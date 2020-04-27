@@ -10,12 +10,15 @@
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
 		4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77422456C2A000038729 /* SceneDelegate.swift */; };
 		4F7F77452456C2A000038729 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77442456C2A000038729 /* ViewController.swift */; };
-		4F7F77482456C2A000038729 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F7F77462456C2A000038729 /* Main.storyboard */; };
 		4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77492456C2A000038729 /* Tymed.xcdatamodeld */; };
 		4F7F774D2456C2A400038729 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F7F774C2456C2A400038729 /* Assets.xcassets */; };
 		4F7F77502456C2A400038729 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */; };
 		4F7F775B2456C2A400038729 /* TymedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F775A2456C2A400038729 /* TymedTests.swift */; };
 		4F7F77662456C2A400038729 /* TymedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77652456C2A400038729 /* TymedUITests.swift */; };
+		4F7F77742456C7BE00038729 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77732456C7BE00038729 /* HomeView.swift */; };
+		4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77752456CA6400038729 /* NavigationBar.swift */; };
+		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
+		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +43,6 @@
 		4F7F77402456C2A000038729 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F7F77422456C2A000038729 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		4F7F77442456C2A000038729 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		4F7F77472456C2A000038729 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4F7F774A2456C2A000038729 /* Tymed.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tymed.xcdatamodel; sourceTree = "<group>"; };
 		4F7F774C2456C2A400038729 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F7F774F2456C2A400038729 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -51,6 +53,10 @@
 		4F7F77612456C2A400038729 /* TymedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TymedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7F77652456C2A400038729 /* TymedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TymedUITests.swift; sourceTree = "<group>"; };
 		4F7F77672456C2A400038729 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F7F77732456C7BE00038729 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		4F7F77752456CA6400038729 /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
+		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,11 +110,14 @@
 				4F7F77402456C2A000038729 /* AppDelegate.swift */,
 				4F7F77422456C2A000038729 /* SceneDelegate.swift */,
 				4F7F77442456C2A000038729 /* ViewController.swift */,
-				4F7F77462456C2A000038729 /* Main.storyboard */,
+				4F7F77752456CA6400038729 /* NavigationBar.swift */,
+				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+				4F7F7779245766E400038729 /* HomeViewController.swift */,
 				4F7F774C2456C2A400038729 /* Assets.xcassets */,
 				4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */,
 				4F7F77512456C2A400038729 /* Info.plist */,
 				4F7F77492456C2A000038729 /* Tymed.xcdatamodeld */,
+				4F7F77732456C7BE00038729 /* HomeView.swift */,
 			);
 			path = Tymed;
 			sourceTree = "<group>";
@@ -237,7 +246,6 @@
 			files = (
 				4F7F77502456C2A400038729 /* LaunchScreen.storyboard in Resources */,
 				4F7F774D2456C2A400038729 /* Assets.xcassets in Resources */,
-				4F7F77482456C2A000038729 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,8 +272,12 @@
 			files = (
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
+				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
+				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
+				4F7F77742456C7BE00038729 /* HomeView.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
+				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,14 +313,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4F7F77462456C2A000038729 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4F7F77472456C2A000038729 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
