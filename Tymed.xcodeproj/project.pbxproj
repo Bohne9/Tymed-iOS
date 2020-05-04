@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
+		4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */; };
+		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
+		4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
+		4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */; };
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
 		4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77422456C2A000038729 /* SceneDelegate.swift */; };
 		4F7F77452456C2A000038729 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77442456C2A000038729 /* ViewController.swift */; };
@@ -19,6 +24,7 @@
 		4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77752456CA6400038729 /* NavigationBar.swift */; };
 		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
+		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +45,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
+		4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailCollectionViewController.swift; sourceTree = "<group>"; };
+		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		4F405E83245D72FC00E1E704 /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
+		4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewController.swift; sourceTree = "<group>"; };
 		4F7F773D2456C2A000038729 /* Tymed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tymed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7F77402456C2A000038729 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F7F77422456C2A000038729 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +68,7 @@
 		4F7F77752456CA6400038729 /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +96,42 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F15239624602204005F34B6 /* TimetableEdit */ = {
+			isa = PBXGroup;
+			children = (
+				4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */,
+			);
+			path = TimetableEdit;
+			sourceTree = "<group>";
+		};
+		4F15239724602218005F34B6 /* TimetableHome */ = {
+			isa = PBXGroup;
+			children = (
+				4F7F7779245766E400038729 /* HomeViewController.swift */,
+				4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */,
+			);
+			path = TimetableHome;
+			sourceTree = "<group>";
+		};
+		4F15239824602237005F34B6 /* TimetableProfile */ = {
+			isa = PBXGroup;
+			children = (
+				4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */,
+			);
+			path = TimetableProfile;
+			sourceTree = "<group>";
+		};
+		4F405E85245DB80D00E1E704 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4F7F77442456C2A000038729 /* ViewController.swift */,
+				4F15239724602218005F34B6 /* TimetableHome */,
+				4F15239624602204005F34B6 /* TimetableEdit */,
+				4F15239824602237005F34B6 /* TimetableProfile */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		4F7F77342456C2A000038729 = {
 			isa = PBXGroup;
 			children = (
@@ -107,17 +155,16 @@
 		4F7F773F2456C2A000038729 /* Tymed */ = {
 			isa = PBXGroup;
 			children = (
+				4FC2C2CB245D72B300B57682 /* Service */,
+				4F7F777B24588DE700038729 /* Model */,
+				4F7F778C2458A16A00038729 /* View */,
+				4F405E85245DB80D00E1E704 /* Controller */,
 				4F7F77402456C2A000038729 /* AppDelegate.swift */,
 				4F7F77422456C2A000038729 /* SceneDelegate.swift */,
-				4F7F77442456C2A000038729 /* ViewController.swift */,
-				4F7F77752456CA6400038729 /* NavigationBar.swift */,
-				4F7F777724575AB100038729 /* HomeTopBar.swift */,
-				4F7F7779245766E400038729 /* HomeViewController.swift */,
 				4F7F774C2456C2A400038729 /* Assets.xcassets */,
 				4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */,
 				4F7F77512456C2A400038729 /* Info.plist */,
 				4F7F77492456C2A000038729 /* Tymed.xcdatamodeld */,
-				4F7F77732456C7BE00038729 /* HomeView.swift */,
 			);
 			path = Tymed;
 			sourceTree = "<group>";
@@ -138,6 +185,33 @@
 				4F7F77672456C2A400038729 /* Info.plist */,
 			);
 			path = TymedUITests;
+			sourceTree = "<group>";
+		};
+		4F7F777B24588DE700038729 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		4F7F778C2458A16A00038729 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4F7F77752456CA6400038729 /* NavigationBar.swift */,
+				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+				4F7F77732456C7BE00038729 /* HomeView.swift */,
+				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */,
+				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		4FC2C2CB245D72B300B57682 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				4F405E83245D72FC00E1E704 /* TimetableService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,13 +344,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */,
+				4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
+				4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */,
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
+				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
+				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
 				4F7F77742456C7BE00038729 /* HomeView.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
+				4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */,
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

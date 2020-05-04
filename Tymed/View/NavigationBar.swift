@@ -9,15 +9,15 @@
 import UIKit
 import SwiftUI
 
-class NavigationBar: UINavigationBar {
+class NavigationBar: UINavigationBar, UINavigationBarDelegate {
 
-    
     let topBar = HomeTopBar()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        prefersLargeTitles = true
+        prefersLargeTitles = false
+        isTranslucent = false
         
         addSubview(topBar)
         
@@ -25,14 +25,17 @@ class NavigationBar: UINavigationBar {
         topBar.backgroundColor = backgroundColor
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        topBar.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.65).isActive = true
+        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true
         topBar.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         topBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        shadowImage = UIImage()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
     
 }
