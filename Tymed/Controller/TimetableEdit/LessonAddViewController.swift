@@ -38,6 +38,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     private var endPickerCell: LessonTimePickerCell?
     private var dayPickerCell: LessonDayPickerCell?
     
+    private var noteCell: LessonAddNoteCell?
     
     // Amount of items in each section
     private var sectionItemCount = [1, 3, 1]
@@ -48,6 +49,16 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     
     private var lessonColor = "blue"
     
+    
+    // Get-only lesson params
+    
+    var subjectName: String? {
+        textField.text
+    }
+    
+    var lessonNote: String? {
+        noteCell?.textView.text
+    }
 
     //MARK: viewDidLoad
     override func viewDidLoad() {
@@ -132,9 +143,23 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         selectColor("blue")
     }
     
-    @objc func add() {
+    func createLesson() {
         
-        dismiss(animated: true, completion: nil)
+        print("Lesson:")
+        
+        print("\t\(subjectName ?? "nil")")
+        print("\tColor:\(lessonColor)")
+        print("\tStart: \(startDate.timeToString())")
+        print("\tEnd: \(endDate.timeToString())")
+        print("\tDay: \(day.date()?.dayToString() ?? "nil")")
+        print("\tNote: \(lessonNote ?? "nil")")
+        
+        
+    }
+    
+    @objc func add() {
+        createLesson()
+//        dismiss(animated: true, completion: nil)
     }
     
     @objc func cancel() {
@@ -244,7 +269,8 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
             
         }else {
             // MARK: Note
-            let cell = tableView.dequeueReusableCell(withIdentifier: lessonNoteCell, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: lessonNoteCell, for: indexPath) as! LessonAddNoteCell
+            noteCell = cell
             
             return cell
         }
