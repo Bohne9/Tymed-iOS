@@ -54,9 +54,9 @@ class ViewController: UITabBarController {
     }
     
     private func generateAddViewController() -> UINavigationController {
-        let nav = UINavigationController(navigationBarClass: LessonAddNavigationbar.self, toolbarClass: nil)
-        nav.setViewControllers([addVC], animated: false)
-//        let nav = UINavigationController(rootViewController: addVC)
+//        let nav = UINavigationController(navigationBarClass: LessonAddNavigationbar.self, toolbarClass: nil)
+//        nav.setViewControllers([addVC], animated: false)
+        let nav = UINavigationController(rootViewController: addVC)
         
         return nav
     }

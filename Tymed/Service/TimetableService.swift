@@ -44,9 +44,6 @@ extension Date {
     }
     
     func dayToString() -> String {
-        print(Calendar.current.weekdaySymbols)
-//        return stringify(with: "EEEE")
-        print(Calendar.current.component(.weekday, from: self))
         return stringify(with: "EEEE")
     }
     
