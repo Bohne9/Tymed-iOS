@@ -2,7 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Lesson" representedClassName="Lesson" syncable="YES" codeGenerationType="class">
         <attribute name="dayOfWeek" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -15,8 +15,14 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="lessons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Lesson" inverseName="subject" inverseEntity="Lesson"/>
     </entity>
+    <entity name="Timetable" representedClassName="Timetable" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="subjects" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject"/>
+    </entity>
     <elements>
-        <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="118"/>
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="133"/>
+        <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="118"/>
+        <element name="Timetable" positionX="-9" positionY="171" width="128" height="88"/>
     </elements>
 </model>

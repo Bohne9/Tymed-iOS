@@ -47,6 +47,12 @@ class ViewController: UITabBarController {
         viewControllers = [home, add, profile]
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        homeVC.dashCollectionView.reload()
+    }
+    
     private func generateProfileViewController() -> UINavigationController {
         let nav = UINavigationController(rootViewController: profileVC)
 

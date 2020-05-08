@@ -182,9 +182,11 @@ class TimetableService {
         
         lesson.subject = subject
         
-        lesson.dayOfWeek = day.date()
+        let dayDate = day.date()
+        
+        lesson.dayOfWeek = dayDate
         lesson.startTime = start
-        lesson.endDate = end
+        lesson.endTime = end
         lesson.note = note
         
         save()
@@ -228,4 +230,40 @@ class TimetableService {
         
         return Calendar.current.date(from: dateComponents)!
     }
+    
+    func getLessons(within date: Date) -> [Lesson] {
+        
+        do {
+            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
+            
+            let comp = Calendar.current.dateComponents([.hour, .minute, .weekday], from: date)
+            let d = Calendar.current.date(from: comp)!
+            
+            fetchRequest.predicate = NSPredicate(format: "startTime <= %@ AND %@ <= endTime", d as NSDate, d as NSDate)
+            let fetchedResults = try context.fetch(fetchRequest)
+            
+            return fetchedResults
+        }
+        catch {
+            print ("fetch task failed", error)
+            return []
+        }
+        
+    }
+    
+//    func getLessons(of subject: Subject) -> [Lesson] {
+//
+//        do {
+//            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
+//            fetchRequest.predicate = NSPredicate(format: "startDate <= %@ AND %@ <= endDate ", date as NSDate)
+//            let fetchedResults = try context.fetch(fetchRequest)
+//
+//            return fetchedResults
+//        }
+//        catch {
+//            print ("fetch task failed", error)
+//            return []
+//        }
+//
+//    }
 }

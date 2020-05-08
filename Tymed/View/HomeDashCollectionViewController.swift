@@ -28,6 +28,8 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     var subjects: [Subject]?
     var lessons: [Lesson]?
     
+    var nowLessons: [Lesson]?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -47,8 +49,8 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         collectionView.backgroundColor = .systemBackground
         
         collectionView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-        
-        collectionView.register(HomeDashNowCollectionViewCell.self, forCellWithReuseIdentifier: "celll")
+        collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -59,9 +61,30 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         
     }
     
+    func reload() {
+        fetchData()
+        
+        collectionView.reloadData()
+    }
+    
     private func fetchData() {
         
         lessons = TimetableService.shared.fetchLessons()
+        
+        nowLessons = TimetableService.shared.getLessons(within: Date())
+        
+        lessons?.forEach({ (lesson) in
+            
+            let format = DateFormatter()
+            format.dateStyle = .medium
+            
+            let cal = Calendar.current
+            
+            print(cal.dateComponents([.year], from: lesson.startTime!))
+            
+            print(format.string(from: lesson.startTime ?? Date()))
+        })
+        print(Calendar.current.dateComponents([.year], from: Date()))
         
     }
 
@@ -73,15 +96,15 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lessons?.count ?? 0
+        return nowLessons?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "celll", for: indexPath) as! HomeDashNowCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeLessonCollectionViewCell
     
         // Configure the cell
         
-        cell.lesson = lessons?[indexPath.row]
+        cell.lesson = nowLessons?[indexPath.row]
     
         return cell
     }
@@ -96,40 +119,25 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         }
         
     }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeDashCollectionViewHeader
+            
+            if indexPath.section == 0 {
+                header.label.text = "Now"
+            }
+            
+            return header
+        }
+        
+        return UICollectionReusableView()
+    }
     
- 
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 50)
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
 
 
@@ -138,58 +146,36 @@ extension HomeDashCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 2 * 16, height: 80)
     }
-    
+
 }
 
 
-class HomeDashNowCollectionViewCell: UICollectionViewCell {
+//MARK: HomeDashCollectionViewHeader
+class HomeDashCollectionViewHeader: UICollectionReusableView  {
     
-    var lesson: Lesson? {
-        didSet {
-            guard let lesson = lesson else { return }
-            
-            name.text = lesson.subject?.name
-            
-            time.text = "\(lesson.dayOfWeek?.dayToStringShort() ?? "") - \(lesson.startTime?.timeToString() ?? "") - \(lesson.endDate?.timeToString() ?? "")"
-            
-            name.backgroundColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
-        }
-    }
-    
-    var name = PaddingLabel()
-    
-    var time = UILabel()
+    var label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        addSubview(label)
         
-        addSubview(name)
+        label.translatesAutoresizingMaskIntoConstraints = false
         
-        name.translatesAutoresizingMaskIntoConstraints = false
+        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        label.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        name.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        name.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        name.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
-        name.textColor = UIColor.white
-        
-        addSubview(time)
-        
-        time.translatesAutoresizingMaskIntoConstraints = false
-        
-        time.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        time.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 5).isActive = true
-        time.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
-        time.textColor = UIColor.white
-        
-        layer.cornerRadius = 10
-        
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
     }
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
+
+
+
+

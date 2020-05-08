@@ -275,7 +275,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
             return nil
         }
         
-        guard subjectName != nil && subjectName?.isEmpty != false  else {
+        if subjectName == nil || subjectName?.isEmpty == true {
             print("Invalid subject name")
             return nil
         }
