@@ -152,11 +152,11 @@ class HomeDashNowCollectionViewCell: UICollectionViewCell {
             
             time.text = "\(lesson.dayOfWeek?.dayToStringShort() ?? "") - \(lesson.startTime?.timeToString() ?? "") - \(lesson.endDate?.timeToString() ?? "")"
             
-            backgroundColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
+            name.backgroundColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
         }
     }
     
-    var name = UILabel()
+    var name = PaddingLabel()
     
     var time = UILabel()
     
