@@ -25,6 +25,7 @@
 		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
 		4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */; };
+		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddViewController.swift; sourceTree = "<group>"; };
+		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,6 +160,7 @@
 		4F7F773F2456C2A000038729 /* Tymed */ = {
 			isa = PBXGroup;
 			children = (
+				4F9405E72463F3940063E4DA /* Helper */,
 				4FC2C2CB245D72B300B57682 /* Service */,
 				4F7F777B24588DE700038729 /* Model */,
 				4F7F778C2458A16A00038729 /* View */,
@@ -207,6 +210,14 @@
 				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		4F9405E72463F3940063E4DA /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				4F9405E82463F3A00063E4DA /* Extensions.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		4FC2C2CB245D72B300B57682 /* Service */ = {
@@ -358,6 +369,7 @@
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
+				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
 				4F7F77742456C7BE00038729 /* HomeView.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
 				4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */,

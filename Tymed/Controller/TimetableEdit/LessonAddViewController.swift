@@ -14,12 +14,90 @@ private let lessonTimeTitleCell = "lessonTimeTitleCell"
 private let lessonColorPickerCell = "lessonColorPickerCell"
 private let lessonDayPickerCell = "lessonDayPickerCell"
 
+protocol SubjectAutoFillDelegate {
+    
+    func subjectAutoFill(didSelect subject: String)
+    
+}
 
-class LessonAddViewController: UITableViewController, UITextFieldDelegate, LessonColorPickerTableViewDelegate, UIPickerViewDelegate, LessonDayPickerCellDelegate {
+class SubjectAutoFill: UIStackView {
+    
+    var subjects: [Subject]? = nil
+    
+    var subjectDelegate: SubjectAutoFillDelegate? = nil
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        distribution = .fillEqually
+        spacing = 0
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func selectItem(_ btn: UIButton) {
+        guard let title = btn.title(for: .normal) else {
+            return
+        }
+        
+        subjectDelegate?.subjectAutoFill(didSelect: title)
+    }
+    
+    func sortSubjects(_ title: String) -> [Subject]?  {
+        guard let subjects = subjects else {
+            return nil
+        }
+        
+        var values = subjects.map { (sub: Subject) in
+            return (sub, sub.name?.levenshteinDistanceScore(to: title) ?? 0.0)
+        }
+        
+        values.sort(by: { (v1, v2) -> Bool in
+            return v1.1 > v2.1
+        })
+        
+        return values.map { (value: (Subject, Double)) in
+            return value.0
+        }
+    }
+    
+    func addSubject(_ subject: Subject) {
+        let button = UIButton()
+        
+        button.setTitle(subject.name ?? "-", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(named: subject.color ?? "dark") ?? .blue
+        
+        button.addTarget(self, action: #selector(selectItem(_:)), for: .touchUpInside)
+        
+        addArrangedSubview(button)
+    }
+    
+    func setupViews(_ title: String) {
+        subviews.forEach { view in
+            view.removeFromSuperview()
+        }
+        
+        sortSubjects(title)?.prefix(3).forEach({ (subject) in
+            self.addSubject(subject)
+        })
+    }
+    
+    func reload(_ title: String) {
+        setupViews(title)
+    }
+}
+
+
+class LessonAddViewController: UITableViewController, UITextFieldDelegate, LessonColorPickerTableViewDelegate, UIPickerViewDelegate, LessonDayPickerCellDelegate, SubjectAutoFillDelegate {
 
     let textField = UITextField()
     
     var subjects: [Subject]?
+    
+    var autoFill: SubjectAutoFill = SubjectAutoFill()
     
     private var expandStartTime = false
     private var expandEndTime = false
@@ -30,13 +108,13 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     private var endDate: Date = TimetableService.shared.dateFor(hour: 14, minute: 0)
     private var day: Day = Day.monday
     
-    private var startTitleCell: LessonTimeTitleCell?
-    private var endTitleCell: LessonTimeTitleCell?
-    private var dayTitleCell: LessonTimeTitleCell?
+    private weak var startTitleCell: LessonTimeTitleCell?
+    private weak var endTitleCell: LessonTimeTitleCell?
+    private weak var dayTitleCell: LessonTimeTitleCell?
     
-    private var startPickerCell: LessonTimePickerCell?
-    private var endPickerCell: LessonTimePickerCell?
-    private var dayPickerCell: LessonDayPickerCell?
+    private weak var startPickerCell: LessonTimePickerCell?
+    private weak var endPickerCell: LessonTimePickerCell?
+    private weak var dayPickerCell: LessonDayPickerCell?
     
     private var noteCell: LessonAddNoteCell?
     
@@ -76,6 +154,9 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         
         subjects = TimetableService.shared.fetchSubjects()
         
+        autoFill.subjects = subjects
+        autoFill.reload("")
+        
         // Select default color
         selectColor(lessonColor)
     }
@@ -92,8 +173,29 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         
         textField.delegate = self
         
+        textField.autocorrectionType = .no
+        
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.addTarget(self, action: #selector(titleChanged(_:)), for: .editingChanged)
+        
+        let toolBar = UIToolbar()
+        
+        toolBar.addSubview(autoFill)
+        
+        autoFill.subjectDelegate = self
+        autoFill.backgroundColor = .red
+        
+        toolBar.sizeToFit()
+        
+        autoFill.translatesAutoresizingMaskIntoConstraints = false
+        
+        autoFill.leadingAnchor.constraint(equalTo: toolBar.leadingAnchor).isActive = true
+        autoFill.topAnchor.constraint(equalTo: toolBar.topAnchor).isActive = true
+        autoFill.widthAnchor.constraint(equalTo: toolBar.widthAnchor).isActive = true
+        autoFill.heightAnchor.constraint(equalTo: toolBar.heightAnchor).isActive = true
+        
+        
+        textField.inputAccessoryView = toolBar
         
         if let navbar = navigationController?.navigationBar {
             textField.widthAnchor.constraint(equalTo: navbar.widthAnchor, multiplier: 0.4).isActive = true
@@ -110,15 +212,28 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         , action: #selector(cancel))
     }
     
+    func subjectAutoFill(didSelect subject: String) {
+        guard let val = subjects?.filter({ sub -> Bool in return sub.name == subject }).first else {
+            return
+        }
+        
+        textField.text = subject
+        selectSubject(val)
+        textField.resignFirstResponder()
+    }
+    
     @objc func titleChanged(_ textField: UITextField) {
         guard let subjects = self.subjects else {
             return
         }
         
+        autoFill.reload(textField.text ?? "")
+        
         guard let subject = subjects.filter({ subject -> Bool in return subject.name == textField.text }).first else {
             deselectSubject()
             return
         }
+        
         
         selectSubject(subject)
         
@@ -140,10 +255,11 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     
     func deselectSubject() {
         
-        selectColor("blue")
+        
+//        selectColor("blue")
     }
     
-    func createLesson() {
+    func createLesson() -> Lesson? {
         
         print("Lesson:")
         
@@ -154,12 +270,37 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         print("\tDay: \(day.date()?.dayToString() ?? "nil")")
         print("\tNote: \(lessonNote ?? "nil")")
         
+        if invalidTimeInterval {
+            print("Invalid lesson times")
+            return nil
+        }
         
+        guard subjectName != nil && subjectName?.isEmpty != false  else {
+            print("Invalid subject name")
+            return nil
+        }
+        
+        var subject: Subject? = subjects?.filter({ subject -> Bool in return subject.name == subjectName }).first
+        
+        if subject == nil, let name = subjectName {
+            
+            subject = TimetableService.shared.addSubject(name, lessonColor)
+            
+        }
+        
+        let lesson = TimetableService.shared.addLesson(subject: subject!, day: day, start: startDate, end: endDate, note: lessonNote)
+        
+        return lesson
     }
     
     @objc func add() {
-        createLesson()
-//        dismiss(animated: true, completion: nil)
+        let lesson = createLesson()
+        
+        if lesson != nil {
+            dismiss(animated: true, completion: nil)
+        }
+        
+        
     }
     
     @objc func cancel() {
@@ -184,7 +325,6 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
             let cell = tableView.dequeueReusableCell(withIdentifier: lessonColorPickerCell, for: indexPath) as! LessonColorPickerCell
             
             cell.selectColor(named: lessonColor)
-            print(lessonColor)
             
             return cell
         }else if indexPath.section == 1 {
@@ -204,6 +344,9 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
                     let cell = tableView.dequeueReusableCell(withIdentifier: lessonTimePickerCell, for: indexPath) as! LessonTimePickerCell
                     startPickerCell = cell
                     cell.datePicker.setDate(startDate, animated: false)
+                    
+                    cell.datePicker.removeTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
+                    
                     cell.datePicker.addTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
                     
                     return cell
@@ -218,6 +361,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
                     
                     return cell
                 }
+                
             case 2:
                 // Third cell in the time section depends whether the startTime cell is expanded
                 if expandStartTime {
@@ -235,6 +379,9 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
                     endPickerCell = cell
                     
                     cell.datePicker.setDate(endDate, animated: false)
+
+                    cell.datePicker.removeTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
+                    
                     cell.datePicker.addTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
                     
                     return cell
@@ -247,6 +394,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
                     
                     return cell
                 }
+                
             case 3:
                 if expandStartTime || expandEndTime {
                     let cell = tableView.dequeueReusableCell(withIdentifier: lessonTimeTitleCell, for: indexPath) as! LessonTimeTitleCell

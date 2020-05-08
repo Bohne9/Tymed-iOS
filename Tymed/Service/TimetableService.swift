@@ -176,16 +176,16 @@ class TimetableService {
     }
     
     
-    func addLesson(subject: Subject, day: Day, start: Date, end: Date) -> Lesson {
+    func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String?) -> Lesson {
         
         let lesson = self.lesson()
         
         lesson.subject = subject
-        lesson.note = "Room 123"
         
         lesson.dayOfWeek = day.date()
         lesson.startTime = start
         lesson.endDate = end
+        lesson.note = note
         
         save()
         
