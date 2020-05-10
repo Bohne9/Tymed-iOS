@@ -10,6 +10,9 @@ import UIKit
 
 private let nowReuseIdentifier = "homeNowCell"
 
+private let nowSection = "nowSection"
+private let nextSection = "nextSection"
+
 class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
 
     lazy var collectionView: UICollectionView = {
@@ -30,6 +33,8 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     
     var nowLessons: [Lesson]?
     
+    var sectionIdentifiers: [String] = []
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -48,7 +53,7 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         
         collectionView.backgroundColor = .systemBackground
         
-        collectionView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
@@ -71,42 +76,61 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         
         lessons = TimetableService.shared.fetchLessons()
         
-        nowLessons = TimetableService.shared.getLessons(within: Date())
-        
-        lessons?.forEach({ (lesson) in
-            
-            let format = DateFormatter()
-            format.dateStyle = .medium
-            
-            let cal = Calendar.current
-            
-            print(cal.dateComponents([.year], from: lesson.startTime!))
-            
-            print(format.string(from: lesson.startTime ?? Date()))
+        nowLessons = TimetableService.shared.getLessons(within: Date()).sorted(by: { (l1, l2) in
+            return l1.startTime < l2.startTime
         })
-        print(Calendar.current.dateComponents([.year], from: Date()))
         
+        sectionIdentifiers = []
+        
+        if (nowLessons?.count ?? 0) > 0 {
+            sectionIdentifiers.append(nowSection)
+        }
+        
+        if (lessons?.count ?? 0) > 0 {
+            sectionIdentifiers.append(nextSection)
+        }
     }
-
+    
     // MARK: UICollectionViewDataSource
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        
+        
+        
+        
+        return ((nowLessons?.count ?? 0) > 0 ? 1 : 0) + ((lessons?.count ?? 0) > 0 ? 1 : 0)
     }
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return nowLessons?.count ?? 0
+        if section == 0 {
+            return nowLessons?.count ?? 0
+        }else if section == 1 {
+            return lessons?.count ?? 0
+        }
+        return 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeLessonCollectionViewCell
-    
-        // Configure the cell
         
-        cell.lesson = nowLessons?[indexPath.row]
-    
-        return cell
+        if indexPath.section == 0 {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeLessonCollectionViewCell
+            
+            // Configure the cell
+            
+            cell.lesson = nowLessons?[indexPath.row]
+            
+            return cell
+        }else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeLessonCollectionViewCell
+            
+            // Configure the cell
+            
+            cell.lesson = lessons?[indexPath.row]
+            
+            return cell
+        }
+        
+        
     }
     
     
@@ -127,6 +151,8 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
             
             if indexPath.section == 0 {
                 header.label.text = "Now"
+            }else {
+                header.label.text = "All"
             }
             
             return header

@@ -66,6 +66,10 @@ enum Day: Int{
     func date() -> Date? {
         return TimetableService.shared.dateFor(day: self)
     }
+    
+    func string() -> String {
+        return Calendar.current.weekdaySymbols[rawValue - 1]
+    }
 }
 
 class TimetableService {
@@ -176,17 +180,26 @@ class TimetableService {
     }
     
     
-    func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String?) -> Lesson {
+    func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String?) -> Lesson? {
         
         let lesson = self.lesson()
         
         lesson.subject = subject
         
-        let dayDate = day.date()
+        guard let dayDate = day.date() else {
+            print("fvjos")
+            return nil
+        }
         
-        lesson.dayOfWeek = dayDate
-        lesson.startTime = start
-        lesson.endTime = end
+        let weekDay = Calendar.current.dateComponents([.day, .hour, .minute], from: dayDate)
+        
+        print("WeekDay: \(weekDay)")
+        print(Calendar.current.date(byAdding: weekDay, to: start))
+        
+        lesson.dayOfWeek = Int32(day.rawValue)
+        lesson.startTime = Time(from: start)
+        lesson.endTime = Time(from: end)
+        
         lesson.note = note
         
         save()
@@ -209,15 +222,19 @@ class TimetableService {
         }
     }
     
-    //MARK: Date
+    //MARK: dateFor(day: )
+    /// Creates a Date containing the given Day type as .weekday
+    /// - Parameter day: Day of week
+    /// - Returns: Date containing the given Day type as .weekday
     func dateFor(day: Day) -> Date? {
-        
         var dateComponents = DateComponents()
         dateComponents.weekday = day.rawValue
         
         let cal = Calendar.current
         
-        return cal.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .strict)
+        let date = DateComponents()
+        
+        return cal.nextDate(after: cal.date(from: date)!, matching: dateComponents, matchingPolicy: .strict)
         
     }
     
@@ -231,17 +248,23 @@ class TimetableService {
         return Calendar.current.date(from: dateComponents)!
     }
     
+    //MARK: getLessons(date: )
+    /// Fetches the lesson of the current timetable that match a given date (.weekday, .hour, .minute)
+    /// - Parameter date: Date that is within the lessons
+    /// - Returns: Array containing the lessons (of the current timetable) that match the date
     func getLessons(within date: Date) -> [Lesson] {
         
         do {
             let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
             
-            let comp = Calendar.current.dateComponents([.hour, .minute, .weekday], from: date)
-            let d = Calendar.current.date(from: comp)!
+            let weekday = Calendar.current.component(.weekday, from: date)
             
-            fetchRequest.predicate = NSPredicate(format: "startTime <= %@ AND %@ <= endTime", d as NSDate, d as NSDate)
+            let time = Time(from: date)
+            
+            fetchRequest.predicate = NSPredicate(format: "dayOfWeek == %@ AND start <= %@ AND %@ <= end", NSNumber(value: weekday), NSNumber(value: time.timeInterval), NSNumber(value: time.timeInterval))
+            
             let fetchedResults = try context.fetch(fetchRequest)
-            
+                
             return fetchedResults
         }
         catch {
@@ -251,19 +274,51 @@ class TimetableService {
         
     }
     
-//    func getLessons(of subject: Subject) -> [Lesson] {
-//
-//        do {
-//            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
-//            fetchRequest.predicate = NSPredicate(format: "startDate <= %@ AND %@ <= endDate ", date as NSDate)
-//            let fetchedResults = try context.fetch(fetchRequest)
-//
-//            return fetchedResults
-//        }
-//        catch {
-//            print ("fetch task failed", error)
-//            return []
-//        }
-//
-//    }
+    //MARK: getLessons(time: )
+    /// Fetches the lesson of the current timetable that match a given time (.hour, .minute)
+    /// - Parameter time: Time that is within the lessons
+    /// - Returns: Array containing the lessons (of the current timetable) that match the time
+    func getLessons(within time: Time) -> [Lesson] {
+        
+        do {
+            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
+            
+            fetchRequest.predicate = NSPredicate(format: "start <= %@ AND %@ <= end", NSNumber(value: time.timeInterval), NSNumber(value: time.timeInterval))
+            
+            let fetchedResults = try context.fetch(fetchRequest)
+                
+            return fetchedResults
+        }
+        catch {
+            print ("fetch task failed", error)
+            return []
+        }
+        
+    }
+    
+    //MARK: getLessons(day: )
+    /// Fetches the lesson of the current timetable that match a given day (.weekday)
+    /// - Parameter day: Day of week of the lessons
+    /// - Returns: Array containing the lessons (of the current timetable) that match the day of week
+    func getLessons(within day: Day) -> [Lesson] {
+        
+        do {
+            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
+            
+            let weekday = day.rawValue
+            
+            fetchRequest.predicate = NSPredicate(format: "dayOfWeek == %@", NSNumber(value: weekday))
+            
+            let fetchedResults = try context.fetch(fetchRequest)
+                
+            return fetchedResults
+        }
+        catch {
+            print ("fetch task failed", error)
+            return []
+        }
+        
+        
+    }
+    
 }

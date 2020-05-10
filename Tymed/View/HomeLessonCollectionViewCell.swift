@@ -17,7 +17,7 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
             
             name.text = lesson.subject?.name
             
-            time.text = "\(lesson.dayOfWeek?.dayToStringShort() ?? "") - \(lesson.startTime?.timeToString() ?? "") - \(lesson.endTime?.timeToString() ?? "")"
+            time.text = "\(lesson.day.string() ?? "") - \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
             
             let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
