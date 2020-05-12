@@ -52,7 +52,25 @@ extension Date {
     }
 }
 
-enum Day: Int{
+enum Day: Int {
+    
+    static var current: Day {
+        return Day(rawValue: Calendar.current.component(.weekday, from: Date())) ?? Day.monday
+    }
+    
+    static func <(_ d1: Day, _ d2: Day) -> Bool {
+        let v1 = d1.rawValue + (d1 == .sunday ? 7 : 0)
+        let v2 = d2.rawValue + (d2 == .sunday ? 7 : 0)
+        return v1 < v2
+    }
+    
+    static func ==(_ d1: Day, _ d2: Day) -> Bool {
+        return d1.rawValue == d2.rawValue
+    }
+    
+    static func <=(_ d1: Day, _ d2: Day) -> Bool {
+        return d1 < d2 || d1 == d2
+    }
     
     case monday = 2
     case tuesday = 3

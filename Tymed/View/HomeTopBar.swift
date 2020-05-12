@@ -61,16 +61,7 @@ class HomeTopBar: UIStackView {
     
     
     @objc func updateButtons(_ tappedBtn: UIButton) {
-        let btns = [dash, tasks, week]
-        
-        for btn in btns {
-            if btn == tappedBtn {
-                btn.alpha = 1.0
-            }else {
-                btn.alpha = 0.7
-            }
-        }
-        
+        highlightPage(tappedBtn.tag)
     }
     
     func highlightPage(_ page: Int) {
@@ -80,7 +71,7 @@ class HomeTopBar: UIStackView {
             if btn.tag == page {
                 btn.alpha = 1.0
             }else {
-                btn.alpha = 0.7
+                btn.alpha = 0.6
             }
         }
     }

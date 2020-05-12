@@ -31,11 +31,12 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return homeDash
     }()
     
-    var weekCollectionView: HomeDashCollectionViewController = {
+    var weekCollectionView: HomeWeekCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        let homeDash = HomeDashCollectionViewController()
-        homeDash.cellColor = .green
-        return homeDash
+        let homeWeek = HomeWeekCollectionView(frame: .zero
+            , collectionViewLayout: flowLayout)
+        
+        return homeWeek
     }()
     
     var currentPage = 0 {
@@ -63,7 +64,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
 //        TimetableService.shared.addLesson(subject: subject, day: .monday, start: start, end: end)
 //        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
-        print("Tuesday \(Day.tuesday.date()?.dayToString())")
         
         //MARK: NavBar setup
         
@@ -105,6 +105,15 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.scrollToItem(at: IndexPath(row: btn.tag, section: 0), at: .left, animated: true)
     }
     
+    func reload() {
+        dashCollectionView.reload()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        reload()
+    }
 
     // MARK: UICollectionViewDataSource
 
@@ -196,8 +205,10 @@ extension HomeViewController: HomeCollectionViewDelegate {
         
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.barTintColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
-//        nav.navigationBar.prefersLargeTitles = true
+        
         vc.title = lesson.subject?.name ?? "-"
+        
+        vc.delegate = self
         
         present(nav, animated: true, completion: nil)
         
@@ -205,3 +216,11 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
 }
 
+
+extension HomeViewController: LessonDetailCollectionViewControllerDelegate {
+    
+    func lessonDetailWillDismiss(_ viewController: LessonDetailCollectionViewController) {
+        reload()
+    }
+    
+}

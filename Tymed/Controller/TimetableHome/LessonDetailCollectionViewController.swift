@@ -10,9 +10,17 @@ import UIKit
 
 private let lessonDeleteCell = "lessonDeleteCell"
 
+protocol LessonDetailCollectionViewControllerDelegate {
+    
+    func lessonDetailWillDismiss(_ viewController: LessonDetailCollectionViewController)
+    
+}
+
 class LessonDetailCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     var lesson: Lesson?
+    
+    var delegate: LessonDetailCollectionViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +28,10 @@ class LessonDetailCollectionViewController: UICollectionViewController, UICollec
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+        navigationController?.presentationController?.delegate = self
+        
         // Register cell classes
         self.collectionView!.register(LessonDetailDeleteCell.self, forCellWithReuseIdentifier: lessonDeleteCell)
 
@@ -71,7 +83,9 @@ class LessonDetailCollectionViewController: UICollectionViewController, UICollec
             if let lesson = self.lesson {
                 TimetableService.shared.deleteLesson(lesson)
                 self.lesson = nil
-                self.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true) {
+                    self.delegate?.lessonDetailWillDismiss(self)
+                }
                 print("delete")
             }
         }))
@@ -154,5 +168,19 @@ class LessonDetailDeleteCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+}
+
+
+extension LessonDetailCollectionViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.lessonDetailWillDismiss(self)
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        delegate?.lessonDetailWillDismiss(self)
+    }
+    
     
 }
