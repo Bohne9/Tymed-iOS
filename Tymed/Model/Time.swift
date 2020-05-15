@@ -36,11 +36,11 @@ public class Time: NSObject, NSCoding {
         return Time(hour: 0, minute: 0)
     }
     
-    static var current: Time {
+    static var now: Time {
         return Time(from: Date())
     }
     
-    static func between(_ t1: Time, _ t2: Time, t3: Time, _ allowEqual: Bool = true) -> Bool {
+    static func between(_ t1: Time, _ t2: Time, t3: Time, allowEqual: Bool = true) -> Bool {
         if allowEqual {
             return t1 <= t2 && t2 <= t3
         }else {
@@ -59,7 +59,7 @@ public class Time: NSObject, NSCoding {
     
     var minute: Int = 0
     
-    public var timeInterval: Int {
+    var timeInterval: Int {
         get {
             hour * 60 + minute
         }

@@ -13,17 +13,7 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
     
     var lesson: Lesson? {
         didSet {
-            guard let lesson = lesson else { return }
-            
-            name.text = lesson.subject?.name
-            
-            name.sizeToFit()
-            
-            time.text = "\(lesson.day.string() ?? "") - \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
-            
-            let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
-
-            colorIndicator.backgroundColor = color
+            reload()
         }
     }
     
@@ -64,7 +54,7 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
         name.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         name.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         
-        name.textColor = UIColor.white
+        name.textColor = UIColor.label
         name.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         
         //MARK: time
@@ -78,7 +68,7 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
         
         time.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         
-        time.textColor = .white
+        time.textColor = .label
         
         let image = UIImage(systemName: "list.dash")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold))
         let imageView = UIImageView(image: image)
@@ -107,6 +97,20 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
         
         layer.cornerRadius = 10
         
+    }
+    
+    internal func reload() {
+        guard let lesson = lesson else { return }
+        
+        name.text = lesson.subject?.name
+        
+        name.sizeToFit()
+        
+        time.text = "\(lesson.day.string()) - \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+        
+        let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
+
+        colorIndicator.backgroundColor = color
     }
     
     

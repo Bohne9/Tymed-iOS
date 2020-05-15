@@ -88,6 +88,17 @@ enum Day: Int {
     func string() -> String {
         return Calendar.current.weekdaySymbols[rawValue - 1]
     }
+    
+    func rotatingNext() -> Day {
+        if self == .saturday {
+            return .sunday
+        }
+        return Day(rawValue: rawValue + 1)!
+    }
+    
+    func isToday() -> Bool {
+        return Calendar.current.component(.weekday, from: Date()) == self.rawValue
+    }
 }
 
 class TimetableService {
@@ -198,7 +209,7 @@ class TimetableService {
     }
     
     
-    func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String?) -> Lesson? {
+    func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String? = nil) -> Lesson? {
         
         let lesson = self.lesson()
         

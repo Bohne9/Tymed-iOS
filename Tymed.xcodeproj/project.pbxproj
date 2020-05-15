@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */; };
+		4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
@@ -29,8 +31,6 @@
 		4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */; };
 		4F9405EF2468067C0063E4DA /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
 		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */; };
-		4FEE40EF2468109000DFFF73 /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40ED2468109000DFFF73 /* Lesson+CoreDataClass.swift */; };
-		4FEE40F02468109000DFFF73 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40EE2468109000DFFF73 /* Lesson+CoreDataProperties.swift */; };
 		4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +52,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -80,8 +82,6 @@
 		4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLessonCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F9405EE2468067C0063E4DA /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
 		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionViewController.swift; sourceTree = "<group>"; };
-		4FEE40ED2468109000DFFF73 /* Lesson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		4FEE40EE2468109000DFFF73 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,8 +206,8 @@
 		4F7F777B24588DE700038729 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4FEE40ED2468109000DFFF73 /* Lesson+CoreDataClass.swift */,
-				4FEE40EE2468109000DFFF73 /* Lesson+CoreDataProperties.swift */,
+				4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */,
+				4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */,
 				4F9405EE2468067C0063E4DA /* Time.swift */,
 			);
 			path = Model;
@@ -375,12 +375,12 @@
 			files = (
 				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
+				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
-				4FEE40F02468109000DFFF73 /* Lesson+CoreDataProperties.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
+				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
-				4FEE40EF2468109000DFFF73 /* Lesson+CoreDataClass.swift in Sources */,
 				4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */,
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,

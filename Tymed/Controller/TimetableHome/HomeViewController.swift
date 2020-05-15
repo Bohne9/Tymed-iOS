@@ -33,8 +33,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var weekCollectionView: HomeWeekCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        let homeWeek = HomeWeekCollectionView(frame: .zero
-            , collectionViewLayout: flowLayout)
+        let homeWeek = HomeWeekCollectionView()
         
         return homeWeek
     }()
@@ -51,20 +50,20 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-//        let subject = TimetableService.shared.addSubject("Database", "blue")
-//
+//        let subject = TimetableService.shared.addSubject("Programming", "orange")
+////
 //        let start = TimetableService.shared.dateFor(hour: 12, minute: 30)
 //        let end = TimetableService.shared.dateFor(hour: 14, minute: 0)
 //
 //        TimetableService.shared.addLesson(subject: subject, day: .monday, start: start, end: end)
 //        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .monday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .monday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .monday, start: start, end: end)
-//        TimetableService.shared.addLesson(subject: subject, day: .tuesday, start: start, end: end)
-        
+//        TimetableService.shared.addLesson(subject: subject, day: .wednesday, start: start, end: end)
+//        TimetableService.shared.addLesson(subject: subject, day: .thursday, start: start, end: end)
+//        TimetableService.shared.addLesson(subject: subject, day: .friday, start: start, end: end)
+//        TimetableService.shared.addLesson(subject: subject, day: .saturday, start: start, end: end)
+//        TimetableService.shared.addLesson(subject: subject, day: .sunday, start: start, end: end)
+//        TimetableService.shared.addLesson(subject: subject, day: .wednesday, start: start, end: end)
+//        
         //MARK: NavBar setup
         
         if let navBar = (navigationController?.navigationBar as? NavigationBar) {
@@ -107,6 +106,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func reload() {
         dashCollectionView.reload()
+        weekCollectionView.reload()
     }
     
     override func viewDidAppear(_ animated: Bool) {
