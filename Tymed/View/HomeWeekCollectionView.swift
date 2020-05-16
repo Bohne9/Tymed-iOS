@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//MARK: HomeWeekCollectionView
 class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     lazy var collectionView: UICollectionView = {
@@ -26,6 +26,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     private var weekDays: [Day] = []
     private var week: [Day: [Lesson]] = [:]
     
+    //MARK: init(frame: )
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -36,16 +37,16 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         fatalError("init(coder:) has not been implemented")
     }
     
-    
+    //MARK: setup()
     private func setup() {
         
-        setupUserInterface()
+        setupUI()
         
         reload()
     }
     
-    //MARK: UI setup
-    private func setupUserInterface() {
+    //MARK: setupUI()
+    private func setupUI() {
         
         addSubview(collectionView)
         
@@ -64,13 +65,16 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         
     }
     
-    
+    //MARK: reload()
+    /// Fetches the data from core data and reloads the collection view.
+    /// After that it scrolls to the first lesson that is right now (in case the is one).
+    /// If not it scrolls to the next lesson
     func reload() {
         fetchData()
         
         collectionView.reloadData()
         scrollTo(date: Date())
-//        scrollTo(day: .monday, time: Time(hour: 21, minute: 0), false)
+        
     }
     
     //MARK: fetchDate()
@@ -112,6 +116,11 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     }
     
     //MARK: scrollTo(date: )
+    /// Scrolls the collection view to the first lesson that fits the date.
+    /// If there is no lesson that fits the date. The next lesson after that date will be chosen
+    /// - Parameters:
+    ///   - date: Date to search for the alogorithm
+    ///   - animated: scroll animation yes/no
     func scrollTo(date: Date, _ animated: Bool = false) {
         guard let day = Day(rawValue: Calendar.current.component(.weekday, from: date)) else {
             print("scrollTo(date:) failed")
@@ -121,6 +130,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         
         scrollTo(day: day, time: time, animated)
     }
+    
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
         if let section = weekDays.firstIndex(of: day) {
@@ -131,6 +141,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
             }
         }
     }
+    
     //MARK: scrollTo(day:, time: )
     func scrollTo(day: Day, time: Time, _ animated: Bool = false) {
         if let section = weekDays.firstIndex(of: day) {
