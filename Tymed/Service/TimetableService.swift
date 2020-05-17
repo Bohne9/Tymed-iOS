@@ -208,22 +208,12 @@ class TimetableService {
         return lesson
     }
     
-    
+    //MARK: addLesson(...)
     func addLesson(subject: Subject, day: Day, start: Date, end: Date, note: String? = nil) -> Lesson? {
         
         let lesson = self.lesson()
         
         lesson.subject = subject
-        
-        guard let dayDate = day.date() else {
-            print("fvjos")
-            return nil
-        }
-        
-        let weekDay = Calendar.current.dateComponents([.day, .hour, .minute], from: dayDate)
-        
-        print("WeekDay: \(weekDay)")
-        print(Calendar.current.date(byAdding: weekDay, to: start))
         
         lesson.dayOfWeek = Int32(day.rawValue)
         lesson.startTime = Time(from: start)
@@ -242,11 +232,36 @@ class TimetableService {
         save()
     }
     
+    //MARK: task()
+    /// Creates a new instance of Task and attaches an UUID
+    func task() -> Task {
+        let task = Task(context: context)
+        task.id = UUID()
+        
+        return task
+    }
+    
+    //MARK: addTask(...)
+    func addTask(_ title: String, _ text: String = "", _ due: Date, _ lesson: Lesson? = nil, _ priority: Int = 0) -> Task? {
+        let task = self.task()
+        
+        task.title = title
+        task.completed = false
+        task.text = text
+        task.due = due
+        task.lesson = lesson
+        task.priority = Int32(priority)
+        
+        save()
+        
+        return task
+    }
+    
     //MARK: save
     func save() {
         do {
             try context.save()
-        }catch {
+        } catch {
             print(error)
         }
     }

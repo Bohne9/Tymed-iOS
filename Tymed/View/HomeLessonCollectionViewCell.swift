@@ -9,7 +9,11 @@
 import UIKit
 
 let homeLessonCell = "homeLessonCell"
-class HomeLessonCollectionViewCell: UICollectionViewCell {
+class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
+    
+    static func register(_ collectionView: UICollectionView) {
+        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+    }
     
     var lesson: Lesson? {
         didSet {
@@ -28,6 +32,11 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setupUserInterface()
+        
+    }
+    
+    internal override func setupUserInterface() {
         //MARK: colorIndicator
         addSubview(colorIndicator)
         
@@ -96,10 +105,13 @@ class HomeLessonCollectionViewCell: UICollectionViewCell {
         tasksLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         
         layer.cornerRadius = 10
-        
     }
     
-    internal func reload() {
+   
+    
+    internal override func reload() {
+        super.reload()
+        
         guard let lesson = lesson else { return }
         
         name.text = lesson.subject?.name

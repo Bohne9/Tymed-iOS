@@ -19,7 +19,7 @@ protocol SubjectAutoFillDelegate {
     func subjectAutoFill(didSelect subject: String)
     
 }
-
+//MARK: SubjectAutoFill
 class SubjectAutoFill: UIStackView {
     
     var subjects: [Subject]? = nil
@@ -90,7 +90,7 @@ class SubjectAutoFill: UIStackView {
     }
 }
 
-
+//MARK: LessonAddViewController
 class LessonAddViewController: UITableViewController, UITextFieldDelegate, LessonColorPickerTableViewDelegate, UIPickerViewDelegate, LessonDayPickerCellDelegate, SubjectAutoFillDelegate {
 
     let textField = UITextField()
@@ -204,6 +204,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         
         textField.textAlignment = .center
         textField.placeholder = "Subject name"
+        textField.textColor = .white
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .done, target: self
             , action: #selector(add))
@@ -485,7 +486,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             
-            let detail = LessonColorPickerTableView(style: .plain)
+            let detail = LessonColorPickerTableView(style: .insetGrouped)
             detail.lessonDelegate = self
             detail.selectedColor = lessonColor
             navigationController?.pushViewController(detail, animated: true)

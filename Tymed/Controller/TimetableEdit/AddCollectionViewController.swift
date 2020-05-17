@@ -110,7 +110,7 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
         let alert = UIAlertController(title: "", message: "What whould you like to add?", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Lesson", style: .default , handler:{ (action) in
-            let lesson = UINavigationController(rootViewController: LessonAddViewController(style: .grouped))
+            let lesson = UINavigationController(rootViewController: LessonAddViewController(style: .insetGrouped))
             self.present(lesson, animated: true, completion: nil)
         }))
 
