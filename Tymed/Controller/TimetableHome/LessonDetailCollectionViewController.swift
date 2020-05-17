@@ -34,6 +34,7 @@ class LessonDetailCollectionViewController: UICollectionViewController, UICollec
         
         // Register cell classes
         self.collectionView!.register(LessonDetailDeleteCell.self, forCellWithReuseIdentifier: lessonDeleteCell)
+        collectionView.backgroundColor = .systemBackground
 
         // Do any additional setup after loading the view.
     }

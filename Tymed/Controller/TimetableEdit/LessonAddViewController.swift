@@ -206,6 +206,7 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         textField.placeholder = "Subject name"
         textField.textColor = .white
         
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .done, target: self
             , action: #selector(add))
         

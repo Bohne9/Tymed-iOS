@@ -35,7 +35,6 @@ class LessonAddNavigationbar: UINavigationBar {
                 bottomOffsetConstraint?.constant = -10
             }
             
-            
         }
     }
     
@@ -91,7 +90,7 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
         
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: addReuseIdentifier)
-
+        collectionView.backgroundColor = .systemGroupedBackground
         // Do any additional setup after loading the view.
     }
 
@@ -105,9 +104,9 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
     }
     */
     
-    @objc func showActionSheet() {
+    @objc func showActionSheet(_ sender: UIBarButtonItem) {
         
-        let alert = UIAlertController(title: "", message: "What whould you like to add?", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "What whould you like to add?", message: "", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Lesson", style: .default , handler:{ (action) in
             let lesson = UINavigationController(rootViewController: LessonAddViewController(style: .insetGrouped))
@@ -125,6 +124,10 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
             print("Dismiss")
         }))
+        
+        if let popOver = alert.popoverPresentationController {
+            popOver.barButtonItem = sender
+        }
         
         self.present(alert, animated: true, completion: {
             print("completion block")

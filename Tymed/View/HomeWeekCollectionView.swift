@@ -50,7 +50,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         
         addSubview(collectionView)
         
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .systemGroupedBackground
         
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
@@ -283,7 +283,7 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
         }
         name.textColor = .label
         time.textColor = .label
-        backgroundColor = .systemGray6
+        backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }
     

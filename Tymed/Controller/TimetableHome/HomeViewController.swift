@@ -70,6 +70,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             navBar.topBar.dash.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.tasks.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.week.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
+            navBar.barTintColor = .systemGroupedBackground
         }
         
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -79,6 +80,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .systemGroupedBackground
         
         dashCollectionView.delegate = self
         tasksCollectionView.delegate = self
@@ -106,6 +108,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func reload() {
         dashCollectionView.reload()
+        tasksCollectionView.reload()
         weekCollectionView.reload()
     }
     

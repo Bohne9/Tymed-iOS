@@ -13,7 +13,7 @@ class HomeBaseCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        
+        setupUserInterface()
     }
     
     required init?(coder: NSCoder) {
@@ -23,7 +23,7 @@ class HomeBaseCollectionViewCell: UICollectionViewCell {
     internal func setupUserInterface() {
         
         layer.cornerRadius = 10
-        backgroundColor = .systemGroupedBackground
+        backgroundColor = .secondarySystemGroupedBackground
     }
  
     internal func reload() {

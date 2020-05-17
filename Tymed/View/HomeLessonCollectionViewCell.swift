@@ -37,6 +37,8 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     }
     
     internal override func setupUserInterface() {
+        super.setupUserInterface()
+        
         //MARK: colorIndicator
         addSubview(colorIndicator)
         
@@ -53,8 +55,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         //MARK: name
         addSubview(name)
-        
-        backgroundColor = .systemGray6
         
         name.translatesAutoresizingMaskIntoConstraints = false
         
@@ -104,7 +104,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         tasksLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         
-        layer.cornerRadius = 10
     }
     
    

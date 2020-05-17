@@ -51,6 +51,7 @@ class ViewController: UITabBarController {
         super.viewDidAppear(animated)
         
         homeVC.dashCollectionView.reload()
+        
     }
     
     private func generateProfileViewController() -> UINavigationController {
