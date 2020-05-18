@@ -44,3 +44,47 @@ extension String {
         return 0.0
     }
 }
+
+
+extension Date {
+    
+    func stringify(with format: String) -> String{
+        
+        let formatter = DateFormatter()
+        
+        formatter.dateFormat = format
+        
+        return formatter.string(from: self)
+    }
+    
+    
+    func stringifyTime(with format: DateFormatter.Style) -> String{
+        
+        let formatter = DateFormatter()
+        
+        formatter.timeStyle = format
+        
+        return formatter.string(from: self)
+    }
+    
+    func stringify(with style: DateFormatter.Style) -> String{
+        
+        let formatter = DateFormatter()
+        
+        formatter.dateStyle = style
+        
+        return formatter.string(from: self)
+    }
+    
+    func timeToString() -> String {
+        return stringifyTime(with: .short)
+    }
+    
+    func dayToString() -> String {
+        return stringify(with: "EEEE")
+    }
+    
+    func dayToStringShort() -> String {
+        return stringify(with: "E")
+    }
+}

@@ -27,6 +27,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     
     var time = UILabel()
     
+    internal var tasksImage: UIImageView!
     var tasksLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -47,9 +48,9 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         colorIndicator.backgroundColor = .label
         
         colorIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        colorIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        colorIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 14).isActive = true
         colorIndicator.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        colorIndicator.widthAnchor.constraint(equalToConstant: 7).isActive = true
+        colorIndicator.widthAnchor.constraint(equalToConstant: 8).isActive = true
         
         colorIndicator.layer.cornerRadius = 3.5
         
@@ -59,12 +60,12 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         name.translatesAutoresizingMaskIntoConstraints = false
         
         name.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15).isActive = true
-        name.topAnchor.constraint(equalTo: topAnchor, constant: 6).isActive = true
+        name.topAnchor.constraint(equalTo: topAnchor, constant: 11).isActive = true
         name.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         name.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         
         name.textColor = UIColor.label
-        name.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        name.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         
         //MARK: time
         addSubview(time)
@@ -75,29 +76,29 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         time.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 5).isActive = true
         time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        time.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        time.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         time.textColor = .label
         
         let image = UIImage(systemName: "list.dash")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold))
-        let imageView = UIImageView(image: image)
-        imageView.tintColor = .label
+        tasksImage = UIImageView(image: image)
+        tasksImage.tintColor = .label
         
         addSubview(tasksLabel)
         
         tasksLabel.text = "5"
         
-        addSubview(imageView)
+        addSubview(tasksImage)
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        tasksImage.translatesAutoresizingMaskIntoConstraints = false
         tasksLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        imageView.leadingAnchor.constraint(equalTo: name.leadingAnchor).isActive = true
-        imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 17).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 17).isActive = true
+        tasksImage.leadingAnchor.constraint(equalTo: name.leadingAnchor).isActive = true
+        tasksImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        tasksImage.widthAnchor.constraint(equalToConstant: 17).isActive = true
+        tasksImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
         
-        tasksLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 5).isActive = true
+        tasksLabel.leadingAnchor.constraint(equalTo: tasksImage.trailingAnchor, constant: 5).isActive = true
         tasksLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
         tasksLabel.widthAnchor.constraint(equalToConstant: 15).isActive = true
         tasksLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
@@ -106,7 +107,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
     }
     
-   
     
     internal override func reload() {
         super.reload()
@@ -117,11 +117,13 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         name.sizeToFit()
         
-        time.text = "\(lesson.day.string()) - \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+        time.text = "\(lesson.day.string()) \u{2022} \(lesson.startTime.string() ?? "") \u{2022} \(lesson.endTime.string() ?? "")"
         
         let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
         colorIndicator.backgroundColor = color
+        
+        tasksLabel.text = "\(lesson.tasks?.count ?? 0)"
     }
     
     

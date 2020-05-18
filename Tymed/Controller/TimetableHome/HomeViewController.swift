@@ -203,11 +203,10 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
     func lessonDetail(_ view: UIView, for lesson: Lesson) {
         
-        let vc = LessonDetailCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let vc = LessonDetailCollectionViewController(style: .insetGrouped)
         vc.lesson = lesson
         
         let nav = UINavigationController(rootViewController: vc)
-        nav.navigationBar.barTintColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
         
         vc.title = lesson.subject?.name ?? "-"
         

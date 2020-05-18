@@ -99,8 +99,8 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
     
     var autoFill: SubjectAutoFill = SubjectAutoFill()
     
-    private var expandStartTime = false
-    private var expandEndTime = false
+    internal var expandStartTime = false
+    internal var expandEndTime = false
     private var expandDay = false
     private var invalidTimeInterval = false
     
@@ -161,13 +161,18 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         selectColor(lessonColor)
     }
     
+    internal func fetchSubjects() {
+        
+    }
+    
     private func setupView() {
         
         setupNavigationBar()
         
     }
     
-    private func setupNavigationBar() {
+    internal func setupTextField() {
+        navigationController?.navigationBar.addSubview(textField)
         
         navigationItem.titleView = textField
         
@@ -203,8 +208,15 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         }
         
         textField.textAlignment = .center
-        textField.placeholder = "Subject name"
+        textField.attributedPlaceholder = NSAttributedString(string: "Subject Name", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.6) ])
         textField.textColor = .white
+        textField.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+
+    }
+    
+    internal func setupNavigationBar() {
+        
+        setupTextField()
         
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add", style: .done, target: self
@@ -301,7 +313,6 @@ class LessonAddViewController: UITableViewController, UITextFieldDelegate, Lesso
         if lesson != nil {
             dismiss(animated: true, completion: nil)
         }
-        
         
     }
     

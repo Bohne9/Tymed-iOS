@@ -13,7 +13,7 @@ class ViewController: UITabBarController {
 
     let homeVC = HomeViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
-    let addVC = AddCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+    let addVC = AddCollectionViewController(style: .insetGrouped)
     
     let profileVC = ProfileCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -60,12 +60,21 @@ class ViewController: UITabBarController {
         return nav
     }
     
-    private func generateAddViewController() -> UINavigationController {
+    private func generateAddViewController() -> UIViewController {
 //        let nav = UINavigationController(navigationBarClass: LessonAddNavigationbar.self, toolbarClass: nil)
 //        nav.setViewControllers([addVC], animated: false)
         let nav = UINavigationController(rootViewController: addVC)
         
-        return nav
+        let split = UISplitViewController()
+
+        split.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+        split.viewControllers = [nav]//, UINavigationController(rootViewController: LessonAddViewController(style: .insetGrouped))]
+        split.extendedLayoutIncludesOpaqueBars = true
+        
+        
+        
+        return split
+        
     }
     
     private func generateHomeViewController() -> UINavigationController {

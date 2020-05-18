@@ -2,7 +2,7 @@
 //  Lesson+CoreDataProperties.swift
 //  Tymed
 //
-//  Created by Jonah Schueller on 15.05.20.
+//  Created by Jonah Schueller on 18.05.20.
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 //
@@ -23,8 +23,8 @@ extension Lesson {
     @NSManaged public var note: String?
     @NSManaged public var start: Int32
     @NSManaged public var subject: Subject?
-    
-    
+    @NSManaged public var tasks: NSSet?
+
     var day: Day {
         return Day(rawValue: Int(dayOfWeek)) ?? .monday
     }
@@ -46,4 +46,21 @@ extension Lesson {
             end = Int32(newValue.timeInterval)
         }
     }
+}
+
+// MARK: Generated accessors for tasks
+extension Lesson {
+
+    @objc(addTasksObject:)
+    @NSManaged public func addToTasks(_ value: Task)
+
+    @objc(removeTasksObject:)
+    @NSManaged public func removeFromTasks(_ value: Task)
+
+    @objc(addTasks:)
+    @NSManaged public func addToTasks(_ values: NSSet)
+
+    @objc(removeTasks:)
+    @NSManaged public func removeFromTasks(_ values: NSSet)
+
 }

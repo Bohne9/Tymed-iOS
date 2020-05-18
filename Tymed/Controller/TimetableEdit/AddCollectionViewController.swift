@@ -8,73 +8,8 @@
 
 import UIKit
 
-class LessonAddNavigationbar: UINavigationBar {
-    
-    let textField = UITextField()
-    
-    override var prefersLargeTitles: Bool  {
-        
-        didSet {
-            print("navvar big title - \(prefersLargeTitles)")
-        }
-    }
-    
-    override var frame: CGRect {
-        
-        didSet {
-            print(frame.height)
-            
-            if frame.height < 50 {
-                
-                textField.font = UIFont.preferredFont(forTextStyle: .headline)
-                bottomOffsetConstraint?.constant = 0
-            }else if frame.height > 85 {
-                textField.layer.contentsScale = max(1, frame.height / 100)
-            }else {
-                textField.font = UIFont.preferredFont(forTextStyle: .largeTitle)
-                bottomOffsetConstraint?.constant = -10
-            }
-            
-        }
-    }
-    
-    
-    private var bottomOffsetConstraint: NSLayoutConstraint?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        prefersLargeTitles = true
-        
-        isTranslucent = false
-        
-        addSubview(textField)
-        
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = backgroundColor
-        
-        textField.placeholder = "subject name"
-        
-        sendSubviewToBack(textField)
-        
-        textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        textField.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        bottomOffsetConstraint = textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
-        bottomOffsetConstraint?.isActive = true
-        
-        textField.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        textField.font = UIFont.preferredFont(forTextStyle: .largeTitle)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-}
-
 let addReuseIdentifier = "addCell"
-class AddCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class AddCollectionViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,21 +23,11 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
         navigationItem.rightBarButtonItem = rightItem
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: addReuseIdentifier)
-        collectionView.backgroundColor = .systemGroupedBackground
-        // Do any additional setup after loading the view.
-    }
+        title = "Timetable"
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: addReuseIdentifier)
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
     }
-    */
     
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
         
@@ -136,61 +61,24 @@ class AddCollectionViewController: UICollectionViewController, UICollectionViewD
         
     }
 
-    // MARK: - UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 20
     }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: addReuseIdentifier, for: indexPath)
     
-        // Configure the cell
-        cell.backgroundColor = .red
-    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: addReuseIdentifier, for: indexPath)
+        
+        cell.textLabel?.text = "Timetable"
+        cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
-
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }

@@ -16,9 +16,11 @@ protocol LessonDetailCollectionViewControllerDelegate {
     
 }
 
-class LessonDetailCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class LessonDetailCollectionViewController: LessonAddViewController {
 
     var lesson: Lesson?
+    
+    private var isEditable: Bool = false
     
     var delegate: LessonDetailCollectionViewControllerDelegate?
     
@@ -32,110 +34,88 @@ class LessonDetailCollectionViewController: UICollectionViewController, UICollec
         
         navigationController?.presentationController?.delegate = self
         
-        // Register cell classes
-        self.collectionView!.register(LessonDetailDeleteCell.self, forCellWithReuseIdentifier: lessonDeleteCell)
-        collectionView.backgroundColor = .systemBackground
-
+        let item = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toogleEditing(_:)))
+        
+        navigationItem.rightBarButtonItem = item
+        
+        let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(dismissDetailView))
+        
+        navigationItem.rightBarButtonItem = item
+        navigationItem.leftBarButtonItem = cancel
+        
+        if let lesson = lesson {
+//            selectColor(lesson.subject?.color)
+            title = lesson.subject?.name
+        }
+        
+        navigationController?.navigationBar.tintColor = .systemBlue
+        
         // Do any additional setup after loading the view.
     }
-
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        // Configure the cell
-        
-        if indexPath.row == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: lessonDeleteCell, for: indexPath)
-            
-            setupDeleteCell(cell)
-            
-            return cell
-        }
-        
-        return UICollectionViewCell(frame: .zero)
-    }
     
-    private func setupDeleteCell(_ cell: UICollectionViewCell) {
-        
-        guard let deleteCell = cell as? LessonDetailDeleteCell else {
-            return
-        }
-        
-        deleteCell.deleteButton.addTarget(self, action: #selector(showDeleteConfirm), for: .touchUpInside)
+    override func selectColor(_ colorName: String?) {
         
     }
     
-    @objc func showDeleteConfirm() {
+    @objc func dismissDetailView() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func toogleEditing(_ btn: UIBarButtonItem) {
         
-        let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
+        isEditable.toggle()
+        
+        btn.title = isEditable ? "Save" : "Edit"
+        btn.style = isEditable ? .done : .plain
+        
+        if !isEditable {
+            expandStartTime = false
+            expandEndTime = false
+        }
+        
+        tableView.reloadData()
+    }
+    
+    // Override necessary to not add the navigation bar title + text field toolbar of the superclass
+    override func setupNavigationBar() {
+        
+    }
 
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
-            // Delete lesson
-            if let lesson = self.lesson {
-                TimetableService.shared.deleteLesson(lesson)
-                self.lesson = nil
-                self.dismiss(animated: true) {
-                    self.delegate?.lessonDetailWillDismiss(self)
-                }
-                print("delete")
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        if let color = cell as? LessonColorPickerCell {
+            color.accessoryType = .none
+            color.selectColor(named: lesson?.subject?.color ?? "blue")
+        }else if let time = cell as? LessonTimeTitleCell {
+            if indexPath.row == 0 {
+                time.title.text = "Start"
+                time.value.text = lesson?.startTime.string()
+            }else if indexPath.row == 1 {
+                time.title.text = "End"
+                time.value.text = lesson?.endTime.string()
+            } else {
+                time.title.text = "Day"
+                time.value.text = lesson?.day.string()
             }
-        }))
-
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
-            print("Dismiss")
-        }))
+        }else if let note = cell as? LessonAddNoteCell {
+            note.textView.text = lesson?.note ?? ""
+            note.textView.isEditable = isEditable
+        }
         
-        self.present(alert, animated: true, completion: {
-            print("completion block")
-        })
+        cell.selectionStyle = .none
+        
+        return cell
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
-    }
-    */
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 40)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if isEditable {
+            super.tableView(tableView, didSelectRowAt: indexPath)
+        }
     }
 
+  
 }
 
 

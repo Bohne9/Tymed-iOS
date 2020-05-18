@@ -278,11 +278,16 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
             let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
             colorIndicator.backgroundColor = .white
+            
+            tasksLabel.textColor = .white
+            tasksImage.tintColor = .white
             backgroundColor = color
             return
         }
         name.textColor = .label
         time.textColor = .label
+        tasksLabel.textColor = .label
+        tasksImage.tintColor = .label
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }
