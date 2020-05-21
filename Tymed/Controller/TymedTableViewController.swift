@@ -58,9 +58,13 @@ class TymedTableViewController: UITableViewController {
     //MARK: identifier(for: )
     /// Returns the identifier of a cell for a given IndexPath
     /// - Parameter indexPath: IndexPath of the cell
-    private func identifier(for indexPath: IndexPath) -> String? {
+    internal func identifier(for indexPath: IndexPath) -> String? {
         let identifier = sectionIdentifier(for: indexPath.section)
         return cells[identifier]?[indexPath.row]
+    }
+    
+    internal func numerOfCells(for section: String) -> Int {
+        return cells[section]?.count ?? 0
     }
     
     // MARK: - Table view data source
@@ -91,6 +95,18 @@ class TymedTableViewController: UITableViewController {
 
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let identifier = identifier(for: indexPath) else {
+            return
+        }
+        didSelectRow(at: indexPath, with: identifier)
+    }
+    
+    //MARK: didSelectRow(at: , with: )
+    internal func didSelectRow(at indexPath: IndexPath, with identifier: String) {
+        
+    }
 
     //MARK: addSection(...)
     
@@ -105,8 +121,9 @@ class TymedTableViewController: UITableViewController {
     /// - Parameters:
     ///   - identfier: Unique identifier for the section
     ///   - index: Index where the section will be inserted (index is automatically )
-    internal func addSection(with identfier: String, at index: Int) {
-        sections.insert(identfier, at: max(0, min(index, sections.endIndex)))
+    internal func addSection(with identifier: String, at index: Int) {
+        sections.insert(identifier, at: max(0, min(index, sections.endIndex)))
+        cells[identifier] = []
     }
     
     //MARK: removeSection(...)
@@ -144,6 +161,18 @@ class TymedTableViewController: UITableViewController {
         addCell(with: identifier, at: sections[section])
     }
     
+    internal func setCells(for section: String, _ cells: String...) {
+        if self.cells[section] != nil {
+            self.cells[section] = cells
+        }
+    }
+    
+    internal func setCells(for section: String, _ cells: [String]) {
+        if self.cells[section] != nil {
+            self.cells[section] = cells
+        }
+    }
+    
     //MARK: removeCell(...)
     
     /// Removes the cell of the specified section - row
@@ -176,7 +205,7 @@ class TymedTableViewController: UITableViewController {
         })
     }
     
-    /// Removes the cell of the specified section - row
+    /// Removes all cell of the specified section - row
     /// - Parameters:
     ///   - section: Section index of the cell
     ///   - row: Row identifier of the cell
@@ -189,10 +218,7 @@ class TymedTableViewController: UITableViewController {
     ///   - section: Section identifier of the cell
     ///   - row: Row index of the cell
     internal func removeCell(at section: String, row: Int) {
-        guard let index = sections.firstIndex(of: section) else {
-            return
-        }
-        removeCell(at: index, row: row)
+        cells[section]?.remove(at: row)
     }
     
     
