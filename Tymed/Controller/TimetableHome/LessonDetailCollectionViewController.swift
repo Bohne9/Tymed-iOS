@@ -8,6 +8,7 @@
 
 import UIKit
 
+private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 
 protocol LessonDetailCollectionViewControllerDelegate {
@@ -21,6 +22,8 @@ class LessonDetailCollectionViewController: LessonAddViewController {
     var lesson: Lesson?
     
     private var isEditable: Bool = false
+    
+    private var lessonDeleteSecionIndex = 4
     
     var delegate: LessonDetailCollectionViewControllerDelegate?
     
@@ -43,12 +46,17 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         navigationItem.rightBarButtonItem = item
         navigationItem.leftBarButtonItem = cancel
         
+        register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
+        
         colorSectionIndex = 1
         timeSectionIndex = 2
         noteSectionIndex = 3
         
         addSection(with: "sec", at: 0)
         addCell(with: lessonTimeTitleCell, at: "sec")
+        
+        addSection(with: lessonDeleteSection)
+        addCell(with: lessonDeleteCell, at: lessonDeleteSection)
         
         if let lesson = lesson {
 //            selectColor(lesson.subject?.color)
@@ -91,7 +99,9 @@ class LessonDetailCollectionViewController: LessonAddViewController {
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         if index == 0 {
             return "Tasks"
-        }else {
+        } else if index == lessonDeleteSecionIndex {
+            return nil
+        } else {
             return super.headerForSection(with: identifier, at: index)
         }
     }
@@ -100,6 +110,10 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         super.configureCell(cell, for: identifier, at: indexPath)
         
         cell.selectionStyle = .none
+        
+        if identifier == lessonDeleteCell {
+            setupDeleteCell(cell)
+        }
         
         if indexPath.section == colorSectionIndex {
             cell.accessoryType = isEditable ? .disclosureIndicator : .none
@@ -121,8 +135,47 @@ class LessonDetailCollectionViewController: LessonAddViewController {
             
         }
         
+    }
+    
+    private func setupDeleteCell(_ cell: UITableViewCell) {
+        
+        guard let deleteCell = cell as? LessonDetailDeleteCell else {
+            return
+        }
+        
+        deleteCell.deleteButton.addTarget(self, action: #selector(showDeleteConfirm), for: .touchUpInside)
         
     }
+    
+    @objc func showDeleteConfirm(_ sender: UIButton) {
+        
+        let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
+            // Delete lesson
+            if let lesson = self.lesson {
+                TimetableService.shared.deleteLesson(lesson)
+                self.lesson = nil
+                self.dismiss(animated: true) {
+                    self.delegate?.lessonDetailWillDismiss(self)
+                }
+                print("delete")
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
+            print("Dismiss")
+        }))
+        
+        if let popOver = alert.popoverPresentationController {
+            popOver.sourceView = sender
+        }
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
+    
     /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -163,12 +216,13 @@ class LessonDetailCollectionViewController: LessonAddViewController {
 
 
 
-class LessonDetailDeleteCell: UICollectionViewCell {
+class LessonDetailDeleteCell: UITableViewCell {
     
     let deleteButton = UIButton()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
         
         setupView()
     }

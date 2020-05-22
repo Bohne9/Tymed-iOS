@@ -39,7 +39,8 @@ class AddCollectionViewController: UITableViewController {
         }))
 
         alert.addAction(UIAlertAction(title: "Task", style: .default , handler:{ (action) in
-            print("Add task")
+            let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
+            self.present(task, animated: true, completion: nil)
         }))
 
         alert.addAction(UIAlertAction(title: "Timetable", style: .default , handler:{ (action) in
