@@ -43,6 +43,13 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         navigationItem.rightBarButtonItem = item
         navigationItem.leftBarButtonItem = cancel
         
+        colorSectionIndex = 1
+        timeSectionIndex = 2
+        noteSectionIndex = 3
+        
+        addSection(with: "sec", at: 0)
+        addCell(with: lessonTimeTitleCell, at: "sec")
+        
         if let lesson = lesson {
 //            selectColor(lesson.subject?.color)
             title = lesson.subject?.name
@@ -80,7 +87,43 @@ class LessonDetailCollectionViewController: LessonAddViewController {
     override func setupNavigationBar() {
         
     }
+    
+    override func headerForSection(with identifier: String, at index: Int) -> String? {
+        if index == 0 {
+            return "Tasks"
+        }else {
+            return super.headerForSection(with: identifier, at: index)
+        }
+    }
 
+    override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
+        super.configureCell(cell, for: identifier, at: indexPath)
+        
+        cell.selectionStyle = .none
+        
+        if indexPath.section == colorSectionIndex {
+            cell.accessoryType = isEditable ? .disclosureIndicator : .none
+        }
+        
+    }
+    
+    override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
+        
+        guard isEditable else {
+            return
+        }
+        
+        if indexPath.section == 0 {
+            
+        }else {
+            
+            super.didSelectRow(at: indexPath, with: identifier)
+            
+        }
+        
+        
+    }
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
@@ -107,7 +150,7 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         cell.selectionStyle = .none
         
         return cell
-    }
+    } */
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditable {

@@ -67,6 +67,10 @@ class TymedTableViewController: UITableViewController {
         return cells[section]?.count ?? 0
     }
     
+    internal func headerForSection(with identifier: String, at index: Int) -> String? {
+        return ""
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -101,6 +105,10 @@ class TymedTableViewController: UITableViewController {
             return
         }
         didSelectRow(at: indexPath, with: identifier)
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return headerForSection(with: sectionIdentifier(for: section), at: section)
     }
     
     //MARK: didSelectRow(at: , with: )
