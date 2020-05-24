@@ -1,0 +1,18 @@
+/* 
+  Localizable.strings
+  Tymed
+
+  Created by Jonah Schueller on 24.05.20.
+  Copyright © 2020 Jonah Schueller. All rights reserved.
+*/
+
+// NavigationBar
+"Dash" = "Start";
+"Tasks" = "Aufgaben";
+"Week" = "Woche";
+
+// Section Headers
+"Description" = "Beschreibung";
+"Title" = "Titel";
+
+

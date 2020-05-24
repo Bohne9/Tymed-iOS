@@ -25,7 +25,8 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         topBar.backgroundColor = .systemGroupedBackground
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true
+//        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true
+        topBar.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.95).isActive = true
         topBar.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         topBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         

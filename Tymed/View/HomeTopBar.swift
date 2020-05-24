@@ -26,7 +26,7 @@ class HomeTopBar: UIStackView {
         
         alignment = .leading
         
-        distribution = .fillEqually
+        distribution = .fillProportionally
         
         addArrangedSubview(dash)
         
@@ -40,7 +40,7 @@ class HomeTopBar: UIStackView {
         
         addArrangedSubview(week)
         
-        configureButton(dash, "Dash")
+        configureButton(dash, "Start")
         
         configureButton(tasks, "Tasks")
         
@@ -51,13 +51,15 @@ class HomeTopBar: UIStackView {
     
     private func configureButton(_ btn: UIButton, _ title: String) {
     
-        btn.setTitle(title, for: .normal)
+        btn.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
         btn.setAttributedTitle(
             NSAttributedString(string: title,
                                attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30, weight: .bold),
                                             NSAttributedString.Key.foregroundColor: UIColor.label]), for: .normal)
         
         btn.addTarget(self, action: #selector(updateButtons(_:)), for: .touchUpInside)
+        
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     

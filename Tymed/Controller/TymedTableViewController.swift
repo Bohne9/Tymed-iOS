@@ -31,6 +31,8 @@ class TymedTableViewController: UITableViewController {
         super.viewDidLoad()
 
         setup()
+        
+        navigationController?.navigationBar.isTranslucent = true
     }
     
     
@@ -46,6 +48,15 @@ class TymedTableViewController: UITableViewController {
     ///   - identifier: Reuseidentifier for the UITableViewCell class
     internal func register(_ cellClass: AnyClass, identifier: String) {
         tableView.register(cellClass, forCellReuseIdentifier: identifier)
+    }
+    
+    //MARK: register(_ :, identifier)
+    /// Registers a UITableViewCell to the tableView of the controller
+    /// - Parameters:
+    ///   - nib: UINib to register
+    ///   - identifier: Reuseidentifier for the UITableViewCell class
+    internal func register(_ nib: UINib?, identifier: String) {
+        tableView.register(nib, forCellReuseIdentifier: identifier)
     }
     
     //MARK: sectionIdentifier(for: )
@@ -109,6 +120,18 @@ class TymedTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return headerForSection(with: sectionIdentifier(for: section), at: section)
+    }
+    
+    
+    internal func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        return 0
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let identifier = identifier(for: indexPath) else {
+            return 0
+        }
+        return heightForRow(at: indexPath, with: identifier)
     }
     
     //MARK: didSelectRow(at: , with: )
