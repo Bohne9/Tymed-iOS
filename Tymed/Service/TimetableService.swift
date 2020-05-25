@@ -47,6 +47,10 @@ enum Day: Int {
         return Calendar.current.weekdaySymbols[rawValue - 1]
     }
     
+    func shortString() -> String {
+        return Calendar.current.shortWeekdaySymbols[rawValue - 1]
+    }
+    
     func rotatingNext() -> Day {
         if self == .saturday {
             return .sunday
@@ -322,6 +326,31 @@ class TimetableService {
             return []
         }
         
+    }
+    
+    func sortLessonsByWeekDay(_ lessons: [Lesson]) -> [Day: [Lesson]] {
+        var week = [Day: [Lesson]]()
+        
+        lessons.forEach({ (lesson) in
+            if ((week[lesson.day]) != nil) {
+                week[lesson.day]?.append(lesson)
+            }else {
+                week[lesson.day] = [lesson]
+            }
+        })
+        
+        // Sort each day slot by time
+        week.forEach { (arg0) in
+            let (key, value) = arg0
+            week[key] = value.sorted(by: { (l1, l2) -> Bool in
+                if l1.startTime != l2.startTime {
+                    return l1.startTime < l2.startTime
+                }
+                return l1.endTime < l2.endTime
+            })
+        }
+        
+        return week
     }
     
     //MARK: getTasks(predicate: )

@@ -84,9 +84,10 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         // Fetch all lessons
         lessons = TimetableService.shared.fetchLessons() ?? []
         
-        // Clear old data
-        week = [:]
         
+        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
+        
+        /*
         // Sort the lessons into the day slots
         lessons.forEach({ (lesson) in
             if ((week[lesson.day]) != nil) {
@@ -105,7 +106,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
                 }
                 return l1.endTime < l2.endTime
             })
-        }
+        }*/
         
         weekDays = Array(week.keys)
         
