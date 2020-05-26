@@ -76,6 +76,15 @@ extension Date {
         return formatter.string(from: self)
     }
     
+    func stringify(dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style) -> String {
+        let formatter = DateFormatter()
+        
+        formatter.dateStyle = dateStyle
+        formatter.timeStyle = timeStyle
+        
+        return formatter.string(from: self)
+    }
+    
     func timeToString() -> String {
         return stringifyTime(with: .short)
     }

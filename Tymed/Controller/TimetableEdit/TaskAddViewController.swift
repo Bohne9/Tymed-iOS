@@ -22,6 +22,8 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
     
     private var lesson: Lesson?
     
+    private var dueDate = Date()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -69,6 +71,15 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
     }
 
     @objc func addTask() {
+        let task = TimetableService.shared.task()
+        
+        task.completed = false
+        task.due = dueDate
+        task.lesson = lesson
+        task.priority = 0
+        task.title = "My task"
+        task.text = "My text"
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -96,8 +107,9 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         lesson = nil
         removeCell(at: 2, row: 0)
         addSection(with: "lesson", at: 2)
+        tableView.deleteRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
         addCell(with: taskAttachLessonCell, at: "lesson")
-        tableView.reloadData()
+        tableView.insertRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
     }
     
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
@@ -111,20 +123,29 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
             cell.removeBtn.addTarget(self, action: #selector(removeLesson), for: .touchUpInside)
             
             cell.setLesson(lesson)
+        } else if identifier == taskDueDateTitleCell {
+            let cell = cell as! TaskDueDateTitleTableViewCell
+            
+            cell.titleLabel.text = "Due"
+            cell.valueLabel.text = dueDate.stringify(dateStyle: .short, timeStyle: .short)
+        } else if identifier == taskDueDateCell {
+            let cell = cell as! TaskDueDateTableViewCell
+            
+            cell.dueDate.date = dueDate
         }
         
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         switch identifier {
-        case taskTitleCell, taskAttachLessonCell, taskAttachedLessonCell:
+        case taskTitleCell:
             return 40
-        case taskDueDateTitleCell:
+        case taskDueDateTitleCell, taskAttachedLessonCell, taskAttachLessonCell:
             return 50
         case taskDescriptionCell:
             return 120
         case taskDueDateCell:
-            return 180
+            return 160
         default:
             return 0
         }
@@ -171,6 +192,10 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
             removeCell(at: 2, row: 0)
             addSection(with: "lesson", at: 2)
             addCell(with: taskAttachedLessonCell, at: "lesson")
+            
+            if let date = TimetableService.shared.dateOfNext(lesson: lesson) {
+                dueDate = date
+            }
         }
             
         self.lesson = lesson

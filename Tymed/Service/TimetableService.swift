@@ -414,4 +414,17 @@ class TimetableService {
         }
     }
     
+    
+    func dateOfNext(lesson: Lesson) -> Date? {
+        
+        let start = lesson.startTime
+        let day = lesson.day
+        
+        var comp = DateComponents()
+        comp.weekday = day.rawValue
+        comp.hour = start.hour
+        comp.minute = start.minute
+        
+        return Calendar.current.nextDate(after: Date(), matching: comp, matchingPolicy: .strict)
+    }
 }

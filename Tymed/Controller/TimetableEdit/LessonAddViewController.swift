@@ -154,7 +154,7 @@ class LessonAddViewController: TymedTableViewController, UITextFieldDelegate, Le
     
     // Vars for the lesson
     
-    private var lessonColor = "blue"
+    internal var lessonColor = "blue"
     
     
     // Get-only lesson params

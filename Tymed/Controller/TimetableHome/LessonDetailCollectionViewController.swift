@@ -106,21 +106,89 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         }
     }
 
+    //MARK: configureCell(_: ...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         super.configureCell(cell, for: identifier, at: indexPath)
         
         cell.selectionStyle = .none
         
+        
         if identifier == lessonDeleteCell {
             setupDeleteCell(cell)
         }
-        
+        // Configure isEditable
         if indexPath.section == colorSectionIndex {
-            cell.accessoryType = isEditable ? .disclosureIndicator : .none
+            cell.accessoryType = isEditable ? .disclosureIndicator : .none // chrevron icon if isEditable
+        }
+        
+        if indexPath.section == noteSectionIndex {
+            (cell as! LessonAddNoteCell).textView.isEditable = isEditable // Make textView editable if isEditable
+        }
+        
+        //MARK: lesson value setup
+        // Break if there is no cell configured
+        guard let lesson = self.lesson else {
+            return
+        }
+        
+        // Set the values of the cells to the value of the lesson
+        switch identifier {
+        case lessonColorPickerCell:
+            guard indexPath.section == colorSectionIndex else {
+                break
+            }
+            // Configure subject color
+            (cell as! LessonColorPickerCell).selectColor(named: lesson.subject?.color ?? "dark")
+            break
+        case lessonTimeTitleCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
+            }
+            // Set the values of the time/ day title cells
+            let cell = cell as! LessonTimeTitleCell
+            let row = indexPath.row
+            
+            if row == 0 {
+                cell.value.text = lesson.startTime.string()
+            }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
+                cell.value.text = lesson.endTime.string()
+            }else {
+                cell.value.text = lesson.day.string()
+            }
+            break
+        case lessonTimePickerCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
+            }
+            // Set the values of the time pickers
+            let cell = cell as! LessonTimePickerCell
+            
+            if indexPath.row == 1 {
+                cell.datePicker.date = lesson.startTime.date ?? Date()
+            }else {
+                cell.datePicker.date = lesson.endTime.date ?? Date()
+            }
+            break
+        case lessonDayPickerCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
+            }
+            // Set the values of the day picker
+            let cell = cell as! LessonDayPickerCell
+            cell.picker.selectRow(lesson.day == .sunday ? 6 : lesson.day.rawValue - 2, inComponent: 0, animated: false)
+        case lessonNoteCell:
+            guard indexPath.section == noteSectionIndex else {
+                break
+            }
+            // Set the value of the note cell
+            (cell as! LessonAddNoteCell).textView.text = lesson.note ?? ""
+            break
+        default:
+            break
         }
         
     }
-    
+    //MARK: didSelectRow(at: , with:)
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         
         guard isEditable else {
@@ -130,6 +198,9 @@ class LessonDetailCollectionViewController: LessonAddViewController {
         if indexPath.section == 0 {
             
         }else {
+            if identifier == lessonColorPickerCell {
+                lessonColor = lesson?.subject?.color ?? "blue"
+            }
             
             super.didSelectRow(at: indexPath, with: identifier)
             

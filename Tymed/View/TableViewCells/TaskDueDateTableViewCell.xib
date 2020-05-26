@@ -28,6 +28,9 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="dueDate" destination="PH5-2g-0TK" id="plv-FI-onq"/>
+            </connections>
             <point key="canvasLocation" x="131.8840579710145" y="235.71428571428569"/>
         </tableViewCell>
     </objects>
