@@ -16,9 +16,12 @@ private let taskAttachLessonCell = "taskAttchLessonCell"
 private let taskAttachedLessonCell = "taskAttachedLessonCell"
 
 //MARK: TaskAddViewController
-class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate {
+class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
 
     private var expandDueDateCell = false
+    
+    private var taskTitle: String?
+    private var taskDescription: String?
     
     private var lesson: Lesson?
     
@@ -37,6 +40,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         
     }
 
+    //MARK: setupNavigationBar()
     internal func setupNavigationBar() {
         
         title = "Task"
@@ -70,6 +74,15 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         addCell(with: taskDueDateTitleCell, at: "due")
     }
 
+    @objc func changeTaskTitle(_ textField: UITextField) {
+        taskTitle = textField.text
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        taskDescription = textView.text
+    }
+    
+    //MARK: addTask()
     @objc func addTask() {
         let task = TimetableService.shared.task()
         
@@ -77,16 +90,18 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         task.due = dueDate
         task.lesson = lesson
         task.priority = 0
-        task.title = "My task"
-        task.text = "My text"
+        task.title = taskTitle
+        task.text = taskDescription
+        
+        TimetableService.shared.save()
         
         dismiss(animated: true, completion: nil)
     }
-    
+    //MARK: cancel()
     @objc func cancel() {
         dismiss(animated: true, completion: nil)
     }
-
+    //MARK: headerForSection(with: , at:)
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         switch index {
         case 0:
@@ -101,7 +116,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
             return ""
         }
     }
-
+    //MARK: removeLesson()
     @objc func removeLesson() {
         
         lesson = nil
@@ -111,10 +126,18 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         addCell(with: taskAttachLessonCell, at: "lesson")
         tableView.insertRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
     }
-    
+    //MARK: configureCell(cell: ,...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         
-        if identifier == taskAttachLessonCell {
+        if identifier == taskTitleCell {
+            let cell = cell as! TaskTitleTableViewCell
+            
+            cell.textField.addTarget(self, action: #selector(changeTaskTitle(_:)), for: .editingChanged)
+        } else if identifier == taskDescriptionCell {
+            let cell = cell as! TaskDescriptionTableViewCell
+            
+            cell.textView.delegate = self
+        } else if identifier == taskAttachLessonCell {
             let cell = cell as! TaskLessonAttachTableViewCell
             cell.attchLesson.addTarget(self, action: #selector(showLessonPicker), for: .touchUpInside)
         } else if identifier == taskAttachedLessonCell {
@@ -135,7 +158,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         }
         
     }
-    
+    //MARK: heightForRow(at: , with: )
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         switch identifier {
         case taskTitleCell:
@@ -151,6 +174,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
         }
     }
     
+    //MARK: didSelectRow(at: , with: )
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         super.didSelectRow(at: indexPath, with: identifier)
         
@@ -178,12 +202,14 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate 
             break
         }
     }
-    
+    //MARK: showLessonPicker()
     @objc func showLessonPicker() {
         let lessonPicker = TaskLessonPickerTableViewController(style: .insetGrouped)
         lessonPicker.lessonDelegate = self
         
-        present(UINavigationController(rootViewController: lessonPicker), animated: true, completion: nil)
+        navigationController?.pushViewController(lessonPicker, animated: true)
+        
+//        present(UINavigationController(rootViewController: lessonPicker), animated: true, completion: nil)
     }
     
     func taskLessonPicker(_ picker: TaskLessonPickerTableViewController, didSelect lesson: Lesson) {
@@ -217,7 +243,7 @@ protocol TaskLessonPickerDelegate {
 }
 
 //MARK: TaskLessonPickerTableViewController
-class TaskLessonPickerTableViewController: UITableViewController {
+class TaskLessonPickerTableViewController: UITableViewController, UINavigationControllerDelegate {
         
     private var lessons: [Lesson]?
     private var displayedLessons: [Lesson]?
@@ -235,9 +261,9 @@ class TaskLessonPickerTableViewController: UITableViewController {
         
         tableView.register(TaskLessonPickerTableViewCell.self, forCellReuseIdentifier: "lessonCell")
         
-        let cancelItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
-        navigationItem.leftBarButtonItem = cancelItem
-        
+//        let cancelItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
+//        navigationItem.leftBarButtonItem = cancelItem
+//
         title = "Lesson"
         
         reload()
@@ -245,7 +271,8 @@ class TaskLessonPickerTableViewController: UITableViewController {
     
     @objc func cancel() {
         lessonDelegate?.taskLessonPickerDidCancel(self)
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     func reload() {
@@ -300,7 +327,7 @@ class TaskLessonPickerTableViewController: UITableViewController {
         }
         
         lessonDelegate?.taskLessonPicker(self, didSelect: lesson)
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

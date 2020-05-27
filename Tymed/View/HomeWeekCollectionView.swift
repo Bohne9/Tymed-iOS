@@ -53,7 +53,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         collectionView.backgroundColor = .systemGroupedBackground
         
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -224,7 +224,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeDashCollectionViewHeader
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
             header.label.text = lesson(for: indexPath)?.day.date()?.dayToString()
             

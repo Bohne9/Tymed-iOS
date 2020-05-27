@@ -369,6 +369,21 @@ class TimetableService {
            return []
         }
     }
+    
+    func getTasks() -> [Task] {
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Task")
+        
+        do {
+            
+            let res = try context.fetch(req) as! [Task]
+            
+            return res
+            
+        } catch {
+            return []
+        }
+    }
+    
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
         return getTasks("lesson == %@", args: lesson)
