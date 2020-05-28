@@ -209,9 +209,9 @@ class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
     }
     
-    private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
-        if let lesson = lessons?[indexPath.row] {
-            delegate?.lessonDetail(self, for: lesson)
+    private func presentDetail(_ tasks: [Task]?, _ indexPath: IndexPath) {
+        if let task = tasks?[indexPath.row] {
+            delegate?.taskDetail(self, for: task)
         }
     }
     
@@ -220,6 +220,7 @@ class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         let sectionId = self.section(for: indexPath)
         
+        presentDetail(tasks, indexPath)
 //        switch sectionId {
 //        case nowSection:
 //            presentDetail(nowLessons, indexPath)

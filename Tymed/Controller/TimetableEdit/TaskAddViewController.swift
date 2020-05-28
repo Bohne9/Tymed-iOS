@@ -8,12 +8,12 @@
 
 import UIKit
 
-private let taskTitleCell = "taskTitleCell"
-private let taskDescriptionCell = "taskDescriptionCell"
-private let taskDueDateTitleCell = "taskDueDateTitleCell"
-private let taskDueDateCell = "taskDueDateCell"
-private let taskAttachLessonCell = "taskAttchLessonCell"
-private let taskAttachedLessonCell = "taskAttachedLessonCell"
+internal let taskTitleCell = "taskTitleCell"
+internal let taskDescriptionCell = "taskDescriptionCell"
+internal let taskDueDateTitleCell = "taskDueDateTitleCell"
+internal let taskDueDateCell = "taskDueDateCell"
+internal let taskAttachLessonCell = "taskAttchLessonCell"
+internal let taskAttachedLessonCell = "taskAttachedLessonCell"
 
 //MARK: TaskAddViewController
 class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
@@ -23,7 +23,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
     private var taskTitle: String?
     private var taskDescription: String?
     
-    private var lesson: Lesson?
+    internal var lesson: Lesson?
     
     private var dueDate = Date()
     
@@ -213,8 +213,23 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
     }
     
     func taskLessonPicker(_ picker: TaskLessonPickerTableViewController, didSelect lesson: Lesson) {
+        selectLesson(lesson)
+        
+        tableView.reloadData()
+    }
+    
+    func taskLessonPickerDidCancel(_ picker: TaskLessonPickerTableViewController) {
+        
+    }
+    
+    func selectLesson(_ lesson: Lesson?) {
+        guard let lesson = lesson else {
+            return
+        }
         
         if self.lesson == nil {
+            tableView.beginUpdates()
+            
             removeCell(at: 2, row: 0)
             addSection(with: "lesson", at: 2)
             addCell(with: taskAttachedLessonCell, at: "lesson")
@@ -222,15 +237,11 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
             if let date = TimetableService.shared.dateOfNext(lesson: lesson) {
                 dueDate = date
             }
+            
+            tableView.endUpdates()
         }
             
         self.lesson = lesson
-        
-        tableView.reloadData()
-    }
-    
-    func taskLessonPickerDidCancel(_ picker: TaskLessonPickerTableViewController) {
-        
     }
 }
 

@@ -166,7 +166,7 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
     func lessonDetail(_ view: UIView, for lesson: Lesson) {
         
-        let vc = LessonDetailCollectionViewController(style: .insetGrouped)
+        let vc = LessonDetailTableViewController(style: .insetGrouped)
         vc.lesson = lesson
         
         let nav = UINavigationController(rootViewController: vc)
@@ -179,12 +179,23 @@ extension HomeViewController: HomeCollectionViewDelegate {
         
     }
     
+    func taskDetail(_ view: UIView, for task: Task) {
+        let vc = TaskDetailTableViewController(style: .insetGrouped)
+        vc.task = task
+        
+        let nav = UINavigationController(rootViewController: vc)
+        
+        vc.title = "Task"
+        
+        present(nav, animated: true, completion: nil)
+    }
+    
 }
 
 
-extension HomeViewController: LessonDetailCollectionViewControllerDelegate {
+extension HomeViewController: LessonDetailTableViewControllerDelegate {
     
-    func lessonDetailWillDismiss(_ viewController: LessonDetailCollectionViewController) {
+    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController) {
         reload()
     }
     

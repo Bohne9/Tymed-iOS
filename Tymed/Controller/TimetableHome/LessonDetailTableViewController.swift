@@ -11,13 +11,13 @@ import UIKit
 private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 
-protocol LessonDetailCollectionViewControllerDelegate {
+protocol LessonDetailTableViewControllerDelegate {
     
-    func lessonDetailWillDismiss(_ viewController: LessonDetailCollectionViewController)
+    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController)
     
 }
 
-class LessonDetailCollectionViewController: LessonAddViewController {
+class LessonDetailTableViewController: LessonAddViewController {
 
     var lesson: Lesson?
     
@@ -25,7 +25,7 @@ class LessonDetailCollectionViewController: LessonAddViewController {
     
     private var lessonDeleteSecionIndex = 4
     
-    var delegate: LessonDetailCollectionViewControllerDelegate?
+    var delegate: LessonDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -321,7 +321,7 @@ class LessonDetailDeleteCell: UITableViewCell {
 }
 
 
-extension LessonDetailCollectionViewController: UIAdaptivePresentationControllerDelegate {
+extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.lessonDetailWillDismiss(self)
