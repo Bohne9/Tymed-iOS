@@ -13,7 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+    - name: CocoaPod Install
+      run: pod install
+    - name: Force xcode 11
+      run: sudo xcode-select -switch /Applications/Xcode_11.5.app
+    - name: iPhone 11 Test
+      run: xcodebuild test -scheme affirm-me-test -workspace affirm-me.xcworkspace -destination ‘platform=iOS Simulator,name=iPhone 11,OS=13.5’
