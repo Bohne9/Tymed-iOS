@@ -18,4 +18,5 @@ jobs:
     - name: Force xcode 11
       run: sudo xcode-select -switch /Applications/Xcode_11.5.app
     - name: iPhone 11 Test
-      run: xcodebuild test -scheme affirm-me-test -workspace affirm-me.xcworkspace -destination ‘platform=iOS Simulator,name=iPhone 11,OS=13.5’
+      run: xcodebuild -project Tymed.xcodeproj -configuration Release
+
