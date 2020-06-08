@@ -6,10 +6,12 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 private let nowReuseIdentifier = "homeNowCell"
 
+private let tasksSection = "tasksSection"
 private let nowSection = "nowSection"
 private let nextSection = "nextSection"
 private let weekSection = "weekSection"
@@ -38,6 +40,8 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     
     var nextLessons: [Lesson]?
     
+    var tasks: [Task]?
+    
     var sectionIdentifiers: [String] = []
     
     //MARK: init(frame: )
@@ -63,6 +67,8 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
+        
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -115,6 +121,10 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         sectionIdentifiers = []
         
+        tasks = TimetableService.shared.getTasks()
+        
+        addSection(id: tasksSection)
+        
         // If there are lessons right now show the "now" section, else show the next
         if (nowLessons?.count ?? 0) > 0 {
             addSection(id: nowSection)
@@ -164,7 +174,8 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         let sectionId = self.section(for: section)
         
         switch sectionId {
-            
+        case tasksSection:
+            return 1
         case nowSection:
             return nowLessons?.count ?? 0
         case nextSection:
@@ -188,6 +199,13 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         let sectionId = self.section(for: indexPath)
         
         switch sectionId {
+        case tasksSection:
+            let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
+        
+            cell.tasks = tasks
+            cell.reload()
+            
+            return cell
         case nowSection:
             let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
             
@@ -248,6 +266,8 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             let sectionId = section(for: indexPath)
             
             switch sectionId{
+            case tasksSection:
+                header.label.text = "Tasks"
             case nowSection:
                 header.label.text =  "Now"
             case nextSection:
@@ -274,6 +294,12 @@ extension HomeDashCollectionView: UICollectionViewDelegateFlowLayout {
     
     //MARK: sizeForItemAt
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sectionId = section(for: indexPath)
+        
+        if sectionId == tasksSection {
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: 70 + CGFloat(min(3, tasks?.count ?? 0) * 40))
+        }
+        
         return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)
     }
 
