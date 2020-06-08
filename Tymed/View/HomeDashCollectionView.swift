@@ -297,7 +297,7 @@ extension HomeDashCollectionView: UICollectionViewDelegateFlowLayout {
         let sectionId = section(for: indexPath)
         
         if sectionId == tasksSection {
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: 70 + CGFloat(min(3, tasks?.count ?? 0) * 40))
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 55))
         }
         
         return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)
