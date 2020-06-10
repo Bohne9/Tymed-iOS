@@ -161,7 +161,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
     }
     
-    func presentTaskDetail(_ task: Task) {
+    func presentTaskDetail(_ task: Task, animated: Bool = true) {
         
         
         DispatchQueue.main.async {
@@ -172,7 +172,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             
             vc.title = "Task"
             
-            self.present(nav, animated: true, completion: nil)
+            self.present(nav, animated: animated, completion: nil)
         }
         
     }
@@ -214,8 +214,8 @@ extension HomeViewController: LessonDetailTableViewControllerDelegate {
 
 extension HomeViewController: HomeDashTaskOverviewCollectionViewCellDelegate {
     
-    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath) {
-        presentTaskDetail(task)
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
+        presentTaskDetail(task, animated: animated)
     }
     
 }

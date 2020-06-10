@@ -10,7 +10,7 @@ import UIKit
 
 protocol HomeDashTaskOverviewCollectionViewCellDelegate {
     
-    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath)
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
 }
 
@@ -42,6 +42,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         tableView.dataSource = self
         
         tableView.becomeFirstResponder()
+        
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
     }
     
     override func reload() {
@@ -49,9 +51,10 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         
         tableView.reloadData()
     }
-        
-
     
+    private func task(for indexPath: IndexPath) -> Task? {
+        return tasks?[indexPath.row]
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return min(tasks?.count ?? 0, 3)
@@ -61,6 +64,10 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeTaskItem", for: indexPath) as! HomeDashTaskOverviewCollectionViewCellItem
     
         cell.reload(tasks![indexPath.row])
+    
+        if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.frame.width, bottom: 0, right: 0)
+        }
         
         return cell
     }
@@ -76,7 +83,51 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
             return
         }
         
-        taskDelegate?.didSelectTask(self, task, indexPath)
+        taskDelegate?.didSelectTask(self, task, indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        
+        let item = Int((configuration.identifier as! NSString) as String) ?? 0
+        
+        animator.addCompletion {
+            let task = self.task(for: IndexPath(row: item, section: 0))!
+            
+            self.taskDelegate?.didSelectTask(self, task, IndexPath(row: item, section: 0), animated: true)
+        }
+        
+    }
+    
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let id = "\(indexPath.row)" as NSString
+        
+        let config = UIContextMenuConfiguration(identifier: id, previewProvider: { () -> UIViewController? in
+            
+            let detail = TaskDetailTableViewController(style: .insetGrouped)
+                
+            detail.task = self.task(for: indexPath)
+            
+            return detail
+        }) { (element) -> UIMenu? in
+            
+            let complete = UIAction(title: "Complete", image: UIImage(systemName: "checkmark")) { (action) in
+                
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                task.completed.toggle()
+                
+                (tableView.cellForRow(at: indexPath) as! HomeDashTaskOverviewCollectionViewCellItem).reload(task)
+
+            }
+            
+            return UIMenu(title: "", image: nil, children: [complete])
+        }
+        
+        
+        return config
     }
     
 }
@@ -204,6 +255,8 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
         
         
     }
+    
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
