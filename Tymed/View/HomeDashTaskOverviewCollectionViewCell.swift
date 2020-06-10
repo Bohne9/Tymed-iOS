@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol HomeDashTaskOverviewCollectionViewCellDelegate {
+    
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath)
+    
+}
+
 let homeDashTaskOverviewCollectionViewCell = "homeDashTaskOverviewCollectionViewCell"
 class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
@@ -16,6 +22,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     }
     
     var tasks: [Task]?
+    
+    var taskDelegate: HomeDashTaskOverviewCollectionViewCellDelegate?
         
     @IBOutlet weak var tableView: UITableView!
     
@@ -37,43 +45,10 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     override func reload() {
         super.reload()
         
-//        guard stackView != nil else {
-//            return
-//        }
         tableView.reloadData()
-        // Add the first three tasks to the stackView
-//        tasks.prefix(3).forEach { addTaskView($0) }
-        
     }
         
-    private func clearTasks() {
-        
-//        stackView.arrangedSubviews.forEach { (subview) in
-//            stackView.removeArrangedSubview(subview)
-//            subview.removeFromSuperview()
-//        }
-        
-    }
-    
-//    private func addTaskView(_ task: Task) {
-//        if stackView?.arrangedSubviews.count != 0 {
-//            let lineView = UIView()
-//            stackView.addArrangedSubview(lineView)
-//            lineView.translatesAutoresizingMaskIntoConstraints = false
-//            lineView
-//            lineView.constraintTrailingToSuperview(constant: 0)
-//            lineView.constraint(height: 1)
-//            lineView.backgroundColor = .red
-//            lineView.layer.borderWidth = 1.0
-//            lineView.layer.borderColor = UIColor.systemGray3.cgColor
-//
-//
-//        }
-//
-//        let view = HomeDashTaskOverviewCollectionViewCellItem(task)
-//        stackView.addArrangedSubview(view)
-//
-//    }
+
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -90,8 +65,17 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return 60
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let task = tasks?[indexPath.row] else {
+            return
+        }
+        
+        taskDelegate?.didSelectTask(self, task, indexPath)
+    }
+    
 }
 
 
@@ -100,17 +84,11 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
     var task: Task!
     
     var complete = UIButton()
-    var label = UILabel()
+    var titleLabel = UILabel()
+    var descriptionLabel = UILabel()
+    var dueLabel = UILabel()
     var subjectIndicator = UIView()
     
-    
-    
-//    init(_ task: Task) {
-//        self.task = task
-//        super.init(style: .default, reuseIdentifier: "homeTaskItem")
-//
-//        configureUserInterface()
-//    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -124,44 +102,75 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
         let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
         complete.setImage(image, for: .normal)
         
-        label.text = task.title
+        titleLabel.text = task.title
         
         subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.blue
+        
+        descriptionLabel.text = task.text ?? "-"
+        
+        dueLabel.text = task.due?.stringify(dateStyle: .short, timeStyle: .short)
+    }
+    
+    private func addSubviews(_ views: UIView...) {
+        views.forEach { (view) in
+            self.addSubview(view)
+            view.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
     private func configureUserInterface() {
-        addSubview(complete)
+        selectionStyle = .none
         
-        addSubview(label)
-        
-        addSubview(subjectIndicator)
+        addSubviews(complete, titleLabel, subjectIndicator, descriptionLabel, dueLabel)
         
         backgroundColor = .secondarySystemGroupedBackground
         contentView.backgroundColor = .secondarySystemGroupedBackground
         
-        complete.translatesAutoresizingMaskIntoConstraints = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        subjectIndicator.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        complete.constraintLeadingToSuperview(constant: -6 )
-        complete.constraint(width: 44, height: 44)
+        // Setup complete indicator
+        complete.constraintLeadingToSuperview(constant: 0)
+        complete.constraint(width: 30, height: 30)
         complete.constraintCenterYToSuperview(constant: 0)
         
         complete.addTarget(self, action: #selector(completeTap), for: .touchUpInside)
         
+        // Setup subject indicator
         subjectIndicator.constraint(width: 10, height: 10)
-        subjectIndicator.constraintTrailingToSuperview(constant: 12)
-        subjectIndicator.constraintCenterYToSuperview(constant: 0)
-        
-        label.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 5)
-        label.constraintHeightToSuperview()
-        label.constraintTrailingTo(anchor: subjectIndicator.leadingAnchor, constant: 5)
-        label.constraintCenterYToSuperview(constant: 0)
-        
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        
+        subjectIndicator.constraintTrailingToSuperview(constant: 5)
+        subjectIndicator.constraintCenterYTo(anchor: titleLabel.centerYAnchor, constant: 0)
+
         subjectIndicator.layer.cornerRadius = 5
+        
+        // Setup title label
+        titleLabel.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 10)
+        titleLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        titleLabel.constraintTrailingTo(anchor: subjectIndicator.leadingAnchor, constant: 5)
+        titleLabel.constraintTopToSuperview(constant: 5)
+        
+        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        
+        // Setup due label
+        let constraint = dueLabel.leadingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -100)
+        constraint.priority = UILayoutPriority.defaultHigh
+        constraint.isActive = true
+        dueLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        dueLabel.constraintTrailingToSuperview(constant: 5)
+        dueLabel.constraintTopTo(anchor: titleLabel.bottomAnchor, constant: 0)
+        
+        dueLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        dueLabel.textAlignment = .right
+        
+        // Setup description label
+        descriptionLabel.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 10)
+        descriptionLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        descriptionLabel.constraintTrailingTo(anchor: dueLabel.leadingAnchor, constant: 5)
+        let c2 = descriptionLabel.trailingAnchor.constraint(equalTo: dueLabel.leadingAnchor, constant: -5)
+        c2.priority = UILayoutPriority.defaultLow
+        c2.isActive = true
+        descriptionLabel.constraintTopTo(anchor: titleLabel.bottomAnchor, constant: 0)
+        
+        descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        
+        descriptionLabel.text = "-"
         
     }
     
@@ -171,17 +180,21 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
         let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
         complete.setImage(image, for: .normal)
         
+        
+        
         if task.completed {
-            UIView.transition(with: label, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.label.text = ((self.task.title ?? "") + " 👏")
+            UIView.transition(with: titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.titleLabel.text = ((self.task.title ?? "") + " 👏")
             }, completion: { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    UIView.transition(with: self.label, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                        self.label.text = self.task.title
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                    UIView.transition(with: self.titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                        self.titleLabel.text = self.task.title
                     }, completion: nil)
                 }
                 
             })
+        }else {
+             self.titleLabel.text = self.task.title
         }
         
         layoutIfNeeded()

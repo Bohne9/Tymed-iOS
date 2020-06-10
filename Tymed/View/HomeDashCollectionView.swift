@@ -30,6 +30,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     var cellColor: UIColor = .red
     
     var delegate: HomeCollectionViewDelegate?
+    var taskDelegate: HomeDashTaskOverviewCollectionViewCellDelegate?
     
     var subjects: [Subject]?
     var lessons: [Lesson]?
@@ -203,6 +204,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
         
             cell.tasks = tasks
+            cell.taskDelegate = taskDelegate
             cell.reload()
             
             return cell
@@ -297,7 +299,7 @@ extension HomeDashCollectionView: UICollectionViewDelegateFlowLayout {
         let sectionId = section(for: indexPath)
         
         if sectionId == tasksSection {
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 55))
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 65))
         }
         
         return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)

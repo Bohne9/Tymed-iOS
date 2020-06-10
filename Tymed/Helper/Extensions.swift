@@ -140,7 +140,7 @@ extension UIView {
     }
     
     func constraintBottomTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat) {
-        self.bottomAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
+        self.bottomAnchor.constraint(equalTo: anchor, constant: -constant).isActive = true
     }
     
     func constraintCenterXTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat) {

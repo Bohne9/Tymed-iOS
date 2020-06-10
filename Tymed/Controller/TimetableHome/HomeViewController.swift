@@ -14,7 +14,6 @@ let reuseIdentifier = "cell"
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     var dashCollectionView: HomeDashCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
         let homeDash = HomeDashCollectionView()
         
         return homeDash
@@ -81,6 +80,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         dashCollectionView.delegate = self
         tasksCollectionView.delegate = self
         weekCollectionView.delegate = self
+        
+        dashCollectionView.taskDelegate = self
     }
     
     func setupFlowLayout() {
@@ -159,6 +160,17 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             navBar.topBar.highlightPage(page)
         }
     }
+    
+    func presentTaskDetail(_ task: Task) {
+        let vc = TaskDetailTableViewController(style: .insetGrouped)
+        vc.task = task
+        
+        let nav = UINavigationController(rootViewController: vc)
+        
+        vc.title = "Task"
+        
+        present(nav, animated: true, completion: nil)
+    }
 }
 
 //MARK: HomeCollectionViewDelegate
@@ -180,14 +192,7 @@ extension HomeViewController: HomeCollectionViewDelegate {
     }
     
     func taskDetail(_ view: UIView, for task: Task) {
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
-        
-        let nav = UINavigationController(rootViewController: vc)
-        
-        vc.title = "Task"
-        
-        present(nav, animated: true, completion: nil)
+        presentTaskDetail(task)
     }
     
 }
@@ -197,6 +202,15 @@ extension HomeViewController: LessonDetailTableViewControllerDelegate {
     
     func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController) {
         reload()
+    }
+    
+}
+
+
+extension HomeViewController: HomeDashTaskOverviewCollectionViewCellDelegate {
+    
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath) {
+        presentTaskDetail(task)
     }
     
 }
