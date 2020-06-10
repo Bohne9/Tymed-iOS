@@ -1,8 +1,8 @@
 //
-//  HomeDashCollectionViewController.swift
+//  HomeTaskCollectionView.swift
 //  Tymed
 //
-//  Created by Jonah Schueller on 28.04.20.
+//  Created by Jonah Schueller on 27.05.20.
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
@@ -14,7 +14,7 @@ private let nowSection = "nowSection"
 private let nextSection = "nextSection"
 private let weekSection = "weekSection"
 
-class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
+class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate {
 
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: self.frame, collectionViewLayout: UICollectionViewFlowLayout())
@@ -29,14 +29,7 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     
     var delegate: HomeCollectionViewDelegate?
     
-    var subjects: [Subject]?
-    var lessons: [Lesson]?
-    
-    
-    //MARK: Section lesson arrays
-    var nowLessons: [Lesson]?
-    
-    var nextLessons: [Lesson]?
+    var tasks: [Task]?
     
     var sectionIdentifiers: [String] = []
     
@@ -61,8 +54,8 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         collectionView.backgroundColor = .systemGroupedBackground
         
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -107,14 +100,17 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     //MARK: fetchData()
     private func fetchData() {
         
-        lessons = TimetableService.shared.fetchLessons()
+        tasks = TimetableService.shared.getTasks()
         
-        nowLessons = TimetableService.shared.getLessons(within: Date()).sorted(by: { (l1, l2) in
-            return l1.startTime < l2.startTime
-        })
+//        nowLessons = TimetableService.shared.getLessons(within: Date()).sorted(by: { (l1, l2) in
+//            return l1.startTime < l2.startTime
+//        })
         
         sectionIdentifiers = []
         
+        addSection(id: nowSection)
+        
+        /*
         // If there are lessons right now show the "now" section, else show the next
         if (nowLessons?.count ?? 0) > 0 {
             addSection(id: nowSection)
@@ -146,6 +142,7 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         if (lessons?.count ?? 0) > 0 {
             addSection(id: weekSection)
         }
+ */
         
     }
     
@@ -166,11 +163,11 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         switch sectionId {
             
         case nowSection:
-            return nowLessons?.count ?? 0
-        case nextSection:
-            return nextLessons?.count ?? 0
-        case weekSection:
-            return lessons?.count ?? 0
+            return tasks?.count ?? 0
+//        case nextSection:
+//            return nextLessons?.count ?? 0
+//        case weekSection:
+//            return lessons?.count ?? 0
         default:
             return 0
             
@@ -189,32 +186,32 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         
         switch sectionId {
         case nowSection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
+            let cell = dequeueCell(homeTaskCell, indexPath) as! HomeTaskCollectionViewCell
             
-            cell.lesson = nowLessons?[indexPath.row]
-            
-            return cell
-        case nextSection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
-            
-            cell.lesson = nextLessons?[indexPath.row]
+            cell.task = tasks?[indexPath.row]
             
             return cell
-        case weekSection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
-            
-            cell.lesson = lessons?[indexPath.row]
-            
-            return cell
+//        case nextSection:
+//            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
+//
+//            cell.lesson = nextLessons?[indexPath.row]
+//
+//            return cell
+//        case weekSection:
+//            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
+//
+//            cell.lesson = lessons?[indexPath.row]
+//
+//            return cell
         default:
             return UICollectionViewCell()
         }
         
     }
     
-    private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
-        if let lesson = lessons?[indexPath.row] {
-            delegate?.lessonDetail(self, for: lesson)
+    private func presentDetail(_ tasks: [Task]?, _ indexPath: IndexPath) {
+        if let task = tasks?[indexPath.row] {
+            delegate?.taskDetail(self, for: task)
         }
     }
     
@@ -223,19 +220,20 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
         
         let sectionId = self.section(for: indexPath)
         
-        switch sectionId {
-        case nowSection:
-            presentDetail(nowLessons, indexPath)
-            break
-        case nextSection:
-            presentDetail(nextLessons, indexPath)
-            break
-        case weekSection:
-            presentDetail(lessons, indexPath)
-            break
-        default:
-            break
-        }
+        presentDetail(tasks, indexPath)
+//        switch sectionId {
+//        case nowSection:
+//            presentDetail(nowLessons, indexPath)
+//            break
+//        case nextSection:
+//            presentDetail(nextLessons, indexPath)
+//            break
+//        case weekSection:
+//            presentDetail(lessons, indexPath)
+//            break
+//        default:
+//            break
+//        }
         
     }
 
@@ -243,7 +241,7 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeDashCollectionViewHeader
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
             let sectionId = section(for: indexPath)
             
@@ -269,43 +267,11 @@ class HomeDashCollectionViewController: UIView, UICollectionViewDataSource, UICo
     }
 }
 
-
-extension HomeDashCollectionViewController: UICollectionViewDelegateFlowLayout {
+extension HomeTaskCollectionView: UICollectionViewDelegateFlowLayout {
     
     //MARK: sizeForItemAt
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)
+        return CGSize(width: collectionView.frame.width - 2 * 16, height: 80)
     }
 
 }
-
-
-//MARK: HomeDashCollectionViewHeader
-class HomeDashCollectionViewHeader: UICollectionReusableView  {
-    
-    var label = UILabel()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        addSubview(label)
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        label.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-}
-
-
-
-

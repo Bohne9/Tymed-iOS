@@ -13,22 +13,17 @@ let reuseIdentifier = "cell"
 
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
-    var dashCollectionView: HomeDashCollectionViewController = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let homeDash = HomeDashCollectionViewController()
-        homeDash.cellColor = .yellow
-        
-//        let nav = UINavigationController(navigationBarClass: NavigationBar.classForCoder(), toolbarClass: nil)
-//        nav.setViewControllers([homeDash], animated: false)
+    var dashCollectionView: HomeDashCollectionView = {
+        let homeDash = HomeDashCollectionView()
         
         return homeDash
     }()
     
-    var tasksCollectionView: HomeDashCollectionViewController = {
+    var tasksCollectionView: HomeTaskCollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        let homeDash = HomeDashCollectionViewController()
-        homeDash.cellColor = .blue
-        return homeDash
+        let homeTask = HomeTaskCollectionView()
+        
+        return homeTask
     }()
     
     var weekCollectionView: HomeWeekCollectionView = {
@@ -85,6 +80,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         dashCollectionView.delegate = self
         tasksCollectionView.delegate = self
         weekCollectionView.delegate = self
+        
+        dashCollectionView.taskDelegate = self
     }
     
     func setupFlowLayout() {
@@ -133,49 +130,16 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
+        let baseCell = [dashCollectionView, tasksCollectionView, weekCollectionView][indexPath.row]
         
-        cell.backgroundColor = [.red, .yellow, .green][indexPath.row]
-        
-        if indexPath.row == 0 {
-            cell.addSubview(dashCollectionView)
-            
-//            dashCollectionView.collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0)
-            dashCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        cell.addSubview(baseCell)
+                    
+        baseCell.translatesAutoresizingMaskIntoConstraints = false
 
-            dashCollectionView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-            dashCollectionView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-            dashCollectionView.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-            dashCollectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-            
-        }
-        
-        if indexPath.row == 1 {
-            cell.addSubview(tasksCollectionView)
-            
-            tasksCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            
-//            tasksCollectionView.collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0)
-            tasksCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            
-            tasksCollectionView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-            tasksCollectionView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-            tasksCollectionView.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-            tasksCollectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-        }
-        
-        if indexPath.row == 2 {
-            cell.addSubview(weekCollectionView)
-            
-            weekCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            
-//            weekCollectionView.collectionView.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 50, right: 0)
-            weekCollectionView.translatesAutoresizingMaskIntoConstraints = false
-            
-            weekCollectionView.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-            weekCollectionView.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-            weekCollectionView.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-            weekCollectionView.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-        }
+        baseCell.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        baseCell.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
+        baseCell.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        baseCell.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
         
         return cell
     }
@@ -196,6 +160,22 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             navBar.topBar.highlightPage(page)
         }
     }
+    
+    func presentTaskDetail(_ task: Task, animated: Bool = true) {
+        
+        
+        DispatchQueue.main.async {
+            let vc = TaskDetailTableViewController(style: .insetGrouped)
+            vc.task = task
+            
+            let nav = UINavigationController(rootViewController: vc)
+            
+            vc.title = "Task"
+            
+            self.present(nav, animated: animated, completion: nil)
+        }
+        
+    }
 }
 
 //MARK: HomeCollectionViewDelegate
@@ -203,11 +183,10 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
     func lessonDetail(_ view: UIView, for lesson: Lesson) {
         
-        let vc = LessonDetailCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        let vc = LessonDetailTableViewController(style: .insetGrouped)
         vc.lesson = lesson
         
         let nav = UINavigationController(rootViewController: vc)
-        nav.navigationBar.barTintColor = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
         
         vc.title = lesson.subject?.name ?? "-"
         
@@ -217,13 +196,26 @@ extension HomeViewController: HomeCollectionViewDelegate {
         
     }
     
+    func taskDetail(_ view: UIView, for task: Task) {
+        presentTaskDetail(task)
+    }
+    
 }
 
 
-extension HomeViewController: LessonDetailCollectionViewControllerDelegate {
+extension HomeViewController: LessonDetailTableViewControllerDelegate {
     
-    func lessonDetailWillDismiss(_ viewController: LessonDetailCollectionViewController) {
+    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController) {
         reload()
+    }
+    
+}
+
+
+extension HomeViewController: HomeDashTaskOverviewCollectionViewCellDelegate {
+    
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
+        presentTaskDetail(task, animated: animated)
     }
     
 }

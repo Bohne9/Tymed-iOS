@@ -9,49 +9,7 @@
 import Foundation
 import CoreData
 
-extension Date {
-    
-    func stringify(with format: String) -> String{
-        
-        let formatter = DateFormatter()
-        
-        formatter.dateFormat = format
-        
-        return formatter.string(from: self)
-    }
-    
-    
-    func stringifyTime(with format: DateFormatter.Style) -> String{
-        
-        let formatter = DateFormatter()
-        
-        formatter.timeStyle = format
-        
-        return formatter.string(from: self)
-    }
-    
-    func stringify(with style: DateFormatter.Style) -> String{
-        
-        let formatter = DateFormatter()
-        
-        formatter.dateStyle = style
-        
-        return formatter.string(from: self)
-    }
-    
-    func timeToString() -> String {
-        return stringifyTime(with: .short)
-    }
-    
-    func dayToString() -> String {
-        return stringify(with: "EEEE")
-    }
-    
-    func dayToStringShort() -> String {
-        return stringify(with: "E")
-    }
-}
-
+//MARK: Day
 enum Day: Int {
     
     static var current: Day {
@@ -89,6 +47,10 @@ enum Day: Int {
         return Calendar.current.weekdaySymbols[rawValue - 1]
     }
     
+    func shortString() -> String {
+        return Calendar.current.shortWeekdaySymbols[rawValue - 1]
+    }
+    
     func rotatingNext() -> Day {
         if self == .saturday {
             return .sunday
@@ -101,6 +63,7 @@ enum Day: Int {
     }
 }
 
+//MARK: TimetableService
 class TimetableService {
     
     static let shared = TimetableService()
@@ -200,7 +163,7 @@ class TimetableService {
         
     }
     
-    
+    //MARK: Lesson factory
     func lesson() -> Lesson {
         let lesson = Lesson(context: context)
         lesson.id = UUID()
@@ -226,13 +189,14 @@ class TimetableService {
         return lesson
     }
     
+    //MARK: deleteLesson(_: )
     func deleteLesson(_ lesson: Lesson) {
         context.delete(lesson)
         
         save()
     }
     
-    //MARK: task()
+    //MARK: Task factory
     /// Creates a new instance of Task and attaches an UUID
     func task() -> Task {
         let task = Task(context: context)
@@ -257,7 +221,7 @@ class TimetableService {
         return task
     }
     
-    //MARK: save
+    //MARK: save()
     func save() {
         do {
             try context.save()
@@ -312,7 +276,7 @@ class TimetableService {
             return fetchedResults
         }
         catch {
-            print ("fetch task failed", error)
+            print ("fetch lessons failed", error)
             return []
         }
         
@@ -334,7 +298,7 @@ class TimetableService {
             return fetchedResults
         }
         catch {
-            print ("fetch task failed", error)
+            print ("fetch lessons failed", error)
             return []
         }
         
@@ -347,7 +311,7 @@ class TimetableService {
     func getLessons(within day: Day) -> [Lesson] {
         
         do {
-            let fetchRequest : NSFetchRequest<Lesson> = Lesson.fetchRequest()
+            let fetchRequest: NSFetchRequest<Lesson> = Lesson.fetchRequest()
             
             let weekday = day.rawValue
             
@@ -358,11 +322,124 @@ class TimetableService {
             return fetchedResults
         }
         catch {
-            print ("fetch task failed", error)
+            print ("fetch lessons failed", error)
             return []
         }
         
-        
     }
     
+    func sortLessonsByWeekDay(_ lessons: [Lesson]) -> [Day: [Lesson]] {
+        var week = [Day: [Lesson]]()
+        
+        lessons.forEach({ (lesson) in
+            if ((week[lesson.day]) != nil) {
+                week[lesson.day]?.append(lesson)
+            }else {
+                week[lesson.day] = [lesson]
+            }
+        })
+        
+        // Sort each day slot by time
+        week.forEach { (arg0) in
+            let (key, value) = arg0
+            week[key] = value.sorted(by: { (l1, l2) -> Bool in
+                if l1.startTime != l2.startTime {
+                    return l1.startTime < l2.startTime
+                }
+                return l1.endTime < l2.endTime
+            })
+        }
+        
+        return week
+    }
+    
+    //MARK: getTasks(predicate: )
+    private func getTasks(_ predicate: String, args: CVarArg...) -> [Task] {
+
+        do {
+           let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+           
+           fetchRequest.predicate = NSPredicate(format: predicate, args)
+           
+           let results = try context.fetch(fetchRequest)
+           
+           return results
+        }catch {
+           print("fetch tasks failed", error)
+           return []
+        }
+    }
+    
+    func getTasks() -> [Task] {
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Task")
+        
+        do {
+            
+            let res = try context.fetch(req) as! [Task]
+            
+            return res
+            
+        } catch {
+            return []
+        }
+    }
+    
+    //MARK: getTasks(lesson: )
+    func getTasks(for lesson: Lesson) -> [Task] {
+        return getTasks("lesson == %@", args: lesson)
+    }
+
+    //MARK: getTasks(date: )
+    private func getTasks(date: Date, dateOperation: String) -> [Task] {
+        return getTasks("due \(dateOperation) %@", args: date as NSDate)
+    }
+
+    func getTasks(before date: Date) -> [Task] {
+        return getTasks(date: date, dateOperation: "<=")
+    }
+
+    func getTasks(after date: Date) -> [Task] {
+        return getTasks(date: date, dateOperation: ">=")
+    }
+
+    func getTasks(at date: Date) -> [Task] {
+        return getTasks(date: date, dateOperation: "==")
+    }
+
+    //MARK: getTasksOrderedByDate(limit: )
+    /// Fetches all tasks from core data sorted by their due date
+    /// - Parameter limit: Max number of items starting from the first
+    func getTasksOrderedByDate(limit: Int = 5) -> [Task] {
+        do {
+            let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+            
+            let sort = NSSortDescriptor(key: #keyPath(Task.due), ascending: true)
+            
+            fetchRequest.sortDescriptors = [sort]
+            
+            fetchRequest.fetchLimit = limit
+       
+            let results = try context.fetch(fetchRequest)
+            
+            return results
+            
+        }catch {
+            print("fetch tasks failed", error)
+            return []
+        }
+    }
+    
+    
+    func dateOfNext(lesson: Lesson) -> Date? {
+        
+        let start = lesson.startTime
+        let day = lesson.day
+        
+        var comp = DateComponents()
+        comp.weekday = day.rawValue
+        comp.hour = start.hour
+        comp.minute = start.minute
+        
+        return Calendar.current.nextDate(after: Date(), matching: comp, matchingPolicy: .strict)
+    }
 }

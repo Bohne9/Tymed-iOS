@@ -53,7 +53,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         collectionView.backgroundColor = .systemGroupedBackground
         
         collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
-        collectionView.register(HomeDashCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -84,9 +84,10 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         // Fetch all lessons
         lessons = TimetableService.shared.fetchLessons() ?? []
         
-        // Clear old data
-        week = [:]
         
+        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
+        
+        /*
         // Sort the lessons into the day slots
         lessons.forEach({ (lesson) in
             if ((week[lesson.day]) != nil) {
@@ -105,7 +106,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
                 }
                 return l1.endTime < l2.endTime
             })
-        }
+        }*/
         
         weekDays = Array(week.keys)
         
@@ -223,7 +224,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeDashCollectionViewHeader
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
             header.label.text = lesson(for: indexPath)?.day.date()?.dayToString()
             
@@ -278,11 +279,16 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
             let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
             colorIndicator.backgroundColor = .white
+            
+            tasksLabel.textColor = .white
+            tasksImage.tintColor = .white
             backgroundColor = color
             return
         }
         name.textColor = .label
         time.textColor = .label
+        tasksLabel.textColor = .label
+        tasksImage.tintColor = .label
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }

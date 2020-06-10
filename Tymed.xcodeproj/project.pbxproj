@@ -10,12 +10,20 @@
 		4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */; };
 		4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
-		4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */; };
+		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
 		4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */; };
 		4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */; };
+		4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */; };
+		4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */; };
+		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
+		4F3F6295247AF75A00A69202 /* TaskDueDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */; };
+		4F3F6296247AF75A00A69202 /* TaskDueDateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */; };
+		4F3F6299247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */; };
+		4F3F629A247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */; };
 		4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
 		4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */; };
+		4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70014B2478548A001BDF21 /* TaskAddViewController.swift */; };
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
 		4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77422456C2A000038729 /* SceneDelegate.swift */; };
 		4F7F77452456C2A000038729 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77442456C2A000038729 /* ViewController.swift */; };
@@ -27,12 +35,25 @@
 		4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77752456CA6400038729 /* NavigationBar.swift */; };
 		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
+		4F7FAEF32480406A00C89C9D /* TaskDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7FAEF22480406A00C89C9D /* TaskDetailTableViewController.swift */; };
+		4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */; };
+		4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */; };
 		4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */; };
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
 		4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */; };
 		4F9405EF2468067C0063E4DA /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
-		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */; };
+		4F953463247C424A007E708B /* TaskLessonAttachTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */; };
+		4F953464247C424A007E708B /* TaskLessonAttachTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */; };
+		4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */; };
+		4F953468247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */; };
+		4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */; };
+		4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */; };
+		4FB98DDD247DAAD6000130BB /* TaskPriorityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */; };
+		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */; };
+		4FC7CDB5247310D8004F5642 /* TymedTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC7CDB4247310D8004F5642 /* TymedTableViewController.swift */; };
+		4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */; };
+		4FCDEAEB247AABE9001B36F4 /* TaskTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */; };
 		4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,12 +78,22 @@
 		4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
-		4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailCollectionViewController.swift; sourceTree = "<group>"; };
+		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionViewCell.swift; sourceTree = "<group>"; };
+		4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDescriptionTableViewCell.swift; sourceTree = "<group>"; };
+		4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDescriptionTableViewCell.xib; sourceTree = "<group>"; };
+		4F3F628F247ABBD900A69202 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4F3F6291247ABBFE00A69202 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		4F3F6292247ABBFE00A69202 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDueDateTableViewCell.swift; sourceTree = "<group>"; };
+		4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDueDateTableViewCell.xib; sourceTree = "<group>"; };
+		4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDueDateTitleTableViewCell.swift; sourceTree = "<group>"; };
+		4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDueDateTitleTableViewCell.xib; sourceTree = "<group>"; };
 		4F405E83245D72FC00E1E704 /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
 		4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewController.swift; sourceTree = "<group>"; };
+		4F70014B2478548A001BDF21 /* TaskAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAddViewController.swift; sourceTree = "<group>"; };
 		4F7F773D2456C2A000038729 /* Tymed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tymed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7F77402456C2A000038729 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F7F77422456C2A000038729 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,12 +111,25 @@
 		4F7F77752456CA6400038729 /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4F7FAEF22480406A00C89C9D /* TaskDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailTableViewController.swift; sourceTree = "<group>"; };
+		4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionView.swift; sourceTree = "<group>"; };
+		4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddViewController.swift; sourceTree = "<group>"; };
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLessonCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F9405EE2468067C0063E4DA /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
-		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionViewController.swift; sourceTree = "<group>"; };
+		4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskLessonAttachTableViewCell.swift; sourceTree = "<group>"; };
+		4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskLessonAttachTableViewCell.xib; sourceTree = "<group>"; };
+		4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAttachedLessonTableViewCell.swift; sourceTree = "<group>"; };
+		4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAttachedLessonTableViewCell.xib; sourceTree = "<group>"; };
+		4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeDashTaskOverviewCollectionViewCell.xib; sourceTree = "<group>"; };
+		4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPriorityTableViewCell.swift; sourceTree = "<group>"; };
+		4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskPriorityTableViewCell.xib; sourceTree = "<group>"; };
+		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionView.swift; sourceTree = "<group>"; };
+		4FC7CDB4247310D8004F5642 /* TymedTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TymedTableViewController.swift; sourceTree = "<group>"; };
+		4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTitleTableViewCell.swift; sourceTree = "<group>"; };
+		4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTitleTableViewCell.xib; sourceTree = "<group>"; };
 		4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekCollectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,6 +163,7 @@
 			children = (
 				4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */,
 				4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */,
+				4F70014B2478548A001BDF21 /* TaskAddViewController.swift */,
 			);
 			path = TimetableEdit;
 			sourceTree = "<group>";
@@ -127,7 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				4F7F7779245766E400038729 /* HomeViewController.swift */,
-				4F152392245E99DE005F34B6 /* LessonDetailCollectionViewController.swift */,
+				4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */,
+				4F7FAEF22480406A00C89C9D /* TaskDetailTableViewController.swift */,
 			);
 			path = TimetableHome;
 			sourceTree = "<group>";
@@ -144,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				4F7F77442456C2A000038729 /* ViewController.swift */,
+				4FC7CDB4247310D8004F5642 /* TymedTableViewController.swift */,
 				4F15239724602218005F34B6 /* TimetableHome */,
 				4F15239624602204005F34B6 /* TimetableEdit */,
 				4F15239824602237005F34B6 /* TimetableProfile */,
@@ -185,6 +232,7 @@
 				4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */,
 				4F7F77512456C2A400038729 /* Info.plist */,
 				4F7F77492456C2A000038729 /* Tymed.xcdatamodeld */,
+				4F3F6290247ABBD900A69202 /* Localizable.strings */,
 			);
 			path = Tymed;
 			sourceTree = "<group>";
@@ -220,13 +268,17 @@
 		4F7F778C2458A16A00038729 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4FCDEAE5247AA9C3001B36F4 /* TableViewCells */,
 				4F7F77752456CA6400038729 /* NavigationBar.swift */,
 				4F7F777724575AB100038729 /* HomeTopBar.swift */,
-				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionViewController.swift */,
 				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
 				4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */,
+				4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */,
+				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
+				4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */,
 				4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */,
 				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
+				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
 				4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */,
 			);
 			path = View;
@@ -247,6 +299,27 @@
 				4F405E83245D72FC00E1E704 /* TimetableService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		4FCDEAE5247AA9C3001B36F4 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */,
+				4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */,
+				4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */,
+				4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */,
+				4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */,
+				4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */,
+				4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */,
+				4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */,
+				4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */,
+				4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */,
+				4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */,
+				4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */,
+				4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */,
+				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,6 +408,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 4F7F77342456C2A000038729;
 			productRefGroup = 4F7F773E2456C2A000038729 /* Products */;
@@ -353,8 +427,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FB98DDD247DAAD6000130BB /* TaskPriorityTableViewCell.xib in Resources */,
+				4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */,
+				4FCDEAEB247AABE9001B36F4 /* TaskTitleTableViewCell.xib in Resources */,
+				4F3F629A247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib in Resources */,
+				4F953464247C424A007E708B /* TaskLessonAttachTableViewCell.xib in Resources */,
+				4F953468247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib in Resources */,
+				4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */,
 				4F7F77502456C2A400038729 /* LaunchScreen.storyboard in Resources */,
+				4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */,
 				4F7F774D2456C2A400038729 /* Assets.xcassets in Resources */,
+				4F3F6296247AF75A00A69202 /* TaskDueDateTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,17 +462,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionViewController.swift in Sources */,
+				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */,
+				4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
+				4FC7CDB5247310D8004F5642 /* TymedTableViewController.swift in Sources */,
+				4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */,
+				4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
+				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */,
+				4F3F6299247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift in Sources */,
 				4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */,
+				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
 				4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */,
+				4F953463247C424A007E708B /* TaskLessonAttachTableViewCell.swift in Sources */,
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
+				4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */,
+				4F7FAEF32480406A00C89C9D /* TaskDetailTableViewController.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
@@ -398,10 +491,12 @@
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
 				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
 				4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */,
+				4F3F6295247AF75A00A69202 /* TaskDueDateTableViewCell.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
 				4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */,
-				4F152393245E99DE005F34B6 /* LessonDetailCollectionViewController.swift in Sources */,
+				4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */,
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
+				4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,10 +532,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4F3F6290247ABBD900A69202 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F3F628F247ABBD900A69202 /* en */,
+				4F3F6292247ABBFE00A69202 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		4F7F774E2456C2A400038729 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4F7F774F2456C2A400038729 /* Base */,
+				4F3F6291247ABBFE00A69202 /* de */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -452,6 +557,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -512,6 +618,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -569,7 +676,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KE78DLA237;
 				INFOPLIST_FILE = Tymed/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -588,7 +695,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KE78DLA237;
 				INFOPLIST_FILE = Tymed/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
