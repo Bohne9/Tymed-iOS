@@ -40,6 +40,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.becomeFirstResponder()
     }
     
     override func reload() {
@@ -69,6 +71,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("tap task cell item")
         guard let task = tasks?[indexPath.row] else {
             return
         }

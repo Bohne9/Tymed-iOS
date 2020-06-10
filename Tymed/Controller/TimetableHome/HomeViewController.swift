@@ -162,14 +162,19 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func presentTaskDetail(_ task: Task) {
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
         
-        let nav = UINavigationController(rootViewController: vc)
         
-        vc.title = "Task"
+        DispatchQueue.main.async {
+            let vc = TaskDetailTableViewController(style: .insetGrouped)
+            vc.task = task
+            
+            let nav = UINavigationController(rootViewController: vc)
+            
+            vc.title = "Task"
+            
+            self.present(nav, animated: true, completion: nil)
+        }
         
-        present(nav, animated: true, completion: nil)
     }
 }
 
