@@ -51,6 +51,15 @@ class TaskDetailTableViewController: TaskAddViewController {
             cell.textView.isEditable = isEditable
             
             break
+        case taskAttachedLessonCell:
+            guard section == 2 else {
+                break
+            }
+            let cell = cell as! TaskAttachedLessonTableViewCell
+            
+            cell.removeBtn.isHidden = !isEditable
+            
+            break
         case taskDueDateCell:
             
             break
