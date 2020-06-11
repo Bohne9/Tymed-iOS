@@ -108,6 +108,7 @@ class DynamicTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let identifier = self.identifier(for: indexPath) else {
+            // Should never happen
             return UITableViewCell()
         }
         

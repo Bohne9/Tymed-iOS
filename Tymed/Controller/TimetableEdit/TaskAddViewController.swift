@@ -16,7 +16,7 @@ internal let taskAttachLessonCell = "taskAttchLessonCell"
 internal let taskAttachedLessonCell = "taskAttachedLessonCell"
 
 //MARK: TaskAddViewController
-class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
+class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
 
     private var expandDueDateCell = false
     
@@ -26,6 +26,11 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
     internal var lesson: Lesson?
     
     private var dueDate = Date()
+    
+    internal var taskTitleSection = 0
+    internal var taskDescriptionSection = 1
+    internal var taskLessonSection = 2
+    internal var taskDueSection = 3
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,35 +102,40 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
         
         dismiss(animated: true, completion: nil)
     }
+    
     //MARK: cancel()
     @objc func cancel() {
         dismiss(animated: true, completion: nil)
     }
+    
     //MARK: headerForSection(with: , at:)
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         switch index {
-        case 0:
+        case taskTitleSection:
             return ""
-        case 1:
+        case taskDescriptionSection:
             return "Description"
-        case 2:
+        case taskLessonSection:
             return "Lesson"
-        case 3:
+        case taskDescriptionSection:
             return "Due date"
         default:
             return ""
         }
     }
+    
     //MARK: removeLesson()
     @objc func removeLesson() {
         
         lesson = nil
-        removeCell(at: 2, row: 0)
-        addSection(with: "lesson", at: 2)
-        tableView.deleteRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
+        removeCell(at: taskLessonSection, row: 0)
+        addSection(with: "lesson", at: taskLessonSection)
+        tableView.deleteRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
         addCell(with: taskAttachLessonCell, at: "lesson")
-        tableView.insertRows(at: [IndexPath(row: 0, section: 2)], with: .fade)
+        tableView.insertRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
+         
     }
+    
     //MARK: configureCell(cell: ,...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         
@@ -158,6 +168,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
         }
         
     }
+    
     //MARK: heightForRow(at: , with: )
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         switch identifier {
@@ -202,6 +213,7 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
             break
         }
     }
+    
     //MARK: showLessonPicker()
     @objc func showLessonPicker() {
         let lessonPicker = TaskLessonPickerTableViewController(style: .insetGrouped)
@@ -222,25 +234,38 @@ class TaskAddViewController: TymedTableViewController, TaskLessonPickerDelegate,
         
     }
     
+    //MARK: selectLesson(_ lesson: )
     func selectLesson(_ lesson: Lesson?) {
         guard let lesson = lesson else {
             return
         }
+        print("select lesson")
         
+        // In case the super view (add task) is reloaded for the first time
+        // In that case the is a "attach lesson" cell in the section
+        // -> Remove that and add a "attached lesson" cell to the section
         if self.lesson == nil {
+            // Prepare the tableView for changes
             tableView.beginUpdates()
             
-            removeCell(at: 2, row: 0)
-            addSection(with: "lesson", at: 2)
+            // Remove the "attach lesson" cell
+            removeCell(at: taskLessonSection, row: 0)
+            
+            // Readd the section (the section will be removed as soon
+            // as there aren't any cells in the section
+            addSection(with: "lesson", at: taskLessonSection)
+            
+            // Add "attached lesson" cell
             addCell(with: taskAttachedLessonCell, at: "lesson")
             
+            // FIXME
             if let date = TimetableService.shared.dateOfNext(lesson: lesson) {
                 dueDate = date
             }
             
             tableView.endUpdates()
         }
-            
+        
         self.lesson = lesson
     }
 }

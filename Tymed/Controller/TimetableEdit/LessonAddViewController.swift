@@ -95,7 +95,7 @@ class SubjectAutoFill: UIStackView {
 }
 
 //MARK: LessonAddViewController
-class LessonAddViewController: TymedTableViewController, UITextFieldDelegate, LessonColorPickerTableViewDelegate, UIPickerViewDelegate, LessonDayPickerCellDelegate, SubjectAutoFillDelegate {
+class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, LessonColorPickerTableViewDelegate, UIPickerViewDelegate, LessonDayPickerCellDelegate, SubjectAutoFillDelegate {
 
     let textField = UITextField()
     

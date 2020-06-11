@@ -13,7 +13,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     
     var task: Task? {
         didSet {
-            selectLesson(task?.lesson)
+            reload()
         }
     }
     
@@ -31,6 +31,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         navigationItem.rightBarButtonItem = item
         navigationItem.leftBarButtonItem = cancel
         
+        reload()
     }
     
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
@@ -47,6 +48,8 @@ class TaskDetailTableViewController: TaskAddViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    
+    
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         super.configureCell(cell, for: identifier, at: indexPath)
         
@@ -54,7 +57,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         
         switch identifier {
         case taskTitleCell:
-            guard section == 0 else {
+            guard section == taskTitleSection else {
                 break
             }
             let cell = cell as! TaskTitleTableViewCell
@@ -63,7 +66,7 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskDescriptionCell:
-            guard section == 1 else {
+            guard section == taskDescriptionSection else {
                 break
             }
             let cell = cell as! TaskDescriptionTableViewCell
@@ -73,7 +76,7 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskAttachedLessonCell:
-            guard section == 2 else {
+            guard section == taskLessonSection else {
                 break
             }
             let cell = cell as! TaskAttachedLessonTableViewCell
@@ -82,7 +85,9 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskDueDateCell:
-            
+            guard section == taskDescriptionSection else {
+                break
+            }
             break
         default:
             break
@@ -90,4 +95,50 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
 
+    
+    func reload() {
+        guard let task = task else {
+            // Return since there is no task
+            return
+        }
+        
+        
+        // Reconfigure the cell for the corresponding mode (editing, none editing)
+        if isEditable {
+            reloadEditable(task)
+        }else {
+            reloadNoneEditable(task)
+        }
+        
+        selectLesson(task.lesson)
+        
+        if tableView.superview != nil {
+            tableView.reloadData()
+        }
+    }
+    
+    private func reloadNoneEditable(_ task: Task) {
+        // Remove the description cell in case the task does not have a description
+        if (task.text == nil || task.text == ""), let index = sectionIndex(for: "description") {
+            removeSection(with: "description")
+            taskLessonSection = 1
+            taskDueSection = 2
+            taskDescriptionSection = -1
+        }
+    }
+    
+    private func reloadEditable(_ task: Task) {
+        
+        if sectionIndex(for: "description") == nil {
+            addSection(with: "description", at: 1)
+            print("fjdsioafasd \(sectionIdentifier(for: 1))")
+            addCell(with: taskDescriptionCell, at: 1)
+            taskLessonSection = 2
+            taskDueSection = 3
+            taskDescriptionSection = 1
+        }
+        
+    }
+    
+    
 }
