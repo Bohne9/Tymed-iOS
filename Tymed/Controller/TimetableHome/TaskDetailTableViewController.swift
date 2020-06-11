@@ -22,9 +22,30 @@ class TaskDetailTableViewController: TaskAddViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let item = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toogleEditing(_:)))
+        
+        navigationItem.rightBarButtonItem = item
+        
+        let cancel = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(dismissDetailView))
+        
+        navigationItem.rightBarButtonItem = item
+        navigationItem.leftBarButtonItem = cancel
         
     }
     
+    @objc func toogleEditing(_ btn: UIBarButtonItem) {
+        isEditable.toggle()
+        
+        btn.title = isEditable ? "Save" : "Edit"
+        btn.style = isEditable ? .done : .plain
+        
+        
+        tableView.reloadData()
+    }
+    
+    @objc func dismissDetailView() {
+        dismiss(animated: true, completion: nil)
+    }
     
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         super.configureCell(cell, for: identifier, at: indexPath)
