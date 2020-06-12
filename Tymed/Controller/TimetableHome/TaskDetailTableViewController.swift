@@ -41,7 +41,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         btn.style = isEditable ? .done : .plain
         
         
-        tableView.reloadData()
+        reload()
     }
     
     @objc func dismissDetailView() {
@@ -122,7 +122,6 @@ class TaskDetailTableViewController: TaskAddViewController {
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: "description") {
             removeSection(at: index)
             taskLessonSection = taskLessonSection - 1
-//            taskAttachedLessonCell = 1
             taskDueSection = taskDueSection - 1
             taskDescriptionSection = -1
         }
@@ -131,12 +130,12 @@ class TaskDetailTableViewController: TaskAddViewController {
     private func reloadEditable(_ task: Task) {
         
         if sectionIndex(for: "description") == nil {
-            addSection(with: "description", at: 1)
-            print("fjdsioafasd \(sectionIdentifier(for: 1))")
-            addCell(with: taskDescriptionCell, at: 1)
+            taskDescriptionSection = 1
             taskLessonSection = 2
             taskDueSection = 3
-            taskDescriptionSection = 1
+            addSection(with: "description", at: taskDescriptionSection)
+            
+            addCell(with: taskDescriptionCell, at: taskDescriptionSection)
         }
         
     }
