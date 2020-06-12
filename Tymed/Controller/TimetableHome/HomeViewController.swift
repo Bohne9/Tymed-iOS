@@ -167,7 +167,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         DispatchQueue.main.async {
             let vc = TaskDetailTableViewController(style: .insetGrouped)
             vc.task = task
-            
+            vc.taskDelegate = self
             let nav = UINavigationController(rootViewController: vc)
             
             vc.title = "Task"
@@ -212,10 +212,14 @@ extension HomeViewController: LessonDetailTableViewControllerDelegate {
 }
 
 
-extension HomeViewController: HomeDashTaskOverviewCollectionViewCellDelegate {
+extension HomeViewController: HomeTaskDetailDelegate {
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
         presentTaskDetail(task, animated: animated)
+    }
+    
+    func didDeleteTask(_ task: Task) {
+        reload()
     }
     
 }

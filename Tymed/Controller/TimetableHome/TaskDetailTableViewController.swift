@@ -8,9 +8,10 @@
 
 import UIKit
 
+private let taskDeleteCell = "taskDeleteIdentifier"
+
 class TaskDetailTableViewController: TaskAddViewController {
 
-    
     var task: Task? {
         didSet {
             reload()
@@ -18,6 +19,9 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     private var isEditable: Bool = false
+    private var taskDeleteSection = -1
+    
+    var taskDelegate: HomeTaskDetailDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +34,14 @@ class TaskDetailTableViewController: TaskAddViewController {
         
         navigationItem.rightBarButtonItem = item
         navigationItem.leftBarButtonItem = cancel
+        
+        register(UINib(nibName: "TaskDeleteTableViewCell", bundle: nil), identifier: taskDeleteCell)
+        
+        addSection(with: "delete")
+        
+        taskDeleteSection = sectionIndex(for: "delete") ?? -1
+        
+        addCell(with: taskDeleteCell, at: taskDeleteSection)
         
         reload()
     }
@@ -48,6 +60,46 @@ class TaskDetailTableViewController: TaskAddViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func showDeleteConfirm(_ sender: UIButton) {
+        
+        let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
+            // Delete task
+            if let task = self.task {
+                
+                TimetableService.shared.deleteTask(task)
+                
+                self.task = nil
+                self.dismiss(animated: true) {
+                    self.taskDelegate!-.didDeleteTask(task)
+                }
+                print("delete")
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
+            print("Dismiss")
+        }))
+        
+        if let popOver = alert.popoverPresentationController {
+            popOver.sourceView = sender
+        }
+        
+        self.present(alert, animated: true, completion: {
+            print("completion block")
+        })
+    }
+    
+    private func setupDeleteCell(_ cell: UITableViewCell) {
+        
+        guard let deleteCell = cell as? TaskDeleteTableViewCell else {
+            return
+        }
+        print("setting up delete cell")
+
+        deleteCell.deleteBtn?.addTarget(self, action: #selector(showDeleteConfirm), for: .touchUpInside)
+    }
     
     
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
@@ -94,6 +146,14 @@ class TaskDetailTableViewController: TaskAddViewController {
             cell.selectionStyle = isEditable ? .default : .none
             
             break
+        case taskDeleteCell:
+            guard section == taskDeleteSection else {
+                break
+            }
+            
+            setupDeleteCell(cell)
+            
+            break
         default:
             break
         }
@@ -137,20 +197,29 @@ class TaskDetailTableViewController: TaskAddViewController {
             taskLessonSection = taskLessonSection - 1
             taskDueSection = taskDueSection - 1
             taskDescriptionSection = -1
+            taskDeleteSection = taskDeleteSection - 1
         }
     }
     
     private func reloadEditable(_ task: Task) {
         
         if sectionIndex(for: "description") == nil {
-            taskDescriptionSection = 1
-            taskLessonSection = 2
-            taskDueSection = 3
+            taskDescriptionSection =  1
+            taskLessonSection = taskLessonSection + 1
+            taskDueSection = taskDueSection + 1
+            taskDeleteSection = taskDeleteSection + 1
             addSection(with: "description", at: taskDescriptionSection)
             
             addCell(with: taskDescriptionCell, at: taskDescriptionSection)
         }
         
+    }
+    
+    override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        if identifier == taskDeleteCell {
+            return 50
+        }
+        return super.heightForRow(at: indexPath, with: identifier)
     }
     
     

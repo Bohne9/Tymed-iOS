@@ -405,6 +405,13 @@ class TimetableService {
     func getTasks(at date: Date) -> [Task] {
         return getTasks(date: date, dateOperation: "==")
     }
+    
+    //MARK: deleteTask(_: )
+    func deleteTask(_ task: Task) {
+        context.delete(task)
+        
+        save()
+    }
 
     //MARK: getTasksOrderedByDate(limit: )
     /// Fetches all tasks from core data sorted by their due date
