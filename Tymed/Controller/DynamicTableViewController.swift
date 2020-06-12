@@ -108,6 +108,7 @@ class DynamicTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let identifier = self.identifier(for: indexPath) else {
+            // Should never happen
             return UITableViewCell()
         }
         
@@ -221,9 +222,11 @@ class DynamicTableViewController: UITableViewController {
         let identifier = sectionIdentifier(for: section)
         cells[identifier]?.remove(at: row)
         
-        if let cells = cells[identifier], cells.isEmpty {
-            self.cells[identifier] = nil
-            self.sections.remove(at: section)
+        if let c = self.cells[identifier] {
+            if c.isEmpty {
+                self.cells[identifier] = nil
+                self.sections.remove(at: section)
+            }
         }
     }
     
@@ -256,7 +259,11 @@ class DynamicTableViewController: UITableViewController {
     ///   - section: Section identifier of the cell
     ///   - row: Row index of the cell
     internal func removeCell(at section: String, row: Int) {
-        cells[section]?.remove(at: row)
+        guard let section = sectionIndex(for: section) else {
+            return
+        }
+        
+        removeCell(at: section, row: row)
     }
     
     

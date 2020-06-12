@@ -8,10 +8,11 @@
 
 import UIKit
 
-protocol HomeDashTaskOverviewCollectionViewCellDelegate {
+protocol HomeTaskDetailDelegate {
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
+    func didDeleteTask(_ task: Task)
 }
 
 let homeDashTaskOverviewCollectionViewCell = "homeDashTaskOverviewCollectionViewCell"
@@ -23,7 +24,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
     var tasks: [Task]?
     
-    var taskDelegate: HomeDashTaskOverviewCollectionViewCellDelegate?
+    var taskDelegate: HomeTaskDetailDelegate?
         
     @IBOutlet weak var tableView: UITableView!
     
@@ -48,6 +49,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
     override func reload() {
         super.reload()
+        
+        print("rlaoding a \(tasks?.count)")
         
         tableView.reloadData()
     }
@@ -107,6 +110,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
             let detail = TaskDetailTableViewController(style: .insetGrouped)
                 
             detail.task = self.task(for: indexPath)
+            detail.taskDelegate = self.taskDelegate
             
             return detail
         }) { (element) -> UIMenu? in
@@ -123,7 +127,19 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
 
             }
             
-            return UIMenu(title: "", image: nil, children: [complete])
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                TimetableService.shared.deleteTask(task)
+                
+                self.taskDelegate?.didDeleteTask(task)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [complete, delete])
         }
         
         
@@ -132,7 +148,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
 }
 
-
+//MARK: HomeDashTaskOverviewCellItem
 class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
     
     var task: Task!

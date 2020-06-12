@@ -30,7 +30,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     var cellColor: UIColor = .red
     
     var delegate: HomeCollectionViewDelegate?
-    var taskDelegate: HomeDashTaskOverviewCollectionViewCellDelegate?
+    var taskDelegate: HomeTaskDetailDelegate?
     
     var subjects: [Subject]?
     var lessons: [Lesson]?
@@ -124,7 +124,10 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         tasks = TimetableService.shared.getTasks()
         
-        addSection(id: tasksSection)
+        // Add tasks section only if there are any tasks
+        if (tasks?.count ?? 0) > 0 {
+            addSection(id: tasksSection)
+        }
         
         // If there are lessons right now show the "now" section, else show the next
         if (nowLessons?.count ?? 0) > 0 {
@@ -161,8 +164,6 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     }
     
     // MARK: - UICollectionViewDataSource
-    
-    
     
     //MARK: numberOfSections
     func numberOfSections(in collectionView: UICollectionView) -> Int {
