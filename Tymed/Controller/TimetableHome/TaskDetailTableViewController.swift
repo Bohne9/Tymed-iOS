@@ -72,7 +72,7 @@ class TaskDetailTableViewController: TaskAddViewController {
                 
                 self.task = nil
                 self.dismiss(animated: true) {
-                    self.taskDelegate!-.didDeleteTask(task)
+                    self.taskDelegate!.didDeleteTask(task)
                 }
                 print("delete")
             }
