@@ -95,6 +95,14 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
 
+    override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
+        
+        // Disable any cell selection when the view is not in editing mode.
+        if isEditable {
+            super.didSelectRow(at: indexPath, with: identifier)
+        }
+        
+    }
     
     func reload() {
         guard let task = task else {
