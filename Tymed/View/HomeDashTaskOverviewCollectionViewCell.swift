@@ -127,7 +127,19 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
 
             }
             
-            return UIMenu(title: "", image: nil, children: [complete])
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                TimetableService.shared.deleteTask(task)
+                
+                self.taskDelegate?.didDeleteTask(task)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [complete, delete])
         }
         
         

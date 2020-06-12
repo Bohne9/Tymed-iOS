@@ -60,22 +60,26 @@ class TaskDetailTableViewController: TaskAddViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    private func deleteTask() {
+        if let task = self.task {
+            
+            TimetableService.shared.deleteTask(task)
+            
+            self.task = nil
+            self.dismiss(animated: true) {
+                self.taskDelegate!.didDeleteTask(task)
+            }
+            print("delete")
+        }
+    }
+    
     @objc func showDeleteConfirm(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
             // Delete task
-            if let task = self.task {
-                
-                TimetableService.shared.deleteTask(task)
-                
-                self.task = nil
-                self.dismiss(animated: true) {
-                    self.taskDelegate!.didDeleteTask(task)
-                }
-                print("delete")
-            }
+            self.deleteTask()
         }))
 
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
