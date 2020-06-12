@@ -81,6 +81,8 @@ class TaskDetailTableViewController: TaskAddViewController {
             }
             let cell = cell as! TaskAttachedLessonTableViewCell
             
+            cell.selectionStyle = isEditable ? .default : .none
+            
             cell.removeBtn.isHidden = !isEditable
             
             break
@@ -88,6 +90,9 @@ class TaskDetailTableViewController: TaskAddViewController {
             guard section == taskDescriptionSection else {
                 break
             }
+            
+            cell.selectionStyle = isEditable ? .default : .none
+            
             break
         default:
             break
