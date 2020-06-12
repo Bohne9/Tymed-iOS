@@ -241,7 +241,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         }
         print("select lesson")
         
-        // In case the super view (add task) is reloaded for the first time
+        // In case the view (add task) is reloaded for the first time
         // In that case the is a "attach lesson" cell in the section
         // -> Remove that and add a "attached lesson" cell to the section
         if self.lesson == nil {

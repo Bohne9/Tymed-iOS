@@ -120,9 +120,10 @@ class TaskDetailTableViewController: TaskAddViewController {
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: "description") {
-            removeSection(with: "description")
-            taskLessonSection = 1
-            taskDueSection = 2
+            removeSection(at: index)
+            taskLessonSection = taskLessonSection - 1
+//            taskAttachedLessonCell = 1
+            taskDueSection = taskDueSection - 1
             taskDescriptionSection = -1
         }
     }

@@ -170,8 +170,8 @@ class DynamicTableViewController: UITableViewController {
     /// Removes the section at the specified position
     /// - Parameter index: The position of the section to remove
     internal func removeSection(at index: Int) {
-        sections.remove(at: max(0, min(index, sections.endIndex)))
         cells[sectionIdentifier(for: index)] = nil
+        sections.remove(at: max(0, min(index, sections.endIndex)))
     }
     
     /// Removes the first section of the specified identifier (in case the identifier exists)
@@ -222,9 +222,11 @@ class DynamicTableViewController: UITableViewController {
         let identifier = sectionIdentifier(for: section)
         cells[identifier]?.remove(at: row)
         
-        if let cells = cells[identifier], cells.isEmpty {
-            self.cells[identifier] = nil
-            self.sections.remove(at: section)
+        if let c = self.cells[identifier] {
+            if c.isEmpty {
+                self.cells[identifier] = nil
+                self.sections.remove(at: section)
+            }
         }
     }
     
@@ -257,7 +259,11 @@ class DynamicTableViewController: UITableViewController {
     ///   - section: Section identifier of the cell
     ///   - row: Row index of the cell
     internal func removeCell(at section: String, row: Int) {
-        cells[section]?.remove(at: row)
+        guard let section = sectionIndex(for: section) else {
+            return
+        }
+        
+        removeCell(at: section, row: row)
     }
     
     
