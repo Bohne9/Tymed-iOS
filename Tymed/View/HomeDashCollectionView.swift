@@ -24,6 +24,8 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         view.delegate = self
         view.dataSource = self
         
+        view.alwaysBounceVertical = true
+        
         return view
     }()
     

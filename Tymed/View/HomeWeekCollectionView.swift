@@ -16,6 +16,8 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         view.delegate = self
         view.dataSource = self
         
+        view.alwaysBounceVertical = true
+        
         return view
     }()
     
