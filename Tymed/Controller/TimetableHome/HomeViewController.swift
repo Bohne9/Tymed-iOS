@@ -214,6 +214,17 @@ extension HomeViewController: LessonDetailTableViewControllerDelegate {
 
 extension HomeViewController: HomeTaskDetailDelegate {
     
+    func showTaskDetail(_ task: Task) {
+        let vc = TaskDetailTableViewController(style: .insetGrouped)
+        vc.task = task
+        vc.taskDelegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        
+        vc.title = "Task"
+        
+        self.present(nav, animated: true, completion: nil)
+    }
+    
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
         presentTaskDetail(task, animated: animated)
     }

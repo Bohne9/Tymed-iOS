@@ -340,7 +340,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             return lessonDetail
         }) { (elements) -> UIMenu? in
             
-            return nil
+            return UIMenu(title: "")
         }
         
         return config
