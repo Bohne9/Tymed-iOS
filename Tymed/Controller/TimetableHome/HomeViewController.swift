@@ -209,6 +209,9 @@ extension HomeViewController: LessonDetailTableViewControllerDelegate {
         reload()
     }
     
+    func lessonDidDelete(_ view: UIView, lesson: Lesson) {
+        reload()
+    }
 }
 
 

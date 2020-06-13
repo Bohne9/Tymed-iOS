@@ -340,7 +340,19 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             return lessonDetail
         }) { (elements) -> UIMenu? in
             
-            return UIMenu(title: "")
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                guard let lesson = self.lesson(for: indexPath) else {
+                    return
+                }
+                
+                TimetableService.shared.deleteLesson(lesson)
+                
+                self.delegate?.lessonDidDelete(self, lesson: lesson)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [delete])
         }
         
         return config
