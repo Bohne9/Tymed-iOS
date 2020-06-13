@@ -80,6 +80,28 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
     }
     
+    /// Returns the lesson for a given uuid
+    /// - Parameter uuid: UUID of the lesson
+    /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
+    private func lesson(for uuid: UUID) -> Lesson? {
+        return lessons?.filter { return $0.id == uuid }.first
+    }
+    
+    private func lesson(for indexPath: IndexPath) -> Lesson? {
+        let identifier = section(for: indexPath)
+        
+        switch identifier {
+        case nowSection:
+            return nowLessons?[indexPath.row]
+        case nextSection:
+            return nextLessons?[indexPath.row]
+        case weekSection:
+            return lessons?[indexPath.row]
+        default:
+            return nil
+        }
+    }
+    
     //MARK: - Section helper
     private func section(for section: Int) -> String {
         return sectionIdentifiers[section]
@@ -289,6 +311,55 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 50)
+    }
+    
+    
+//    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+//
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+//        print("fjweio")
+//    }
+//
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let lesson = self.lesson(for: indexPath)
+        
+        guard let uuid = lesson?.id else {
+            return nil
+        }
+        
+        let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
+            
+            let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
+            
+            lessonDetail.lesson = self.lesson(for: indexPath)
+            
+            return lessonDetail
+        }) { (elements) -> UIMenu? in
+            
+            return nil
+        }
+        
+        return config
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        
+        guard let id = (configuration.identifier as? NSUUID) as UUID? else {
+            return
+        }
+        
+        animator.addCompletion {
+            guard let lesson = self.lesson(for: id) else {
+                return
+            }
+            
+            self.delegate?.lessonDetail(self, for: lesson)
+        }
+        
     }
 }
 
