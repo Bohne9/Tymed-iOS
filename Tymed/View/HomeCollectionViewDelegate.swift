@@ -14,6 +14,8 @@ protocol HomeCollectionViewDelegate {
     func lessonDetail(_ view: UIView, for lesson: Lesson)
     
     func taskDetail(_ view: UIView, for task: Task)
+    
+    func lessonDidDelete(_ view: UIView, lesson: Lesson)
 }
 
 extension HomeCollectionViewDelegate {

@@ -10,6 +10,8 @@ import UIKit
 
 protocol HomeTaskDetailDelegate {
     
+    func showTaskDetail(_ task: Task)
+    
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
     func didDeleteTask(_ task: Task)
@@ -96,7 +98,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         animator.addCompletion {
             let task = self.task(for: IndexPath(row: item, section: 0))!
             
-            self.taskDelegate?.didSelectTask(self, task, IndexPath(row: item, section: 0), animated: true)
+            self.taskDelegate?.showTaskDetail(task)
         }
         
     }

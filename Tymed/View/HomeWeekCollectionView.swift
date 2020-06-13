@@ -16,6 +16,8 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         view.delegate = self
         view.dataSource = self
         
+        view.alwaysBounceVertical = true
+        
         return view
     }()
     
@@ -190,6 +192,13 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         }
     }
     
+    /// Returns the lesson for a given uuid
+    /// - Parameter uuid: UUID of the lesson
+    /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
+    private func lesson(for uuid: UUID) -> Lesson? {
+        return lessons.filter { return $0.id == uuid }.first
+    }
+    
     //MARK: lesson(for: )
     private func lesson(for indexPath: IndexPath) -> Lesson? {
         return week[weekDays[indexPath.section]]?[indexPath.row]
@@ -257,6 +266,58 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         presentDetail(lessons(for: indexPath.section), indexPath)
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let lesson = self.lesson(for: indexPath)
+        
+        guard let uuid = lesson?.id else {
+            return nil
+        }
+        
+        let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
+            
+            let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
+            
+            lessonDetail.lesson = self.lesson(for: indexPath)
+            
+            return lessonDetail
+        }) { (elements) -> UIMenu? in
+            
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                guard let lesson = self.lesson(for: indexPath) else {
+                    return
+                }
+                
+                TimetableService.shared.deleteLesson(lesson)
+                
+                self.delegate?.lessonDidDelete(self, lesson: lesson)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [delete])
+        }
+        
+        return config
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        
+        guard let id = (configuration.identifier as? NSUUID) as UUID? else {
+            return
+        }
+        
+        animator.addCompletion {
+            guard let lesson = self.lesson(for: id) else {
+                return
+            }
+            
+            self.delegate?.lessonDetail(self, for: lesson)
+        }
+        
+    }
+    
 }
  
 //MARK: HomeWeekLessonCollectionViewCell
