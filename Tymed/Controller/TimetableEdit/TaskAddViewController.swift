@@ -87,6 +87,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         taskDescription = textView.text
     }
     
+    private func validateValues() -> Bool {
+        
+        return true
+    }
+    
     //MARK: addTask()
     @objc func addTask() {
         let task = TimetableService.shared.task()

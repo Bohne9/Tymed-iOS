@@ -266,7 +266,71 @@ class DynamicTableViewController: UITableViewController {
         removeCell(at: section, row: row)
     }
     
+    internal func tapticFeedback(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(type)
+    }
     
+    internal func tapticErrorFeedback() {
+        tapticFeedback(.error)
+    }
     
-
+    internal func tapticWarningFeedback() {
+        tapticFeedback(.warning)
+    }
+    
+    internal func tapticSuccessFeedback() {
+        tapticFeedback(.success)
+    }
+    
+    internal func viewTextColorErrorAnimation(for view: UIView, _ errorColor: UIColor, _ switchColor: @escaping (UIColor?) -> UIColor?) {
+        
+        var color: UIColor?
+        
+        UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            color = switchColor(errorColor)
+        }, completion: { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    _ = switchColor(color)
+                }, completion: nil)
+            }
+            
+        })
+    }
+    
+    internal func labelErrorAnimation(_ label: UILabel, _ errorColor: UIColor = .red) {
+        
+        viewTextColorErrorAnimation(for: label, errorColor) { (color) -> UIColor? in
+            let prevColor = label.textColor
+            
+            label.textColor = color ?? .label
+            
+            return prevColor
+        }
+    }
+    
+    internal func textFieldErrorAnimation(_ textField: UITextField, _ errorColor: UIColor = .red) {
+        
+        viewTextColorErrorAnimation(for: textField, errorColor) { (color) -> UIColor? in
+            let prevColor = textField.textColor
+            
+            
+            textField.textColor = color ?? .label
+            
+            return prevColor
+        }
+    }
+    
+    internal func textViewErrorAnimation(_ textView: UITextView, _ errorColor: UIColor = .red) {
+        
+        viewTextColorErrorAnimation(for: textView, errorColor) { (color) -> UIColor? in
+            let prevColor = textView.textColor
+            
+            textView.textColor = color ?? .label
+            
+            return prevColor
+        }
+    }
+    
 }

@@ -314,7 +314,51 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
 //        selectColor("blue")
     }
     
+    
+    
+    internal func validateLesson() -> Bool {
+        
+        // There is no subject name
+        if subjectName == nil || subjectName?.isEmpty == true {
+            
+            // Give feedback via taptic engine
+            tapticErrorFeedback()
+            
+            // Highlight the textfield red for a second to show the user where the error occured
+            viewTextColorErrorAnimation(for: textField, UIColor.red.withAlphaComponent(0.8)) { (color) -> UIColor? in
+                
+                self.textField.attributedPlaceholder = NSAttributedString(string: "Subject Name", attributes: [NSAttributedString.Key.foregroundColor: color ?? .label])
+                
+                return UIColor.white.withAlphaComponent(0.6)
+            }
+            
+            return false
+        }
+        
+        // The end time is before the start time
+        if invalidTimeInterval {
+            
+            // Give feedback via taptic engine
+            tapticErrorFeedback()
+            
+            // Highlight the value label of the endTitleCell red for a
+            // second to let the user know where the error occured
+            if let label = endTitleCell?.value {
+                labelErrorAnimation(label)
+            }
+            
+            return false
+        }
+        
+        return true
+    }
+    
     func createLesson() -> Lesson? {
+        
+        guard validateLesson() else {
+            print("Lesson validation failed")
+            return nil
+        }
         
         print("Lesson:")
         
@@ -324,16 +368,6 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         print("\tEnd: \(endDate.timeToString())")
         print("\tDay: \(day.date()?.dayToString() ?? "nil")")
         print("\tNote: \(lessonNote ?? "nil")")
-        
-        if invalidTimeInterval {
-            print("Invalid lesson times")
-            return nil
-        }
-        
-        if subjectName == nil || subjectName?.isEmpty == true {
-            print("Invalid subject name")
-            return nil
-        }
         
         var subject: Subject? = subjects?.filter({ subject -> Bool in return subject.name == subjectName }).first
         
