@@ -87,13 +87,39 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         taskDescription = textView.text
     }
     
+    private func getTaskTitleCell() -> TaskTitleTableViewCell? {
+        tableView.cellForRow(at: IndexPath(row: 0, section: taskTitleSection)) as? TaskTitleTableViewCell
+    }
+    
     private func validateValues() -> Bool {
+        
+        // There is no subject name
+        if taskTitle == nil || taskTitle?.isEmpty == true, let cell = getTaskTitleCell() {
+            
+            // Give feedback via taptic engine
+            tapticErrorFeedback()
+            
+            // Highlight the textfield red for a second to show the user where the error occured
+            viewTextColorErrorAnimation(for: cell.textField, UIColor.red.withAlphaComponent(0.6)) { (color) -> UIColor? in
+                
+                cell.textField.attributedPlaceholder = NSAttributedString(string: "Task title...", attributes: [NSAttributedString.Key.foregroundColor: color ?? .placeholderText ])
+                
+                return UIColor.placeholderText
+            }
+            
+            return false
+        }
         
         return true
     }
     
     //MARK: addTask()
     @objc func addTask() {
+        guard validateValues() else {
+            print("Task validation failed")
+            return
+        }
+        
         let task = TimetableService.shared.task()
         
         task.completed = false
