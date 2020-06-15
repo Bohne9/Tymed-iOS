@@ -1,0 +1,6 @@
+framework module Pods_Tymed {
+  umbrella header "Pods-Tymed-umbrella.h"
+
+  export *
+  module * { export * }
+}

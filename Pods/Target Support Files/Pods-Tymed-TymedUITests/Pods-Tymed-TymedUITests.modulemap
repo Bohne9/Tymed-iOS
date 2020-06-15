@@ -1,0 +1,6 @@
+framework module Pods_Tymed_TymedUITests {
+  umbrella header "Pods-Tymed-TymedUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
