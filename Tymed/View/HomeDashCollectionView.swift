@@ -337,7 +337,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             
             let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
             
-            lessonDetail.lesson = self.lesson(for: indexPath)
+            lessonDetail.lesson = lesson
             
             return lessonDetail
         }) { (elements) -> UIMenu? in

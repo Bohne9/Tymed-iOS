@@ -52,8 +52,6 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     override func reload() {
         super.reload()
         
-        print("rlaoding a \(tasks?.count)")
-        
         tableView.reloadData()
     }
     
