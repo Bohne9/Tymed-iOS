@@ -16,4 +16,4 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select -switch /Applications/Xcode_11.5.app
     - name: Build
-      run: xcodebuild build -workspace Tymed.xcworkspace -scheme Tymed
+      run: xcodebuild build -workspace Tymed.xcworkspace -scheme Tymed -allowProvisioningUpdates
