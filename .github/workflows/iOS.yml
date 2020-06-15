@@ -1,0 +1,19 @@
+name: Swift
+
+on:
+  push:
+    branches: [ master, production ]
+  pull_request:
+    branches: [ master, production ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Select Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_11.5.app
+    - name: Build
+      run: xcodebuild build -workspace Tymed.xcworkspace -scheme Tymed
