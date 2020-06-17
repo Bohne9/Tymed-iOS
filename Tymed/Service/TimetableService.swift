@@ -359,20 +359,27 @@ class TimetableService {
     
     func getNextLessons(in lessons: [Lesson]?) -> [Lesson]? {
         
+        // If there aren't any lessons -> return nil
         guard var lessons = lessons else {
             return nil
         }
         
-        let today = Day.current
+        // Calculate the sorting value for the current day
+        let today = Day.current == .sunday ? 7 : (Day.current.rawValue - 1)
         
         lessons = lessons.sorted(by: { (l1, l2) in // Sort the lessons so that the next lessons are in front
-            // If the lesson is on an previous day, rotate the day to next week
-            let d1 = l1.day.rawValue + (l1.day < today ? 7 : 0)
-            let d2 = l2.day.rawValue + (l2.day < today ? 7 : 0)
+            // Calculate the sorting value for both lesson days
+            var d1 = l1.day == .sunday ? 7 : (l1.day.rawValue - 1)
+            var d2 = l2.day == .sunday ? 7 : (l2.day.rawValue - 1)
+            
+            // Rotate the previous days of this week
+            d1 = d1 + (d1 < today ? 7 : 0)
+            d2 = d2 + (d2 < today ? 7 : 0)
             
             if d1 != d2 { // Check if the lessons are on different days
                 return d1 < d2
             }
+            
             // From here the lessons are on the same day
             if l1.startTime != l2.startTime { // Check if the lessons start on different times
                 return l1.startTime < l2.startTime
@@ -380,19 +387,18 @@ class TimetableService {
             return l1.endTime < l2.endTime // The lesson that ends first is the prefered
         })
         
-        if let first = lessons.first {
-            
-            lessons = lessons.reduce([first]) { (res, lesson) -> [Lesson] in
-                if let first = res.first {
-                    if first.day == lesson.day && first.startTime == lesson.startTime {
-                        var r = res
-                        r.append(lesson)
-                        return r
-                    }
+        // Reduce the lessons to the first few with the same lesson and startTime
+        lessons = lessons.reduce([]) { (res, lesson) -> [Lesson] in
+            if let first = res.first {
+                if first.day == lesson.day && first.startTime == lesson.startTime {
+                    var r = res
+                    r.append(lesson)
+                    return r
                 }
-                return res
+            }else {
+                return [lesson]
             }
-            
+            return res
         }
         
         return lessons
