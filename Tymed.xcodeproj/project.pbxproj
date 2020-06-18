@@ -136,6 +136,7 @@
 		4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskLessonAttachTableViewCell.xib; sourceTree = "<group>"; };
 		4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAttachedLessonTableViewCell.swift; sourceTree = "<group>"; };
 		4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAttachedLessonTableViewCell.xib; sourceTree = "<group>"; };
+		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
 		4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeDashTaskOverviewCollectionViewCell.xib; sourceTree = "<group>"; };
 		4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPriorityTableViewCell.swift; sourceTree = "<group>"; };
 		4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskPriorityTableViewCell.xib; sourceTree = "<group>"; };
@@ -268,6 +269,7 @@
 				4F7F775A2456C2A400038729 /* TymedTests.swift */,
 				4F7F775C2456C2A400038729 /* Info.plist */,
 				4F2F42AF24994FBA009B73A5 /* DayTests.swift */,
+				4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */,
 			);
 			path = TymedTests;
 			sourceTree = "<group>";
