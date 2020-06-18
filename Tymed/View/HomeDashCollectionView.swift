@@ -158,23 +158,7 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             addSection(id: nowSection)
         }
         else {
-            let today = Day.current
-        
-            nextLessons = lessons?.sorted(by: { (l1, l2) in // Sort the lessons so that the next lessons are in front
-                // If the lesson is on an previous day, rotate the day to next week
-                let d1 = l1.day.rawValue + (l1.day < today ? 7 : 0)
-                let d2 = l2.day.rawValue + (l2.day < today ? 7 : 0)
-                
-                if d1 != d2 { // Check if the lessons are on different days
-                    return d1 < d2
-                }
-                // From here the lessons are on the same day
-                if l1.startTime != l2.startTime { // Check if the lessons start on different times
-                    return l1.startTime < l2.startTime
-                }
-                return l1.endTime < l2.endTime // The lesson that ends first is the prefered
-            })
-            
+            nextLessons = TimetableService.shared.getNextLessons()
             
             if (nextLessons?.count ?? 0) > 0 {
                 addSection(id: nextSection)

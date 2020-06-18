@@ -256,6 +256,10 @@ class TimetableService {
         return Calendar.current.date(from: dateComponents)!
     }
     
+    func lessons() -> [Lesson]? {
+        return fetchLessons()
+    }
+    
     //MARK: getLessons(date: )
     /// Fetches the lesson of the current timetable that match a given date (.weekday, .hour, .minute)
     /// - Parameter date: Date that is within the lessons
@@ -351,6 +355,61 @@ class TimetableService {
         }
         
         return week
+    }
+    
+    func getNextLessons(in lessons: [Lesson]?) -> [Lesson]? {
+        
+        // If there aren't any lessons -> return nil
+        guard var les = lessons else {
+            return nil
+        }
+        
+        // Calculate the sorting value for the current day
+        let now = Time.now
+        
+        les.sort { (l1, l2) -> Bool in
+            if l1.day == l2.day {
+                if l1.startTime == l2.startTime {
+                    return l1.endTime < l2.endTime
+                }
+                return l1.startTime < l2.startTime
+            }
+            return l1.day < l2.day
+        }
+        
+        // Repeat as often as many items there are in the next lessons list
+        for _ in 0..<les.count {
+            guard let first = les.first else {
+                break
+            }
+            // If the day is on a previous day or today but already passed
+            // -> Remove form index 0 and append to the end of the list
+            if  first.day < Day.current ||
+               (first.day == Day.current && first.endTime < now) {
+                les.remove(at: 0)
+                les.append(first)
+            }
+        }
+        
+        // Reduce the lessons to the first few with the same lesson and startTime
+        les = les.reduce([]) { (res, lesson) -> [Lesson] in
+            if let first = res.first {
+                if first.day == lesson.day && first.startTime == lesson.startTime {
+                    var r = res
+                    r.append(lesson)
+                    return r
+                }
+            }else {
+                return [lesson]
+            }
+            return res
+        }
+        
+        return les
+    }
+    
+    func getNextLessons() -> [Lesson]? {
+        return getNextLessons(in: self.lessons())
     }
     
     //MARK: getTasks(predicate: )

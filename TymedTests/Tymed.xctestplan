@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "174BACDD-015C-4E78-8357-003F4DDF6CA1",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Tymed.xcodeproj",
+      "identifier" : "4F7F773C2456C2A000038729",
+      "name" : "Tymed"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Tymed.xcodeproj",
+        "identifier" : "4F7F77552456C2A400038729",
+        "name" : "TymedTests"
+      }
+    }
+  ],
+  "version" : 1
+}
