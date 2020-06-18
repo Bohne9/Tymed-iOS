@@ -365,7 +365,6 @@ class TimetableService {
         }
         
         // Calculate the sorting value for the current day
-        let today = Day.current == .sunday ? 7 : (Day.current.rawValue - 1)
         let now = Time.now
         
         les.sort { (l1, l2) -> Bool in
@@ -378,11 +377,13 @@ class TimetableService {
             return l1.day < l2.day
         }
         
-        for i in 0..<les.count {
+        // Repeat as often as many items there are in the next lessons list
+        for _ in 0..<les.count {
             guard let first = les.first else {
                 break
             }
-            
+            // If the day is on a previous day or today but already passed
+            // -> Remove form index 0 and append to the end of the list
             if  first.day < Day.current ||
                (first.day == Day.current && first.endTime < now) {
                 les.remove(at: 0)
