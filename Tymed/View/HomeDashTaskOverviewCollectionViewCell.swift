@@ -15,6 +15,8 @@ protocol HomeTaskDetailDelegate {
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
     func didDeleteTask(_ task: Task)
+    
+    func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell)
 }
 
 let homeDashTaskOverviewCollectionViewCell = "homeDashTaskOverviewCollectionViewCell"
@@ -31,7 +33,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onSeeAll(_ sender: Any) {
-    
+        taskDelegate?.onSeeAllTasks(self)
     }
     
     override func awakeFromNib() {

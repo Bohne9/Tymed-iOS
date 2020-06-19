@@ -9,6 +9,7 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:Tymed.xcodeproj",
       "identifier" : "4F7F773C2456C2A000038729",

@@ -161,6 +161,12 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
     }
     
+    func scrollToSection(_ section: Int) {
+        
+        collectionView.scrollToItem(at: IndexPath(row: section, section: 0), at: .left, animated: true)
+        
+    }
+    
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
         
         
@@ -236,4 +242,8 @@ extension HomeViewController: HomeTaskDetailDelegate {
         reload()
     }
     
+    func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+        // Scroll to task section (with animation)
+        scrollToSection(1)
+    }
 }
