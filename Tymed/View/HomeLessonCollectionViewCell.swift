@@ -27,7 +27,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     
     var time = UILabel()
     
-    internal var tasksImage: UIImageView!
+    var tasksImage = UIImageView()
     var tasksLabel = UILabel()
     
     override init(frame: CGRect) {
@@ -40,20 +40,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     internal override func setupUserInterface() {
         super.setupUserInterface()
         
-        //MARK: colorIndicator
-//        addSubview(colorIndicator)
-//
-//        colorIndicator.translatesAutoresizingMaskIntoConstraints = false
-//
-//        colorIndicator.backgroundColor = .label
-//
-//        colorIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-//        colorIndicator.topAnchor.constraint(equalTo: topAnchor, constant: 14).isActive = true
-//        colorIndicator.heightAnchor.constraint(equalToConstant: 20).isActive = true
-//        colorIndicator.widthAnchor.constraint(equalToConstant: 8).isActive = true
-//
-//        colorIndicator.layer.cornerRadius = 3.5
-//
         //MARK: name
         addSubview(name)
         
@@ -80,33 +66,58 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         time.textColor = .white
         
-        let image = UIImage(systemName: "list.dash")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold))
-        tasksImage = UIImageView(image: image)
-        tasksImage.tintColor = .label
+        setupTaskUserInterface()
         
-        addSubview(tasksLabel)
+    }
+    
+    private func setupTaskUserInterface() {
         
-        tasksLabel.text = "5"
+        // Make sure the lesson has tasks attached
+        guard lesson?.tasks?.count ?? 0 > 0 else {
+            tasksImage.isHidden = true
+            tasksLabel.isHidden = true
+            return
+        }
+        tasksImage.isHidden = false
+        tasksLabel.isHidden = false
         
-        addSubview(tasksImage)
+        if tasksImage.superview == nil {
+            let image = UIImage(systemName: "list.dash")?
+                .withConfiguration(UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold))
+            tasksImage = UIImageView(image: image)
+            tasksImage.tintColor = .label
+            
+            addSubview(tasksImage)
+            
+            tasksImage.translatesAutoresizingMaskIntoConstraints = false
+            tasksLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            tasksImage.leadingAnchor.constraint(equalTo: name.leadingAnchor).isActive = true
+            tasksImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+            tasksImage.widthAnchor.constraint(equalToConstant: 17).isActive = true
+            tasksImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
+            
+            tasksImage.tintColor = .white
+            
+        }
         
-        tasksImage.translatesAutoresizingMaskIntoConstraints = false
-        tasksLabel.translatesAutoresizingMaskIntoConstraints = false
+        if tasksLabel.superview == nil {
+            
+            addSubview(tasksLabel)
+            
+            tasksLabel.text = "-"
+            
+            tasksLabel.leadingAnchor.constraint(equalTo: tasksImage.trailingAnchor, constant: 5).isActive = true
+            tasksLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+            tasksLabel.widthAnchor.constraint(equalToConstant: 15).isActive = true
+            tasksLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
+            
+            tasksLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+            
+            tasksLabel.textColor = .white
+        }
         
-        tasksImage.leadingAnchor.constraint(equalTo: name.leadingAnchor).isActive = true
-        tasksImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-        tasksImage.widthAnchor.constraint(equalToConstant: 17).isActive = true
-        tasksImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
         
-        tasksLabel.leadingAnchor.constraint(equalTo: tasksImage.trailingAnchor, constant: 5).isActive = true
-        tasksLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-        tasksLabel.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        tasksLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
-        
-        tasksLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        
-        tasksImage.tintColor = .white
-        tasksLabel.textColor = .white
         
     }
     
@@ -115,6 +126,8 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         super.reload()
         
         guard let lesson = lesson else { return }
+        
+        setupTaskUserInterface()
         
         name.text = lesson.subject?.name
         
