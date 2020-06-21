@@ -52,6 +52,7 @@
 		4F953464247C424A007E708B /* TaskLessonAttachTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */; };
 		4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */; };
 		4F953468247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */; };
+		4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */; };
 		4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */; };
 		4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */; };
 		4FB98DDD247DAAD6000130BB /* TaskPriorityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */; };
@@ -136,6 +137,7 @@
 		4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskLessonAttachTableViewCell.xib; sourceTree = "<group>"; };
 		4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAttachedLessonTableViewCell.swift; sourceTree = "<group>"; };
 		4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAttachedLessonTableViewCell.xib; sourceTree = "<group>"; };
+		4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCellConfigurator.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
 		4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeDashTaskOverviewCollectionViewCell.xib; sourceTree = "<group>"; };
 		4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPriorityTableViewCell.swift; sourceTree = "<group>"; };
@@ -297,18 +299,9 @@
 		4F7F778C2458A16A00038729 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4F99D205249FECA500A8DFAB /* Home */,
+				4F99D201249FEA7F00A8DFAB /* CellConfiguartor */,
 				4FCDEAE5247AA9C3001B36F4 /* TableViewCells */,
-				4F7F77752456CA6400038729 /* NavigationBar.swift */,
-				4F7F777724575AB100038729 /* HomeTopBar.swift */,
-				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
-				4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */,
-				4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */,
-				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
-				4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */,
-				4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */,
-				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
-				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
-				4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -320,6 +313,56 @@
 				4F9405EA2465B7EE0063E4DA /* Label.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		4F99D201249FEA7F00A8DFAB /* CellConfiguartor */ = {
+			isa = PBXGroup;
+			children = (
+				4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */,
+			);
+			path = CellConfiguartor;
+			sourceTree = "<group>";
+		};
+		4F99D205249FECA500A8DFAB /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				4F7F77752456CA6400038729 /* NavigationBar.swift */,
+				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+				4F99D206249FECBE00A8DFAB /* HomeDash */,
+				4F99D207249FECEA00A8DFAB /* HomeTask */,
+				4F99D208249FECFF00A8DFAB /* HomeWeek */,
+				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
+				4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */,
+				4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		4F99D206249FECBE00A8DFAB /* HomeDash */ = {
+			isa = PBXGroup;
+			children = (
+				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
+				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
+				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
+			);
+			path = HomeDash;
+			sourceTree = "<group>";
+		};
+		4F99D207249FECEA00A8DFAB /* HomeTask */ = {
+			isa = PBXGroup;
+			children = (
+				4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */,
+				4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */,
+			);
+			path = HomeTask;
+			sourceTree = "<group>";
+		};
+		4F99D208249FECFF00A8DFAB /* HomeWeek */ = {
+			isa = PBXGroup;
+			children = (
+				4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */,
+			);
+			path = HomeWeek;
 			sourceTree = "<group>";
 		};
 		4FC2C2CB245D72B300B57682 /* Service */ = {
@@ -592,6 +635,7 @@
 				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */,
 				4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
+				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */,
 				4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */,
