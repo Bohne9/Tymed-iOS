@@ -372,15 +372,18 @@ extension HomeDashCollectionView: UICollectionViewDelegateFlowLayout {
             return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 65))
         }
         
-        var height: CGFloat = 70
-        
-        if let lesson = self.lesson(for: indexPath) {
-            if lesson.tasks?.count ?? 0 > 0 {
-                height += 30
-            }
+        switch sectionId {
+        case tasksSection:
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 65))
+        case nowSection, nextSection, weekSection:
+            
+            let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
+                
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
+        default:
+            return CGSize.zero
         }
         
-        return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
     }
 
 }

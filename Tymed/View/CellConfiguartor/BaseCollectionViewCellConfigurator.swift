@@ -6,16 +6,19 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class BaseCollectionViewCellConfigurator {
+class BaseCollectionViewCellConfigurator<Cell: UICollectionViewCell> {
     
     func reset() {
         
     }
     
-    func reload() {
+    func configure(_ cell: Cell) {
         
     }
     
+    func height(for cell: Cell) -> CGFloat {
+        fatalError("Invalid implemention of BaseCollectionViewCellConfigurator.height(for: )")
+    }
 }
