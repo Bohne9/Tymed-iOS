@@ -17,9 +17,12 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     
     var lesson: Lesson? {
         didSet {
+            configurator.configure(self)
             reload()
         }
     }
+    
+    var configurator = HomeLessonCellConfigurator()
     
     var colorIndicator = UIView()
     
@@ -29,6 +32,10 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     
     var tasksImage = UIImageView()
     var tasksLabel = UILabel()
+    
+    // Layout constraint for anchoring the time label to the top of the cell
+    var timeTopConstraint: NSLayoutConstraint?
+    var timeBottomConstraint: NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +66,14 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         time.translatesAutoresizingMaskIntoConstraints = false
         
         time.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        time.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+        
+        // Setup two constraints for different cells
+        timeTopConstraint = time.topAnchor.constraint(equalTo: topAnchor, constant: 11)
+        timeBottomConstraint = time.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+        
+        timeTopConstraint?.isActive = false
+        timeBottomConstraint?.isActive = false
+        
         time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         time.font = UIFont.systemFont(ofSize: 14, weight: .semibold)

@@ -55,7 +55,7 @@ class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         collectionView.backgroundColor = .systemGroupedBackground
         
-        collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 60, right: 0)
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
@@ -267,6 +267,11 @@ class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 50)
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.didScroll(scrollView)
+    }
+    
 }
 
 extension HomeTaskCollectionView: UICollectionViewDelegateFlowLayout {

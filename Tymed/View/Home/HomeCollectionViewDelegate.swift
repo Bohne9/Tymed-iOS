@@ -11,6 +11,8 @@ import UIKit
 
 protocol HomeCollectionViewDelegate {
     
+    func didScroll(_ view: UIScrollView)
+    
     func lessonDetail(_ view: UIView, for lesson: Lesson)
     
     func taskDetail(_ view: UIView, for task: Task)
