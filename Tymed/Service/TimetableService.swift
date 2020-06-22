@@ -357,6 +357,17 @@ class TimetableService {
         return week
     }
     
+    
+    /// Returns if the lesson is right now
+    /// - Parameter lesson: Lesson to analyse
+    /// - Returns: Returns if the time of the lesson is right now
+    func lessonIsNow(_ lesson: Lesson) -> Bool {
+        let now = Time.now
+        let today = Day.current
+        
+        return lesson.day == today && lesson.startTime <= now && now <= lesson.endTime
+    }
+    
     func getNextLessons(in lessons: [Lesson]?) -> [Lesson]? {
         
         // If there aren't any lessons -> return nil
@@ -364,9 +375,9 @@ class TimetableService {
             return nil
         }
         
-        // Calculate the sorting value for the current day
         let now = Time.now
         
+        // Sort the lessons by day/time
         les.sort { (l1, l2) -> Bool in
             if l1.day == l2.day {
                 if l1.startTime == l2.startTime {
@@ -382,10 +393,11 @@ class TimetableService {
             guard let first = les.first else {
                 break
             }
-            // If the day is on a previous day or today but already passed
+            // If the day is on a previous day or today but already passed or is right now
             // -> Remove form index 0 and append to the end of the list
             if  first.day < Day.current ||
-               (first.day == Day.current && first.endTime < now) {
+                (first.day == Day.current && first.endTime < now) ||
+                (lessonIsNow(first)) {
                 les.remove(at: 0)
                 les.append(first)
             }

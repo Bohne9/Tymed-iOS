@@ -157,12 +157,11 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         if (nowLessons?.count ?? 0) > 0 {
             addSection(id: nowSection)
         }
-        else {
-            nextLessons = TimetableService.shared.getNextLessons()
-            
-            if (nextLessons?.count ?? 0) > 0 {
-                addSection(id: nextSection)
-            }
+        
+        nextLessons = TimetableService.shared.getNextLessons()
+        
+        if (nextLessons?.count ?? 0) > 0 {
+            addSection(id: nextSection)
         }
         
         if (lessons?.count ?? 0) > 0 {
