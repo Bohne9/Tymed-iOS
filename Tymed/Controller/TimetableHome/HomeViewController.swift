@@ -65,7 +65,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             navBar.topBar.dash.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.tasks.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.week.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
-            navBar.barTintColor = .systemGroupedBackground
+//            navBar.barTintColor = .systemGroupedBackground
         }
         
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)

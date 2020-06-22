@@ -17,12 +17,12 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         super.init(frame: frame)
         
         prefersLargeTitles = false
-        isTranslucent = false
+        isTranslucent = true
         
         addSubview(topBar)
         
         topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .systemGroupedBackground
+        topBar.backgroundColor = .clear
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
 //        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true
