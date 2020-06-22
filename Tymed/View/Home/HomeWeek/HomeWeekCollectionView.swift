@@ -54,7 +54,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
         
         collectionView.backgroundColor = .systemGroupedBackground
         
-        collectionView.contentInset = UIEdgeInsets(top: 40, left: 0, bottom: 10, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 60, right: 0)
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
@@ -316,6 +316,10 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
             self.delegate?.lessonDetail(self, for: lesson)
         }
         
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.didScroll(scrollView)
     }
     
 }

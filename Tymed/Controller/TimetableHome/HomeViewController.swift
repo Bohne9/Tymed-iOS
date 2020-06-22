@@ -70,6 +70,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
+//        additionalSafeAreaInsets = UIEdgeInsets(top: 60, left: 0, bottom: 60, right: 0)
         
         setupFlowLayout()
         
@@ -245,5 +246,27 @@ extension HomeViewController: HomeTaskDetailDelegate {
     func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell) {
         // Scroll to task section (with animation)
         scrollToSection(1)
+    }
+    
+    /// Calculates the alpha value depending on a scroll offset
+    /// - Parameter y: Scroll offset y
+    /// - Returns: Returns the value of f(x) = 0.1 * x + 1 (clipped to [0, 1])
+    private func calcuateNavBarBackgroundAlpha(_ y: CGFloat) -> CGFloat {
+        let value = 0.02 * y + 0.2
+        // Clip the value to [0, 1]
+        return min(max(0, value), 1)
+    }
+    
+    func didScroll(_ view: UIScrollView) {
+        let alpha = calcuateNavBarBackgroundAlpha(view.contentOffset.y)
+        
+        guard let nav = navigationController?.navigationBar else {
+            return
+        }
+        print(view.contentOffset.y)
+        
+        nav.subviews.first!.alpha = alpha
+//        nav.backgroundColor = UIColor.systemBackground.withAlphaComponent(alpha)
+        
     }
 }
