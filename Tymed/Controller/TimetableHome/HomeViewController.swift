@@ -258,15 +258,20 @@ extension HomeViewController: HomeTaskDetailDelegate {
     }
     
     func didScroll(_ view: UIScrollView) {
-        let alpha = calcuateNavBarBackgroundAlpha(view.contentOffset.y)
+        let offset = view.contentOffset.y
         
+        // Just to avoid force unwrapping
         guard let nav = navigationController?.navigationBar else {
             return
         }
-        print(view.contentOffset.y)
+        // Improve performance/ efficiency by only updating in the necessary ranges
+        guard offset >= -100 && offset <= 150 else {
+            return
+        }
+        // Calculate the alpha value for the current scrollview offset
+        let alpha = calcuateNavBarBackgroundAlpha(offset)
         
-        nav.subviews.first!.alpha = alpha
-//        nav.backgroundColor = UIColor.systemBackground.withAlphaComponent(alpha)
-        
+        // Update the alpha of the navigation bar background view
+        nav.subviews.first?.alpha = alpha
     }
 }
