@@ -55,9 +55,11 @@ class HomeTaskCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         collectionView.backgroundColor = .systemGroupedBackground
         
-        collectionView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 60, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 100, right: 0)
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
+        
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         

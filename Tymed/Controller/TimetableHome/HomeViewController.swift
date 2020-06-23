@@ -252,7 +252,7 @@ extension HomeViewController: HomeTaskDetailDelegate {
     /// - Parameter y: Scroll offset y
     /// - Returns: Returns the value of f(x) = 0.1 * x + 1 (clipped to [0, 1])
     private func calcuateNavBarBackgroundAlpha(_ y: CGFloat) -> CGFloat {
-        let value = 0.02 * y + 0.2
+        let value = 0.013 * y + 1.067
         // Clip the value to [0, 1]
         return min(max(0, value), 1)
     }

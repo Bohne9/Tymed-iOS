@@ -67,11 +67,12 @@ class HomeDashCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         collectionView.backgroundColor = .systemGroupedBackground
         
-        collectionView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 60, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 100, right: 0)
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
