@@ -18,6 +18,9 @@ class HomeBaseCollectionView: UICollectionView {
     init() {
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
+        delegate = self
+        dataSource = self
+        
         setupUserInterface()
     }
     
@@ -27,6 +30,9 @@ class HomeBaseCollectionView: UICollectionView {
         showsVerticalScrollIndicator = false
         
         translatesAutoresizingMaskIntoConstraints = false
+        
+        backgroundColor = .systemGroupedBackground
+        
     }
     
     //MARK: - Section helper
@@ -100,6 +106,10 @@ class HomeBaseCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection identifier: String) -> Int {
+        fatalError("collectionView(..., numberOfItemsInSection) not implemented.")
+    }
+
 }
 
 extension HomeBaseCollectionView: UICollectionViewDataSource {
@@ -108,9 +118,7 @@ extension HomeBaseCollectionView: UICollectionViewDataSource {
         return sectionIdentifiers.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection identifier: String) -> Int {
-        fatalError("collectionView(..., numberOfItemsInSection) not implemented.")
-    }
+    
  
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let identifier = self.section(for: section)

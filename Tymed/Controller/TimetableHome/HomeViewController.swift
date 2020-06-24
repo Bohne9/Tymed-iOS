@@ -78,7 +78,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
         
-        dashCollectionView.delegate = self
+        dashCollectionView.homeDelegate = self
         tasksCollectionView.delegate = self
         weekCollectionView.delegate = self
         
