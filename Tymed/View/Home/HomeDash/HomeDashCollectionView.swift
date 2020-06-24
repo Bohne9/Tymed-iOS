@@ -17,22 +17,8 @@ private let nextSection = "nextSection"
 private let weekSection = "weekSection"
 
 class HomeDashCollectionView: HomeBaseCollectionView {
-
-//    lazy var collectionView: UICollectionView = {
-//        let view = UICollectionView(frame: self.frame, collectionViewLayout: UICollectionViewFlowLayout())
-//
-//        view.delegate = self
-//        view.dataSource = self
-//
-//        view.alwaysBounceVertical = true
-//
-//        return view
-//    }()
     
     var cellColor: UIColor = .red
-    
-//    var delegate: HomeCollectionViewDelegate?
-//    var taskDelegate: HomeTaskDetailDelegate?
     
     var subjects: [Subject]?
     var lessons: [Lesson]?
@@ -45,42 +31,14 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     var tasks: [Task]?
     
-//    var sectionIdentifiers: [String] = []
-    
-    //MARK: init(frame: )
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//
-//        setupUserInterface()
-//
-//        fetchData()
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
     //MARK: UI setup
     override internal func setupUserInterface() {
         super.setupUserInterface()
         
-//        addSubview(collectionView)
-//
-//        backgroundColor = .systemGroupedBackground
-//
-//        collectionView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 100, right: 0)
         register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         
-//        collectionView.showsVerticalScrollIndicator = false
-//
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-//        collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-//        collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-//        collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
     }
     
@@ -105,37 +63,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return nil
         }
     }
-    
-//    //MARK: - Section helper
-//    private func section(for section: Int) -> String {
-//        return sectionIdentifiers[section]
-//    }
-//
-//    private func section(for indexPath: IndexPath) -> String {
-//        return section(for: indexPath.section)
-//    }
-//
-//    private func section(for identifier: String) -> Int? {
-//        return sectionIdentifiers.firstIndex(of: identifier)
-//    }
-//
-//    private func section(at section: Int, is identifier: String) -> Bool {
-//        return self.section(for: section) == identifier
-//    }
-//
-//    private func section(at indexPath: IndexPath, is identifier: String) -> Bool {
-//        return section(at: indexPath.section, is: identifier)
-//    }
-//
-//    private func addSection(id: String) {
-//        sectionIdentifiers.append(id)
-//    }
-    
-    //MARK: reload()
-//    func reload() {
-//        fetchData()
-//        collectionView.reloadData()
-//    }
     
     //MARK: fetchData()
     override internal func fetchData() {
@@ -173,11 +100,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     }
     
     // MARK: - UICollectionViewDataSource
-    
-    //MARK: numberOfSections
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return sectionIdentifiers.count
-//    }
 
     //MARK: numberOfItemsInSection
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection identifier: String) -> Int {
@@ -196,11 +118,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
         }
     }
-    
-    
-//    private func dequeueCell(_ identifier: String, _ indexPath: IndexPath) -> UICollectionViewCell {
-//        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-//    }
     
     //MARK: cellForItemAt
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -297,16 +214,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 50)
     }
-    
-    
-//    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-//
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, previewForDismissingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-//        print("fjweio")
-//    }
-//
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
