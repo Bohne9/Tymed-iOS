@@ -171,6 +171,11 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
     }
     
+    func presentTaskAdd() {
+        let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
+        self.present(task, animated: true, completion: nil)
+    }
+    
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
         
         
@@ -249,6 +254,10 @@ extension HomeViewController: HomeTaskDetailDelegate {
     func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell) {
         // Scroll to task section (with animation)
         scrollToSection(1)
+    }
+    
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+        presentTaskAdd()
     }
     
     /// Calculates the alpha value depending on a scroll offset

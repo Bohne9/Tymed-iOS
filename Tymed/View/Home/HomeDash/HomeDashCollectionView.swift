@@ -281,13 +281,9 @@ extension HomeDashCollectionView {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sectionId = section(for: indexPath)
         
-        if sectionId == tasksSection {
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 65))
-        }
-        
         switch sectionId {
         case tasksSection:
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: 50 + CGFloat(min(3, tasks?.count ?? 0) * 65))
+            return CGSize(width: collectionView.frame.width - 2 * 16, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
         case nowSection, nextSection, weekSection:
             
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))

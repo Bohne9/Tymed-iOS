@@ -17,44 +17,17 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="DMg-dZ-LAf">
-                        <rect key="frame" x="20" y="15" width="404" height="214"/>
+                        <rect key="frame" x="20" y="10" width="404" height="254"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <color key="sectionIndexBackgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tableView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5BF-bg-u9c">
-                        <rect key="frame" x="400" y="238.5" width="24" height="21.5"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="24" id="NNN-wH-9XZ"/>
-                            <constraint firstAttribute="width" constant="24" id="a9i-Xo-SRx"/>
-                        </constraints>
-                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" weight="semibold">
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                        </preferredSymbolConfiguration>
-                    </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSh-eY-lgb">
-                        <rect key="frame" x="20" y="234" width="404" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="CC1-eP-4Mw"/>
-                            <constraint firstAttribute="height" constant="30" id="Ry9-Ck-cz8"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
-                        <state key="normal" title="See all"/>
-                        <connections>
-                            <action selector="onSeeAll:" destination="ZdF-VC-U1W" eventType="touchUpInside" id="Ply-f3-LYe"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
-                    <constraint firstItem="DSh-eY-lgb" firstAttribute="trailing" secondItem="5BF-bg-u9c" secondAttribute="trailing" id="38n-Py-tf7"/>
-                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="trailing" secondItem="5BF-bg-u9c" secondAttribute="trailing" id="3Fp-px-gHY"/>
-                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="leading" secondItem="DSh-eY-lgb" secondAttribute="leading" id="4mJ-PK-AJQ"/>
-                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="bottom" secondItem="DSh-eY-lgb" secondAttribute="top" constant="-5" id="UmD-I7-iob"/>
-                    <constraint firstAttribute="bottom" secondItem="DSh-eY-lgb" secondAttribute="bottom" constant="10" id="YOE-5R-Z7c"/>
-                    <constraint firstItem="DSh-eY-lgb" firstAttribute="leading" secondItem="Xex-tE-ZyA" secondAttribute="leading" constant="20" id="bsa-XG-RFf"/>
-                    <constraint firstItem="DSh-eY-lgb" firstAttribute="centerY" secondItem="5BF-bg-u9c" secondAttribute="centerY" id="exT-9c-enc"/>
-                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="top" secondItem="Xex-tE-ZyA" secondAttribute="top" constant="15" id="kRU-ht-9do"/>
-                    <constraint firstAttribute="trailing" secondItem="DSh-eY-lgb" secondAttribute="trailing" constant="20" id="v6g-ku-vyN"/>
+                    <constraint firstAttribute="trailing" secondItem="DMg-dZ-LAf" secondAttribute="trailing" constant="20" id="0om-5N-7bg"/>
+                    <constraint firstAttribute="bottom" secondItem="DMg-dZ-LAf" secondAttribute="bottom" constant="10" id="U4P-p4-lVd"/>
+                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="top" secondItem="Xex-tE-ZyA" secondAttribute="top" constant="10" id="ftj-Kq-Cjs"/>
+                    <constraint firstItem="DMg-dZ-LAf" firstAttribute="leading" secondItem="Xex-tE-ZyA" secondAttribute="leading" constant="20" id="iab-HB-mr2"/>
                 </constraints>
                 <userDefinedRuntimeAttributes>
                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -69,7 +42,4 @@
             <point key="canvasLocation" x="-30.434782608695656" y="178.79464285714286"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
-    </resources>
 </document>
