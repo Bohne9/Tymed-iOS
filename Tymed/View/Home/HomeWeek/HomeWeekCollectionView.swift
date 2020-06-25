@@ -8,109 +8,32 @@
 
 import UIKit
 //MARK: HomeWeekCollectionView
-class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+class HomeWeekCollectionView: HomeBaseCollectionView {
     
-    lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: self.frame, collectionViewLayout: UICollectionViewFlowLayout())
-        
-        view.delegate = self
-        view.dataSource = self
-        
-        view.alwaysBounceVertical = true
-        
-        return view
-    }()
-    
-    var delegate: HomeCollectionViewDelegate?
     
     var lessons: [Lesson] = []
     
     private var weekDays: [Day] = []
     private var week: [Day: [Lesson]] = [:]
     
-    //MARK: init(frame: )
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setup()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //MARK: setup()
-    private func setup() {
-        
-        setupUI()
-        
-        reload()
-    }
-    
     //MARK: setupUI()
-    private func setupUI() {
+    override internal func setupUserInterface() {
+        super.setupUserInterface()
         
-        addSubview(collectionView)
-        
-        collectionView.backgroundColor = .systemGroupedBackground
-        
-        collectionView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 100, right: 0)
-        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
-        
-        collectionView.showsVerticalScrollIndicator = false
-        
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        collectionView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        
-    }
-    
-    //MARK: reload()
-    /// Fetches the data from core data and reloads the collection view.
-    /// After that it scrolls to the first lesson that is right now (in case the is one).
-    /// If not it scrolls to the next lesson
-    func reload() {
-        fetchData()
-        
-        collectionView.reloadData()
-        scrollTo(date: Date())
+        register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
     }
     
     //MARK: fetchDate()
     /// Fetches the lesson data from core data
-    func fetchData() {
+    override func fetchData() {
         
         // Fetch all lessons
         lessons = TimetableService.shared.fetchLessons() ?? []
         
         
         week = TimetableService.shared.sortLessonsByWeekDay(lessons)
-        
-        /*
-        // Sort the lessons into the day slots
-        lessons.forEach({ (lesson) in
-            if ((week[lesson.day]) != nil) {
-                week[lesson.day]?.append(lesson)
-            }else {
-                week[lesson.day] = [lesson]
-            }
-        })
-        
-        // Sort each day slot by time
-        week.forEach { (arg0) in
-            let (key, value) = arg0
-            week[key] = value.sorted(by: { (l1, l2) -> Bool in
-                if l1.startTime != l2.startTime {
-                    return l1.startTime < l2.startTime
-                }
-                return l1.endTime < l2.endTime
-            })
-        }*/
         
         weekDays = Array(week.keys)
         
@@ -139,7 +62,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
         if let section = weekDays.firstIndex(of: day) {
-            collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
+            scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), animated)
@@ -186,7 +109,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
             }
             
             // Scroll to the lesson
-            collectionView.scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
+            scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
@@ -215,16 +138,16 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     }
     
     //MARK: UICollectionViewDataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return week.keys.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return week[weekDays[section]]?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
         
         cell.lesson = lesson(for: indexPath)
         
@@ -246,7 +169,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     }
     
     //MARK: sizeForItemAt
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)
     }
     
@@ -258,7 +181,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
     
     private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
         if let lesson = lessons?[indexPath.row] {
-            delegate?.lessonDetail(self, for: lesson)
+            homeDelegate?.lessonDetail(self, for: lesson)
         }
     }
     
@@ -294,7 +217,7 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
                 
                 TimetableService.shared.deleteLesson(lesson)
                 
-                self.delegate?.lessonDidDelete(self, lesson: lesson)
+                self.homeDelegate?.lessonDidDelete(self, lesson: lesson)
                 
             }
             
@@ -315,13 +238,13 @@ class HomeWeekCollectionView: UIView, UICollectionViewDelegate, UICollectionView
                 return
             }
             
-            self.delegate?.lessonDetail(self, for: lesson)
+            self.homeDelegate?.lessonDetail(self, for: lesson)
         }
         
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        delegate?.didScroll(scrollView)
+        homeDelegate?.didScroll(scrollView)
     }
     
 }

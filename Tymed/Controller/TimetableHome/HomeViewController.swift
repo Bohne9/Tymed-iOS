@@ -80,7 +80,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         dashCollectionView.homeDelegate = self
         tasksCollectionView.homeDelegate = self
-        weekCollectionView.delegate = self
+        weekCollectionView.homeDelegate = self
         
         dashCollectionView.taskDelegate = self
     }
