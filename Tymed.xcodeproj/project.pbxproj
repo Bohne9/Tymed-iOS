@@ -29,6 +29,7 @@
 		4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
 		4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */; };
 		4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70014B2478548A001BDF21 /* TaskAddViewController.swift */; };
+		4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */; };
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
 		4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77422456C2A000038729 /* SceneDelegate.swift */; };
 		4F7F77452456C2A000038729 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77442456C2A000038729 /* ViewController.swift */; };
@@ -109,6 +110,7 @@
 		4F405E83245D72FC00E1E704 /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
 		4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewController.swift; sourceTree = "<group>"; };
 		4F70014B2478548A001BDF21 /* TaskAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAddViewController.swift; sourceTree = "<group>"; };
+		4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionView.swift; sourceTree = "<group>"; };
 		4F7F773D2456C2A000038729 /* Tymed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tymed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7F77402456C2A000038729 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F7F77422456C2A000038729 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 			children = (
 				4F7F77752456CA6400038729 /* NavigationBar.swift */,
 				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+				4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */,
 				4F99D206249FECBE00A8DFAB /* HomeDash */,
 				4F99D207249FECEA00A8DFAB /* HomeTask */,
 				4F99D208249FECFF00A8DFAB /* HomeWeek */,
@@ -673,6 +676,7 @@
 				4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */,
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
 				4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */,
+				4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -78,9 +78,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
         
-        dashCollectionView.delegate = self
-        tasksCollectionView.delegate = self
-        weekCollectionView.delegate = self
+        dashCollectionView.homeDelegate = self
+        tasksCollectionView.homeDelegate = self
+        weekCollectionView.homeDelegate = self
         
         dashCollectionView.taskDelegate = self
     }
@@ -159,6 +159,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let page = Int((scrollView.contentOffset.x / scrollView.frame.width).rounded())
         if let navBar = navigationController?.navigationBar as? NavigationBar {
             navBar.topBar.highlightPage(page)
+            let scene = page == 0 ? dashCollectionView :
+                (page == 1 ? tasksCollectionView : weekCollectionView)
+            scene.homeDelegate?.didScroll(scene)
         }
     }
     
@@ -166,6 +169,11 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         collectionView.scrollToItem(at: IndexPath(row: section, section: 0), at: .left, animated: true)
         
+    }
+    
+    func presentTaskAdd() {
+        let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
+        self.present(task, animated: true, completion: nil)
     }
     
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
@@ -248,25 +256,34 @@ extension HomeViewController: HomeTaskDetailDelegate {
         scrollToSection(1)
     }
     
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+        presentTaskAdd()
+    }
+    
     /// Calculates the alpha value depending on a scroll offset
     /// - Parameter y: Scroll offset y
     /// - Returns: Returns the value of f(x) = 0.1 * x + 1 (clipped to [0, 1])
     private func calcuateNavBarBackgroundAlpha(_ y: CGFloat) -> CGFloat {
-        let value = 0.02 * y + 0.2
+        let value = 0.013 * y + 1.067
         // Clip the value to [0, 1]
         return min(max(0, value), 1)
     }
     
     func didScroll(_ view: UIScrollView) {
-        let alpha = calcuateNavBarBackgroundAlpha(view.contentOffset.y)
+        let offset = view.contentOffset.y
         
+        // Just to avoid force unwrapping
         guard let nav = navigationController?.navigationBar else {
             return
         }
-        print(view.contentOffset.y)
+        // Improve performance/ efficiency by only updating in the necessary ranges
+//        guard offset >= -100 && offset <= 150 else {
+//            return
+//        }
+        // Calculate the alpha value for the current scrollview offset
+        let alpha = calcuateNavBarBackgroundAlpha(offset)
         
-        nav.subviews.first!.alpha = alpha
-//        nav.backgroundColor = UIColor.systemBackground.withAlphaComponent(alpha)
-        
+        // Update the alpha of the navigation bar background view
+        nav.subviews.first?.alpha = alpha
     }
 }

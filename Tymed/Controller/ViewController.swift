@@ -21,7 +21,7 @@ class ViewController: UITabBarController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        tabBar.isTranslucent = false
+        tabBar.isTranslucent = true
         
         
         let home = generateHomeViewController()
