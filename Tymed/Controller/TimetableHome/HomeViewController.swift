@@ -79,7 +79,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.backgroundColor = .systemGroupedBackground
         
         dashCollectionView.homeDelegate = self
-        tasksCollectionView.delegate = self
+        tasksCollectionView.homeDelegate = self
         weekCollectionView.delegate = self
         
         dashCollectionView.taskDelegate = self
@@ -159,6 +159,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let page = Int((scrollView.contentOffset.x / scrollView.frame.width).rounded())
         if let navBar = navigationController?.navigationBar as? NavigationBar {
             navBar.topBar.highlightPage(page)
+            let scene = page == 0 ? dashCollectionView :
+                (page == 1 ? tasksCollectionView : weekCollectionView)
+            
         }
     }
     
