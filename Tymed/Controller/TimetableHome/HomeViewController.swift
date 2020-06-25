@@ -161,7 +161,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             navBar.topBar.highlightPage(page)
             let scene = page == 0 ? dashCollectionView :
                 (page == 1 ? tasksCollectionView : weekCollectionView)
-            
+            scene.homeDelegate?.didScroll(scene)
         }
     }
     
@@ -268,9 +268,9 @@ extension HomeViewController: HomeTaskDetailDelegate {
             return
         }
         // Improve performance/ efficiency by only updating in the necessary ranges
-        guard offset >= -100 && offset <= 150 else {
-            return
-        }
+//        guard offset >= -100 && offset <= 150 else {
+//            return
+//        }
         // Calculate the alpha value for the current scrollview offset
         let alpha = calcuateNavBarBackgroundAlpha(offset)
         
