@@ -63,7 +63,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             title = lesson.subject?.name
         }
         
-        navigationController?.navigationBar.tintColor = .systemBlue
+        navigationController?.navigationBar.tintColor = .white
         
         // Do any additional setup after loading the view.
     }
@@ -91,8 +91,12 @@ class LessonDetailTableViewController: LessonAddViewController {
         tableView.reloadData()
     }
     
-    // Override necessary to not add the navigation bar title + text field toolbar of the superclass
+    // Do not call super class implementation to not add the navigation bar title + text field toolbar of the superclass
     override func setupNavigationBar() {
+        navigationController?.navigationBar.backgroundColor = UIColor(lesson)
+        navigationController?.navigationBar.barTintColor = UIColor(lesson)
+        
+        navigationController?.navigationBar.isTranslucent = false
         
     }
     

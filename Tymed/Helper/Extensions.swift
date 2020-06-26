@@ -233,3 +233,19 @@ extension UIView {
     }
     
 }
+
+
+extension UIColor {
+    
+    convenience init? (_ subject: Subject?) {
+        guard let color = subject?.color else {
+            return nil
+        }
+        self.init(named: color)
+    }
+    
+    convenience init? (_ lesson: Lesson?) {
+        self.init(lesson?.subject)
+    }
+    
+}

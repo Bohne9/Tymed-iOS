@@ -841,6 +841,7 @@ class LessonColorPickerTableView: UITableViewController {
         
         tableView.register(LessonColorIndicationCell.self, forCellReuseIdentifier: lessonColorIndicationCell)
         
+        tableView.contentInset = UIEdgeInsets(top: 25, left: 0, bottom: 25, right: 0)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
