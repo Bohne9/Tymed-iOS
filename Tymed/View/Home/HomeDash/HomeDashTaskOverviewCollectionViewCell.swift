@@ -176,7 +176,14 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
         let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
         complete.setImage(image, for: .normal)
         
-        titleLabel.text = task.title
+//        titleLabel.text = task.title
+        
+        if task.completed {
+            titleLabel.attributedText = NSAttributedString(string: task.title ?? "",
+                                                           attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+        }else {
+            titleLabel.attributedText = NSAttributedString(string: task.title ?? "")
+        }
         
         subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.blue
         
@@ -251,6 +258,8 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
     @objc func completeTap() {
         task.completed.toggle()
         
+        TimetableService.shared.save()
+
         let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
         complete.setImage(image, for: .normal)
         
@@ -263,12 +272,17 @@ class HomeDashTaskOverviewCollectionViewCellItem: UITableViewCell {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                     UIView.transition(with: self.titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
                         self.titleLabel.text = self.task.title
-                    }, completion: nil)
+                    }, completion: { _ in
+                        UIView.transition(with: self.titleLabel, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                            self.reload(self.task)
+                        })
+                    })
                 }
-                
             })
         }else {
-             self.titleLabel.text = self.task.title
+            UIView.transition(with: self.titleLabel, duration: 0.35, options: .transitionCrossDissolve, animations: {
+                self.reload(self.task)
+            })
         }
         
         layoutIfNeeded()
