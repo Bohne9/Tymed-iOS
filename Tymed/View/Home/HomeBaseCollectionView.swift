@@ -33,6 +33,8 @@ class HomeBaseCollectionView: UICollectionView {
         
         backgroundColor = .systemGroupedBackground
         
+        alwaysBounceVertical = true
+        
     }
     
     //MARK: - Section helper
