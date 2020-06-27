@@ -74,6 +74,18 @@ class TimetableService {
         
     }
     
+    /// Returns all timetables
+    func fetchTimetables() -> [Timetable]? {
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Timetable")
+        
+        do {
+            let res = try context.fetch(req) as! [Timetable]
+            
+            return res
+        }catch {
+            return nil
+        }
+    }
     
     //MARK: Subject fetching
     func fetchSubjects() -> [Subject]? {
