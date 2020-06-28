@@ -200,6 +200,7 @@ extension HomeViewController: HomeCollectionViewDelegate {
         
         let vc = LessonDetailTableViewController(style: .insetGrouped)
         vc.lesson = lesson
+        vc.taskDelegate = self
         
         let nav = UINavigationController(rootViewController: vc)
         

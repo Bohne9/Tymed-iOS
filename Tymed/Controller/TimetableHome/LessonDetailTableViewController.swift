@@ -27,6 +27,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     private var lessonTaskOverviewIndex = 0
     private var lessonDeleteSecionIndex = 4
     
+    var taskDelegate: HomeTaskDetailDelegate?
     var delegate: LessonDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -149,7 +150,11 @@ class LessonDetailTableViewController: LessonAddViewController {
             guard indexPath.section == lessonTaskOverviewIndex else {
                 break
             }
-            (cell as! LessonDetailTaskOverviewCell).lesson = lesson
+            let cell = cell as! LessonDetailTaskOverviewCell
+            
+            cell.lesson = lesson
+            cell.taskDelegate = taskDelegate
+            
             break
         case lessonColorPickerCell:
             guard indexPath.section == colorSectionIndex else {

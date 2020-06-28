@@ -23,6 +23,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             tableView.reloadData()
         }
     }
+    var taskDelegate: HomeTaskDetailDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,6 +47,8 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        tableView.backgroundColor = .secondarySystemGroupedBackground
         
     }
     
@@ -77,5 +80,75 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let task = self.task(for: indexPath) else {
+            return
+        }
+        
+        taskDelegate?.showTaskDetail(task)
+    }
+    
+    func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        
+        let item = Int((configuration.identifier as! NSString) as String) ?? 0
+        
+        animator.addCompletion {
+            let task = self.task(for: IndexPath(row: item, section: 0))!
+            
+            self.taskDelegate?.showTaskDetail(task)
+        }
+        
+    }
+    
+    private func task(for indexPath: IndexPath) -> Task? {
+        let tasks = self.lesson?.tasks?.allObjects as! [Task]
+        
+        return tasks[indexPath.row]
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let id = "\(indexPath.row)" as NSString
+        
+        let config = UIContextMenuConfiguration(identifier: id, previewProvider: { () -> UIViewController? in
+            
+            let detail = TaskDetailTableViewController(style: .insetGrouped)
+            
+            detail.task = self.task(for: indexPath)
+            detail.taskDelegate = self.taskDelegate
+            
+            return detail
+        }) { (element) -> UIMenu? in
+            
+            let complete = UIAction(title: "Complete", image: UIImage(systemName: "checkmark")) { (action) in
+                
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                task.completed.toggle()
+                
+                (tableView.cellForRow(at: indexPath) as! TaskOverviewTableViewCell).reload(task)
+
+            }
+            
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                TimetableService.shared.deleteTask(task)
+                
+                self.taskDelegate?.didDeleteTask(task)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [complete, delete])
+        }
+        
+        
+        return config
     }
 }
