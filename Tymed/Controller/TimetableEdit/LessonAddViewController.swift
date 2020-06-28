@@ -511,14 +511,12 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         tableView.reloadData()
     }
     
-    
-    //MARK: heightForRowAt
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         if indexPath.section == colorSectionIndex {
             return 50
         }else if indexPath.section == timeSectionIndex {
             
-            return identifier(for: indexPath) == lessonTimeTitleCell ? 50 : 150
+            return self.identifier(for: indexPath) == lessonTimeTitleCell ? 50 : 150
            
         }else if indexPath.section == noteSectionIndex {
             // Note
