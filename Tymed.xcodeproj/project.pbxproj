@@ -16,6 +16,8 @@
 		4F1FCFDD2493F387003693A6 /* DynamicTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */; };
 		4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */; };
 		4F1FCFE12493FF14003693A6 /* TaskDeleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */; };
+		4F2A1C8D24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A1C8C24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift */; };
+		4F2A1C8F24A9233000E66C79 /* TaskOverviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A1C8E24A9233000E66C79 /* TaskOverviewTableViewCell.swift */; };
 		4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */; };
 		4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */; };
 		4F2F42B024994FBA009B73A5 /* DayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2F42AF24994FBA009B73A5 /* DayTests.swift */; };
@@ -95,6 +97,8 @@
 		4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTableViewControllerTests.swift; sourceTree = "<group>"; };
 		4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDeleteTableViewCell.swift; sourceTree = "<group>"; };
 		4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDeleteTableViewCell.xib; sourceTree = "<group>"; };
+		4F2A1C8C24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTaskOverviewCell.swift; sourceTree = "<group>"; };
+		4F2A1C8E24A9233000E66C79 /* TaskOverviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskOverviewTableViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2F42AF24994FBA009B73A5 /* DayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTests.swift; sourceTree = "<group>"; };
@@ -214,6 +218,37 @@
 				4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */,
 			);
 			path = TimetableProfile;
+			sourceTree = "<group>";
+		};
+		4F2A1C8A24A9207800E66C79 /* TaskDetailCells */ = {
+			isa = PBXGroup;
+			children = (
+				4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */,
+				4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */,
+				4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */,
+				4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */,
+				4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */,
+				4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */,
+				4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */,
+				4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */,
+				4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */,
+				4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */,
+				4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */,
+				4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */,
+				4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */,
+				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
+				4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */,
+				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
+			);
+			path = TaskDetailCells;
+			sourceTree = "<group>";
+		};
+		4F2A1C8B24A920EA00E66C79 /* LessonDetailCells */ = {
+			isa = PBXGroup;
+			children = (
+				4F2A1C8C24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift */,
+			);
+			path = LessonDetailCells;
 			sourceTree = "<group>";
 		};
 		4F405E85245DB80D00E1E704 /* Controller */ = {
@@ -382,22 +417,9 @@
 		4FCDEAE5247AA9C3001B36F4 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */,
-				4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */,
-				4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */,
-				4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */,
-				4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */,
-				4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */,
-				4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */,
-				4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */,
-				4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */,
-				4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */,
-				4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */,
-				4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */,
-				4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */,
-				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
-				4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */,
-				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
+				4F2A1C8E24A9233000E66C79 /* TaskOverviewTableViewCell.swift */,
+				4F2A1C8B24A920EA00E66C79 /* LessonDetailCells */,
+				4F2A1C8A24A9207800E66C79 /* TaskDetailCells */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -652,6 +674,7 @@
 				4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */,
 				4F3F6299247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift in Sources */,
 				4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */,
+				4F2A1C8D24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift in Sources */,
 				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
@@ -665,6 +688,7 @@
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
+				4F2A1C8F24A9233000E66C79 /* TaskOverviewTableViewCell.swift in Sources */,
 				4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,

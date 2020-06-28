@@ -10,6 +10,7 @@ import UIKit
 
 private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
+private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
 protocol LessonDetailTableViewControllerDelegate {
     
@@ -23,8 +24,10 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     private var isEditable: Bool = false
     
+    private var lessonTaskOverviewIndex = 0
     private var lessonDeleteSecionIndex = 4
     
+    var taskDelegate: HomeTaskDetailDelegate?
     var delegate: LessonDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -47,13 +50,10 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationItem.leftBarButtonItem = cancel
         
         register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
+        register(LessonDetailTaskOverviewCell.self, identifier: lessonTaskOverviewCell)
         
-        colorSectionIndex = 1
-        timeSectionIndex = 2
-        noteSectionIndex = 3
         
-        addSection(with: "sec", at: 0)
-        addCell(with: lessonTimeTitleCell, at: "sec")
+        
         
         addSection(with: lessonDeleteSection)
         addCell(with: lessonDeleteCell, at: lessonDeleteSection)
@@ -61,9 +61,18 @@ class LessonDetailTableViewController: LessonAddViewController {
         if let lesson = lesson {
 //            selectColor(lesson.subject?.color)
             title = lesson.subject?.name
+            
+            if lesson.tasks?.count ?? 0 > 0 {
+                addSection(with: "taskOverview", at: 0)
+                addCell(with: lessonTaskOverviewCell, at: "taskOverview")
+                
+                colorSectionIndex = 1
+                timeSectionIndex = 2
+                noteSectionIndex = 3
+            }
         }
         
-        navigationController?.navigationBar.tintColor = .systemBlue
+        navigationController?.navigationBar.tintColor = .white
         
         // Do any additional setup after loading the view.
     }
@@ -91,13 +100,17 @@ class LessonDetailTableViewController: LessonAddViewController {
         tableView.reloadData()
     }
     
-    // Override necessary to not add the navigation bar title + text field toolbar of the superclass
+    // Do not call super class implementation to not add the navigation bar title + text field toolbar of the superclass
     override func setupNavigationBar() {
+        navigationController?.navigationBar.backgroundColor = UIColor(lesson)
+        navigationController?.navigationBar.barTintColor = UIColor(lesson)
+        
+        navigationController?.navigationBar.isTranslucent = false
         
     }
     
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if index == 0 {
+        if index == lessonTaskOverviewIndex {
             return "Tasks"
         } else if index == lessonDeleteSecionIndex {
             return nil
@@ -133,6 +146,16 @@ class LessonDetailTableViewController: LessonAddViewController {
         
         // Set the values of the cells to the value of the lesson
         switch identifier {
+        case lessonTaskOverviewCell:
+            guard indexPath.section == lessonTaskOverviewIndex else {
+                break
+            }
+            let cell = cell as! LessonDetailTaskOverviewCell
+            
+            cell.lesson = lesson
+            cell.taskDelegate = taskDelegate
+            
+            break
         case lessonColorPickerCell:
             guard indexPath.section == colorSectionIndex else {
                 break
@@ -247,34 +270,16 @@ class LessonDetailTableViewController: LessonAddViewController {
         })
     }
     
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        
-        if let color = cell as? LessonColorPickerCell {
-            color.accessoryType = .none
-            color.selectColor(named: lesson?.subject?.color ?? "blue")
-        }else if let time = cell as? LessonTimeTitleCell {
-            if indexPath.row == 0 {
-                time.title.text = "Start"
-                time.value.text = lesson?.startTime.string()
-            }else if indexPath.row == 1 {
-                time.title.text = "End"
-                time.value.text = lesson?.endTime.string()
-            } else {
-                time.title.text = "Day"
-                time.value.text = lesson?.day.string()
-            }
-        }else if let note = cell as? LessonAddNoteCell {
-            note.textView.text = lesson?.note ?? ""
-            note.textView.isEditable = isEditable
+    override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        if identifier != lessonTaskOverviewCell {
+            return super.heightForRow(at: indexPath, with: identifier)
         }
+        // From here the row must be a lessonTaskOverviewCell
         
-        cell.selectionStyle = .none
+        let count = min(3, lesson?.tasks?.count ?? 0)
         
-        return cell
-    } */
+        return CGFloat(20 + count * 60)
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isEditable {
