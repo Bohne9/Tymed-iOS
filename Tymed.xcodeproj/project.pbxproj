@@ -216,6 +216,29 @@
 			path = TimetableProfile;
 			sourceTree = "<group>";
 		};
+		4F2A1C8A24A9207800E66C79 /* TaskDetailCells */ = {
+			isa = PBXGroup;
+			children = (
+				4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */,
+				4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */,
+				4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */,
+				4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */,
+				4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */,
+				4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */,
+				4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */,
+				4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */,
+				4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */,
+				4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */,
+				4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */,
+				4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */,
+				4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */,
+				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
+				4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */,
+				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
+			);
+			path = TaskDetailCells;
+			sourceTree = "<group>";
+		};
 		4F405E85245DB80D00E1E704 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -382,22 +405,7 @@
 		4FCDEAE5247AA9C3001B36F4 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */,
-				4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */,
-				4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */,
-				4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */,
-				4F3F6293247AF75A00A69202 /* TaskDueDateTableViewCell.swift */,
-				4F3F6294247AF75A00A69202 /* TaskDueDateTableViewCell.xib */,
-				4F3F6297247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.swift */,
-				4F3F6298247B0A1F00A69202 /* TaskDueDateTitleTableViewCell.xib */,
-				4F953461247C424A007E708B /* TaskLessonAttachTableViewCell.swift */,
-				4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */,
-				4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */,
-				4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */,
-				4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */,
-				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
-				4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */,
-				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
+				4F2A1C8A24A9207800E66C79 /* TaskDetailCells */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
