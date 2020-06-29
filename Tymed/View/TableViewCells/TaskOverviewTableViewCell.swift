@@ -31,8 +31,6 @@ class TaskOverviewTableViewCell: UITableViewCell {
         let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
         complete.setImage(image, for: .normal)
         
-//        titleLabel.text = task.title
-        
         if task.completed {
             titleLabel.attributedText = NSAttributedString(string: task.title ?? "",
                                                            attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
@@ -40,7 +38,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
             titleLabel.attributedText = NSAttributedString(string: task.title ?? "")
         }
         
-        subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.blue
+        subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.clear
         
         descriptionLabel.text = task.text ?? "-"
         
@@ -67,7 +65,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         complete.constraint(width: 30, height: 30)
         complete.constraintCenterYToSuperview(constant: 0)
         
-        complete.addTarget(self, action: #selector(completeTap), for: .touchUpInside)
+        complete.addTarget(self, action: #selector(completeToogle), for: .touchUpInside)
         
         // Setup subject indicator
         subjectIndicator.constraint(width: 10, height: 10)
@@ -110,7 +108,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
     }
     
-    @objc func completeTap() {
+    @objc func completeToogle() {
         task.completed.toggle()
         
         TimetableService.shared.save()
