@@ -173,7 +173,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
     
-    func reload() {
+    override func reload() {
         guard let task = task else {
             // Return since there is no task
             return

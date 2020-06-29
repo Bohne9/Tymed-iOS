@@ -52,14 +52,21 @@ class LessonDetailTableViewController: LessonAddViewController {
         register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
         register(LessonDetailTaskOverviewCell.self, identifier: lessonTaskOverviewCell)
         
-        
-        
-        
         addSection(with: lessonDeleteSection)
         addCell(with: lessonDeleteCell, at: lessonDeleteSection)
         
+        navigationController?.navigationBar.tintColor = .white
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func setup() {
+        super.setup()
+        addTaskOverviewSection()
+    }
+    
+    private func addTaskOverviewSection() {
         if let lesson = lesson {
-//            selectColor(lesson.subject?.color)
             title = lesson.subject?.name
             
             if lesson.tasks?.count ?? 0 > 0 {
@@ -71,10 +78,15 @@ class LessonDetailTableViewController: LessonAddViewController {
                 noteSectionIndex = 3
             }
         }
+    }
+    
+    override func reconfigure() {
+        removeSection(with: "taskOverview")
+        colorSectionIndex = 0
+        timeSectionIndex = 1
+        noteSectionIndex = 2
         
-        navigationController?.navigationBar.tintColor = .white
-        
-        // Do any additional setup after loading the view.
+        addTaskOverviewSection()
     }
     
     override func selectColor(_ colorName: String?) {
@@ -337,7 +349,7 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
     }
     
     func didDeleteTask(_ task: Task) {
-        
+        reload()
     }
     
     func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
