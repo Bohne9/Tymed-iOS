@@ -25,15 +25,42 @@ class TaskOverviewTableViewCell: UITableViewCell {
         configureUserInterface()
     }
     
+    private func reloadCompleteIndicator() {
+        
+        let completed = task.completed
+        
+        var systemImage = completed ? "checkmark.circle.fill" : "circle"
+        
+        var tint: UIColor = completed ? .green : .systemBlue
+        
+        // If the task has a due date attached
+        if let dueDate = task.due {
+            let now = Date()
+            // If the tasks due date is in the past
+            if dueDate < now {
+                tint = .red
+                systemImage = completed ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
+            }
+            
+        }
+        
+        let image = UIImage(systemName: systemImage, withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
+        
+        UIView.transition(with: self.complete, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.complete.tintColor = tint
+            self.complete.setImage(image, for: .normal)
+        })
+        
+    }
+    
     func reload(_ task: Task) {
         self.task = task
         
-        let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
-        complete.setImage(image, for: .normal)
+        reloadCompleteIndicator()
         
         if task.completed {
             titleLabel.attributedText = NSAttributedString(string: task.title ?? "",
-                                                           attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.single.rawValue])
+                                                           attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.thick.rawValue])
         }else {
             titleLabel.attributedText = NSAttributedString(string: task.title ?? "")
         }
@@ -113,10 +140,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         TimetableService.shared.save()
 
-        let image = UIImage(systemName: task.completed ? "largecircle.fill.circle" : "circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
-        complete.setImage(image, for: .normal)
-        
-        
+        reloadCompleteIndicator()
         
         if task.completed {
             UIView.transition(with: titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
