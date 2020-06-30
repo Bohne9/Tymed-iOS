@@ -22,6 +22,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     private var taskDeleteSection = -1
     
     var taskDelegate: HomeTaskDetailDelegate?
+    var detailDelegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +43,9 @@ class TaskDetailTableViewController: TaskAddViewController {
         taskDeleteSection = sectionIndex(for: "delete") ?? -1
         
         addCell(with: taskDeleteCell, at: taskDeleteSection)
+        
+        navigationController!.presentationController!.delegate = self
+        
         
         reload()
     }
@@ -117,6 +121,9 @@ class TaskDetailTableViewController: TaskAddViewController {
                 break
             }
             let cell = cell as! TaskTitleTableViewCell
+            
+            cell.setCompleteBtn(active: true)
+            cell.setComplete(for: self.task)
             cell.textField.text = task?.title
             cell.textField.isEnabled = isEditable
             
@@ -226,5 +233,19 @@ class TaskDetailTableViewController: TaskAddViewController {
         return super.heightForRow(at: indexPath, with: identifier)
     }
     
+    
+}
+
+extension TaskDetailTableViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        print("didDismiss")
+        detailDelegate!.detailWillDismiss(self)
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        print("fnhsjdoi")
+        detailDelegate?.detailWillDismiss(self)
+    }
     
 }

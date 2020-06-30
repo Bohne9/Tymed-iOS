@@ -179,7 +179,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
         
         
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             let vc = TaskDetailTableViewController(style: .insetGrouped)
             vc.task = task
             vc.taskDelegate = self
@@ -187,8 +187,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             
             vc.title = "Task"
             
+            vc.detailDelegate = self
+            
             self.present(nav, animated: animated, completion: nil)
-        }
+//        }
         
     }
 }
@@ -208,7 +210,7 @@ extension HomeViewController: HomeCollectionViewDelegate {
         
         vc.delegate = self
         
-        present(nav, animated: true, completion: nil)
+        self.present(nav, animated: true, completion: nil)
         
     }
     
@@ -219,9 +221,9 @@ extension HomeViewController: HomeCollectionViewDelegate {
 }
 
 
-extension HomeViewController: LessonDetailTableViewControllerDelegate {
+extension HomeViewController: HomeDetailTableViewControllerDelegate {
     
-    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController) {
+    func detailWillDismiss(_ viewController: UIViewController) {
         reload()
     }
     
@@ -240,6 +242,8 @@ extension HomeViewController: HomeTaskDetailDelegate {
         let nav = UINavigationController(rootViewController: vc)
         
         vc.title = "Task"
+        
+        vc.detailDelegate = self
         
         self.present(nav, animated: true, completion: nil)
     }

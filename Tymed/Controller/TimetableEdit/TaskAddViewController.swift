@@ -177,7 +177,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         if identifier == taskTitleCell {
             let cell = cell as! TaskTitleTableViewCell
-            
+            cell.setCompleteBtn(active: false)
             cell.textField.addTarget(self, action: #selector(changeTaskTitle(_:)), for: .editingChanged)
         } else if identifier == taskDescriptionCell {
             let cell = cell as! TaskDescriptionTableViewCell

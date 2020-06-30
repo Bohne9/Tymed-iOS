@@ -12,11 +12,6 @@ private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
-protocol LessonDetailTableViewControllerDelegate {
-    
-    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController)
-    
-}
 
 class LessonDetailTableViewController: LessonAddViewController {
 
@@ -28,7 +23,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     private var lessonDeleteSecionIndex = 4
     
     var taskDelegate: HomeTaskDetailDelegate?
-    var delegate: LessonDetailTableViewControllerDelegate?
+    var delegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -263,7 +258,7 @@ class LessonDetailTableViewController: LessonAddViewController {
                 TimetableService.shared.deleteLesson(lesson)
                 self.lesson = nil
                 self.dismiss(animated: true) {
-                    self.delegate?.lessonDetailWillDismiss(self)
+                    self.delegate?.detailWillDismiss(self)
                 }
                 print("delete")
             }
@@ -321,13 +316,12 @@ class LessonDetailTableViewController: LessonAddViewController {
 extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.lessonDetailWillDismiss(self)
+        delegate?.detailWillDismiss(self)
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        delegate?.lessonDetailWillDismiss(self)
+        delegate?.detailWillDismiss(self)
     }
-    
     
 }
 
