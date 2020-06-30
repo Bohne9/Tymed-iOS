@@ -139,6 +139,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func updateDueDate(_ picker: UIDatePicker) {
+        dueDate = picker.date
+        reload()
+    }
+    
     //MARK: headerForSection(with: , at:)
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         switch index {
@@ -195,6 +200,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         } else if identifier == taskDueDateCell {
             let cell = cell as! TaskDueDateTableViewCell
             
+            cell.dueDate.addTarget(self, action: #selector(updateDueDate(_:)), for: .valueChanged)
             cell.dueDate.date = dueDate
         }
         
@@ -231,6 +237,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
                 if expandDueDateCell {
                     removeCell(at: section, row: 1)
                     tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .top)
+                    reload()
                 }else {
                     addCell(with: taskDueDateCell, at: "due")
                     tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .top)
