@@ -31,14 +31,14 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         var systemImage = completed ? "checkmark.circle.fill" : "circle"
         
-        var tint: UIColor = completed ? .green : .systemBlue
+        var tint: UIColor = completed ? .appGreen : .appBlue
         
         // If the task has a due date attached
         if let dueDate = task.due {
             let now = Date()
             // If the tasks due date is in the past
             if dueDate < now {
-                tint = .red
+                tint = completed ? .appOrange : .appRed
                 systemImage = completed ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
             }
             
