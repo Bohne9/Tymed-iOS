@@ -190,6 +190,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
             vc.detailDelegate = self
             
             self.present(nav, animated: animated, completion: nil)
+        
 //        }
         
     }
@@ -249,7 +250,19 @@ extension HomeViewController: HomeTaskDetailDelegate {
     }
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
-        presentTaskDetail(task, animated: animated)
+//        presentTaskDetail(task, animated: animated)
+        
+        let vc = TaskDetailTableViewController(style: .insetGrouped)
+        vc.task = task
+        vc.taskDelegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        
+        vc.title = "Task"
+        
+        vc.detailDelegate = self
+        
+        self.present(nav, animated: animated, completion: nil)
+        
     }
     
     func didDeleteTask(_ task: Task) {

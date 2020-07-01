@@ -44,10 +44,12 @@ class TaskDetailTableViewController: TaskAddViewController {
         
         addCell(with: taskDeleteCell, at: taskDeleteSection)
         
-        navigationController!.presentationController!.delegate = self
-        
-        
         reload()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.presentationController?.delegate = self
     }
     
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
@@ -240,7 +242,7 @@ extension TaskDetailTableViewController: UIAdaptivePresentationControllerDelegat
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         print("didDismiss")
-        detailDelegate!.detailWillDismiss(self)
+        detailDelegate?.detailWillDismiss(self)
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {

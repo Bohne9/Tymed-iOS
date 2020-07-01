@@ -25,7 +25,7 @@
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPX-Lg-8lF">
                         <rect key="frame" x="5" y="5" width="40" height="34"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
-                        <state key="normal" image="circle" catalog="system">
+                        <state key="normal">
                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
                             </preferredSymbolConfiguration>
@@ -63,7 +63,4 @@
             <point key="canvasLocation" x="131.8840579710145" y="152.67857142857142"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="circle" catalog="system" width="128" height="121"/>
-    </resources>
 </document>

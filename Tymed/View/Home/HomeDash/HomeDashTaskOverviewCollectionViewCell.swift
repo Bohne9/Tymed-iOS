@@ -124,7 +124,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 let cell = (tableView.cellForRow(at: indexPath) as! TaskOverviewTableViewCell)
                 
                 // Delay the complete toogle for the animation.
-                // The context menu animation has to end
+                // The context menu animation has to e-nd
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                     cell.completeToogle()
                 }

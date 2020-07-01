@@ -33,8 +33,6 @@ class LessonDetailTableViewController: LessonAddViewController {
 
         self.navigationController?.navigationBar.prefersLargeTitles = true
         
-        navigationController?.presentationController?.delegate = self
-        
         let item = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toogleEditing(_:)))
         
         navigationItem.rightBarButtonItem = item
@@ -53,6 +51,12 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationController?.navigationBar.tintColor = .white
         
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.presentationController?.delegate = self
     }
     
     override func setup() {

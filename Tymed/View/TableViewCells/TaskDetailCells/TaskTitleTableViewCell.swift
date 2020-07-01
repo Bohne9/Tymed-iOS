@@ -58,7 +58,7 @@ class TaskTitleTableViewCell: UITableViewCell {
         
         let completed = task.completed
         
-        var systemImage = completed ? "checkmark.circle.fill" : "circle"
+        var systemImage: String = completed ? "checkmark.circle.fill" : "circle"
         
         var tint: UIColor = completed ? .appGreen : .appBlue
         
