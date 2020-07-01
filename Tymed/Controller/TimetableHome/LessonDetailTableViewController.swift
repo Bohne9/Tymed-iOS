@@ -329,6 +329,12 @@ extension LessonDetailTableViewController: UIAdaptivePresentationControllerDeleg
     
 }
 
+extension LessonDetailTableViewController: HomeDetailTableViewControllerDelegate {
+    func detailWillDismiss(_ viewController: UIViewController) {
+        reload()
+    }
+    
+}
 
 extension LessonDetailTableViewController: HomeTaskDetailDelegate {
     func showTaskDetail(_ task: Task) {
@@ -338,6 +344,8 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
         let nav = UINavigationController(rootViewController: vc)
         
         vc.title = "Task"
+        
+        vc.detailDelegate = self
         
         self.present(nav, animated: true, completion: nil)
     }
