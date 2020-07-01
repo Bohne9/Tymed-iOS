@@ -272,6 +272,16 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
     }
     
+    /// Calculates the next date of the attached lesson
+    /// - Returns: Date when the next attached lesson starts
+    internal func dueDateForTask() -> Date? {
+        guard let lesson = self.lesson else {
+            return nil
+        }
+        
+        return TimetableService.shared.dateOfNext(lesson: lesson)
+    }
+    
     //MARK: selectLesson(_ lesson: )
     func selectLesson(_ lesson: Lesson?) {
         guard let lesson = lesson else {
@@ -282,6 +292,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         // In that case the is a "attach lesson" cell in the section
         // -> Remove that and add a "attached lesson" cell to the section
         if self.lesson == nil {
+            self.lesson = lesson
             // Prepare the tableView for changes
             tableView.beginUpdates()
             
@@ -296,7 +307,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             addCell(with: taskAttachedLessonCell, at: "lesson")
             
             // FIXME
-            if let date = TimetableService.shared.dateOfNext(lesson: lesson) {
+            if let date = dueDateForTask() {
                 dueDate = date
             }
             

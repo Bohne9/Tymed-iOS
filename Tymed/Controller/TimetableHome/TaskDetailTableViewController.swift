@@ -257,6 +257,11 @@ class TaskDetailTableViewController: TaskAddViewController {
         return super.heightForRow(at: indexPath, with: identifier)
     }
     
+    /// Returns the due date of the task
+    /// - Returns: Due date of the task
+    override func dueDateForTask() -> Date? {
+        return task?.due
+    }
     
 }
 
