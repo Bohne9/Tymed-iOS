@@ -12,11 +12,6 @@ private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
-protocol LessonDetailTableViewControllerDelegate {
-    
-    func lessonDetailWillDismiss(_ viewController: LessonDetailTableViewController)
-    
-}
 
 class LessonDetailTableViewController: LessonAddViewController {
 
@@ -28,7 +23,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     private var lessonDeleteSecionIndex = 4
     
     var taskDelegate: HomeTaskDetailDelegate?
-    var delegate: LessonDetailTableViewControllerDelegate?
+    var delegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +32,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        
-        navigationController?.presentationController?.delegate = self
         
         let item = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toogleEditing(_:)))
         
@@ -52,14 +45,27 @@ class LessonDetailTableViewController: LessonAddViewController {
         register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
         register(LessonDetailTaskOverviewCell.self, identifier: lessonTaskOverviewCell)
         
-        
-        
-        
         addSection(with: lessonDeleteSection)
         addCell(with: lessonDeleteCell, at: lessonDeleteSection)
         
+        navigationController?.navigationBar.tintColor = .white
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.presentationController?.delegate = self
+    }
+    
+    override func setup() {
+        super.setup()
+        addTaskOverviewSection()
+    }
+    
+    private func addTaskOverviewSection() {
         if let lesson = lesson {
-//            selectColor(lesson.subject?.color)
             title = lesson.subject?.name
             
             if lesson.tasks?.count ?? 0 > 0 {
@@ -71,10 +77,15 @@ class LessonDetailTableViewController: LessonAddViewController {
                 noteSectionIndex = 3
             }
         }
+    }
+    
+    override func reconfigure() {
+        removeSection(with: "taskOverview")
+        colorSectionIndex = 0
+        timeSectionIndex = 1
+        noteSectionIndex = 2
         
-        navigationController?.navigationBar.tintColor = .white
-        
-        // Do any additional setup after loading the view.
+        addTaskOverviewSection()
     }
     
     override func selectColor(_ colorName: String?) {
@@ -153,7 +164,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             let cell = cell as! LessonDetailTaskOverviewCell
             
             cell.lesson = lesson
-            cell.taskDelegate = taskDelegate
+            cell.taskDelegate = self
             
             break
         case lessonColorPickerCell:
@@ -251,7 +262,7 @@ class LessonDetailTableViewController: LessonAddViewController {
                 TimetableService.shared.deleteLesson(lesson)
                 self.lesson = nil
                 self.dismiss(animated: true) {
-                    self.delegate?.lessonDetailWillDismiss(self)
+                    self.delegate?.detailWillDismiss(self)
                 }
                 print("delete")
             }
@@ -286,54 +297,73 @@ class LessonDetailTableViewController: LessonAddViewController {
             super.tableView(tableView, didSelectRowAt: indexPath)
         }
     }
+    
+    func presentTaskDetail(_ task: Task, animated: Bool = true) {
+        
+        
+        DispatchQueue.main.async {
+            let vc = TaskDetailTableViewController(style: .insetGrouped)
+            vc.task = task
+            vc.taskDelegate = self
+            let nav = UINavigationController(rootViewController: vc)
+            
+            vc.title = "Task"
+            
+            self.present(nav, animated: animated, completion: nil)
+        }
+        
+    }
 
   
 }
 
-
-
-class LessonDetailDeleteCell: UITableViewCell {
+extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
-    let deleteButton = UIButton()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    
-        
-        setupView()
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        delegate?.detailWillDismiss(self)
     }
     
-    private func setupView() {
-        
-        addSubview(deleteButton)
-        
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.setTitle("Delete", for: .normal)
-        
-        deleteButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        deleteButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        deleteButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
-        deleteButton.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        
-        deleteButton.setTitleColor(.red, for: .normal)
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        delegate?.detailWillDismiss(self)
     }
     
 }
 
-
-extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
-    
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.lessonDetailWillDismiss(self)
+extension LessonDetailTableViewController: HomeDetailTableViewControllerDelegate {
+    func detailWillDismiss(_ viewController: UIViewController) {
+        reload()
     }
     
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        delegate?.lessonDetailWillDismiss(self)
+}
+
+extension LessonDetailTableViewController: HomeTaskDetailDelegate {
+    func showTaskDetail(_ task: Task) {
+        let vc = TaskDetailTableViewController(style: .insetGrouped)
+        vc.task = task
+        vc.taskDelegate = self
+        let nav = UINavigationController(rootViewController: vc)
+        
+        vc.title = "Task"
+        
+        vc.detailDelegate = self
+        
+        self.present(nav, animated: true, completion: nil)
+    }
+    
+    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
+        
+    }
+    
+    func didDeleteTask(_ task: Task) {
+        reload()
+    }
+    
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+        
+    }
+    
+    func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+        
     }
     
     

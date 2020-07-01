@@ -123,14 +123,14 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             
             let complete = UIAction(title: "Complete", image: UIImage(systemName: "checkmark")) { (action) in
                 
-                guard let task = self.task(for: indexPath) else {
-                    return
+                let cell = (tableView.cellForRow(at: indexPath) as! TaskOverviewTableViewCell)
+                
+                // Delay the complete toogle for the animation.
+                // The context menu animation has to end
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    cell.completeToogle()
                 }
                 
-                task.completed.toggle()
-                
-                (tableView.cellForRow(at: indexPath) as! TaskOverviewTableViewCell).reload(task)
-
             }
             
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in

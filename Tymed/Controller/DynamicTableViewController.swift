@@ -35,6 +35,14 @@ class DynamicTableViewController: UITableViewController {
         navigationController?.navigationBar.isTranslucent = true
     }
     
+    internal func reconfigure() {
+        
+    }
+    
+    internal func reload() {
+        reconfigure()
+        tableView.reloadData()
+    }
     
     /// Setup any additional views (gets called in viewDidLoad)
     internal func setup() {

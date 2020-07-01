@@ -237,6 +237,11 @@ extension UIView {
 
 extension UIColor {
     
+    static let appGreen = UIColor(named: "green")!
+    static let appBlue = UIColor(named: "blue")!
+    static let appRed = UIColor(named: "red")!
+    static let appOrange = UIColor(named: "orange")!
+    
     convenience init? (_ subject: Subject?) {
         guard let color = subject?.color else {
             return nil

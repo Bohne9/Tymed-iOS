@@ -20,12 +20,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
 
     private var expandDueDateCell = false
     
-    private var taskTitle: String?
-    private var taskDescription: String?
+    internal var taskTitle: String?
+    internal var taskDescription: String?
     
     internal var lesson: Lesson?
     
-    private var dueDate = Date()
+    internal var dueDate: Date?
     
     internal var taskTitleSection = 0
     internal var taskDescriptionSection = 1
@@ -139,6 +139,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func updateDueDate(_ picker: UIDatePicker) {
+        dueDate = picker.date
+        reload()
+    }
+    
     //MARK: headerForSection(with: , at:)
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         switch index {
@@ -172,7 +177,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         if identifier == taskTitleCell {
             let cell = cell as! TaskTitleTableViewCell
-            
+            cell.setCompleteBtn(active: false)
             cell.textField.addTarget(self, action: #selector(changeTaskTitle(_:)), for: .editingChanged)
         } else if identifier == taskDescriptionCell {
             let cell = cell as! TaskDescriptionTableViewCell
@@ -191,11 +196,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             let cell = cell as! TaskDueDateTitleTableViewCell
             
             cell.titleLabel.text = "Due"
-            cell.valueLabel.text = dueDate.stringify(dateStyle: .short, timeStyle: .short)
+            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short)
         } else if identifier == taskDueDateCell {
             let cell = cell as! TaskDueDateTableViewCell
             
-            cell.dueDate.date = dueDate
+            cell.dueDate.addTarget(self, action: #selector(updateDueDate(_:)), for: .valueChanged)
+            cell.dueDate.date = dueDate ?? Date()
         }
         
     }
@@ -231,6 +237,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
                 if expandDueDateCell {
                     removeCell(at: section, row: 1)
                     tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .top)
+                    reload()
                 }else {
                     addCell(with: taskDueDateCell, at: "due")
                     tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .top)
@@ -265,17 +272,27 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
     }
     
+    /// Calculates the next date of the attached lesson
+    /// - Returns: Date when the next attached lesson starts
+    internal func dueDateForTask() -> Date? {
+        guard let lesson = self.lesson else {
+            return nil
+        }
+        
+        return TimetableService.shared.dateOfNext(lesson: lesson)
+    }
+    
     //MARK: selectLesson(_ lesson: )
     func selectLesson(_ lesson: Lesson?) {
         guard let lesson = lesson else {
             return
         }
-        print("select lesson")
         
         // In case the view (add task) is reloaded for the first time
         // In that case the is a "attach lesson" cell in the section
         // -> Remove that and add a "attached lesson" cell to the section
         if self.lesson == nil {
+            self.lesson = lesson
             // Prepare the tableView for changes
             tableView.beginUpdates()
             
@@ -290,7 +307,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             addCell(with: taskAttachedLessonCell, at: "lesson")
             
             // FIXME
-            if let date = TimetableService.shared.dateOfNext(lesson: lesson) {
+            if let date = dueDateForTask() {
                 dueDate = date
             }
             

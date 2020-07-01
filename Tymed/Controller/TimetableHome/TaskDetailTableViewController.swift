@@ -22,6 +22,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     private var taskDeleteSection = -1
     
     var taskDelegate: HomeTaskDetailDelegate?
+    var detailDelegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +47,35 @@ class TaskDetailTableViewController: TaskAddViewController {
         reload()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.presentationController?.delegate = self
+    }
+    
+    private func updateTaskValues() {
+        guard let task = self.task else {
+            return
+        }
+        
+        task.title = taskTitle
+        task.text = taskDescription
+        
+        task.lesson = lesson
+        
+        task.due = dueDate
+        
+        TimetableService.shared.save()
+    }
+    
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
+        if isEditable {
+            updateTaskValues()
+        }
+        
         isEditable.toggle()
         
         btn.title = isEditable ? "Save" : "Edit"
         btn.style = isEditable ? .done : .plain
-        
         
         reload()
     }
@@ -117,6 +141,9 @@ class TaskDetailTableViewController: TaskAddViewController {
                 break
             }
             let cell = cell as! TaskTitleTableViewCell
+            
+            cell.setCompleteBtn(active: true)
+            cell.setComplete(for: self.task)
             cell.textField.text = task?.title
             cell.textField.isEnabled = isEditable
             
@@ -173,12 +200,16 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
     
-    func reload() {
+    override func reload() {
         guard let task = task else {
             // Return since there is no task
             return
         }
         
+        taskTitle = taskTitle ?? task.title
+        taskDescription = taskDescription ?? task.text
+//        lesson = lesson ?? task.lesson
+        dueDate = dueDate ?? task.due
         
         // Reconfigure the cell for the corresponding mode (editing, none editing)
         if isEditable {
@@ -226,5 +257,24 @@ class TaskDetailTableViewController: TaskAddViewController {
         return super.heightForRow(at: indexPath, with: identifier)
     }
     
+    /// Returns the due date of the task
+    /// - Returns: Due date of the task
+    override func dueDateForTask() -> Date? {
+        return task?.due
+    }
+    
+}
+
+extension TaskDetailTableViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        print("didDismiss")
+        detailDelegate?.detailWillDismiss(self)
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        print("fnhsjdoi")
+        detailDelegate?.detailWillDismiss(self)
+    }
     
 }

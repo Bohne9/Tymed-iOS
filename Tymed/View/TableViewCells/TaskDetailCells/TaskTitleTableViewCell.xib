@@ -17,23 +17,48 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Task title..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bhl-dE-Bea">
-                        <rect key="frame" x="5" y="5" width="303" height="34"/>
+                        <rect key="frame" x="50" y="5" width="258" height="34"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPX-Lg-8lF">
+                        <rect key="frame" x="5" y="5" width="40" height="34"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                        <state key="normal">
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="25"/>
+                            </preferredSymbolConfiguration>
+                        </state>
+                        <connections>
+                            <action selector="completeToogle:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ajf-Ag-7Gu"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="bhl-dE-Bea" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="2Rr-Jk-Nkd"/>
+                    <constraint firstItem="bhl-dE-Bea" firstAttribute="leading" secondItem="DPX-Lg-8lF" secondAttribute="trailing" constant="5" id="59Y-BH-WWV"/>
+                    <constraint firstItem="DPX-Lg-8lF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="6Sp-dG-tuk"/>
+                    <constraint firstItem="bhl-dE-Bea" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="7Xg-d4-bLt"/>
                     <constraint firstAttribute="bottom" secondItem="bhl-dE-Bea" secondAttribute="bottom" constant="5" id="imq-0w-mz4"/>
-                    <constraint firstItem="bhl-dE-Bea" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="ynx-6e-HXZ"/>
+                    <constraint firstItem="DPX-Lg-8lF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="swj-Cm-WIE"/>
+                    <constraint firstItem="bhl-dE-Bea" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="50" id="ynx-6e-HXZ"/>
+                    <constraint firstAttribute="bottom" secondItem="DPX-Lg-8lF" secondAttribute="bottom" constant="5" id="zCG-4S-L4c"/>
                     <constraint firstAttribute="trailing" secondItem="bhl-dE-Bea" secondAttribute="trailing" constant="12" id="zUY-rR-W1W"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="7Xg-d4-bLt"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="complete" destination="DPX-Lg-8lF" id="MqH-8I-trL"/>
                 <outlet property="textField" destination="bhl-dE-Bea" id="ntG-tO-8t9"/>
+                <outlet property="textFieldCompleteBtnTrailing" destination="59Y-BH-WWV" id="KyA-Xf-tkp"/>
+                <outlet property="textFieldContextViewLeading" destination="7Xg-d4-bLt" id="B5M-Hu-4Hd"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="152.67857142857142"/>
         </tableViewCell>
