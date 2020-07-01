@@ -52,12 +52,30 @@ class TaskDetailTableViewController: TaskAddViewController {
         self.navigationController?.presentationController?.delegate = self
     }
     
+    private func updateTaskValues() {
+        guard let task = self.task else {
+            return
+        }
+        
+        task.title = taskTitle
+        task.text = taskDescription
+        
+        task.lesson = lesson
+        
+        task.due = dueDate
+        
+        TimetableService.shared.save()
+    }
+    
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
+        if isEditable {
+            updateTaskValues()
+        }
+        
         isEditable.toggle()
         
         btn.title = isEditable ? "Save" : "Edit"
         btn.style = isEditable ? .done : .plain
-        
         
         reload()
     }
@@ -188,6 +206,10 @@ class TaskDetailTableViewController: TaskAddViewController {
             return
         }
         
+        taskTitle = taskTitle ?? task.title
+        taskDescription = taskDescription ?? task.text
+//        lesson = lesson ?? task.lesson
+        dueDate = dueDate ?? task.due
         
         // Reconfigure the cell for the corresponding mode (editing, none editing)
         if isEditable {

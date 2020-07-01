@@ -20,12 +20,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
 
     private var expandDueDateCell = false
     
-    private var taskTitle: String?
-    private var taskDescription: String?
+    internal var taskTitle: String?
+    internal var taskDescription: String?
     
     internal var lesson: Lesson?
     
-    private var dueDate = Date()
+    internal var dueDate: Date?
     
     internal var taskTitleSection = 0
     internal var taskDescriptionSection = 1
@@ -196,12 +196,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             let cell = cell as! TaskDueDateTitleTableViewCell
             
             cell.titleLabel.text = "Due"
-            cell.valueLabel.text = dueDate.stringify(dateStyle: .short, timeStyle: .short)
+            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short)
         } else if identifier == taskDueDateCell {
             let cell = cell as! TaskDueDateTableViewCell
             
             cell.dueDate.addTarget(self, action: #selector(updateDueDate(_:)), for: .valueChanged)
-            cell.dueDate.date = dueDate
+            cell.dueDate.date = dueDate ?? Date()
         }
         
     }
@@ -277,7 +277,6 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         guard let lesson = lesson else {
             return
         }
-        print("select lesson")
         
         // In case the view (add task) is reloaded for the first time
         // In that case the is a "attach lesson" cell in the section
