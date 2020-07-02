@@ -51,6 +51,15 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         tableView.becomeFirstResponder()
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
+        
+        
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowRadius = 10
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.15
+        
+        layer.masksToBounds = false
+        
     }
     
     override func reload() {

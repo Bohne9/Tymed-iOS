@@ -17,7 +17,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xMt-o3-mbF">
-                        <rect key="frame" x="80" y="7" width="160" height="30"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                         <state key="normal" title="Delete">
                             <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -25,10 +25,10 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="xMt-o3-mbF" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.681818" id="0jx-aI-a9h"/>
+                    <constraint firstItem="xMt-o3-mbF" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="0jx-aI-a9h"/>
                     <constraint firstItem="xMt-o3-mbF" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="8xG-JV-qMR"/>
                     <constraint firstItem="xMt-o3-mbF" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="GJK-Re-6XP"/>
-                    <constraint firstItem="xMt-o3-mbF" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="0.5" id="rwg-XJ-aP1"/>
+                    <constraint firstItem="xMt-o3-mbF" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" id="rwg-XJ-aP1"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
