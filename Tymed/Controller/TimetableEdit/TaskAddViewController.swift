@@ -15,6 +15,12 @@ internal let taskDueDateCell = "taskDueDateCell"
 internal let taskAttachLessonCell = "taskAttchLessonCell"
 internal let taskAttachedLessonCell = "taskAttachedLessonCell"
 
+internal let titleSection = "titleSection"
+internal let descriptionSection = "descriptionSection"
+internal let lessonSection = "lessonSection"
+internal let dueSection = "dueSection"
+internal let deleteSection = "deleteSection"
+
 //MARK: TaskAddViewController
 class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
 
@@ -66,17 +72,17 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         register(UINib(nibName: "TaskLessonAttachTableViewCell", bundle: nil), identifier: taskAttachLessonCell)
         register(TaskAttachedLessonTableViewCell.self, identifier: taskAttachedLessonCell)
         
-        addSection(with: "task")
-        addCell(with: taskTitleCell, at: "task")
+        addSection(with: titleSection)
+        addCell(with: taskTitleCell, at: titleSection)
         
-        addSection(with: "description")
-        addCell(with: taskDescriptionCell, at: "description")
+        addSection(with: descriptionSection)
+        addCell(with: taskDescriptionCell, at: descriptionSection)
         
-        addSection(with: "lesson")
-        addCell(with: taskAttachLessonCell, at: "lesson")
+        addSection(with: lessonSection)
+        addCell(with: taskAttachLessonCell, at: lessonSection)
         
-        addSection(with: "due")
-        addCell(with: taskDueDateTitleCell, at: "due")
+        addSection(with: dueSection)
+        addCell(with: taskDueDateTitleCell, at: dueSection)
     }
 
     @objc func changeTaskTitle(_ textField: UITextField) {
@@ -146,14 +152,14 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     
     //MARK: headerForSection(with: , at:)
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        switch index {
-        case taskTitleSection:
+        switch identifier {
+        case titleSection:
             return ""
-        case taskDescriptionSection:
+        case descriptionSection:
             return "Description"
-        case taskLessonSection:
+        case lessonSection:
             return "Lesson"
-        case taskDescriptionSection:
+        case dueSection:
             return "Due date"
         default:
             return ""
@@ -165,9 +171,9 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         lesson = nil
         removeCell(at: taskLessonSection, row: 0)
-        addSection(with: "lesson", at: taskLessonSection)
+        addSection(with: lessonSection, at: taskLessonSection)
         tableView.deleteRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
-        addCell(with: taskAttachLessonCell, at: "lesson")
+        addCell(with: taskAttachLessonCell, at: lessonSection)
         tableView.insertRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
          
     }
@@ -231,7 +237,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         let sectionIdentifer = sectionIdentifier(for: section)
         
         switch sectionIdentifer {
-        case "due":
+        case dueSection:
             if row == 0 {
                 
                 if expandDueDateCell {
@@ -239,13 +245,13 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
                     tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .top)
                     reload()
                 }else {
-                    addCell(with: taskDueDateCell, at: "due")
+                    addCell(with: taskDueDateCell, at: dueSection)
                     tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .top)
                 }
                 expandDueDateCell.toggle()
 
             }
-        case "lesson":
+        case lessonSection:
             showLessonPicker()
         default:
             break
@@ -301,10 +307,10 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             
             // Readd the section (the section will be removed as soon
             // as there aren't any cells in the section
-            addSection(with: "lesson", at: taskLessonSection)
+            addSection(with: lessonSection, at: taskLessonSection)
             
             // Add "attached lesson" cell
-            addCell(with: taskAttachedLessonCell, at: "lesson")
+            addCell(with: taskAttachedLessonCell, at: lessonSection)
             
             // FIXME
             if let date = dueDateForTask() {
