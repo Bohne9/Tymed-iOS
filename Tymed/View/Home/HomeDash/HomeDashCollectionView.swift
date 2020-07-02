@@ -227,6 +227,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
             
+            lessonDetail.tableView.isScrollEnabled = false
+            lessonDetail.tableView.showsVerticalScrollIndicator = false
+            
             lessonDetail.tableView.beginUpdates()
             
             lessonDetail.addSection(with: "subjectTitle", at: 0)
