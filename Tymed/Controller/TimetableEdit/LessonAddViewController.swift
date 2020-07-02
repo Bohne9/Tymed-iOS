@@ -526,13 +526,25 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         return 50
     }
     
-    
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if index >= 0 && index < sectionHeaderTitles.count {
-            return sectionHeaderTitles[index]
+        switch identifier {
+        case colorSection:
+            return "Color"
+        case timeSection:
+            return "Time"
+        case noteSection:
+            return "Notes"
+        default:
+            return nil
         }
-        return nil
     }
+    
+//    override func headerForSection(with identifier: String, at index: Int) -> String? {
+//        if index >= 0 && index < sectionHeaderTitles.count {
+//            return sectionHeaderTitles[index]
+//        }
+//        return nil
+//    }
     
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         switch identifier {

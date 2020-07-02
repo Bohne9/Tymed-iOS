@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let taskSection = "taskSection"
+
 private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
@@ -69,8 +71,8 @@ class LessonDetailTableViewController: LessonAddViewController {
             title = lesson.subject?.name
             
             if lesson.tasks?.count ?? 0 > 0 {
-                addSection(with: "taskOverview", at: 0)
-                addCell(with: lessonTaskOverviewCell, at: "taskOverview")
+                addSection(with: taskSection, at: 0)
+                addCell(with: lessonTaskOverviewCell, at: taskSection)
                 
                 colorSectionIndex = 1
                 timeSectionIndex = 2
@@ -80,7 +82,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func reconfigure() {
-        removeSection(with: "taskOverview")
+        removeSection(with: taskSection)
         colorSectionIndex = 0
         timeSectionIndex = 1
         noteSectionIndex = 2
@@ -122,7 +124,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if index == lessonTaskOverviewIndex {
+        if identifier == taskSection {
             return "Tasks"
         } else if index == lessonDeleteSecionIndex {
             return nil
