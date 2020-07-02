@@ -93,6 +93,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     @objc func dismissDetailView() {
+        delegate?.detailWillDismiss(self)
         dismiss(animated: true, completion: nil)
     }
     
@@ -319,7 +320,7 @@ class LessonDetailTableViewController: LessonAddViewController {
 
 extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
         delegate?.detailWillDismiss(self)
     }
     
