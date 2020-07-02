@@ -31,6 +31,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     var tasks: [Task]?
     
     var taskDelegate: HomeTaskDetailDelegate?
+    
+    private var cellInsets: UIEdgeInsets?
         
     @IBOutlet weak var tableView: UITableView!
     
@@ -82,7 +84,12 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         cell.reload(tasks![indexPath.row])
     
         if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {
+            if cellInsets == nil {
+                cellInsets = cell.separatorInset
+            }
             cell.separatorInset = UIEdgeInsets(top: 0, left: cell.frame.width, bottom: 0, right: 0)
+        }else if let insets = cellInsets {
+            cell.separatorInset = insets
         }
         
         return cell

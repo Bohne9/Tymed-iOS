@@ -25,6 +25,8 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
     }
     var taskDelegate: HomeTaskDetailDelegate?
     
+    private var cellInsets: UIEdgeInsets?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -50,6 +52,8 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         
         tableView.backgroundColor = .secondarySystemGroupedBackground
         
+        tableView.isScrollEnabled = false
+        
     }
     
     //MARK: UITableViewDataSource
@@ -70,6 +74,15 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         
         guard let tasks = lesson.tasks else {
             return cell
+        }
+         
+        if indexPath.row == min(self.lesson?.tasks?.count ?? 0, 3) - 1 {
+            if cellInsets == nil {
+                cellInsets = cell.separatorInset
+            }
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.frame.width, bottom: 0, right: 0)
+        }else if let insets = cellInsets {
+            cell.separatorInset = insets
         }
         
         let task = tasks.allObjects as! [Task]

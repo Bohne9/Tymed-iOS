@@ -21,8 +21,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     private var isEditable: Bool = false
     
-    private var lessonTaskOverviewIndex = 0
-    private var lessonDeleteSecionIndex = 4
+    var lessonTaskOverviewIndex = 0
+    var lessonDeleteSecionIndex = 4
     
     var taskDelegate: HomeTaskDetailDelegate?
     var delegate: HomeDetailTableViewControllerDelegate?
@@ -45,6 +45,7 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationItem.leftBarButtonItem = cancel
         
         register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
+        register(LessonDetailSubjectTitleCell.self, identifier: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell)
         register(LessonDetailTaskOverviewCell.self, identifier: lessonTaskOverviewCell)
         
         addSection(with: lessonDeleteSection)
@@ -220,6 +221,9 @@ class LessonDetailTableViewController: LessonAddViewController {
             // Set the value of the note cell
             (cell as! LessonAddNoteCell).textView.text = lesson.note ?? ""
             break
+        case LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell:
+            (cell as! LessonDetailSubjectTitleCell).reload(lesson)
+            break
         default:
             break
         }
@@ -285,14 +289,16 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
-        if identifier != lessonTaskOverviewCell {
+        
+        if identifier == lessonTaskOverviewCell {
+            let count = min(3, lesson?.tasks?.count ?? 0)
+            
+            return CGFloat(20 + count * 60)
+        } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {
+            return 30
+        } else {
             return super.heightForRow(at: indexPath, with: identifier)
         }
-        // From here the row must be a lessonTaskOverviewCell
-        
-        let count = min(3, lesson?.tasks?.count ?? 0)
-        
-        return CGFloat(20 + count * 60)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -322,7 +328,7 @@ class LessonDetailTableViewController: LessonAddViewController {
 
 extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
-    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         delegate?.detailWillDismiss(self)
     }
     

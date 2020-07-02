@@ -268,7 +268,7 @@ class TaskDetailTableViewController: TaskAddViewController {
 
 extension TaskDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
-    func presentationControllerWillDismiss(_ presentationController: UIPresentationController) {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         print("didDismiss")
         detailDelegate?.detailWillDismiss(self)
     }
