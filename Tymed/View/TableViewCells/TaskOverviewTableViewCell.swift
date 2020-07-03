@@ -34,14 +34,15 @@ class TaskOverviewTableViewCell: UITableViewCell {
         var tint: UIColor = completed ? .appGreen : .appBlue
         
         // If the task has a due date attached
-        if let dueDate = task.due {
-            let now = Date()
-            // If the tasks due date is in the past
-            if dueDate < now {
-                tint = completed ? .appOrange : .appRed
-                systemImage = completed ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
+        if let due = task.due {
+            if completed {
+                if let completion = task.completionDate, due < completion {
+                    tint = .appOrange
+                }
+            } else if due < Date() {
+                tint = .appRed
+                systemImage = "exclamationmark.circle.fill"
             }
-            
         }
         
         let image = UIImage(systemName: systemImage, withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))
@@ -137,6 +138,8 @@ class TaskOverviewTableViewCell: UITableViewCell {
     
     @objc func completeToogle() {
         task.completed.toggle()
+        
+        task.completionDate = task.completed ? Date() : nil
         
         TimetableService.shared.save()
 
