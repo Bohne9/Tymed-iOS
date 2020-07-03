@@ -293,7 +293,9 @@ class LessonDetailTableViewController: LessonAddViewController {
         if identifier == lessonTaskOverviewCell {
             let count = min(3, lesson?.tasks?.count ?? 0)
             
-            return CGFloat(20 + count * 60)
+            let seeAll = (lesson?.tasks?.count ?? 0 > 0) ? 35 : 0
+            
+            return CGFloat(20 + seeAll + count * 60)
         } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {
             return 34
         } else {

@@ -10,6 +10,7 @@
 		40704C98621E662A3F9AC874 /* Pods_Tymed_TymedUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C1F0E634FE10D118D02F8C1D /* Pods_Tymed_TymedUITests.framework */; };
 		4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */; };
 		4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
+		4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
@@ -96,6 +97,7 @@
 		4B19718C0EFD0532A9E5F041 /* Pods-Tymed-TymedUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tymed-TymedUITests.release.xcconfig"; path = "Target Support Files/Pods-Tymed-TymedUITests/Pods-Tymed-TymedUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTaskOverviewSeeAllCell.swift; sourceTree = "<group>"; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				4F2A1C8C24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift */,
 				4F2A7DC324AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift */,
 				4F2A1C9024AA69C300E66C79 /* LessonDetailDeleteCell.swift */,
+				4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */,
 			);
 			path = LessonDetailCells;
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
+				4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */,
 				4F2A1C8F24A9233000E66C79 /* TaskOverviewTableViewCell.swift in Sources */,
 				4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
