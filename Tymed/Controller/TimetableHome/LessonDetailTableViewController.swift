@@ -75,18 +75,18 @@ class LessonDetailTableViewController: LessonAddViewController {
                 addSection(with: taskSection, at: 0)
                 addCell(with: lessonTaskOverviewCell, at: taskSection)
                 
-                colorSectionIndex = 1
-                timeSectionIndex = 2
-                noteSectionIndex = 3
+                colorSectionIndex += 1
+                timeSectionIndex += 1
+                noteSectionIndex += 1
             }
         }
     }
     
     override func reconfigure() {
         removeSection(with: taskSection)
-        colorSectionIndex = 0
-        timeSectionIndex = 1
-        noteSectionIndex = 2
+        colorSectionIndex -= 1
+        timeSectionIndex -= 1
+        noteSectionIndex -= 1
         
         addTaskOverviewSection()
     }
@@ -145,11 +145,11 @@ class LessonDetailTableViewController: LessonAddViewController {
             setupDeleteCell(cell)
         }
         // Configure isEditable
-        if indexPath.section == colorSectionIndex {
+        if identifier == lessonColorPickerCell {
             cell.accessoryType = isEditable ? .disclosureIndicator : .none // chrevron icon if isEditable
         }
         
-        if indexPath.section == noteSectionIndex {
+        if identifier == lessonNoteCell {
             (cell as! LessonAddNoteCell).textView.isEditable = isEditable // Make textView editable if isEditable
         }
         
@@ -295,7 +295,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             
             return CGFloat(20 + count * 60)
         } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {
-            return 30
+            return 34
         } else {
             return super.heightForRow(at: indexPath, with: identifier)
         }

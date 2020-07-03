@@ -512,6 +512,18 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        
+        switch identifier {
+        case lessonColorPickerCell, lessonTimeTitleCell:
+            return 50
+        case lessonTimePickerCell:
+            return 150
+        case lessonNoteCell:
+            return 120
+        default:
+            return 50
+        }
+        
         if indexPath.section == colorSectionIndex {
             return 50
         }else if indexPath.section == timeSectionIndex {

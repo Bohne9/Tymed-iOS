@@ -227,6 +227,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
             
+            lessonDetail.lesson = lesson
+            
+//            lessonDetail.reload()
+            
             lessonDetail.tableView.isScrollEnabled = false
             lessonDetail.tableView.showsVerticalScrollIndicator = false
             
@@ -240,9 +244,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             lessonDetail.lessonDeleteSecionIndex += 1
             lessonDetail.noteSectionIndex += 1
             
+            lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
+            
             lessonDetail.tableView.endUpdates()
             
-            lessonDetail.lesson = lesson
+            
             
             return lessonDetail
         }) { (elements) -> UIMenu? in
