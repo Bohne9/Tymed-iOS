@@ -93,7 +93,7 @@ class NotificationService {
     private func notificationContentForDueDate(task: Task) -> UNMutableNotificationContent {
         
         let title = task.title
-        let body = ""
+        let body = task.text ?? ""
             
         return notificationContent(title, body: body, thread: .task
             , sound: .default, category: .task)
