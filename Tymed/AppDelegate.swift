@@ -18,6 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        NotificationService.current.getPendingNotifications { (nots) in
+            nots.forEach { (not) in
+                print(not.content.title)
+            }
+        }
+        
         // Override point for customization after application launch.
         return true
     }
