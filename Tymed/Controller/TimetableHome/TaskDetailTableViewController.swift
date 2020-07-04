@@ -57,7 +57,7 @@ class TaskDetailTableViewController: TaskAddViewController {
             return
         }
         
-        task.title = taskTitle
+        task.title = taskTitle ?? ""
         task.text = taskDescription
         
         task.lesson = lesson

@@ -132,10 +132,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         task.due = dueDate
         task.lesson = lesson
         task.priority = 0
-        task.title = taskTitle
+        task.title = taskTitle ?? ""
         task.text = taskDescription
         
         TimetableService.shared.save()
+        
+        NotificationService.current.scheduleDueDateNotification(for: task)
         
         dismiss(animated: true, completion: nil)
     }
