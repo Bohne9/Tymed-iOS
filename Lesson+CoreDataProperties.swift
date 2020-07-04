@@ -46,6 +46,24 @@ extension Lesson {
             end = Int32(newValue.timeInterval)
         }
     }
+    
+    var startDateComponents: DateComponents {
+        var components = DateComponents()
+        components.weekday = Int(dayOfWeek)
+        components.hour = startTime.hour
+        components.minute = startTime.minute
+        
+        return components
+    }
+    
+    var endDateComponents: DateComponents {
+        var components = DateComponents()
+        components.weekday = Int(dayOfWeek)
+        components.hour = endTime.hour
+        components.minute = endTime.minute
+        
+        return components
+    }
 }
 
 // MARK: Generated accessors for tasks

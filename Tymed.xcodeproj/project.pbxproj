@@ -11,6 +11,7 @@
 		4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */; };
 		4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
 		4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */; };
+		4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658924B0669C000488B8 /* NotificationService.swift */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
@@ -98,6 +99,7 @@
 		4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTaskOverviewSeeAllCell.swift; sourceTree = "<group>"; };
+		4F12658924B0669C000488B8 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				4F405E83245D72FC00E1E704 /* TimetableService.swift */,
+				4F12658924B0669C000488B8 /* NotificationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -706,6 +709,7 @@
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
 				4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */,
 				4F7FAEF32480406A00C89C9D /* TaskDetailTableViewController.swift in Sources */,
+				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,

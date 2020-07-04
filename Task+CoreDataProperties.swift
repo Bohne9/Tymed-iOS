@@ -19,10 +19,10 @@ extension Task {
 
     @NSManaged public var completed: Bool
     @NSManaged public var due: Date?
-    @NSManaged public var id: UUID?
+    @NSManaged public var id: UUID
     @NSManaged public var priority: Int32
     @NSManaged public var text: String?
-    @NSManaged public var title: String?
+    @NSManaged public var title: String
     @NSManaged public var completionDate: Date?
     @NSManaged public var lesson: Lesson?
 
