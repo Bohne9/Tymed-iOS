@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let taskSection = "taskSection"
+
 private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
@@ -19,8 +21,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     private var isEditable: Bool = false
     
-    private var lessonTaskOverviewIndex = 0
-    private var lessonDeleteSecionIndex = 4
+    var lessonTaskOverviewIndex = 0
+    var lessonDeleteSecionIndex = 4
     
     var taskDelegate: HomeTaskDetailDelegate?
     var delegate: HomeDetailTableViewControllerDelegate?
@@ -43,6 +45,7 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationItem.leftBarButtonItem = cancel
         
         register(LessonDetailDeleteCell.self, identifier: lessonDeleteCell)
+        register(LessonDetailSubjectTitleCell.self, identifier: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell)
         register(LessonDetailTaskOverviewCell.self, identifier: lessonTaskOverviewCell)
         
         addSection(with: lessonDeleteSection)
@@ -69,21 +72,21 @@ class LessonDetailTableViewController: LessonAddViewController {
             title = lesson.subject?.name
             
             if lesson.tasks?.count ?? 0 > 0 {
-                addSection(with: "taskOverview", at: 0)
-                addCell(with: lessonTaskOverviewCell, at: "taskOverview")
+                addSection(with: taskSection, at: 0)
+                addCell(with: lessonTaskOverviewCell, at: taskSection)
                 
-                colorSectionIndex = 1
-                timeSectionIndex = 2
-                noteSectionIndex = 3
+                colorSectionIndex += 1
+                timeSectionIndex += 1
+                noteSectionIndex += 1
             }
         }
     }
     
     override func reconfigure() {
-        removeSection(with: "taskOverview")
-        colorSectionIndex = 0
-        timeSectionIndex = 1
-        noteSectionIndex = 2
+        removeSection(with: taskSection)
+        colorSectionIndex -= 1
+        timeSectionIndex -= 1
+        noteSectionIndex -= 1
         
         addTaskOverviewSection()
     }
@@ -93,6 +96,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     @objc func dismissDetailView() {
+        delegate?.detailWillDismiss(self)
         dismiss(animated: true, completion: nil)
     }
     
@@ -121,7 +125,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if index == lessonTaskOverviewIndex {
+        if identifier == taskSection {
             return "Tasks"
         } else if index == lessonDeleteSecionIndex {
             return nil
@@ -141,11 +145,11 @@ class LessonDetailTableViewController: LessonAddViewController {
             setupDeleteCell(cell)
         }
         // Configure isEditable
-        if indexPath.section == colorSectionIndex {
+        if identifier == lessonColorPickerCell {
             cell.accessoryType = isEditable ? .disclosureIndicator : .none // chrevron icon if isEditable
         }
         
-        if indexPath.section == noteSectionIndex {
+        if identifier == lessonNoteCell {
             (cell as! LessonAddNoteCell).textView.isEditable = isEditable // Make textView editable if isEditable
         }
         
@@ -217,6 +221,9 @@ class LessonDetailTableViewController: LessonAddViewController {
             // Set the value of the note cell
             (cell as! LessonAddNoteCell).textView.text = lesson.note ?? ""
             break
+        case LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell:
+            (cell as! LessonDetailSubjectTitleCell).reload(lesson)
+            break
         default:
             break
         }
@@ -282,14 +289,18 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
-        if identifier != lessonTaskOverviewCell {
+        
+        if identifier == lessonTaskOverviewCell {
+            let count = min(3, lesson?.tasks?.count ?? 0)
+            
+            let seeAll = (lesson?.tasks?.count ?? 0 > 0) ? 35 : 0
+            
+            return CGFloat(20 + seeAll + count * 60)
+        } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {
+            return 34
+        } else {
             return super.heightForRow(at: indexPath, with: identifier)
         }
-        // From here the row must be a lessonTaskOverviewCell
-        
-        let count = min(3, lesson?.tasks?.count ?? 0)
-        
-        return CGFloat(20 + count * 60)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

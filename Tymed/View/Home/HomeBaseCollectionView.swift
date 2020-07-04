@@ -31,7 +31,7 @@ class HomeBaseCollectionView: UICollectionView {
         
         translatesAutoresizingMaskIntoConstraints = false
         
-        backgroundColor = .systemGroupedBackground
+        backgroundColor = .systemBackground
         
         alwaysBounceVertical = true
         

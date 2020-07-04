@@ -512,6 +512,18 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        
+        switch identifier {
+        case lessonColorPickerCell, lessonTimeTitleCell:
+            return 50
+        case lessonTimePickerCell:
+            return 150
+        case lessonNoteCell:
+            return 120
+        default:
+            return 50
+        }
+        
         if indexPath.section == colorSectionIndex {
             return 50
         }else if indexPath.section == timeSectionIndex {
@@ -526,13 +538,25 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         return 50
     }
     
-    
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if index >= 0 && index < sectionHeaderTitles.count {
-            return sectionHeaderTitles[index]
+        switch identifier {
+        case colorSection:
+            return "Color"
+        case timeSection:
+            return "Time"
+        case noteSection:
+            return "Notes"
+        default:
+            return nil
         }
-        return nil
     }
+    
+//    override func headerForSection(with identifier: String, at index: Int) -> String? {
+//        if index >= 0 && index < sectionHeaderTitles.count {
+//            return sectionHeaderTitles[index]
+//        }
+//        return nil
+//    }
     
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         switch identifier {

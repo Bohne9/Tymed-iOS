@@ -31,6 +31,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     var tasks: [Task]?
     
     var taskDelegate: HomeTaskDetailDelegate?
+    
+    private var cellInsets: UIEdgeInsets?
         
     @IBOutlet weak var tableView: UITableView!
     
@@ -51,6 +53,15 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         tableView.becomeFirstResponder()
         
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 0)
+        
+        
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowRadius = 10
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.15
+        
+        layer.masksToBounds = false
+        
     }
     
     override func reload() {
@@ -73,7 +84,12 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         cell.reload(tasks![indexPath.row])
     
         if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {
+            if cellInsets == nil {
+                cellInsets = cell.separatorInset
+            }
             cell.separatorInset = UIEdgeInsets(top: 0, left: cell.frame.width, bottom: 0, right: 0)
+        }else if let insets = cellInsets {
+            cell.separatorInset = insets
         }
         
         return cell
@@ -112,7 +128,10 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         let config = UIContextMenuConfiguration(identifier: id, previewProvider: { () -> UIViewController? in
             
             let detail = TaskDetailTableViewController(style: .insetGrouped)
-                
+            
+            detail.tableView.isScrollEnabled = false
+            detail.tableView.showsVerticalScrollIndicator = false
+            
             detail.task = self.task(for: indexPath)
             detail.taskDelegate = self.taskDelegate
             

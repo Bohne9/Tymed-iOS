@@ -81,6 +81,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     @objc func dismissDetailView() {
+        detailDelegate?.detailWillDismiss(self)
         dismiss(animated: true, completion: nil)
     }
     

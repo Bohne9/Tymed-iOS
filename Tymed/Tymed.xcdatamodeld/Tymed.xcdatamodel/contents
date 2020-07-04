@@ -16,8 +16,9 @@
         <attribute name="name" attributeType="String"/>
         <relationship name="lessons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Lesson" inverseName="subject" inverseEntity="Lesson"/>
     </entity>
-    <entity name="Task" representedClassName="Task" syncable="YES" codeGenerationType="class">
+    <entity name="Task" representedClassName="Task" syncable="YES">
         <attribute name="completed" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="completionDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="due" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="priority" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -33,7 +34,7 @@
     <elements>
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="148"/>
         <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="118"/>
-        <element name="Task" positionX="-134.80078125" positionY="347.38671875" width="128" height="148"/>
+        <element name="Task" positionX="-134.80078125" positionY="347.38671875" width="128" height="163"/>
         <element name="Timetable" positionX="74.35546875" positionY="-96.5078125" width="128" height="88"/>
     </elements>
 </model>
