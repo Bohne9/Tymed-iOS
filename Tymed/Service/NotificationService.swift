@@ -58,8 +58,6 @@ class NotificationService {
         
     }
     
-    
-    
     //MARK: notificationTrigger(for: )
     
     private func notificationTrigger(for dateComponents: DateComponents, repeats: Bool = false) -> UNCalendarNotificationTrigger {
@@ -115,8 +113,6 @@ class NotificationService {
         let content = notificationContentForDueDate(task: task)
         let identfier = task.id.uuidString
         
-        print("Trigger for date: \(trigger.nextTriggerDate()?.stringify(dateStyle: .full, timeStyle: .full))")
-        
         return notificationRequest(identfier, content, trigger)
     }
     
@@ -138,6 +134,26 @@ class NotificationService {
         scheduleNotification(request)
     }
     
+    
+    //MARK: removeNotifications
+    func removePendingNotifications(of task: Task) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [task.id.uuidString])
+    }
+    
+    func removeDeliveredNotifications(of task: Task) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [task.id.uuidString])
+    }
+    
+    func removeAllNotifications(of task: Task) {
+        removePendingNotifications(of: task)
+        removeDeliveredNotifications(of: task)
+    }
+    
+    //MARK: getNotifications
+    
+    func getPendingNotifications(_ completion: @escaping ([UNNotificationRequest]) -> Void) {
+        UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: completion)
+    }
     
     
 }
