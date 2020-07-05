@@ -154,14 +154,55 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     //MARK: ScrollViewDelegate
     
+    private func sceneBaseCollectionView(for index: Int) -> HomeBaseCollectionView {
+        if index == 0 {
+            return dashCollectionView
+        }else if index == 1 {
+            return tasksCollectionView
+        }else {
+            return weekCollectionView
+        }
+    }
+    
+    private func navigationBarAlphaTransition(page: CGFloat) {
+        
+        let first = Int(page)
+        let sec = min(Int(page + 1), 2)
+        
+        let firstOff = sceneBaseCollectionView(for: first).contentOffset.y
+        let secOff = sceneBaseCollectionView(for: sec).contentOffset.y
+        
+        let percent = page - CGFloat(Int(page))
+        
+        let firstAlpha = calcuateNavBarBackgroundAlpha(firstOff)
+        let secAlpha = calcuateNavBarBackgroundAlpha(secOff)
+        
+        let m = (secAlpha - firstAlpha)
+        
+        let val = m * percent + firstAlpha
+        
+//        print("First: \(first), Sec: \(sec) F-Alpha: \(firstAlpha), S-Alpha: \(secAlpha), Alpha: \(val), Percent: \(percent)")
+        
+        // Just to avoid force unwrapping
+        guard let nav = navigationController?.navigationBar else {
+            return
+        }
+        
+        // Update the alpha of the navigation bar background view
+        nav.subviews.first?.alpha = val
+    }
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Calculate current page
-        let page = Int((scrollView.contentOffset.x / scrollView.frame.width).rounded())
+        let pagePercent = scrollView.contentOffset.x / scrollView.frame.width
+        
+        let page = Int(pagePercent.rounded())
         if let navBar = navigationController?.navigationBar as? NavigationBar {
+            navigationBarAlphaTransition(page: pagePercent)
             navBar.topBar.highlightPage(page)
             let scene = page == 0 ? dashCollectionView :
                 (page == 1 ? tasksCollectionView : weekCollectionView)
-            scene.homeDelegate?.didScroll(scene)
+//            scene.homeDelegate?.didScroll(scene)
         }
     }
     
