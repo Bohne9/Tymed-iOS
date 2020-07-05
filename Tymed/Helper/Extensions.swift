@@ -8,6 +8,7 @@
 
 import UIKit
 
+//MARK: String
 extension String {
     func levenshteinDistanceScore(to string: String, ignoreCase: Bool = true, trimWhiteSpacesAndNewLines: Bool = true) -> Double {
 
@@ -45,7 +46,7 @@ extension String {
     }
 }
 
-
+//MARK: Date
 extension Date {
     
     func stringify(with format: String) -> String{
@@ -100,7 +101,7 @@ extension Date {
 
 
 
-
+//MARK: UIView
 extension UIView {
     
     
@@ -234,7 +235,7 @@ extension UIView {
     
 }
 
-
+//MARK: UIColor
 extension UIColor {
     
     static let appGreen = UIColor(named: "green")!
@@ -253,4 +254,26 @@ extension UIColor {
         self.init(lesson?.subject)
     }
     
+}
+
+
+//MARK: TimeInterval
+extension TimeInterval {
+
+    static func seconds(_ value: TimeInterval) -> TimeInterval {
+        return value
+    }
+    
+    static func minute(_ value: Int) -> TimeInterval {
+        return TimeInterval(value * 60)
+    }
+    
+    static func hour(_ value: Int) -> TimeInterval {
+        return minute(value) * 60
+    }
+    
+    static func day(_ value: Int) -> TimeInterval {
+        return hour(value) * 24
+    }
+
 }

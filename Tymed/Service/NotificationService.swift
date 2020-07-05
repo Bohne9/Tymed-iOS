@@ -64,16 +64,27 @@ class NotificationService {
         return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
     }
     
+    private func notificationTrigger(at date: Date) -> UNCalendarNotificationTrigger {
+        let comp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        return notificationTrigger(for: comp)
+    }
+    
     private func notificationTrigger(for lesson: Lesson) -> UNCalendarNotificationTrigger {
         return notificationTrigger(for: lesson.startDateComponents, repeats: true)
     }
     
     private func notificationTrigger(for task: Task) -> UNCalendarNotificationTrigger? {
-        guard let dueDate = task.due else {
-            return nil
-        }
-        let comp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: dueDate)
-        return notificationTrigger(for: comp)
+        guard let date = task.due else { return nil }
+        
+        return notificationTrigger(at: date)
+    }
+    
+    private func notificationTriggger(for task: Task, with offset: TimeInterval) -> UNCalendarNotificationTrigger? {
+        guard var date = task.due else { return nil }
+        
+        date = date - offset
+        
+        return notificationTrigger(at: date)
     }
     
     //MARK: notificationContent
@@ -94,7 +105,7 @@ class NotificationService {
         
         let title = task.title
         let body = task.text ?? ""
-            
+        
         return notificationContent(title, body: body, thread: .task
             , sound: .default, category: .task)
     }
