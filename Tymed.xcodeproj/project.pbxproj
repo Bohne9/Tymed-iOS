@@ -12,6 +12,8 @@
 		4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
 		4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */; };
 		4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658924B0669C000488B8 /* NotificationService.swift */; };
+		4F12658F24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */; };
+		4F12659024B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
@@ -100,6 +102,8 @@
 		4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lesson+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTaskOverviewSeeAllCell.swift; sourceTree = "<group>"; };
 		4F12658924B0669C000488B8 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskNotificationTitleTableViewCell.swift; sourceTree = "<group>"; };
+		4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskNotificationTitleTableViewCell.xib; sourceTree = "<group>"; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 				4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */,
 				4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */,
 				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
+				4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */,
+				4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */,
 			);
 			path = TaskDetailCells;
 			sourceTree = "<group>";
@@ -587,6 +593,7 @@
 				4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */,
 				4F1FCFE12493FF14003693A6 /* TaskDeleteTableViewCell.xib in Resources */,
 				4F7F774D2456C2A400038729 /* Assets.xcassets in Resources */,
+				4F12659024B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib in Resources */,
 				4F3F6296247AF75A00A69202 /* TaskDueDateTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -683,6 +690,7 @@
 			files = (
 				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */,
 				4F2A7DC724AFAD22002467E3 /* Task+CoreDataClass.swift in Sources */,
+				4F12658F24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift in Sources */,
 				4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,

@@ -70,6 +70,7 @@ class TaskTitleTableViewCell: UITableViewCell {
             if completed {
                 if let completion = task.completionDate, due < completion {
                     tint = .appOrange
+                    NotificationService.current.removeDeliveredNotifications(of: task)
                 }
             } else if due < Date() {
                 tint = .appRed
