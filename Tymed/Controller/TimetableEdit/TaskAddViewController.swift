@@ -235,7 +235,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             return 0
         }
     }
-    
+      
     //MARK: didSelectRow(at: , with: )
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         super.didSelectRow(at: indexPath, with: identifier)
@@ -248,18 +248,27 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case dueSection:
             if row == 0 {
                 
+                tableView.beginUpdates()
+                
                 if expandDueDateCell {
-                    removeCell(at: section, row: 1)
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .top)
-                    reload()
-                }else {
-                    addCell(with: taskDueDateCell, at: dueSection)
                     
-                    tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .top)
+                    removeCell(at: section, row: 1)
+                    tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+                    
+                }else {
+                    insertCell(with: taskDueDateCell, in: dueSection, at: 1)
+
+                    tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+                    tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+
                 }
+                
+                tableView.endUpdates()
                 expandDueDateCell.toggle()
 
             }
+            break
         case lessonSection:
             showLessonPicker()
         default:
