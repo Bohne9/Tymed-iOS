@@ -14,6 +14,7 @@
 		4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658924B0669C000488B8 /* NotificationService.swift */; };
 		4F12658F24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */; };
 		4F12659024B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */; };
+		4F12659224B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */; };
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
@@ -104,6 +105,7 @@
 		4F12658924B0669C000488B8 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskNotificationTitleTableViewCell.swift; sourceTree = "<group>"; };
 		4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskNotificationTitleTableViewCell.xib; sourceTree = "<group>"; };
+		4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskSelectorCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
@@ -411,6 +413,7 @@
 				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
 				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
 				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
+				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
 			);
 			path = HomeDash;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
+				4F12659224B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift in Sources */,
 				4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */,
 				4F2A1C8F24A9233000E66C79 /* TaskOverviewTableViewCell.swift in Sources */,
 				4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */,

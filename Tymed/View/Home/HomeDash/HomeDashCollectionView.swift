@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 private let nowReuseIdentifier = "homeNowCell"
+private let taskSelectionCell = "taskSelection"
 
 private let tasksSection = "tasksSection"
 private let nowSection = "nowSection"
@@ -38,7 +39,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
-        
+        register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
         
     }
     
@@ -106,7 +107,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         switch identifier {
         case tasksSection:
-            return 1
+            return 5
         case nowSection:
             return nowLessons?.count ?? 0
         case nextSection:
@@ -126,13 +127,20 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         switch sectionId {
         case tasksSection:
-            let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
-        
-            cell.tasks = tasks
-            cell.taskDelegate = taskDelegate
-            cell.reload()
+            if indexPath.row < 4 {
+                let cell = dequeueCell(taskSelectionCell, indexPath)
+                
+                return cell
+            }else {
+                let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
+                
+                cell.tasks = tasks
+                cell.taskDelegate = taskDelegate
+                cell.reload()
+                
+                return cell
+            }
             
-            return cell
         case nowSection:
             let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
             
@@ -304,12 +312,16 @@ extension HomeDashCollectionView {
         
         switch sectionId {
         case tasksSection:
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
+            if indexPath.row < 4 {
+                return CGSize(width: (collectionView.contentSize.width -  16) / 2, height: 60)
+            }
+            
+            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
         case nowSection, nextSection, weekSection:
             
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
                 
-            return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
+            return CGSize(width: collectionView.contentSize.width, height: height)
         default:
             return CGSize.zero
         }
@@ -332,7 +344,7 @@ class HomeCollectionViewHeader: UICollectionReusableView  {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
+        label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         label.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
