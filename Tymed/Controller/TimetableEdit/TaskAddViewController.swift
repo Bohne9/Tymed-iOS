@@ -210,7 +210,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             let cell = cell as! TaskDueDateTitleTableViewCell
             
             cell.titleLabel.text = "Due"
-            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short)
+            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short) ?? "-"
         } else if identifier == taskDueDateCell {
             let cell = cell as! TaskDueDateTableViewCell
             
