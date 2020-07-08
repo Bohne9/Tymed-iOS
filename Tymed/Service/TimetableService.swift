@@ -507,6 +507,22 @@ class TimetableService {
         return getTasks(date: date, dateOperation: "==")
     }
     
+    func getTasks(between date1: Date, and date2: Date) -> [Task] {
+        return getTasks(NSPredicate(format: "due >= %@ AND due <= %@", date1 as NSDate, date2 as NSDate))
+    }
+    
+    func getTasksOfToday() -> [Task] {
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+
+        guard let endOfToday = Calendar.current.date(byAdding: components, to: startOfToday) else { return [] }
+        
+        return getTasks(between: startOfToday, and: endOfToday)
+    }
+    
     //MARK: deleteTask(_: )
     func deleteTask(_ task: Task) {
         context.delete(task)
