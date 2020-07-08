@@ -105,7 +105,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         switch selection {
         case .today:
-            
+            tasks = TimetableService.shared.getTasksOfToday()
             break
         case .all:
             tasks = TimetableService.shared.getTasks()
