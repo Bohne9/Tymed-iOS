@@ -8,9 +8,27 @@
 
 import UIKit
 
+enum HomeDashTaskSelectorCellType {
+    
+    case today
+    case all
+    case done
+    case expired
+    
+}
+
 class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
     
-    let button = UIButton(type: .roundedRect)
+    let label = UILabel()
+    let image = UIImageView()
+    
+    var type: HomeDashTaskSelectorCellType = .today {
+        didSet {
+            configurator.configure(self)
+        }
+    }
+    
+    var configurator = HomeDashTaskSelectorCellConfigurator()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,22 +42,34 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
     
     private func setup() {
         
-        contentView.addSubview(button)
+        contentView.addSubview(label)
+        contentView.addSubview(image)
+        
         contentView.layer.cornerRadius = 10
         
         contentView.backgroundColor = .secondarySystemGroupedBackground
+        
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowRadius = 10
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.15
+        
         layer.masksToBounds = false
         
-        button.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        image.translatesAutoresizingMaskIntoConstraints = false
         
-        button.constraintToSuperview(top: 10, bottom: 10, leading: 10, trailing: 10)
+        image.constraintCenterYToSuperview(constant: 0)
+        image.constraintLeadingToSuperview(constant: 20)
+        image.constraint(width: 30, height: 30)
+        image.contentMode = .scaleAspectFit
         
-        button.setTitle("Today", for: .normal)
-        button.setImage(UIImage(systemName: "calender"), for: .normal)
-        
-        
-        button.backgroundColor = .tertiarySystemGroupedBackground
-        
+        label.constraintCenterYToSuperview(constant: 0)
+        label.constraintLeadingTo(anchor: image.trailingAnchor, constant: 10)
+        label.constraintTrailingToSuperview(constant: 5)
+        label.constraint(height: 40)
+    
+        label.font = .systemFont(ofSize: 16, weight: .bold)
     }
     
     

@@ -128,7 +128,20 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         switch sectionId {
         case tasksSection:
             if indexPath.row < 4 {
-                let cell = dequeueCell(taskSelectionCell, indexPath)
+                let cell = dequeueCell(taskSelectionCell, indexPath) as! HomeDashTaskSelectorCollectionViewCell
+                
+                switch indexPath.row {
+                case 0:
+                    cell.type = .today
+                case 1:
+                    cell.type = .done
+                case 2:
+                    cell.type = .all
+                case 3:
+                    cell.type = .expired
+                default:
+                    break
+                }
                 
                 return cell
             }else {
@@ -313,7 +326,7 @@ extension HomeDashCollectionView {
         switch sectionId {
         case tasksSection:
             if indexPath.row < 4 {
-                return CGSize(width: (collectionView.contentSize.width -  16) / 2, height: 60)
+                return CGSize(width: (collectionView.contentSize.width -  16) / 2, height: 50)
             }
             
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
