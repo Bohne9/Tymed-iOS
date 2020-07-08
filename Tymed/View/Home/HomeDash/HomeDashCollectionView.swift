@@ -103,6 +103,18 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     private func loadTask(for selection: HomeDashTaskSelectorCellType) {
         
+        switch selection {
+        case .today:
+            
+            break
+        case .all:
+            tasks = TimetableService.shared.getTasks()
+        case .done:
+            tasks = TimetableService.shared.getCompletedTasks()
+            break
+        case .expired:
+            tasks = TimetableService.shared.getExpiredTasks()
+        }
         
     }
     
@@ -192,6 +204,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         case tasksSection:
             if indexPath.row < 4 {
                 taskSelection = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+                
+                loadTask(for: taskSelection)
+                
                 collectionView.reloadSections(IndexSet(arrayLiteral: 0))
             }
             

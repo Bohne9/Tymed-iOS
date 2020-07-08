@@ -447,7 +447,7 @@ class TimetableService {
            let results = try context.fetch(fetchRequest)
            
            return results
-        }catch {
+        } catch {
            print("fetch tasks failed", error)
            return []
         }
@@ -466,6 +466,41 @@ class TimetableService {
             return []
         }
     }
+    
+    func getTasksWithCompleteState(state: Bool) -> [Task] {
+        return getTasks("completed == %@", args: state)
+    }
+    
+    func getCompletedTasks() -> [Task] {
+        do {
+           let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+           
+           fetchRequest.predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
+           
+           let results = try context.fetch(fetchRequest)
+           
+           return results
+        } catch {
+           print("fetch tasks failed", error)
+           return []
+        }
+    }
+    
+    func getExpiredTasks() -> [Task] {
+        do {
+           let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+           
+           fetchRequest.predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
+           
+           let results = try context.fetch(fetchRequest)
+           
+           return results
+        } catch {
+           print("fetch tasks failed", error)
+           return []
+        }
+    }
+    
     
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
