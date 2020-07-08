@@ -437,12 +437,12 @@ class TimetableService {
     }
     
     //MARK: getTasks(predicate: )
-    private func getTasks(_ predicate: String, args: CVarArg...) -> [Task] {
+    private func getTasks(_ predicate: NSPredicate) -> [Task] {
 
         do {
            let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
            
-           fetchRequest.predicate = NSPredicate(format: predicate, args)
+           fetchRequest.predicate = predicate
            
            let results = try context.fetch(fetchRequest)
            
@@ -468,48 +468,31 @@ class TimetableService {
     }
     
     func getTasksWithCompleteState(state: Bool) -> [Task] {
-        return getTasks("completed == %@", args: state)
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: state))
+        return getTasks(predicate)
     }
     
     func getCompletedTasks() -> [Task] {
-        do {
-           let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-           
-           fetchRequest.predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
-           
-           let results = try context.fetch(fetchRequest)
-           
-           return results
-        } catch {
-           print("fetch tasks failed", error)
-           return []
-        }
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
+        
+        return getTasks(predicate)
     }
     
     func getExpiredTasks() -> [Task] {
-        do {
-           let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
-           
-           fetchRequest.predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
-           
-           let results = try context.fetch(fetchRequest)
-           
-           return results
-        } catch {
-           print("fetch tasks failed", error)
-           return []
-        }
+        let predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
+        
+        return getTasks(predicate)
     }
     
     
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
-        return getTasks("lesson == %@", args: lesson)
+        return getTasks(NSPredicate(format: "lesson == %@", lesson))
     }
 
     //MARK: getTasks(date: )
     private func getTasks(date: Date, dateOperation: String) -> [Task] {
-        return getTasks("due \(dateOperation) %@", args: date as NSDate)
+        return getTasks(NSPredicate(format: "due \(dateOperation) %@", date as NSDate))
     }
 
     func getTasks(before date: Date) -> [Task] {
