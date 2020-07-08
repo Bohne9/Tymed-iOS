@@ -8,12 +8,12 @@
 
 import UIKit
 
-enum HomeDashTaskSelectorCellType {
+enum HomeDashTaskSelectorCellType : Int {
     
-    case today
-    case all
-    case done
-    case expired
+    case today = 0
+    case done = 1
+    case all = 2
+    case expired = 3
     
 }
 
@@ -21,6 +21,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
     
     let label = UILabel()
     let image = UIImageView()
+    let selectedIndicator = UIImageView()
     
     var type: HomeDashTaskSelectorCellType = .today {
         didSet {
@@ -44,6 +45,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         
         contentView.addSubview(label)
         contentView.addSubview(image)
+        contentView.addSubview(selectedIndicator)
         
         contentView.layer.cornerRadius = 10
         
@@ -58,6 +60,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         image.translatesAutoresizingMaskIntoConstraints = false
+        selectedIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         image.constraintCenterYToSuperview(constant: 0)
         image.constraintLeadingToSuperview(constant: 20)
@@ -66,11 +69,17 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         
         label.constraintCenterYToSuperview(constant: 0)
         label.constraintLeadingTo(anchor: image.trailingAnchor, constant: 10)
-        label.constraintTrailingToSuperview(constant: 5)
+        label.constraintTrailingTo(anchor: selectedIndicator.leadingAnchor, constant: 10)
         label.constraint(height: 40)
+        
+        selectedIndicator.constraintCenterYToSuperview(constant: 0)
+        selectedIndicator.constraintTrailingToSuperview(constant: 20)
+        selectedIndicator.constraint(width: 20, height: 20)
     
         label.font = .systemFont(ofSize: 16, weight: .bold)
+        selectedIndicator.tintColor = .systemBlue
+        
+        
     }
-    
     
 }

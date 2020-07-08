@@ -22,12 +22,12 @@ class HomeDashTaskSelectorCellConfigurator: BaseCollectionViewCellConfigurator<H
         case .today:
             title = "Today"
             imageName = "calendar"
-            tint = .appBlue
+            tint = .systemBlue
             break
         case .done:
             title = "Done"
             imageName = "checkmark.circle.fill"
-            tint = .appGreen
+            tint = .systemGreen
         case .all:
             title = "All"
             imageName = "tray.full.fill"
@@ -35,12 +35,19 @@ class HomeDashTaskSelectorCellConfigurator: BaseCollectionViewCellConfigurator<H
         case .expired:
             title = "Expired"
             imageName = "exclamationmark.circle.fill"
-            tint = .appRed
+            tint = .systemRed
         }
         
         cell.label.text = title
         cell.image.image = UIImage(systemName: imageName)?.withTintColor(tint)
         cell.image.tintColor = tint
+        
+        if cell.isSelected {
+            cell.selectedIndicator.image = UIImage(systemName: "checkmark")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))
+        }else {
+            cell.selectedIndicator.image = nil
+        }
+        
         
     }
     

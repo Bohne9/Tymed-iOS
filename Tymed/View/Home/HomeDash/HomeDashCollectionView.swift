@@ -24,6 +24,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     var subjects: [Subject]?
     var lessons: [Lesson]?
     
+    private var taskSelection: HomeDashTaskSelectorCellType = .today
     
     //MARK: Section lesson arrays
     var nowLessons: [Lesson]?
@@ -100,6 +101,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
     
+    private func loadTask(for selection: HomeDashTaskSelectorCellType) {
+        
+        
+    }
+    
     // MARK: - UICollectionViewDataSource
 
     //MARK: numberOfItemsInSection
@@ -130,18 +136,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             if indexPath.row < 4 {
                 let cell = dequeueCell(taskSelectionCell, indexPath) as! HomeDashTaskSelectorCollectionViewCell
                 
-                switch indexPath.row {
-                case 0:
-                    cell.type = .today
-                case 1:
-                    cell.type = .done
-                case 2:
-                    cell.type = .all
-                case 3:
-                    cell.type = .expired
-                default:
-                    break
-                }
+                let type = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+                
+                cell.isSelected = type == taskSelection
+                cell.type = type
+                
                 
                 return cell
             }else {
@@ -190,6 +189,13 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         let sectionId = self.section(for: indexPath)
         
         switch sectionId {
+        case tasksSection:
+            if indexPath.row < 4 {
+                taskSelection = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+                collectionView.reloadSections(IndexSet(arrayLiteral: 0))
+            }
+            
+            break
         case nowSection:
             presentDetail(nowLessons, indexPath)
             break
