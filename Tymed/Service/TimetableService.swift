@@ -437,17 +437,17 @@ class TimetableService {
     }
     
     //MARK: getTasks(predicate: )
-    private func getTasks(_ predicate: String, args: CVarArg...) -> [Task] {
+    private func getTasks(_ predicate: NSPredicate) -> [Task] {
 
         do {
            let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
            
-           fetchRequest.predicate = NSPredicate(format: predicate, args)
+           fetchRequest.predicate = predicate
            
            let results = try context.fetch(fetchRequest)
            
            return results
-        }catch {
+        } catch {
            print("fetch tasks failed", error)
            return []
         }
@@ -467,14 +467,36 @@ class TimetableService {
         }
     }
     
+    func getAllTasks() -> [Task] {
+        return getTasks().sorted()
+    }
+    
+    func getTasksWithCompleteState(state: Bool) -> [Task] {
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: state))
+        return getTasks(predicate)
+    }
+    
+    func getCompletedTasks() -> [Task] {
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    func getExpiredTasks() -> [Task] {
+        let predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
-        return getTasks("lesson == %@", args: lesson)
+        return getTasks(NSPredicate(format: "lesson == %@", lesson))
     }
 
     //MARK: getTasks(date: )
     private func getTasks(date: Date, dateOperation: String) -> [Task] {
-        return getTasks("due \(dateOperation) %@", args: date as NSDate)
+        return getTasks(NSPredicate(format: "due \(dateOperation) %@", date as NSDate))
     }
 
     func getTasks(before date: Date) -> [Task] {
@@ -487,6 +509,22 @@ class TimetableService {
 
     func getTasks(at date: Date) -> [Task] {
         return getTasks(date: date, dateOperation: "==")
+    }
+    
+    func getTasks(between date1: Date, and date2: Date) -> [Task] {
+        return getTasks(NSPredicate(format: "due >= %@ AND due <= %@", date1 as NSDate, date2 as NSDate))
+    }
+    
+    func getTasksOfToday() -> [Task] {
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+
+        guard let endOfToday = Calendar.current.date(byAdding: components, to: startOfToday) else { return [] }
+        
+        return getTasks(between: startOfToday, and: endOfToday).sorted()
     }
     
     //MARK: deleteTask(_: )

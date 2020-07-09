@@ -220,6 +220,10 @@ class DynamicTableViewController: UITableViewController {
         }
     }
     
+    internal func insertCell(with identifier: String, in section: String, at index: Int) {
+        cells[section]?.insert(identifier, at: index)
+    }
+    
     //MARK: removeCell(...)
     
     /// Removes the cell of the specified section - row

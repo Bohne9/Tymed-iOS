@@ -25,7 +25,7 @@ class HomeBaseCollectionView: UICollectionView {
     }
     
     internal func setupUserInterface() {
-        contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 100, right: 0)
+        contentInset = UIEdgeInsets(top: 80, left: 20, bottom: 100, right: 20)
         
         showsVerticalScrollIndicator = false
         

@@ -14,6 +14,9 @@ internal let taskDueDateTitleCell = "taskDueDateTitleCell"
 internal let taskDueDateCell = "taskDueDateCell"
 internal let taskAttachLessonCell = "taskAttchLessonCell"
 internal let taskAttachedLessonCell = "taskAttachedLessonCell"
+internal let taskNotifiactionCell = "taskNotifiactionCell"
+internal let taskNotificationTitleCell = "taskNotificationTitleCell"
+internal let taskNotificationDatePickerCell = "taskNotificationDatePickerCell"
 
 internal let titleSection = "titleSection"
 internal let descriptionSection = "descriptionSection"
@@ -71,6 +74,8 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         register(UINib(nibName: "TaskDueDateTitleTableViewCell", bundle: nil), identifier: taskDueDateTitleCell)
         register(UINib(nibName: "TaskLessonAttachTableViewCell", bundle: nil), identifier: taskAttachLessonCell)
         register(TaskAttachedLessonTableViewCell.self, identifier: taskAttachedLessonCell)
+        register(UINib(nibName: "TaskNotificationTitleTableViewCell", bundle: nil), identifier: taskNotifiactionCell)
+        register(UINib(nibName: "TaskDueDateTitleTableViewCell", bundle: nil), identifier: taskNotificationTitleCell)
         
         addSection(with: titleSection)
         addCell(with: taskTitleCell, at: titleSection)
@@ -83,6 +88,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         addSection(with: dueSection)
         addCell(with: taskDueDateTitleCell, at: dueSection)
+        addCell(with: taskNotifiactionCell, at: dueSection)
     }
 
     @objc func changeTaskTitle(_ textField: UITextField) {
@@ -204,7 +210,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             let cell = cell as! TaskDueDateTitleTableViewCell
             
             cell.titleLabel.text = "Due"
-            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short)
+            cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short) ?? "-"
         } else if identifier == taskDueDateCell {
             let cell = cell as! TaskDueDateTableViewCell
             
@@ -219,7 +225,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         switch identifier {
         case taskTitleCell:
             return 40
-        case taskDueDateTitleCell, taskAttachedLessonCell, taskAttachLessonCell:
+        case taskDueDateTitleCell, taskAttachedLessonCell, taskAttachLessonCell, taskNotifiactionCell:
             return 50
         case taskDescriptionCell:
             return 120
@@ -229,7 +235,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             return 0
         }
     }
-    
+      
     //MARK: didSelectRow(at: , with: )
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         super.didSelectRow(at: indexPath, with: identifier)
@@ -242,17 +248,27 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case dueSection:
             if row == 0 {
                 
+                tableView.beginUpdates()
+                
                 if expandDueDateCell {
+                    
                     removeCell(at: section, row: 1)
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .top)
-                    reload()
+                    tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+                    
                 }else {
-                    addCell(with: taskDueDateCell, at: dueSection)
-                    tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .top)
+                    insertCell(with: taskDueDateCell, in: dueSection, at: 1)
+
+                    tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+                    tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+
                 }
+                
+                tableView.endUpdates()
                 expandDueDateCell.toggle()
 
             }
+            break
         case lessonSection:
             showLessonPicker()
         default:
