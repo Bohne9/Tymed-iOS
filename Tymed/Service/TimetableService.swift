@@ -467,6 +467,10 @@ class TimetableService {
         }
     }
     
+    func getAllTasks() -> [Task] {
+        return getTasks().sorted()
+    }
+    
     func getTasksWithCompleteState(state: Bool) -> [Task] {
         let predicate = NSPredicate(format: "completed == %@", NSNumber(value: state))
         return getTasks(predicate)
@@ -475,13 +479,13 @@ class TimetableService {
     func getCompletedTasks() -> [Task] {
         let predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
         
-        return getTasks(predicate)
+        return getTasks(predicate).sorted()
     }
     
     func getExpiredTasks() -> [Task] {
         let predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
         
-        return getTasks(predicate)
+        return getTasks(predicate).sorted()
     }
     
     
@@ -520,7 +524,7 @@ class TimetableService {
 
         guard let endOfToday = Calendar.current.date(byAdding: components, to: startOfToday) else { return [] }
         
-        return getTasks(between: startOfToday, and: endOfToday)
+        return getTasks(between: startOfToday, and: endOfToday).sorted()
     }
     
     //MARK: deleteTask(_: )

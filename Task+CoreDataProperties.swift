@@ -27,3 +27,14 @@ extension Task {
     @NSManaged public var lesson: Lesson?
 
 }
+
+extension Task: Comparable {
+    
+    public static func < (lhs: Task, rhs: Task) -> Bool {
+        guard let d1 = lhs.due, let d2 = rhs.due else {
+            return true
+        }
+        return d1 < d2
+    }
+    
+}

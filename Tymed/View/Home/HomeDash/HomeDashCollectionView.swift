@@ -106,14 +106,14 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             tasks = TimetableService.shared.getTasksOfToday()
             break
         case .all:
-            tasks = TimetableService.shared.getTasks()
+            tasks = TimetableService.shared.getAllTasks()
         case .done:
             tasks = TimetableService.shared.getCompletedTasks()
             break
         case .expired:
             tasks = TimetableService.shared.getExpiredTasks()
         }
-        
+        tasks?.reverse()
     }
     
     // MARK: - UICollectionViewDataSource
