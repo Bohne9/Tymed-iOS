@@ -77,12 +77,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         sectionIdentifiers = []
         
-        tasks = TimetableService.shared.getTasks()
+        loadTask(for: taskSelection)
         
-        // Add tasks section only if there are any tasks
-        if (tasks?.count ?? 0) > 0 {
-            addSection(id: tasksSection)
-        }
+        // Add tasks section
+        addSection(id: tasksSection)
         
         // If there are lessons right now show the "now" section, else show the next
         if (nowLessons?.count ?? 0) > 0 {
