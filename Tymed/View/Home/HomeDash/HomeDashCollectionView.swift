@@ -41,6 +41,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
+        register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noTaskCell")
+        
         
     }
     
@@ -79,8 +81,12 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         loadTask(for: taskSelection)
         
-        // Add tasks section
         addSection(id: tasksSection)
+        
+        // Add tasks section
+        if tasks?.count ?? 0 > 0 {
+            
+        }
         
         // If there are lessons right now show the "now" section, else show the next
         if (nowLessons?.count ?? 0) > 0 {
@@ -153,12 +159,16 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 
                 
                 return cell
-            }else {
+            }else if tasks?.count ?? 0 > 0 {
                 let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
                 
                 cell.tasks = tasks
                 cell.taskDelegate = taskDelegate
                 cell.reload()
+                
+                return cell
+            }else {
+                let cell = dequeueCell("noTaskCell", indexPath)
                 
                 return cell
             }
