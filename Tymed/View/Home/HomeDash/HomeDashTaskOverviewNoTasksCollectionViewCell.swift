@@ -35,6 +35,7 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
         label.font = .boldSystemFont(ofSize: 16)
         
         contentView.backgroundColor = .secondarySystemGroupedBackground
+        contentView.layer.cornerRadius = 10
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 10

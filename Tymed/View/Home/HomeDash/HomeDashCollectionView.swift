@@ -356,6 +356,8 @@ extension HomeDashCollectionView {
         case tasksSection:
             if indexPath.row < 4 {
                 return CGSize(width: (collectionView.contentSize.width -  16) / 2, height: 50)
+            } else if tasks?.count ?? 0 == 0 {
+                return CGSize(width: collectionView.contentSize.width, height: 50)
             }
             
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
