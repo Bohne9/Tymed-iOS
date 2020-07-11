@@ -315,7 +315,7 @@ extension HomeViewController: HomeTaskDetailDelegate {
         scrollToSection(1)
     }
     
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell?) {
         presentTaskAdd()
     }
     

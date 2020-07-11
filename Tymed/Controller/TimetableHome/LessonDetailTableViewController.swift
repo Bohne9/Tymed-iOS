@@ -369,7 +369,7 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
         reload()
     }
     
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell?) {
         
     }
     

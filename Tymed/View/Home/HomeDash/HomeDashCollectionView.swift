@@ -168,7 +168,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 
                 return cell
             }else {
-                let cell = dequeueCell("noTaskCell", indexPath)
+                let cell = dequeueCell("noTaskCell", indexPath) as! HomeDashTaskOverviewNoTasksCollectionViewCell
+                
+                cell.taskDelegate = taskDelegate
                 
                 return cell
             }

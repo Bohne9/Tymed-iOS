@@ -12,6 +12,8 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
     let addButton = UIButton()
     
+    var taskDelegate: HomeTaskDetailDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -23,7 +25,7 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func addTask() {
-        print("Add task")
+        taskDelegate?.onAddTask(nil)
     }
     
     private func setup() {

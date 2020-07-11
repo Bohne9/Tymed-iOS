@@ -16,7 +16,7 @@ protocol HomeTaskDetailDelegate {
     
     func didDeleteTask(_ task: Task)
     
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell)
+    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell?)
     
     func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell)
 }
