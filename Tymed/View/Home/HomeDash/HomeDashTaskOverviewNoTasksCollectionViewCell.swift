@@ -10,7 +10,9 @@ import UIKit
 
 class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
-    let label = UILabel()
+    let addButton = UIButton()
+    
+    var taskDelegate: HomeTaskAddDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,19 +24,32 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    @objc func addTask() {
+        taskDelegate?.onAddTask(nil)
+    }
+    
     private func setup() {
-        contentView.addSubview(label)
+        contentView.addSubview(addButton)
         
-        label.translatesAutoresizingMaskIntoConstraints = false
+        addButton.translatesAutoresizingMaskIntoConstraints = false
         
-        label.constraintToSuperview(top: 0, bottom: 0, leading: 0, trailing: 0)
+        addButton.constraintTopTo(anchor: contentView.topAnchor, constant: 0)
+        addButton.constraintHorizontalToSuperview(leading: 0, trailing: 0)
+        addButton.constraintBottomToSuperview(constant: 0)
         
-        label.text = "No tasks"
-        label.textAlignment = .center
+        addButton.setTitle("Add Task", for: .normal)
+        addButton.setImage(
+            UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
+            , for: .normal)
         
-        label.font = .boldSystemFont(ofSize: 16)
+        addButton.setTitleColor(.systemBlue, for: .normal)
+        
+        addButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        
+        addButton.addTarget(self, action: #selector(addTask), for: .touchUpInside)
         
         contentView.backgroundColor = .secondarySystemGroupedBackground
+        contentView.layer.cornerRadius = 10
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 10

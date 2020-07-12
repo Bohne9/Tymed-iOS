@@ -213,8 +213,12 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func presentTaskAdd() {
-        let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
-        self.present(task, animated: true, completion: nil)
+        let taskAdd = TaskAddViewController(style: .insetGrouped)
+        
+        taskAdd.detailDelegate = self
+
+        let nav = UINavigationController(rootViewController: taskAdd)
+        self.present(nav, animated: true, completion: nil)
     }
     
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
@@ -262,6 +266,13 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
 }
 
+extension HomeViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        print("home did dismiss")
+    }
+    
+}
 
 extension HomeViewController: HomeDetailTableViewControllerDelegate {
     
@@ -315,7 +326,7 @@ extension HomeViewController: HomeTaskDetailDelegate {
         scrollToSection(1)
     }
     
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell) {
+    func onAddTask(_ cell: UICollectionViewCell?) {
         presentTaskAdd()
     }
     
