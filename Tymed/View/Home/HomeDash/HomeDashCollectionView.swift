@@ -362,7 +362,8 @@ extension HomeDashCollectionView {
                 return CGSize(width: collectionView.contentSize.width, height: 50)
             }
             
-            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
+//            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
+            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat((tasks?.count ?? 0) * 60))
         case nowSection, nextSection, weekSection:
             
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))

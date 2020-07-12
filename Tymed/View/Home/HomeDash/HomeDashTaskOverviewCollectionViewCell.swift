@@ -79,7 +79,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(tasks?.count ?? 0, 3)
+//        return min(tasks?.count ?? 0, 3)
+        return tasks?.count ?? 0
     }
    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -87,7 +88,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
         cell.reload(tasks![indexPath.row])
     
-        if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {
+//        if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {
+        if indexPath.row == (tasks?.count ?? 0) - 1 {
             if cellInsets == nil {
                 cellInsets = cell.separatorInset
             }
