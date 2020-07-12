@@ -348,6 +348,7 @@ extension LessonDetailTableViewController: HomeDetailTableViewControllerDelegate
 }
 
 extension LessonDetailTableViewController: HomeTaskDetailDelegate {
+    
     func showTaskDetail(_ task: Task) {
         let vc = TaskDetailTableViewController(style: .insetGrouped)
         vc.task = task
@@ -369,7 +370,7 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
         reload()
     }
     
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell?) {
+    func onAddTask(_ cell: UICollectionViewCell?) {
         
     }
     

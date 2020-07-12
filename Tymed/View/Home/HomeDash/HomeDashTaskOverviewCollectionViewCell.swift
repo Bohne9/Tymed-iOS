@@ -8,15 +8,19 @@
 
 import UIKit
 
-protocol HomeTaskDetailDelegate {
+protocol HomeTaskAddDelegate {
+    
+    func onAddTask(_ cell: UICollectionViewCell?)
+    
+}
+
+protocol HomeTaskDetailDelegate: HomeTaskAddDelegate {
     
     func showTaskDetail(_ task: Task)
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
     func didDeleteTask(_ task: Task)
-    
-    func onAddTask(_ cell: HomeDashTaskOverviewCollectionViewCell?)
     
     func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell)
 }

@@ -41,9 +41,17 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     internal var taskLessonSection = 2
     internal var taskDueSection = 3
     
+    var detailDelegate: HomeDetailTableViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.presentationController?.delegate = self
     }
 
     override func setup() {
@@ -145,11 +153,14 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         NotificationService.current.scheduleDueDateNotification(for: task)
         
+        detailDelegate?.detailWillDismiss(self)
+        
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: cancel()
     @objc func cancel() {
+        detailDelegate?.detailWillDismiss(self)
         dismiss(animated: true, completion: nil)
     }
     
@@ -534,4 +545,16 @@ class TaskLessonPickerTableViewCell: UITableViewCell {
     
 }
 
+
+extension TaskAddViewController: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        detailDelegate?.detailWillDismiss(self)
+    }
+    
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        detailDelegate?.detailWillDismiss(self)
+    }
+    
+}
 

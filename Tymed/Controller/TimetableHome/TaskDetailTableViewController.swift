@@ -22,7 +22,6 @@ class TaskDetailTableViewController: TaskAddViewController {
     private var taskDeleteSection = -1
     
     var taskDelegate: HomeTaskDetailDelegate?
-    var detailDelegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,10 +46,6 @@ class TaskDetailTableViewController: TaskAddViewController {
         reload()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.presentationController?.delegate = self
-    }
     
     private func updateTaskValues() {
         guard let task = self.task else {
@@ -266,16 +261,3 @@ class TaskDetailTableViewController: TaskAddViewController {
     
 }
 
-extension TaskDetailTableViewController: UIAdaptivePresentationControllerDelegate {
-    
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        print("didDismiss")
-        detailDelegate?.detailWillDismiss(self)
-    }
-    
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        print("fnhsjdoi")
-        detailDelegate?.detailWillDismiss(self)
-    }
-    
-}

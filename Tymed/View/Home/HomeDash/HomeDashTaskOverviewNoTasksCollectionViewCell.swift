@@ -12,7 +12,7 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
     let addButton = UIButton()
     
-    var taskDelegate: HomeTaskDetailDelegate?
+    var taskDelegate: HomeTaskAddDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
