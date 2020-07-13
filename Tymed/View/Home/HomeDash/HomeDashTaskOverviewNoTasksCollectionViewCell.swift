@@ -14,6 +14,8 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
     var taskDelegate: HomeTaskAddDelegate?
     
+    var type: HomeDashTaskSelectorCellType?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -25,7 +27,13 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func addTask() {
-        taskDelegate?.onAddTask(nil)
+        taskDelegate?.onAddTask(nil, completion: { (viewController) in
+            guard let type = self.type else { return }
+            
+            if type == .today {
+                viewController.dueDate = Date()
+            }
+        })
     }
     
     private func setup() {

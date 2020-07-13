@@ -516,7 +516,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         switch identifier {
         case lessonColorPickerCell, lessonTimeTitleCell:
             return 50
-        case lessonTimePickerCell:
+        case lessonTimePickerCell, lessonDayPickerCell:
             return 150
         case lessonNoteCell:
             return 120
@@ -524,18 +524,6 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             return 50
         }
         
-        if indexPath.section == colorSectionIndex {
-            return 50
-        }else if indexPath.section == timeSectionIndex {
-            
-            return self.identifier(for: indexPath) == lessonTimeTitleCell ? 50 : 150
-           
-        }else if indexPath.section == noteSectionIndex {
-            // Note
-            return 120
-        }
-        
-        return 50
     }
     
     override func headerForSection(with identifier: String, at index: Int) -> String? {

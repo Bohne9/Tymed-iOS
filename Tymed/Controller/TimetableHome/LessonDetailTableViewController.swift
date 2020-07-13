@@ -120,6 +120,9 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationController?.navigationBar.backgroundColor = UIColor(lesson)
         navigationController?.navigationBar.barTintColor = UIColor(lesson)
         
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         navigationController?.navigationBar.isTranslucent = false
         
     }
@@ -370,7 +373,7 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
         reload()
     }
     
-    func onAddTask(_ cell: UICollectionViewCell?) {
+    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)?) {
         
     }
     

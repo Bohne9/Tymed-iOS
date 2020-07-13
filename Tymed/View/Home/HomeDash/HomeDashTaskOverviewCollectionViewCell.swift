@@ -10,9 +10,17 @@ import UIKit
 
 protocol HomeTaskAddDelegate {
     
-    func onAddTask(_ cell: UICollectionViewCell?)
+    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)?)
     
 }
+
+//extension HomeTaskAddDelegate {
+//
+//    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)? = nil) {
+//
+//    }
+//
+//}
 
 protocol HomeTaskDetailDelegate: HomeTaskAddDelegate {
     
@@ -41,7 +49,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onAddTask(_ sender: Any) {
-        taskDelegate?.onAddTask(self)
+        taskDelegate?.onAddTask(self, completion: nil)
     }
     
     override func awakeFromNib() {
