@@ -120,6 +120,9 @@ class LessonDetailTableViewController: LessonAddViewController {
         navigationController?.navigationBar.backgroundColor = UIColor(lesson)
         navigationController?.navigationBar.barTintColor = UIColor(lesson)
         
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         navigationController?.navigationBar.isTranslucent = false
         
     }

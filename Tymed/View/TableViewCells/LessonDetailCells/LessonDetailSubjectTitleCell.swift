@@ -26,8 +26,8 @@ class LessonDetailSubjectTitleCell: UITableViewCell {
     
     private func setup() {
         
-        contentView.backgroundColor = .systemBackground
-        backgroundColor = .systemBackground
+        contentView.backgroundColor = .systemGroupedBackground
+        backgroundColor = .systemGroupedBackground
         
         contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
