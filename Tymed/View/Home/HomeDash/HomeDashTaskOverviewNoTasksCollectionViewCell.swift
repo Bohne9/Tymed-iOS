@@ -25,7 +25,9 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func addTask() {
-        taskDelegate?.onAddTask(nil)
+        taskDelegate?.onAddTask(nil, completion: { (viewController) in
+            viewController.dueDate = Date()
+        })
     }
     
     private func setup() {

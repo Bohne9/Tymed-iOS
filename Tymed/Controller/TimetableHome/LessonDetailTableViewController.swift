@@ -370,7 +370,7 @@ extension LessonDetailTableViewController: HomeTaskDetailDelegate {
         reload()
     }
     
-    func onAddTask(_ cell: UICollectionViewCell?) {
+    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)?) {
         
     }
     
