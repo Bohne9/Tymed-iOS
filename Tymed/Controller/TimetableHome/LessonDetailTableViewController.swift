@@ -111,6 +111,14 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
         
+        if isEditable, let lesson = self.lesson {
+            lesson.startTime = Time(from: startDate)
+            lesson.endTime = Time(from: endDate)
+            lesson.dayOfWeek = Int32(day.rawValue)
+            
+            TimetableService.shared.save()
+        }
+        
         isEditable.toggle()
         
         btn.title = isEditable ? "Save" : "Edit"
