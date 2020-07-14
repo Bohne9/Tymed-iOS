@@ -148,6 +148,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         task.priority = 0
         task.title = taskTitle ?? ""
         task.text = taskDescription
+        task.archived = false
         
         TimetableService.shared.save()
         
