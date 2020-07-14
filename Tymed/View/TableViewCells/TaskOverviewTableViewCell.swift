@@ -76,7 +76,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
     
     private func addSubviews(_ views: UIView...) {
         views.forEach { (view) in
-            self.addSubview(view)
+            contentView.addSubview(view)
             view.translatesAutoresizingMaskIntoConstraints = false
         }
     }
@@ -105,17 +105,17 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         // Setup title label
         titleLabel.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 10)
-        titleLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        titleLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.4).isActive = true
         titleLabel.constraintTrailingTo(anchor: subjectIndicator.leadingAnchor, constant: 5)
         titleLabel.constraintTopToSuperview(constant: 5)
         
         titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         
         // Setup due label
-        let constraint = dueLabel.leadingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -100)
+        let constraint = dueLabel.leadingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -100)
         constraint.priority = UILayoutPriority.defaultHigh
         constraint.isActive = true
-        dueLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        dueLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.4).isActive = true
         dueLabel.constraintTrailingToSuperview(constant: 5)
         dueLabel.constraintTopTo(anchor: titleLabel.bottomAnchor, constant: 0)
         
@@ -124,7 +124,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         // Setup description label
         descriptionLabel.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 10)
-        descriptionLabel.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.4).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.4).isActive = true
         descriptionLabel.constraintTrailingTo(anchor: dueLabel.leadingAnchor, constant: 5)
         let c2 = descriptionLabel.trailingAnchor.constraint(equalTo: dueLabel.leadingAnchor, constant: -5)
         c2.priority = UILayoutPriority.defaultLow
