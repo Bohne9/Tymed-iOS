@@ -185,6 +185,21 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         }
     }
     
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        switch identifier {
+        case titleSection:
+            return ""
+        case descriptionSection:
+            return "text.alignleft"
+        case lessonSection:
+            return "doc.text"
+        case dueSection:
+            return "timer"
+        default:
+            return ""
+        }
+    }
+    
     //MARK: removeLesson()
     @objc func removeLesson() {
         

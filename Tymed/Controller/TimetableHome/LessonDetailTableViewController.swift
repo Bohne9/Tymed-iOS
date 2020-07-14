@@ -25,6 +25,8 @@ class LessonDetailTableViewController: LessonAddViewController {
             endDate = lesson.endTime.date ?? Date()
             day = lesson.day
             
+            lessonColor = lesson.subject?.color ?? ""
+            
         }
     }
     
@@ -116,6 +118,8 @@ class LessonDetailTableViewController: LessonAddViewController {
             lesson.endTime = Time(from: endDate)
             lesson.dayOfWeek = Int32(day.rawValue)
             
+            lesson.subject?.color = lessonColor
+            
             TimetableService.shared.save()
         }
         
@@ -196,7 +200,7 @@ class LessonDetailTableViewController: LessonAddViewController {
                 break
             }
             // Configure subject color
-            (cell as! LessonColorPickerCell).selectColor(named: lesson.subject?.color ?? "dark")
+            (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
         case lessonTimeTitleCell:
             guard indexPath.section == timeSectionIndex else {

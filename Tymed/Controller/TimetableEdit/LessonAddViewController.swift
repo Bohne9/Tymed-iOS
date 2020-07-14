@@ -539,6 +539,19 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         }
     }
     
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        switch identifier {
+        case colorSection:
+            return "paintbrush"
+        case timeSection:
+            return "clock"
+        case noteSection:
+            return "paperclip"
+        default:
+            return nil
+        }
+    }
+    
 //    override func headerForSection(with identifier: String, at index: Int) -> String? {
 //        if index >= 0 && index < sectionHeaderTitles.count {
 //            return sectionHeaderTitles[index]
