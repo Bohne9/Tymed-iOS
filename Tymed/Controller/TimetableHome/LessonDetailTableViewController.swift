@@ -17,7 +17,16 @@ private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
 class LessonDetailTableViewController: LessonAddViewController {
 
-    var lesson: Lesson?
+    var lesson: Lesson? {
+        didSet {
+            guard let lesson = self.lesson else { return }
+            
+            startDate = lesson.startTime.date ?? Date()
+            endDate = lesson.endTime.date ?? Date()
+            day = lesson.day
+            
+        }
+    }
     
     private var isEditable: Bool = false
     
@@ -190,11 +199,11 @@ class LessonDetailTableViewController: LessonAddViewController {
             let row = indexPath.row
             
             if row == 0 {
-                cell.value.text = lesson.startTime.string()
+                cell.value.text = startDate.stringifyTime(with: .short)
             }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
-                cell.value.text = lesson.endTime.string()
+                cell.value.text = endDate.stringifyTime(with: .short)
             }else {
-                cell.value.text = lesson.day.string()
+                cell.value.text = day.string()
             }
             break
         case lessonTimePickerCell:
@@ -205,9 +214,9 @@ class LessonDetailTableViewController: LessonAddViewController {
             let cell = cell as! LessonTimePickerCell
             
             if indexPath.row == 1 {
-                cell.datePicker.date = lesson.startTime.date ?? Date()
+                cell.datePicker.date = startDate
             }else {
-                cell.datePicker.date = lesson.endTime.date ?? Date()
+                cell.datePicker.date = endDate
             }
             break
         case lessonDayPickerCell:
@@ -216,7 +225,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             }
             // Set the values of the day picker
             let cell = cell as! LessonDayPickerCell
-            cell.picker.selectRow(lesson.day == .sunday ? 6 : lesson.day.rawValue - 2, inComponent: 0, animated: false)
+            cell.picker.selectRow(day == .sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
         case lessonNoteCell:
             guard indexPath.section == noteSectionIndex else {
                 break
@@ -239,7 +248,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             return
         }
         
-        if indexPath.section == 0 {
+        if identifier == lessonTaskOverviewCell {
             
         }else {
             if identifier == lessonColorPickerCell {

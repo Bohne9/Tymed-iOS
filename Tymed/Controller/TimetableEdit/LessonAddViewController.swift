@@ -129,9 +129,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
        }
     private var invalidTimeInterval = false
     
-    private var startDate: Date = TimetableService.shared.dateFor(hour: 12, minute: 30)
-    private var endDate: Date = TimetableService.shared.dateFor(hour: 14, minute: 0)
-    private var day: Day = Day.monday
+    internal var startDate: Date = TimetableService.shared.dateFor(hour: 12, minute: 30)
+    internal var endDate: Date = TimetableService.shared.dateFor(hour: 14, minute: 0)
+    internal var day: Day = Day.monday
     
     private weak var startTitleCell: LessonTimeTitleCell?
     private weak var endTitleCell: LessonTimeTitleCell?

@@ -268,6 +268,10 @@ class TimetableService {
         return Calendar.current.date(from: dateComponents)!
     }
     
+    func dateFor(_ time: Time) -> Date {
+        return dateFor(hour: time.hour, minute: time.minute)
+    }
+    
     func lessons() -> [Lesson]? {
         return fetchLessons()
     }
