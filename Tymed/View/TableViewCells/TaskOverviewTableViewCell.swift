@@ -61,10 +61,10 @@ class TaskOverviewTableViewCell: UITableViewCell {
         reloadCompleteIndicator()
         
         if task.completed {
-            titleLabel.attributedText = NSAttributedString(string: task.title ?? "",
+            titleLabel.attributedText = NSAttributedString(string: task.title ,
                                                            attributes: [NSAttributedString.Key.strikethroughStyle: NSUnderlineStyle.thick.rawValue])
         }else {
-            titleLabel.attributedText = NSAttributedString(string: task.title ?? "")
+            titleLabel.attributedText = NSAttributedString(string: task.title )
         }
         
         subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.clear
@@ -148,7 +148,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         if task.completed {
             UIView.transition(with: titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                self.titleLabel.text = ((self.task.title ?? "") + " 👏")
+                self.titleLabel.text = ((self.task.title) + " 👏")
             }, completion: { _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
                     UIView.transition(with: self.titleLabel, duration: 0.3, options: .transitionCrossDissolve, animations: {

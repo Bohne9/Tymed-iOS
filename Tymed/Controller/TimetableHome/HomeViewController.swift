@@ -200,9 +200,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         if let navBar = navigationController?.navigationBar as? NavigationBar {
             navigationBarAlphaTransition(page: pagePercent)
             navBar.topBar.highlightPage(page)
-            let scene = page == 0 ? dashCollectionView :
-                (page == 1 ? tasksCollectionView : weekCollectionView)
-//            scene.homeDelegate?.didScroll(scene)
         }
     }
     

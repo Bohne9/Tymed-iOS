@@ -467,9 +467,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             
             break
         case lessonDayPickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
+//            guard indexPath.section == timeSectionIndex else {
+//                break
+//            }
             
             let cell = cell as! LessonDayPickerCell
             dayPickerCell = cell
@@ -663,8 +663,8 @@ class LessonTimeTitleCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(title)
-        addSubview(value)
+        contentView.addSubview(title)
+        contentView.addSubview(value)
         
         title.text = "Start"
         value.text = "12:30"
@@ -704,17 +704,16 @@ class LessonTimePickerCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(datePicker)
-        
-        datePicker.datePickerMode = .time
+        contentView.addSubview(datePicker)
         
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         
-        datePicker.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        datePicker.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        if #available(iOS 14, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        datePicker.datePickerMode = .time
         
-        datePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        datePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        datePicker.constraintToSuperview(top: 0, bottom: 0, leading: 20, trailing: 20)
         
     }
     
@@ -749,18 +748,14 @@ class LessonDayPickerCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewDa
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(picker)
+        contentView.addSubview(picker)
         
         picker.delegate = self
         picker.dataSource = self
         
         picker.translatesAutoresizingMaskIntoConstraints = false
         
-        picker.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        picker.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        
-        picker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        picker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        picker.constraintToSuperview(top: 0, bottom: 0, leading: 20, trailing: 20)
         
     }
     

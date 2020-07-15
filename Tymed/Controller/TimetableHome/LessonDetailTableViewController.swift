@@ -157,6 +157,15 @@ class LessonDetailTableViewController: LessonAddViewController {
             return super.headerForSection(with: identifier, at: index)
         }
     }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == taskSection {
+            return "list.bullet"
+        } else {
+            return super.iconForSection(with: identifier, at: index)
+        }
+    }
+    
 
     //MARK: configureCell(_: ...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
