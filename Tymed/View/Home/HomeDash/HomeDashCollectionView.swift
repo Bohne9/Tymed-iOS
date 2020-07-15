@@ -282,8 +282,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             lessonDetail.lesson = lesson
             
-//            lessonDetail.reload()
-            
             lessonDetail.tableView.isScrollEnabled = false
             lessonDetail.tableView.showsVerticalScrollIndicator = false
             

@@ -209,7 +209,26 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             
             let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
             
-            lessonDetail.lesson = self.lesson(for: indexPath)
+            lessonDetail.lesson = lesson
+            
+            lessonDetail.tableView.isScrollEnabled = false
+            lessonDetail.tableView.showsVerticalScrollIndicator = false
+            
+            lessonDetail.tableView.beginUpdates()
+            
+            lessonDetail.addSection(with: "subjectTitle", at: 0)
+            lessonDetail.addCell(with: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell, at: "subjectTitle")
+            lessonDetail.timeSectionIndex += 1
+            lessonDetail.colorSectionIndex += 1
+            lessonDetail.lessonTaskOverviewIndex += 1
+            lessonDetail.lessonDeleteSecionIndex += 1
+            lessonDetail.noteSectionIndex += 1
+            
+            lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
+            
+            lessonDetail.tableView.endUpdates()
+            
+            
             
             return lessonDetail
         }) { (elements) -> UIMenu? in
