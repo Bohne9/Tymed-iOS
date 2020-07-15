@@ -170,7 +170,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForItemAt
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width - 2 * 16, height: 100)
+        
+        let lesson = self.lesson(for: indexPath)
+        
+        let height = HomeLessonCellConfigurator.height(for: lesson)
+        
+        return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
     }
     
     //MARK: sizeForHeaderInSection
