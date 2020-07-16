@@ -405,6 +405,10 @@
 				4F7F777724575AB100038729 /* HomeTopBar.swift */,
 				4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */,
 				4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */,
+				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
+				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
+				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
+				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 				4F99D206249FECBE00A8DFAB /* HomeDash */,
 				4F99D207249FECEA00A8DFAB /* HomeTask */,
 				4F99D208249FECFF00A8DFAB /* HomeWeek */,
@@ -419,10 +423,6 @@
 			isa = PBXGroup;
 			children = (
 				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
-				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
-				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
-				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
-				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 			);
 			path = HomeDash;
 			sourceTree = "<group>";

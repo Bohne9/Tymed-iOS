@@ -18,15 +18,20 @@ class HomeBaseCollectionView: UICollectionView {
     init() {
         super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         
+        setupUserInterface()
+        
         delegate = self
         dataSource = self
         
-        setupUserInterface()
     }
     
     internal func setupUserInterface() {
         contentInset = UIEdgeInsets(top: 80, left: 20, bottom: 100, right: 20)
         
+        layoutIfNeeded()
+        
+        contentSize = frame.size
+
         showsVerticalScrollIndicator = false
         
         translatesAutoresizingMaskIntoConstraints = false

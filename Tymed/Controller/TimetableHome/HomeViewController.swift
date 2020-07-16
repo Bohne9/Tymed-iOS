@@ -20,7 +20,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }()
     
     var tasksCollectionView: HomeTaskCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
         let homeTask = HomeTaskCollectionView()
         
         return homeTask
@@ -83,6 +82,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         weekCollectionView.homeDelegate = self
         
         dashCollectionView.taskDelegate = self
+        tasksCollectionView.taskDelegate = self
     }
     
     func setupFlowLayout() {
