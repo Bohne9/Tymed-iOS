@@ -20,9 +20,10 @@ private let expiredSection = "expiredSection"
 
 class HomeTaskCollectionView: HomeBaseCollectionView {
     
-    var cellColor: UIColor = .red
-    
-    var tasks: [Task]?
+    var todayTasks: [Task]?
+    var allTasks: [Task]?
+    var doneTasks: [Task]?
+    var expiredTasks: [Task]?
     
     //MARK: UI setup
     internal override func setupUserInterface() {
@@ -63,7 +64,11 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     //MARK: fetchData()
     internal override func fetchData() {
         
-        tasks = TimetableService.shared.getTasks()
+        todayTasks = TimetableService.shared.getTasksOfToday()
+        allTasks = TimetableService.shared.getAllTasks()
+        doneTasks = TimetableService.shared.getCompletedTasks()
+        expiredTasks = TimetableService.shared.getExpiredTasks()
+        
         
         sectionIdentifiers = []
         
@@ -88,18 +93,41 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         return 1
     }
     
+    private func tasks(for section: String) -> [Task]? {
+        switch section {
+        case todaySection:
+            return todayTasks
+        case allSection:
+            return allTasks
+        case doneSection:
+            return doneTasks
+        case expiredSection:
+            return expiredTasks
+        default:
+            return []
+        }
+    }
+    
     private func configureCell(_ cell: UICollectionViewCell, identifier: String, indexPath: IndexPath) {
         
         if identifier == taskTypeSelectorIdentifier {
             (cell as! HomeDashTaskSelectorCollectionViewCell).type = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+        } else if indexPath.section >= 3 {
+            let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
+            
+            let section = self.section(for: indexPath.section)
+            
+            taskCell.tasks = self.tasks(for: section)
+            taskCell.taskDelegate = taskDelegate
+            taskCell.reload()
+            
         }
+
         
     }
     
     //MARK: cellForItemAt
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        let sectionId = self.section(for: indexPath)
 
         let identifier = self.identifier(for: indexPath)
 
@@ -120,7 +148,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     //MARK: didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        presentDetail(tasks, indexPath)
+//        presentDetail(tasks, indexPath)
         
     }
 
@@ -175,7 +203,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
         
         if identifier == homeDashTaskOverviewCollectionViewCell {
-            height = 60
+            
+            let tasks = self.tasks(for: self.section(for: indexPath.section))
+            
+            height = 20 + CGFloat((tasks?.count ?? 0) * 60)
         }
         
         return CGSize(width: width, height: height)
