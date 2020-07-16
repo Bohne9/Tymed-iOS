@@ -353,6 +353,8 @@ extension HomeDashCollectionView {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sectionId = section(for: indexPath)
         
+        print("fvsdpeowp \(collectionView.contentSize)")
+        
         switch sectionId {
         case tasksSection:
             if indexPath.row < 4 {

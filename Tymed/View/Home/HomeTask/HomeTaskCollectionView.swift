@@ -28,9 +28,6 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     internal override func setupUserInterface() {
         super.setupUserInterface()
         
-        print(contentInset)
-        print(contentSize)
-        
         register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
@@ -39,6 +36,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noCell")
         
+        
+        if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+            
+            flowLayout.minimumInteritemSpacing = 16
+            
+        }
     }
     
     private func identifier(for indexPath: IndexPath) -> String {
@@ -153,7 +156,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         let identifier = self.section(for: section)
         
         if identifier == typeSection || identifier == addBtnSection {
-            height = 0
+            height = 20
         }
         
         return CGSize(width: collectionView.frame.width, height: height)
@@ -162,11 +165,13 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let identifier = self.identifier(for: indexPath)
         
+        print("hfopsda \(collectionView.contentSize)")
+        
         var width: CGFloat = (collectionView.frame.width - 2 * 16)
         var height: CGFloat = 50
         
         if identifier == taskTypeSelectorIdentifier {
-            width = (collectionView.frame.width - 3 * 16) / 2
+            width = (collectionView.frame.width - 56) / 2
         }
         
         if identifier == homeDashTaskOverviewCollectionViewCell {
