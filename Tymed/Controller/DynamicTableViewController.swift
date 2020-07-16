@@ -8,6 +8,52 @@
 
 import UIKit
 
+class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
+    
+    let iconView = UIImageView()
+    let titleLabel = UILabel()
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        setup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setup() {
+        contentView.addSubview(iconView)
+        contentView.addSubview(titleLabel)
+        
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        iconView.constraintLeadingToSuperview(constant: 15)
+        iconView.constraintCenterYToSuperview(constant: 0)
+        iconView.constraint(width: 18, height: 18)
+        
+        titleLabel.constraintLeadingTo(anchor: iconView.trailingAnchor, constant: 8)
+        titleLabel.constraintCenterYToSuperview(constant: 0)
+        titleLabel.constraint(height: 20)
+        titleLabel.constraintTrailingToSuperview(constant: 5)
+        
+        titleLabel.font = .boldSystemFont(ofSize: 16)
+        
+    }
+    
+    func setTitle(title: String) {
+        titleLabel.text = title
+    }
+    
+    func setIcon(systemName icon: String) {
+        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold))
+        
+        iconView.image = image
+    }
+}
+
 class DynamicTableViewController: UITableViewController {
 
     /// An array of section identifiers
@@ -31,6 +77,10 @@ class DynamicTableViewController: UITableViewController {
         super.viewDidLoad()
 
         setup()
+        
+        tableView.register(DynamicTableViewControllerHeader.self, forHeaderFooterViewReuseIdentifier: "headerView")
+        
+        tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         
         navigationController?.navigationBar.isTranslucent = true
     }
@@ -93,7 +143,15 @@ class DynamicTableViewController: UITableViewController {
         return cells[section]?.count ?? 0
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
     internal func headerForSection(with identifier: String, at index: Int) -> String? {
+        return ""
+    }
+    
+    internal func iconForSection(with identifier: String, at index: Int) -> String? {
         return ""
     }
     
@@ -134,13 +192,20 @@ class DynamicTableViewController: UITableViewController {
         didSelectRow(at: indexPath, with: identifier)
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return headerForSection(with: sectionIdentifier(for: section), at: section)
-    }
-    
     
     internal func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         return 0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "headerView") as! DynamicTableViewControllerHeader
+        
+        let identifier = sectionIdentifier(for: section)
+        
+        header.setTitle(title: headerForSection(with: identifier, at: section) ?? "")
+        header.setIcon(systemName: iconForSection(with: identifier, at: section) ?? "")
+        
+        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

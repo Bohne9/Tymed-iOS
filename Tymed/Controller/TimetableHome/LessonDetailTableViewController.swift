@@ -17,7 +17,18 @@ private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
 class LessonDetailTableViewController: LessonAddViewController {
 
-    var lesson: Lesson?
+    var lesson: Lesson? {
+        didSet {
+            guard let lesson = self.lesson else { return }
+            
+            startDate = lesson.startTime.date ?? Date()
+            endDate = lesson.endTime.date ?? Date()
+            day = lesson.day
+            
+            lessonColor = lesson.subject?.color ?? ""
+            
+        }
+    }
     
     private var isEditable: Bool = false
     
@@ -102,6 +113,16 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
         
+        if isEditable, let lesson = self.lesson {
+            lesson.startTime = Time(from: startDate)
+            lesson.endTime = Time(from: endDate)
+            lesson.dayOfWeek = Int32(day.rawValue)
+            
+            lesson.subject?.color = lessonColor
+            
+            TimetableService.shared.save()
+        }
+        
         isEditable.toggle()
         
         btn.title = isEditable ? "Save" : "Edit"
@@ -136,6 +157,15 @@ class LessonDetailTableViewController: LessonAddViewController {
             return super.headerForSection(with: identifier, at: index)
         }
     }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == taskSection {
+            return "list.bullet"
+        } else {
+            return super.iconForSection(with: identifier, at: index)
+        }
+    }
+    
 
     //MARK: configureCell(_: ...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
@@ -179,7 +209,7 @@ class LessonDetailTableViewController: LessonAddViewController {
                 break
             }
             // Configure subject color
-            (cell as! LessonColorPickerCell).selectColor(named: lesson.subject?.color ?? "dark")
+            (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
         case lessonTimeTitleCell:
             guard indexPath.section == timeSectionIndex else {
@@ -190,11 +220,11 @@ class LessonDetailTableViewController: LessonAddViewController {
             let row = indexPath.row
             
             if row == 0 {
-                cell.value.text = lesson.startTime.string()
+                cell.value.text = startDate.stringifyTime(with: .short)
             }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
-                cell.value.text = lesson.endTime.string()
+                cell.value.text = endDate.stringifyTime(with: .short)
             }else {
-                cell.value.text = lesson.day.string()
+                cell.value.text = day.string()
             }
             break
         case lessonTimePickerCell:
@@ -205,9 +235,9 @@ class LessonDetailTableViewController: LessonAddViewController {
             let cell = cell as! LessonTimePickerCell
             
             if indexPath.row == 1 {
-                cell.datePicker.date = lesson.startTime.date ?? Date()
+                cell.datePicker.date = startDate
             }else {
-                cell.datePicker.date = lesson.endTime.date ?? Date()
+                cell.datePicker.date = endDate
             }
             break
         case lessonDayPickerCell:
@@ -216,7 +246,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             }
             // Set the values of the day picker
             let cell = cell as! LessonDayPickerCell
-            cell.picker.selectRow(lesson.day == .sunday ? 6 : lesson.day.rawValue - 2, inComponent: 0, animated: false)
+            cell.picker.selectRow(day == .sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
         case lessonNoteCell:
             guard indexPath.section == noteSectionIndex else {
                 break
@@ -239,7 +269,7 @@ class LessonDetailTableViewController: LessonAddViewController {
             return
         }
         
-        if indexPath.section == 0 {
+        if identifier == lessonTaskOverviewCell {
             
         }else {
             if identifier == lessonColorPickerCell {

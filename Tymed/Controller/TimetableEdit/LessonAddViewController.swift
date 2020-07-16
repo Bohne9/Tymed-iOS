@@ -129,9 +129,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
        }
     private var invalidTimeInterval = false
     
-    private var startDate: Date = TimetableService.shared.dateFor(hour: 12, minute: 30)
-    private var endDate: Date = TimetableService.shared.dateFor(hour: 14, minute: 0)
-    private var day: Day = Day.monday
+    internal var startDate: Date = TimetableService.shared.dateFor(hour: 12, minute: 30)
+    internal var endDate: Date = TimetableService.shared.dateFor(hour: 14, minute: 0)
+    internal var day: Day = Day.monday
     
     private weak var startTitleCell: LessonTimeTitleCell?
     private weak var endTitleCell: LessonTimeTitleCell?
@@ -467,9 +467,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             
             break
         case lessonDayPickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
+//            guard indexPath.section == timeSectionIndex else {
+//                break
+//            }
             
             let cell = cell as! LessonDayPickerCell
             dayPickerCell = cell
@@ -534,6 +534,19 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             return "Time"
         case noteSection:
             return "Notes"
+        default:
+            return nil
+        }
+    }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        switch identifier {
+        case colorSection:
+            return "paintbrush"
+        case timeSection:
+            return "clock"
+        case noteSection:
+            return "paperclip"
         default:
             return nil
         }
@@ -650,8 +663,8 @@ class LessonTimeTitleCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(title)
-        addSubview(value)
+        contentView.addSubview(title)
+        contentView.addSubview(value)
         
         title.text = "Start"
         value.text = "12:30"
@@ -691,17 +704,16 @@ class LessonTimePickerCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(datePicker)
-        
-        datePicker.datePickerMode = .time
+        contentView.addSubview(datePicker)
         
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         
-        datePicker.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        datePicker.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        if #available(iOS 14, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        datePicker.datePickerMode = .time
         
-        datePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        datePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        datePicker.constraintToSuperview(top: 0, bottom: 0, leading: 20, trailing: 20)
         
     }
     
@@ -736,18 +748,14 @@ class LessonDayPickerCell: UITableViewCell, UIPickerViewDelegate, UIPickerViewDa
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(picker)
+        contentView.addSubview(picker)
         
         picker.delegate = self
         picker.dataSource = self
         
         picker.translatesAutoresizingMaskIntoConstraints = false
         
-        picker.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        picker.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
-        
-        picker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        picker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        picker.constraintToSuperview(top: 0, bottom: 0, leading: 20, trailing: 20)
         
     }
     

@@ -58,6 +58,7 @@
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
 		4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */; };
 		4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */; };
+		4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */; };
 		4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */; };
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
@@ -159,6 +160,7 @@
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionView.swift; sourceTree = "<group>"; };
 		4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionViewCell.swift; sourceTree = "<group>"; };
+		4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewHeader.swift; sourceTree = "<group>"; };
 		4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddViewController.swift; sourceTree = "<group>"; };
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -402,6 +404,11 @@
 				4F7F77752456CA6400038729 /* NavigationBar.swift */,
 				4F7F777724575AB100038729 /* HomeTopBar.swift */,
 				4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */,
+				4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */,
+				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
+				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
+				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
+				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 				4F99D206249FECBE00A8DFAB /* HomeDash */,
 				4F99D207249FECEA00A8DFAB /* HomeTask */,
 				4F99D208249FECFF00A8DFAB /* HomeWeek */,
@@ -416,10 +423,6 @@
 			isa = PBXGroup;
 			children = (
 				4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */,
-				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
-				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
-				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
-				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 			);
 			path = HomeDash;
 			sourceTree = "<group>";
@@ -549,7 +552,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Jonah Schueller";
 				TargetAttributes = {
 					4F7F773C2456C2A000038729 = {
@@ -719,6 +722,7 @@
 				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
 				4F2A7DC424AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift in Sources */,
+				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
@@ -834,6 +838,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -895,6 +900,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

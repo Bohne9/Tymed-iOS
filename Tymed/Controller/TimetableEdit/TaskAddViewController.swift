@@ -148,6 +148,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         task.priority = 0
         task.title = taskTitle ?? ""
         task.text = taskDescription
+        task.archived = false
         
         TimetableService.shared.save()
         
@@ -180,6 +181,21 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             return "Lesson"
         case dueSection:
             return "Due date"
+        default:
+            return ""
+        }
+    }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        switch identifier {
+        case titleSection:
+            return ""
+        case descriptionSection:
+            return "text.alignleft"
+        case lessonSection:
+            return "doc.text"
+        case dueSection:
+            return "timer"
         default:
             return ""
         }
