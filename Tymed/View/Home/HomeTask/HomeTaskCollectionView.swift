@@ -10,9 +10,9 @@ import UIKit
 
 private let nowReuseIdentifier = "homeNowCell"
 private let taskTypeSelectorIdentifier = "taskTypeSelectorIdentifier"
+private let addTaskIdentifier = "addTaskIdentifier"
 
-private let typeSection = "typeSection"
-private let addBtnSection = "addBtnSection"
+private let headerSection = "typeSection"
 private let todaySection = "todaySection"
 private let allSection = "allSection"
 private let doneSection = "doneSection"
@@ -25,6 +25,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     var doneTasks: [Task]?
     var expiredTasks: [Task]?
     
+    private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
+    
     //MARK: UI setup
     internal override func setupUserInterface() {
         super.setupUserInterface()
@@ -35,7 +37,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
         register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         
-        register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noCell")
+        register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: addTaskIdentifier)
         
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -49,16 +51,21 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         let identifier = self.section(for: indexPath.section)
         
         switch identifier {
-        case typeSection:
-            return taskTypeSelectorIdentifier
-        case addBtnSection:
-            return "noCell"
+        case headerSection:
+            return indexPath.row < typeCellSelectors.count ?  taskTypeSelectorIdentifier : addTaskIdentifier
         case todaySection, allSection, doneSection, expiredSection:
             return homeDashTaskOverviewCollectionViewCell
         default:
             return ""
         }
         
+    }
+    
+    private func setupSections(_ tasks: [Task]?, section: String, type: HomeDashTaskSelectorCellType) {
+        if tasks?.count ?? 0 > 0 {
+            addSection(id: section)
+            typeCellSelectors.append(type)
+        }
     }
     
     //MARK: fetchData()
@@ -71,26 +78,15 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         
         sectionIdentifiers = []
+        typeCellSelectors = []
         
-        addSection(id: typeSection)
-        addSection(id: addBtnSection)
+        addSection(id: headerSection)
         
-        if todayTasks?.count ?? 0 > 0 {
-            addSection(id: todaySection)
-        }
+        setupSections(todayTasks, section: todaySection, type: .today)
+        setupSections(doneTasks, section: doneSection, type: .done)
+        setupSections(expiredTasks, section: expiredSection, type: .expired)
+        setupSections(allTasks, section: allSection, type: .all)
         
-        if doneTasks?.count ?? 0 > 0 {
-            addSection(id: doneSection)
-        }
-        
-        if expiredTasks?.count ?? 0 > 0 {
-            addSection(id: expiredSection)
-        }
-        
-        if allTasks?.count ?? 0 > 0 {
-            addSection(id: allSection)
-        }
-
     }
     
     // MARK: - UICollectionViewDataSource
@@ -99,8 +95,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let identifier = self.section(for: section)
         
-        if identifier == typeSection {
-            return 4
+        if identifier == headerSection {
+            return typeCellSelectors.count + 1
         }
         return 1
     }
@@ -123,8 +119,13 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     private func configureCell(_ cell: UICollectionViewCell, identifier: String, indexPath: IndexPath) {
         
         if identifier == taskTypeSelectorIdentifier {
-            (cell as! HomeDashTaskSelectorCollectionViewCell).type = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
-        } else if indexPath.section >= 2 {
+            (cell as! HomeDashTaskSelectorCollectionViewCell).type = typeCellSelectors[indexPath.row]
+        }else if identifier == addTaskIdentifier {
+            let addCell = (cell as! HomeDashTaskOverviewNoTasksCollectionViewCell)
+            
+            addCell.taskDelegate = taskDelegate
+            
+        } else if identifier == homeDashTaskOverviewCollectionViewCell {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
             
             let section = self.section(for: indexPath.section)
@@ -159,11 +160,19 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     //MARK: didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-//        presentDetail(tasks, indexPath)
-        
-    }
 
+//        presentDetail(tasks, indexPath)
+        let section = self.section(for: indexPath.section)
+        let identifier = self.identifier(for: indexPath)
+
+        if section == headerSection {
+            if identifier == addTaskIdentifier {
+                taskDelegate?.onAddTask(nil, completion: nil)
+            }
+
+        }
+    }
+    
     //MARK: supplementaryView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
@@ -173,7 +182,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             let sectionId = section(for: indexPath)
             
             switch sectionId{
-            case typeSection:
+            case headerSection:
                 header.label.text = "Tasks"
             case todaySection:
                 header.label.text =  "Today"
@@ -194,12 +203,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        var height: CGFloat = 50
-        let identifier = self.section(for: section)
-        
-        if identifier == addBtnSection {
-            height = 20
-        }
+        let height: CGFloat = 50
         
         return CGSize(width: collectionView.frame.width, height: height)
     }
@@ -207,13 +211,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let identifier = self.identifier(for: indexPath)
         
-        print("hfopsda \(collectionView.contentSize)")
-        
-        var width: CGFloat = (collectionView.frame.width - 2 * 16)
+        var width: CGFloat = (collectionView.frame.width - 2 * 20)
         var height: CGFloat = 50
         
-        if identifier == taskTypeSelectorIdentifier {
-            width = (collectionView.frame.width - 56) / 2
+        if identifier == taskTypeSelectorIdentifier ||
+            (identifier == addTaskIdentifier && typeCellSelectors.count % 2 != 0) {
+            width = (collectionView.frame.width - 60) / 2
         }
         
         if identifier == homeDashTaskOverviewCollectionViewCell {

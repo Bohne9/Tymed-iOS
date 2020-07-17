@@ -31,17 +31,17 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         var systemImage: String = completed ? "checkmark.circle.fill" : "circle"
         
-        var tint: UIColor = completed ? .appGreen : .appBlue
+        var tint: UIColor = completed ? .systemGreen : .systemBlue
         
         // If the task has a due date attached
         if let due = task.due {
             if completed {
                 if let completion = task.completionDate, due < completion {
-                    tint = .appOrange
+                    tint = .systemOrange
                     NotificationService.current.removeDeliveredNotifications(of: task)
                 }
             } else if due < Date() {
-                tint = .appRed
+                tint = .systemRed
                 systemImage = "exclamationmark.circle.fill"
             }
         }
