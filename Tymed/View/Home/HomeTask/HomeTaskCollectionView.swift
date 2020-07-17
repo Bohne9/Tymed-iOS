@@ -74,11 +74,23 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         addSection(id: typeSection)
         addSection(id: addBtnSection)
-        addSection(id: todaySection)
-        addSection(id: allSection)
-        addSection(id: doneSection)
-        addSection(id: expiredSection)
         
+        if todayTasks?.count ?? 0 > 0 {
+            addSection(id: todaySection)
+        }
+        
+        if doneTasks?.count ?? 0 > 0 {
+            addSection(id: doneSection)
+        }
+        
+        if expiredTasks?.count ?? 0 > 0 {
+            addSection(id: expiredSection)
+        }
+        
+        if allTasks?.count ?? 0 > 0 {
+            addSection(id: allSection)
+        }
+
     }
     
     // MARK: - UICollectionViewDataSource
@@ -112,7 +124,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         if identifier == taskTypeSelectorIdentifier {
             (cell as! HomeDashTaskSelectorCollectionViewCell).type = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
-        } else if indexPath.section >= 3 {
+        } else if indexPath.section >= 2 {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
             
             let section = self.section(for: indexPath.section)
@@ -161,6 +173,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             let sectionId = section(for: indexPath)
             
             switch sectionId{
+            case typeSection:
+                header.label.text = "Tasks"
             case todaySection:
                 header.label.text =  "Today"
             case allSection:
@@ -183,7 +197,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         var height: CGFloat = 50
         let identifier = self.section(for: section)
         
-        if identifier == typeSection || identifier == addBtnSection {
+        if identifier == addBtnSection {
             height = 20
         }
         
