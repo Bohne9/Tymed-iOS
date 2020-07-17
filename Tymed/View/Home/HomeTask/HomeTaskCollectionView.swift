@@ -158,6 +158,16 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func sectionIdentifier(for type: HomeDashTaskSelectorCellType) -> String? {
+        switch type {
+        case .today:    return todaySection
+        case .all:      return allSection
+        case .done:     return doneSection
+        case .expired:  return expiredSection
+        default:        return nil
+        }
+    }
+    
     //MARK: didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
@@ -168,6 +178,22 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         if section == headerSection {
             if identifier == addTaskIdentifier {
                 taskDelegate?.onAddTask(nil, completion: nil)
+            }else {
+                guard let id = sectionIdentifier(for: typeCellSelectors[indexPath.row]) else {
+                    return
+                }
+                
+                guard let index = self.section(for: id) else {
+                    return
+                }
+                
+                let headerOffset = collectionView.collectionViewLayout
+                    .layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, at:
+                                                        IndexPath(row: 0, section: index))?.frame.origin.y ?? 0
+                
+                collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: headerOffset - collectionView.contentInset.top), animated: true)
+                
+//                collectionView.scrollToItem(at: IndexPath(row: 0, section: index), at: .top, animated: true)
             }
 
         }
