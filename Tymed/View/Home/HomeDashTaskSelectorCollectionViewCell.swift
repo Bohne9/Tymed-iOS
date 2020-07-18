@@ -14,6 +14,8 @@ enum HomeDashTaskSelectorCellType : Int {
     case done = 1
     case all = 2
     case expired = 3
+    case archived = 4
+    case open = 5
     
 }
 

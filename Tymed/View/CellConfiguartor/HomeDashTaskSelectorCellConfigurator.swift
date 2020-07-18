@@ -30,12 +30,20 @@ class HomeDashTaskSelectorCellConfigurator: BaseCollectionViewCellConfigurator<H
             tint = .systemGreen
         case .all:
             title = "All"
-            imageName = "tray.full.fill"
+            imageName = "tray.fill"
             tint = .systemGray
         case .expired:
             title = "Expired"
             imageName = "exclamationmark.circle.fill"
             tint = .systemRed
+        case .open:
+            title = "Open"
+            imageName = "circle"
+            tint = .systemBlue
+        case .archived:
+            title = "Archived"
+            imageName = "tray.full.fill"
+            tint = .systemGray
         }
         
         cell.label.text = title

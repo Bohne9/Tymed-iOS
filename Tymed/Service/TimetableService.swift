@@ -492,6 +492,18 @@ class TimetableService {
         return getTasks(predicate).sorted()
     }
     
+    func getOpenTasks() -> [Task] {
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: false))
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    func getArchivedTasks() -> [Task] {
+        let predicate = NSPredicate(format: "archived == %@", NSNumber(value: true))
+        
+        return getTasks(predicate).sorted()
+    }
+    
     
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {

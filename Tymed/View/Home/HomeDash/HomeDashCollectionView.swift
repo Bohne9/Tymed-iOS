@@ -118,6 +118,12 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             break
         case .expired:
             tasks = TimetableService.shared.getExpiredTasks()
+        case .archived:
+            print("HomeDash loadTask not implemented")
+            break
+        case .open:
+            print("HomeDash loadTask not implemented")
+            break
         }
         tasks?.reverse()
     }
