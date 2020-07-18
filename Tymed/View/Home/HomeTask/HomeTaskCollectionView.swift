@@ -119,7 +119,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     private func configureCell(_ cell: UICollectionViewCell, identifier: String, indexPath: IndexPath) {
         
         if identifier == taskTypeSelectorIdentifier {
-            (cell as! HomeDashTaskSelectorCollectionViewCell).type = typeCellSelectors[indexPath.row]
+            let cell = (cell as! HomeDashTaskSelectorCollectionViewCell)
+            
+            cell.selectedIndicator.isHidden = true
+            cell.type = typeCellSelectors[indexPath.row]
+            
+            
         }else if identifier == addTaskIdentifier {
             let addCell = (cell as! HomeDashTaskOverviewNoTasksCollectionViewCell)
             
