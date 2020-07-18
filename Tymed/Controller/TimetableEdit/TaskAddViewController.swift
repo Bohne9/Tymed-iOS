@@ -195,7 +195,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case lessonSection:
             return "doc.text"
         case dueSection:
-            return "timer"
+            return "alarm"
         default:
             return ""
         }
