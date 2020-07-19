@@ -31,7 +31,7 @@ class HomeBaseCollectionView: UICollectionView {
             
         }
         
-        contentInset = UIEdgeInsets(top: 80, left: 20, bottom: 100, right: 20)
+        contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 100, right: 20)
         
         layoutIfNeeded()
         

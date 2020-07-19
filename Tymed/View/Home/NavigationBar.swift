@@ -17,7 +17,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         super.init(frame: frame)
         
         prefersLargeTitles = false
-        isTranslucent = true
+        isTranslucent = false
         
         addSubview(topBar)
         

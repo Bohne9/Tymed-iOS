@@ -103,7 +103,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     @objc func tap(_ btn: UIButton) {
         print("Tap: \(btn.currentTitle!) \(btn.tag)")
         
-        collectionView.scrollToItem(at: IndexPath(row: btn.tag, section: 0), at: .left, animated: true)
+//        collectionView.scrollToItem(at: IndexPath(row: btn.tag, section: 0), at: .left, animated: true)
+        collectionView.setContentOffset(CGPoint(x: CGFloat(btn.tag) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
+        print(collectionView.contentOffset)
     }
     
     func reload() {

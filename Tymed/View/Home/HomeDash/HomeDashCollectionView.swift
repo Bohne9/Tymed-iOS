@@ -245,7 +245,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             let sectionId = section(for: indexPath)
             
-            switch sectionId{
+            switch sectionId {
             case tasksSection:
                 header.label.text = "Tasks"
             case nowSection:
