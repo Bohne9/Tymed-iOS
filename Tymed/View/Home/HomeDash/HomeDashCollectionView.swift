@@ -124,6 +124,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         case .open:
             print("HomeDash loadTask not implemented")
             break
+        case .planned:
+            print("HomeDash loadTask not implemented")
+            break
         }
         tasks?.reverse()
     }

@@ -19,6 +19,7 @@ private let doneSection = "doneSection"
 private let expiredSection = "expiredSection"
 private let openSection = "openSection"
 private let archivedSection = "archivedSection"
+private let plannedSection = "plannedSection"
 
 class HomeTaskCollectionView: HomeBaseCollectionView {
     
@@ -27,7 +28,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     var doneTasks: [Task]?
     var expiredTasks: [Task]?
     var openTasks: [Task]?
-    var archivedTask: [Task]?
+    var archivedTasks: [Task]?
+    var plannedTasks: [Task]?
     
     private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
     
@@ -57,7 +59,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         switch identifier {
         case headerSection:
             return indexPath.row < typeCellSelectors.count ?  taskTypeSelectorIdentifier : addTaskIdentifier
-        case todaySection, allSection, doneSection, expiredSection, openSection, archivedSection:
+        case todaySection, allSection, doneSection, expiredSection, openSection, archivedSection, plannedSection:
             return homeDashTaskOverviewCollectionViewCell
         default:
             return ""
@@ -80,7 +82,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         doneTasks = TimetableService.shared.getCompletedTasks()
         expiredTasks = TimetableService.shared.getExpiredTasks()
         openTasks = TimetableService.shared.getOpenTasks()
-        archivedTask = TimetableService.shared.getArchivedTasks()
+        archivedTasks = TimetableService.shared.getArchivedTasks()
+        plannedTasks = TimetableService.shared.getPlannedTasks()
         
         sectionIdentifiers = []
         typeCellSelectors = []
@@ -89,9 +92,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         setupSections(todayTasks, section: todaySection, type: .today)
         setupSections(openTasks, section: openSection, type: .open)
+        setupSections(plannedTasks, section: plannedSection, type: .planned)
         setupSections(doneTasks, section: doneSection, type: .done)
         setupSections(expiredTasks, section: expiredSection, type: .expired)
-        setupSections(archivedTask, section: archivedSection, type: .archived)
+        setupSections(archivedTasks, section: archivedSection, type: .archived)
         setupSections(allTasks, section: allSection, type: .all)
         
     }
@@ -121,7 +125,9 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         case openSection:
             return openTasks
         case archivedSection:
-            return archivedTask
+            return archivedTasks
+        case plannedSection:
+            return plannedTasks
         default:
             return []
         }
@@ -181,7 +187,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         case .done:     return doneSection
         case .expired:  return expiredSection
         case .open:     return openSection
-        case .archived:  return archivedSection
+        case .archived: return archivedSection
+        case .planned:  return plannedSection
         }
     }
     
@@ -239,6 +246,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
                 header.label.text = "Open"
             case archivedSection:
                 header.label.text = "Archived"
+            case plannedSection:
+                header.label.text = "Planned"
             default:
                 header.label.text = ""
             }

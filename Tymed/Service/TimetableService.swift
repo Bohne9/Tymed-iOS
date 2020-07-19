@@ -504,6 +504,12 @@ class TimetableService {
         return getTasks(predicate).sorted()
     }
     
+    func getPlannedTasks() -> [Task] {
+        let predicate = NSPredicate(format: "due != nil")
+        
+        return getTasks(predicate).sorted()
+    }
+    
     
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
