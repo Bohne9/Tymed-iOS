@@ -76,16 +76,20 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func getTasks(of type: HomeDashTaskSelectorCellType) -> [Task] {
+        return type.tasks()
+    }
+    
     //MARK: fetchData()
     internal override func fetchData() {
         
-        todayTasks = TimetableService.shared.getTasksOfToday()
-        allTasks = TimetableService.shared.getAllTasks()
-        doneTasks = TimetableService.shared.getCompletedTasks()
-        expiredTasks = TimetableService.shared.getExpiredTasks()
-        openTasks = TimetableService.shared.getOpenTasks()
-        archivedTasks = TimetableService.shared.getArchivedTasks()
-        plannedTasks = TimetableService.shared.getPlannedTasks()
+        todayTasks = getTasks(of: .today)
+        allTasks = getTasks(of: .all)
+        doneTasks = getTasks(of: .done)
+        expiredTasks = getTasks(of: .expired)
+        openTasks = getTasks(of: .open)
+        archivedTasks = getTasks(of: .archived)
+        plannedTasks = getTasks(of: .planned)
         
         sectionIdentifiers = []
         typeCellSelectors = []

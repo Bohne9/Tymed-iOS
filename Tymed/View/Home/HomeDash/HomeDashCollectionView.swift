@@ -107,27 +107,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     private func loadTask(for selection: HomeDashTaskSelectorCellType) {
         
-        switch selection {
-        case .today:
-            tasks = TimetableService.shared.getTasksOfToday()
-            break
-        case .all:
-            tasks = TimetableService.shared.getAllTasks()
-        case .done:
-            tasks = TimetableService.shared.getCompletedTasks()
-            break
-        case .expired:
-            tasks = TimetableService.shared.getExpiredTasks()
-        case .archived:
-            print("HomeDash loadTask not implemented")
-            break
-        case .open:
-            print("HomeDash loadTask not implemented")
-            break
-        case .planned:
-            print("HomeDash loadTask not implemented")
-            break
-        }
+        tasks = taskSelection.tasks()
         tasks?.reverse()
     }
     
@@ -161,7 +141,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             if indexPath.row < 4 {
                 let cell = dequeueCell(taskSelectionCell, indexPath) as! HomeDashTaskSelectorCollectionViewCell
                 
-                let type = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+                let type = selectorType(for: indexPath.row)
                 
                 cell.isSelected = type == taskSelection
                 cell.type = type
@@ -215,6 +195,17 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
+        switch index {
+        case 0:     return .today
+        case 1:     return .done
+        case 2:     return .planned
+        case 3:     return .open
+        default:
+            return .all
+        }
+    }
+    
     //MARK: didSelectItemAt
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -223,7 +214,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         switch sectionId {
         case tasksSection:
             if indexPath.row < 4 {
-                taskSelection = HomeDashTaskSelectorCellType(rawValue: indexPath.row)!
+                taskSelection = selectorType(for: indexPath.row)
                 
                 loadTask(for: taskSelection)
                 
