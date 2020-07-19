@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol TaskOverviewTableviewCellDelegate {
+    
+    func onChange(_ cell: TaskOverviewTableViewCell)
+    
+}
+
 class TaskOverviewTableViewCell: UITableViewCell {
     
     var task: Task!
@@ -18,6 +24,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
     var dueLabel = UILabel()
     var subjectIndicator = UIView()
     
+    var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -156,6 +163,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
                     }, completion: { _ in
                         UIView.transition(with: self.titleLabel, duration: 0.35, options: .transitionCrossDissolve, animations: {
                             self.reload(self.task)
+                            self.taskOverviewDelegate?.onChange(self)
                         })
                     })
                 }
@@ -163,6 +171,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         }else {
             UIView.transition(with: self.titleLabel, duration: 0.35, options: .transitionCrossDissolve, animations: {
                 self.reload(self.task)
+                self.taskOverviewDelegate?.onChange(self)
             })
         }
         

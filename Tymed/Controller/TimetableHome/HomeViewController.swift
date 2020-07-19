@@ -83,6 +83,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         dashCollectionView.taskDelegate = self
         tasksCollectionView.taskDelegate = self
+        
+        tasksCollectionView.taskOverviewDelegate = self
     }
     
     func setupFlowLayout() {
@@ -356,4 +358,12 @@ extension HomeViewController: HomeTaskDetailDelegate {
         // Update the alpha of the navigation bar background view
         nav.subviews.first?.alpha = alpha
     }
+}
+
+extension HomeViewController: TaskOverviewTableviewCellDelegate {
+
+    func onChange(_ cell: TaskOverviewTableViewCell) {
+        reload()
+    }
+    
 }

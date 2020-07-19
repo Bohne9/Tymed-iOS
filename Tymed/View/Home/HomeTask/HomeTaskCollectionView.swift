@@ -33,6 +33,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
     
+    var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
+    
     //MARK: UI setup
     internal override func setupUserInterface() {
         super.setupUserInterface()
@@ -149,6 +151,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             
         } else if identifier == homeDashTaskOverviewCollectionViewCell {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
+            
+            taskCell.taskOverviewDelegate = taskOverviewDelegate
             
             let section = self.section(for: indexPath.section)
             
