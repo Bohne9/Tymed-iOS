@@ -11,6 +11,8 @@ import UIKit
 let addReuseIdentifier = "addCell"
 class AddCollectionViewController: UITableViewController {
 
+    var timetables: [Timetable]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,10 +25,16 @@ class AddCollectionViewController: UITableViewController {
         navigationItem.rightBarButtonItem = rightItem
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        title = "Timetable"
+        title = "Timetables"
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: addReuseIdentifier)
-
+        tableView.register(NoTimetablesTableViewCell.self, forCellReuseIdentifier: "noTimetables")
+        
+    }
+    
+    func fetchData() {
+        timetables = TimetableService.shared.fetchTimetables()
+        
     }
     
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
@@ -67,19 +75,29 @@ class AddCollectionViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return timetables?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let timetable = timetables?[indexPath.row] else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "noTimetables", for: indexPath) as! NoTimetablesTableViewCell
+            
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: addReuseIdentifier, for: indexPath)
         
-        cell.textLabel?.text = "Timetable"
+        cell.textLabel?.text = timetable.name
         cell.accessoryType = .disclosureIndicator
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard timetables?.count ?? 0 > 0 else {
+            return tableView.contentSize.height
+        }
+        
         return 80
     }
 }
