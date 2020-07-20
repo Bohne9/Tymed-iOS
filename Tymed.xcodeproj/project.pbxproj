@@ -44,6 +44,8 @@
 		4F405E87245DB86E00E1E704 /* AddCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */; };
 		4F46E0AF24BA5A1F0037F26E /* TaskDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46E0AE24BA5A1F0037F26E /* TaskDetailTableViewController.swift */; };
 		4F5B4E9124C624860098F4A7 /* NoTimetablesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9024C624860098F4A7 /* NoTimetablesTableViewCell.swift */; };
+		4F5B4E9324C6287B0098F4A7 /* TimetableAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */; };
+		4F5B4E9624C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9524C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift */; };
 		4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70014B2478548A001BDF21 /* TaskAddViewController.swift */; };
 		4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */; };
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
@@ -142,6 +144,8 @@
 		4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCollectionViewController.swift; sourceTree = "<group>"; };
 		4F46E0AE24BA5A1F0037F26E /* TaskDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F5B4E9024C624860098F4A7 /* NoTimetablesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTimetablesTableViewCell.swift; sourceTree = "<group>"; };
+		4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableAddViewController.swift; sourceTree = "<group>"; };
+		4F5B4E9524C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTitleTableViewCell.swift; sourceTree = "<group>"; };
 		4F70014B2478548A001BDF21 /* TaskAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAddViewController.swift; sourceTree = "<group>"; };
 		4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionView.swift; sourceTree = "<group>"; };
 		4F7F773D2456C2A000038729 /* Tymed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tymed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +233,7 @@
 				4F405E86245DB86E00E1E704 /* AddCollectionViewController.swift */,
 				4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */,
 				4F70014B2478548A001BDF21 /* TaskAddViewController.swift */,
+				4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */,
 			);
 			path = TimetableEdit;
 			sourceTree = "<group>";
@@ -306,6 +311,14 @@
 				4F5B4E9024C624860098F4A7 /* NoTimetablesTableViewCell.swift */,
 			);
 			path = Edit;
+			sourceTree = "<group>";
+		};
+		4F5B4E9424C62A2A0098F4A7 /* TimetableDetailCells */ = {
+			isa = PBXGroup;
+			children = (
+				4F5B4E9524C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift */,
+			);
+			path = TimetableDetailCells;
 			sourceTree = "<group>";
 		};
 		4F7F77342456C2A000038729 = {
@@ -474,6 +487,7 @@
 				4F2A1C8E24A9233000E66C79 /* TaskOverviewTableViewCell.swift */,
 				4F2A1C8B24A920EA00E66C79 /* LessonDetailCells */,
 				4F2A1C8A24A9207800E66C79 /* TaskDetailCells */,
+				4F5B4E9424C62A2A0098F4A7 /* TimetableDetailCells */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -743,12 +757,14 @@
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
 				4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */,
 				4F953463247C424A007E708B /* TaskLessonAttachTableViewCell.swift in Sources */,
+				4F5B4E9324C6287B0098F4A7 /* TimetableAddViewController.swift in Sources */,
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
 				4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */,
 				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
+				4F5B4E9624C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift in Sources */,
 				4F12659224B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift in Sources */,
 				4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */,
 				4F46E0AF24BA5A1F0037F26E /* TaskDetailTableViewController.swift in Sources */,

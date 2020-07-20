@@ -74,6 +74,13 @@ class TimetableService {
         
     }
     
+    func timetable() -> Timetable {
+        let timetable = Timetable(context: context)
+        timetable.id = UUID()
+        
+        return timetable
+    }
+    
     /// Returns all timetables
     func fetchTimetables() -> [Timetable]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Timetable")

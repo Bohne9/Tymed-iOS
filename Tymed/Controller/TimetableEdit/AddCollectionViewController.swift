@@ -30,6 +30,7 @@ class AddCollectionViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: addReuseIdentifier)
         tableView.register(NoTimetablesTableViewCell.self, forCellReuseIdentifier: "noTimetables")
         
+        fetchData()
     }
     
     func fetchData() {
@@ -75,12 +76,17 @@ class AddCollectionViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return timetables?.count ?? 1
+        guard let timetables = self.timetables else {
+            return 1
+        }
+        return max(timetables.count, 1)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let timetable = timetables?[indexPath.row] else {
+        guard timetables?.count ?? 0 > 0, let timetable = timetables?[indexPath.row] else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "noTimetables", for: indexPath) as! NoTimetablesTableViewCell
+            
+            cell.addButton.addTarget(self, action: #selector(showTimetableAdd), for: .touchUpInside)
             
             return cell
         }
@@ -99,5 +105,21 @@ class AddCollectionViewController: UITableViewController {
         }
         
         return 80
+    }
+    
+    @objc func showTimetableAdd() {
+        let timetableAdd = TimetableAddViewController(style: .insetGrouped)
+                    let nav = UINavigationController(rootViewController: timetableAdd)
+                    
+                    present(nav, animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if timetables?.count ?? 0 > 0 {
+            
+        }else {
+            showTimetableAdd()
+        }
     }
 }
