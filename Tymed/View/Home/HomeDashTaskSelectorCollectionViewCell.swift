@@ -8,15 +8,6 @@
 
 import UIKit
 
-enum HomeDashTaskSelectorCellType : Int {
-    
-    case today = 0
-    case done = 1
-    case all = 2
-    case expired = 3
-    
-}
-
 class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
     
     let label = UILabel()

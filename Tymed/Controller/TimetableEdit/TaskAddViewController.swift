@@ -59,23 +59,6 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         setupNavigationBar()
         
-        
-    }
-
-    //MARK: setupNavigationBar()
-    internal func setupNavigationBar() {
-        
-        title = "Task"
-        navigationController?.navigationBar.prefersLargeTitles = false
-        
-        let rightItem = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(addTask))
-        
-        navigationItem.rightBarButtonItem = rightItem
-        
-        let leftItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
-        
-        navigationItem.leftBarButtonItem = leftItem
-        
         register(UINib(nibName: "TaskTitleTableViewCell", bundle: nil), identifier: taskTitleCell)
         register(UINib(nibName: "TaskDescriptionTableViewCell", bundle: nil), identifier: taskDescriptionCell)
         register(UINib(nibName: "TaskDueDateTableViewCell", bundle: nil), identifier: taskDueDateCell)
@@ -97,6 +80,22 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         addSection(with: dueSection)
         addCell(with: taskDueDateTitleCell, at: dueSection)
         addCell(with: taskNotifiactionCell, at: dueSection)
+    }
+
+    //MARK: setupNavigationBar()
+    internal func setupNavigationBar() {
+        
+        title = "Task"
+        navigationController?.navigationBar.prefersLargeTitles = false
+        
+        let rightItem = UIBarButtonItem(title: "Add", style: .done, target: self, action: #selector(addTask))
+        
+        navigationItem.rightBarButtonItem = rightItem
+        
+        let leftItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel))
+        
+        navigationItem.leftBarButtonItem = leftItem
+        
     }
 
     @objc func changeTaskTitle(_ textField: UITextField) {
@@ -195,7 +194,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case lessonSection:
             return "doc.text"
         case dueSection:
-            return "timer"
+            return "alarm"
         default:
             return ""
         }

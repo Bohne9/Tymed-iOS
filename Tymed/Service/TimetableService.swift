@@ -74,6 +74,13 @@ class TimetableService {
         
     }
     
+    func timetable() -> Timetable {
+        let timetable = Timetable(context: context)
+        timetable.id = UUID()
+        
+        return timetable
+    }
+    
     /// Returns all timetables
     func fetchTimetables() -> [Timetable]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Timetable")
@@ -488,6 +495,24 @@ class TimetableService {
     
     func getExpiredTasks() -> [Task] {
         let predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    func getOpenTasks() -> [Task] {
+        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: false))
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    func getArchivedTasks() -> [Task] {
+        let predicate = NSPredicate(format: "archived == %@", NSNumber(value: true))
+        
+        return getTasks(predicate).sorted()
+    }
+    
+    func getPlannedTasks() -> [Task] {
+        let predicate = NSPredicate(format: "due != nil")
         
         return getTasks(predicate).sorted()
     }

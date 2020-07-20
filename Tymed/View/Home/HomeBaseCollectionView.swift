@@ -26,7 +26,12 @@ class HomeBaseCollectionView: UICollectionView {
     }
     
     internal func setupUserInterface() {
-        contentInset = UIEdgeInsets(top: 80, left: 20, bottom: 100, right: 20)
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumInteritemSpacing = 20
+            
+        }
+        
+        contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 100, right: 20)
         
         layoutIfNeeded()
         

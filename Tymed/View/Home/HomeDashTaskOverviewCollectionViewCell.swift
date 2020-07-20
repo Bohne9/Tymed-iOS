@@ -44,6 +44,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
     var taskDelegate: HomeTaskDetailDelegate?
     
+    var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
+    
     private var cellInsets: UIEdgeInsets?
         
     @IBOutlet weak var tableView: UITableView!
@@ -94,6 +96,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeTaskItem", for: indexPath) as! TaskOverviewTableViewCell
     
+        cell.taskOverviewDelegate = taskOverviewDelegate
+        
         cell.reload(tasks![indexPath.row])
     
 //        if indexPath.row == min(tasks?.count ?? 0, 3) - 1 {

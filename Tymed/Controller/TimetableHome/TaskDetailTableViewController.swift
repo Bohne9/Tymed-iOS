@@ -89,7 +89,6 @@ class TaskDetailTableViewController: TaskAddViewController {
             self.dismiss(animated: true) {
                 self.taskDelegate!.didDeleteTask(task)
             }
-            print("delete")
         }
     }
     
@@ -120,7 +119,6 @@ class TaskDetailTableViewController: TaskAddViewController {
         guard let deleteCell = cell as? TaskDeleteTableViewCell else {
             return
         }
-        print("setting up delete cell")
 
         deleteCell.deleteBtn?.addTarget(self, action: #selector(showDeleteConfirm), for: .touchUpInside)
     }
@@ -223,7 +221,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
-        if (task.text == nil || task.text == ""), let index = sectionIndex(for: "description") {
+        if (task.text == nil || task.text == ""), let index = sectionIndex(for: descriptionSection) {
             removeSection(at: index)
             taskLessonSection = taskLessonSection - 1
             taskDueSection = taskDueSection - 1
@@ -234,12 +232,12 @@ class TaskDetailTableViewController: TaskAddViewController {
     
     private func reloadEditable(_ task: Task) {
         
-        if sectionIndex(for: "description") == nil {
+        if sectionIndex(for: descriptionSection) == nil {
             taskDescriptionSection =  1
             taskLessonSection = taskLessonSection + 1
             taskDueSection = taskDueSection + 1
             taskDeleteSection = taskDeleteSection + 1
-            addSection(with: "description", at: taskDescriptionSection)
+            addSection(with: descriptionSection, at: taskDescriptionSection)
             
             addCell(with: taskDescriptionCell, at: taskDescriptionSection)
         }
