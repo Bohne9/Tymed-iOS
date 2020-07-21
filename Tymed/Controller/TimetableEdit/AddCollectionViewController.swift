@@ -53,7 +53,7 @@ class AddCollectionViewController: UITableViewController {
         }))
 
         alert.addAction(UIAlertAction(title: "Timetable", style: .default , handler:{ (action) in
-            print("Timetable btn")
+            self.showTimetableAdd()
         }))
         
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in

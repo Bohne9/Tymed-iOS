@@ -54,7 +54,7 @@ class TimetableAddViewController: DynamicTableViewController {
         if identifier == titleCell {
             let cell = (cell as! TimetableDetailTitleTableViewCell)
             
-            cell.textField.addTarget(self, action: #selector(onTitleTextChanges(_:)), for: .valueChanged)
+            cell.textField.addTarget(self, action: #selector(onTitleTextChanges(_:)), for: .editingChanged)
         }
         
     }
