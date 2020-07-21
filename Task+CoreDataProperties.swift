@@ -26,6 +26,7 @@ extension Task {
     @NSManaged public var completionDate: Date?
     @NSManaged public var lesson: Lesson?
     @NSManaged public var archived: Bool
+    @NSManaged public var timetable: Timetable
 
 }
 

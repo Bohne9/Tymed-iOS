@@ -94,6 +94,10 @@ class TimetableService {
         }
     }
     
+    func defaultTimetable() -> Timetable? {
+        return fetchTimetables()?[0]
+    }
+    
     //MARK: Subject fetching
     func fetchSubjects() -> [Subject]? {
     
