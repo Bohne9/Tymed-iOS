@@ -8,8 +8,24 @@
 
 import UIKit
 
+protocol TimetableOverviewDismissDelegate {
+    
+    func dismiss()
+    
+    func popNavigationViewController()
+    
+}
+
+//MARK: DeleteDelegate
+protocol TimetableOverviewDeleteDelegate : TimetableOverviewDismissDelegate {
+    func requestForDeletion(of timetable: Timetable) -> Bool
+}
+
+
+
+
 let addReuseIdentifier = "addCell"
-class AddCollectionViewController: UITableViewController {
+class TimetableOverviewCollectionViewController: UITableViewController {
 
     var timetables: [Timetable]?
     
@@ -31,6 +47,10 @@ class AddCollectionViewController: UITableViewController {
         tableView.register(NoTimetablesTableViewCell.self, forCellReuseIdentifier: "noTimetables")
         
         fetchData()
+    }
+    
+    private func timetable(for index: IndexPath) -> Timetable? {
+        return timetables?[index.row]
     }
     
     func fetchData() {
@@ -109,17 +129,48 @@ class AddCollectionViewController: UITableViewController {
     
     @objc func showTimetableAdd() {
         let timetableAdd = TimetableAddViewController(style: .insetGrouped)
-                    let nav = UINavigationController(rootViewController: timetableAdd)
+        let nav = UINavigationController(rootViewController: timetableAdd)
                     
-                    present(nav, animated: true, completion: nil)
+        
+        present(nav, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if timetables?.count ?? 0 > 0 {
-            
-        }else {
+        // In
+        guard self.timetables?.count ?? 0 > 0 else {
             showTimetableAdd()
+            
+            return
         }
+        
+        guard let timetable = self.timetable(for: indexPath) else {
+            return
+        }
+        
+        let detailVC = TimetableDetailTableViewController(style: .insetGrouped)
+        
+        detailVC.timetableDeletionDelegate = self
+        detailVC.timetable = timetable
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
+}
+
+
+extension TimetableOverviewCollectionViewController : TimetableOverviewDeleteDelegate {
+    
+    func dismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func popNavigationViewController() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func requestForDeletion(of timetable: Timetable) -> Bool {
+        TimetableService.shared.deleteTimetable(timetable)
+        
+        return true
+    }
+    
 }

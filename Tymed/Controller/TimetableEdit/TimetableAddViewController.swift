@@ -12,6 +12,12 @@ internal let titleCell = "titleCell"
 
 class TimetableAddViewController: DynamicTableViewController {
 
+    internal var timetable: Timetable?{
+        didSet {
+            reload()
+        }
+    }
+    
     internal var timetableTitle: String?
     
     override func setup() {
@@ -54,6 +60,8 @@ class TimetableAddViewController: DynamicTableViewController {
         if identifier == titleCell {
             let cell = (cell as! TimetableDetailTitleTableViewCell)
             
+            cell.textField.text = timetable?.name
+            
             cell.textField.addTarget(self, action: #selector(onTitleTextChanges(_:)), for: .editingChanged)
         }
         
@@ -78,7 +86,6 @@ class TimetableAddViewController: DynamicTableViewController {
 
     @objc func onTitleTextChanges(_ textField: UITextField) {
         self.timetableTitle = textField.text
-        print(timetableTitle)
     }
 }
 

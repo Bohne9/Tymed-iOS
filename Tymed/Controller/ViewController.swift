@@ -13,7 +13,7 @@ class ViewController: UITabBarController {
 
     let homeVC = HomeViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
-    let addVC = AddCollectionViewController(style: .insetGrouped)
+    let addVC = TimetableOverviewCollectionViewController(style: .insetGrouped)
     
     let profileVC = ProfileCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -68,7 +68,7 @@ class ViewController: UITabBarController {
         
         let split = UISplitViewController()
 
-        split.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+        split.preferredDisplayMode = UISplitViewController.DisplayMode.oneBesideSecondary
         split.viewControllers = [nav]//, UINavigationController(rootViewController: LessonAddViewController(style: .insetGrouped))]
         split.extendedLayoutIncludesOpaqueBars = true
         
