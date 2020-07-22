@@ -8,16 +8,17 @@
 
 import UIKit
 
-protocol TimetableOverviewDismissDelegate {
+protocol TimetableOverviewBaseDelegate {
+    
+    func reload()
     
     func dismiss()
-    
+        
     func popNavigationViewController()
-    
 }
 
 //MARK: DeleteDelegate
-protocol TimetableOverviewDeleteDelegate : TimetableOverviewDismissDelegate {
+protocol TimetableOverviewDeleteDelegate : TimetableOverviewBaseDelegate {
     func requestForDeletion(of timetable: Timetable) -> Bool
 }
 
@@ -56,6 +57,12 @@ class TimetableOverviewCollectionViewController: UITableViewController {
     func fetchData() {
         timetables = TimetableService.shared.fetchTimetables()
         
+    }
+    
+    func reloadScene() {
+        fetchData()
+        
+        tableView.reloadData()
     }
     
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
@@ -130,7 +137,8 @@ class TimetableOverviewCollectionViewController: UITableViewController {
     @objc func showTimetableAdd() {
         let timetableAdd = TimetableAddViewController(style: .insetGrouped)
         let nav = UINavigationController(rootViewController: timetableAdd)
-                    
+                
+        timetableAdd.timetableBaseDelegate = self
         
         present(nav, animated: true, completion: nil)
     }
@@ -159,12 +167,18 @@ class TimetableOverviewCollectionViewController: UITableViewController {
 
 extension TimetableOverviewCollectionViewController : TimetableOverviewDeleteDelegate {
     
+    func reload() {
+        reloadScene()
+    }
+    
     func dismiss() {
         dismiss(animated: true, completion: nil)
+        reload()
     }
     
     func popNavigationViewController() {
         navigationController?.popViewController(animated: true)
+        reload()
     }
     
     func requestForDeletion(of timetable: Timetable) -> Bool {

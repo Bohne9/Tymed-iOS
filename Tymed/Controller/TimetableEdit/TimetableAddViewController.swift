@@ -20,6 +20,8 @@ class TimetableAddViewController: DynamicTableViewController {
     
     internal var timetableTitle: String?
     
+    var timetableBaseDelegate: TimetableOverviewBaseDelegate?
+    
     override func setup() {
         super.setup()
         
@@ -77,11 +79,11 @@ class TimetableAddViewController: DynamicTableViewController {
         }
         print("Adding timetable     ")
         TimetableService.shared.save()
-        dismiss(animated: true, completion: nil)
+        timetableBaseDelegate?.dismiss()
     }
     
     @objc func cancel() {
-        dismiss(animated: true, completion: nil)
+        timetableBaseDelegate?.dismiss()
     }
 
     @objc func onTitleTextChanges(_ textField: UITextField) {
