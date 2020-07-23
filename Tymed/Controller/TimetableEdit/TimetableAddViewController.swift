@@ -31,6 +31,10 @@ class TimetableAddViewController: DynamicTableViewController {
         
         register(TimetableDetailTitleTableViewCell.self, identifier: titleCell)
         
+        setupSections()
+    }
+    
+    internal func setupSections() {
         addSection(with: "titleSection")
         addCell(with: titleCell, at: "titleSection")
     }
