@@ -40,7 +40,7 @@ class TimetableDetailTitleTableViewCell: UITableViewCell {
         
         textField.constraintToSuperview(top: 10, bottom: 10, leading: 10, trailing: 10)
         
-        textField.font = .boldSystemFont(ofSize: 24)
+        textField.font = .boldSystemFont(ofSize: 30)
         textField.placeholder = "Timetable name"
     }
 

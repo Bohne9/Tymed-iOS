@@ -27,6 +27,8 @@ class TimetableAddViewController: DynamicTableViewController {
         
         setupNavigationBar()
         
+        tableView.contentInset = UIEdgeInsets.zero
+        
         register(TimetableDetailTitleTableViewCell.self, identifier: titleCell)
         
         addSection(with: "titleSection")
@@ -70,7 +72,15 @@ class TimetableAddViewController: DynamicTableViewController {
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        if identifier == titleCell {
+            return 50
+        }
+        
         return 60
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
     }
 
     @objc func addTimetable() {

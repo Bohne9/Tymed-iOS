@@ -75,14 +75,9 @@ class DynamicTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setup()
         
-        tableView.register(DynamicTableViewControllerHeader.self, forHeaderFooterViewReuseIdentifier: "headerView")
-        
-        tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
-        
-        navigationController?.navigationBar.isTranslucent = true
     }
     
     internal func reconfigure() {
@@ -96,7 +91,12 @@ class DynamicTableViewController: UITableViewController {
     
     /// Setup any additional views (gets called in viewDidLoad)
     internal func setup() {
+        tableView.register(DynamicTableViewControllerHeader.self, forHeaderFooterViewReuseIdentifier: "headerView")
+                        
+        tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
         
+        navigationController?.navigationBar.isTranslucent = true
+                
     }
     
     //MARK: register(_ :, identifier)

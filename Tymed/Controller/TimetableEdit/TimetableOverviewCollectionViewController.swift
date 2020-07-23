@@ -15,6 +15,8 @@ protocol TimetableOverviewBaseDelegate {
     func dismiss()
         
     func popNavigationViewController()
+    
+    func present(_ viewController: UIViewController)
 }
 
 //MARK: DeleteDelegate
@@ -144,7 +146,7 @@ class TimetableOverviewCollectionViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // In
+        
         guard self.timetables?.count ?? 0 > 0 else {
             showTimetableAdd()
             
@@ -166,6 +168,10 @@ class TimetableOverviewCollectionViewController: UITableViewController {
 
 
 extension TimetableOverviewCollectionViewController : TimetableOverviewDeleteDelegate {
+    
+    func present(_ viewController: UIViewController) {
+        self.present(viewController, animated: true, completion: nil)
+    }
     
     func reload() {
         reloadScene()
