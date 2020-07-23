@@ -45,22 +45,34 @@ class TimetableDetailTableViewController: TimetableAddViewController {
         navigationItem.rightBarButtonItem = rightItem
     }
     
-    override func setupSections() {
-        addSection(with: "deletion")
-        addCell(with: deleteCell, at: "deletion")
+    // Override the setup of the superclass
+    override func setupSections() { }
+    
+    func saveTimetable() {
+        timetable?.name = timetableTitle
+                
+        TimetableService.shared.save()
+        
+        reload()
     }
     
     @objc func toogleRightBarButton(_ sender: UIBarButtonItem) {
         mode = self.mode == .normal ? .editing : .normal
         
-        sender.title = mode == .editing ? "Edit" : "Save"
+        sender.title = mode == .editing ? "Save" : "Edit"
         
         switch mode {
         case .editing:
             insertTitleEditCell()
         case .normal:
+            saveTimetable()
             removeTitleEditCell()
         }
+    }
+    
+    override func onTitleTextChanges(_ textField: UITextField) {
+        super.onTitleTextChanges(textField)
+        title = textField.text
     }
     
     private func insertTitleEditCell() {
@@ -69,7 +81,10 @@ class TimetableDetailTableViewController: TimetableAddViewController {
         addSection(with: "titleSection", at: 0)
         addCell(with: titleCell, at: "titleSection")
         
-        tableView.insertSections(IndexSet(arrayLiteral: 0), with: .top)
+        addSection(with: "deletion")
+        addCell(with: deleteCell, at: "deletion")
+        
+        tableView.insertSections(IndexSet(arrayLiteral: 0, 1), with: .top)
         
         tableView.endUpdates()
     }
@@ -78,8 +93,9 @@ class TimetableDetailTableViewController: TimetableAddViewController {
         tableView.beginUpdates()
         
         removeSection(with: "titleSection")
+        removeSection(with: "deletion")
         
-        tableView.deleteSections(IndexSet(arrayLiteral: 0), with: .top)
+        tableView.deleteSections(IndexSet(arrayLiteral: 0, 1), with: .top)
         
         tableView.endUpdates()
     }
