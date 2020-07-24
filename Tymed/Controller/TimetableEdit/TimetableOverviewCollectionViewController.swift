@@ -67,6 +67,12 @@ class TimetableOverviewCollectionViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reload()
+    }
+    
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: "What whould you like to add?", message: "", preferredStyle: .actionSheet)
