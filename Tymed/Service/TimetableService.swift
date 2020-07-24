@@ -81,6 +81,25 @@ class TimetableService {
         return timetable
     }
     
+    func deleteTimetable(_ timetable: Timetable) {
+        
+        if let tasks = timetable.tasks {
+            for task in tasks {
+                deleteTask(task as! Task)
+            }
+        }
+        
+        if let subjects = timetable.subjects {
+            for subject in subjects {
+                deleteSubject(subject as! Subject)
+            }
+        }
+        
+        context.delete(timetable)
+        
+        save()
+    }
+    
     /// Returns all timetables
     func fetchTimetables() -> [Timetable]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Timetable")
@@ -92,6 +111,10 @@ class TimetableService {
         }catch {
             return nil
         }
+    }
+    
+    func defaultTimetable() -> Timetable? {
+        return fetchTimetables()?[0]
     }
     
     //MARK: Subject fetching
@@ -135,6 +158,18 @@ class TimetableService {
         return subject
     }
     
+    func deleteSubject(_ subject: Subject) {
+        if let lessons = subject.lessons {
+            for lesson in lessons {
+                deleteLesson(lesson as! Lesson)
+            }
+        }
+        
+        context.delete(subject)
+        
+        save()
+    }
+    
     //MARK: addSubject(_: ...)
     func addSubject(_ name: String, _ color: String, _ createdAt: Date? = nil, _ id: UUID? = nil) -> Subject{
         
@@ -144,6 +179,7 @@ class TimetableService {
         subject.color = color
         subject.createdAt = createdAt ?? Date()
         subject.id = id ?? UUID()
+        subject.timetable = defaultTimetable()
         
         save()
         

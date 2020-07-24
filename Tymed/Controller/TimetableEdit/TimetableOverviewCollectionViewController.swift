@@ -8,8 +8,27 @@
 
 import UIKit
 
+protocol TimetableOverviewBaseDelegate {
+    
+    func reload()
+    
+    func dismiss()
+        
+    func popNavigationViewController()
+    
+    func present(_ viewController: UIViewController)
+}
+
+//MARK: DeleteDelegate
+protocol TimetableOverviewDeleteDelegate : TimetableOverviewBaseDelegate {
+    func requestForDeletion(of timetable: Timetable) -> Bool
+}
+
+
+
+
 let addReuseIdentifier = "addCell"
-class AddCollectionViewController: UITableViewController {
+class TimetableOverviewCollectionViewController: UITableViewController {
 
     var timetables: [Timetable]?
     
@@ -33,9 +52,25 @@ class AddCollectionViewController: UITableViewController {
         fetchData()
     }
     
+    private func timetable(for index: IndexPath) -> Timetable? {
+        return timetables?[index.row]
+    }
+    
     func fetchData() {
         timetables = TimetableService.shared.fetchTimetables()
         
+    }
+    
+    func reloadScene() {
+        fetchData()
+        
+        tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        reload()
     }
     
     @objc func showActionSheet(_ sender: UIBarButtonItem) {
@@ -53,7 +88,7 @@ class AddCollectionViewController: UITableViewController {
         }))
 
         alert.addAction(UIAlertAction(title: "Timetable", style: .default , handler:{ (action) in
-            print("Timetable btn")
+            self.showTimetableAdd()
         }))
         
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { (action) in
@@ -109,17 +144,59 @@ class AddCollectionViewController: UITableViewController {
     
     @objc func showTimetableAdd() {
         let timetableAdd = TimetableAddViewController(style: .insetGrouped)
-                    let nav = UINavigationController(rootViewController: timetableAdd)
-                    
-                    present(nav, animated: true, completion: nil)
+        let nav = UINavigationController(rootViewController: timetableAdd)
+                
+        timetableAdd.timetableBaseDelegate = self
+        
+        present(nav, animated: true, completion: nil)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if timetables?.count ?? 0 > 0 {
-            
-        }else {
+        guard self.timetables?.count ?? 0 > 0 else {
             showTimetableAdd()
+            
+            return
         }
+        
+        guard let timetable = self.timetable(for: indexPath) else {
+            return
+        }
+        
+        let detailVC = TimetableDetailTableViewController(style: .insetGrouped)
+        
+        detailVC.timetableDeletionDelegate = self
+        detailVC.timetable = timetable
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
+}
+
+
+extension TimetableOverviewCollectionViewController : TimetableOverviewDeleteDelegate {
+    
+    func present(_ viewController: UIViewController) {
+        self.present(viewController, animated: true, completion: nil)
+    }
+    
+    func reload() {
+        reloadScene()
+    }
+    
+    func dismiss() {
+        dismiss(animated: true, completion: nil)
+        reload()
+    }
+    
+    func popNavigationViewController() {
+        navigationController?.popViewController(animated: true)
+        reload()
+    }
+    
+    func requestForDeletion(of timetable: Timetable) -> Bool {
+        TimetableService.shared.deleteTimetable(timetable)
+        
+        return true
+    }
+    
 }

@@ -32,13 +32,13 @@
     <entity name="Timetable" representedClassName="Timetable" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="subjects" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="timetable" inverseEntity="Subject"/>
-        <relationship name="tasks" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="timetable" inverseEntity="Task"/>
+        <relationship name="subjects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subject" inverseName="timetable" inverseEntity="Subject"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="timetable" inverseEntity="Task"/>
     </entity>
     <elements>
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="148"/>
         <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="133"/>
-        <element name="Task" positionX="-134.80078125" positionY="347.38671875" width="128" height="193"/>
+        <element name="Task" positionX="-290.4921875" positionY="306.515625" width="128" height="193"/>
         <element name="Timetable" positionX="74.35546875" positionY="-96.5078125" width="128" height="103"/>
     </elements>
 </model>

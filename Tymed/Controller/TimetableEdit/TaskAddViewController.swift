@@ -149,6 +149,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         task.text = taskDescription
         task.archived = false
         
+        guard let defaultTimetable = TimetableService.shared.defaultTimetable() else {
+            return
+        }
+        task.timetable = defaultTimetable
+        
         TimetableService.shared.save()
         
         NotificationService.current.scheduleDueDateNotification(for: task)

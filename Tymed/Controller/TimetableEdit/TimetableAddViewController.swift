@@ -12,15 +12,34 @@ internal let titleCell = "titleCell"
 
 class TimetableAddViewController: DynamicTableViewController {
 
+    internal var timetable: Timetable?{
+        didSet {
+            reload()
+        }
+    }
+    
     internal var timetableTitle: String?
+    
+    var timetableBaseDelegate: TimetableOverviewBaseDelegate?
     
     override func setup() {
         super.setup()
         
         setupNavigationBar()
         
+        tableView.contentInset = UIEdgeInsets.zero
+        
         register(TimetableDetailTitleTableViewCell.self, identifier: titleCell)
         
+        setupSections()
+    }
+    
+    override func reload() {
+        timetableTitle = timetable?.name
+        super.reload()
+    }
+    
+    internal func setupSections() {
         addSection(with: "titleSection")
         addCell(with: titleCell, at: "titleSection")
     }
@@ -54,13 +73,23 @@ class TimetableAddViewController: DynamicTableViewController {
         if identifier == titleCell {
             let cell = (cell as! TimetableDetailTitleTableViewCell)
             
-            cell.textField.addTarget(self, action: #selector(onTitleTextChanges(_:)), for: .valueChanged)
+            cell.textField.text = timetable?.name
+            
+            cell.textField.addTarget(self, action: #selector(onTitleTextChanges(_:)), for: .editingChanged)
         }
         
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
+        if identifier == titleCell {
+            return 50
+        }
+        
         return 60
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 10
     }
 
     @objc func addTimetable() {
@@ -69,16 +98,15 @@ class TimetableAddViewController: DynamicTableViewController {
         }
         print("Adding timetable     ")
         TimetableService.shared.save()
-        dismiss(animated: true, completion: nil)
+        timetableBaseDelegate?.dismiss()
     }
     
     @objc func cancel() {
-        dismiss(animated: true, completion: nil)
+        timetableBaseDelegate?.dismiss()
     }
 
     @objc func onTitleTextChanges(_ textField: UITextField) {
         self.timetableTitle = textField.text
-        print(timetableTitle)
     }
 }
 
