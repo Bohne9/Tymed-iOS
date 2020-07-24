@@ -34,6 +34,11 @@ class TimetableAddViewController: DynamicTableViewController {
         setupSections()
     }
     
+    override func reload() {
+        timetableTitle = timetable?.name
+        super.reload()
+    }
+    
     internal func setupSections() {
         addSection(with: "titleSection")
         addCell(with: titleCell, at: "titleSection")
