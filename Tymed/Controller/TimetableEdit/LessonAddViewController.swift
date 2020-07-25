@@ -192,6 +192,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     }
     
     override internal func setup() {
+        super.setup()
         
         setupNavigationBar()
         
