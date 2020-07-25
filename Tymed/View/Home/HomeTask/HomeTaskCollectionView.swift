@@ -12,6 +12,8 @@ private let nowReuseIdentifier = "homeNowCell"
 private let taskTypeSelectorIdentifier = "taskTypeSelectorIdentifier"
 private let addTaskIdentifier = "addTaskIdentifier"
 
+private let taskHeader = "taskHeader"
+
 private let headerSection = "typeSection"
 private let todaySection = "todaySection"
 private let allSection = "allSection"
@@ -40,6 +42,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         super.setupUserInterface()
         
         register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        register(HomeDashTaskOverviewCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: taskHeader)
+        
         register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
         register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
@@ -231,38 +235,41 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func sectionTitle(for sectionId: String) -> String {
+        switch sectionId{
+            case headerSection:     return "Tasks"
+            case todaySection:      return "Today"
+            case allSection:        return "All"
+            case doneSection:       return "Done"
+            case expiredSection:    return "Expired"
+            case openSection:       return "Open"
+            case archivedSection:   return "Archived"
+            case plannedSection:    return "Planned"
+            default:                return ""
+        }
+    }
+    
     //MARK: supplementaryView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if kind == UICollectionView.elementKindSectionHeader {
+        let sectionTitle = self.sectionTitle(for: section(for: indexPath))
+        
+        if kind == UICollectionView.elementKindSectionHeader && indexPath.section == 0 {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            let sectionId = section(for: indexPath)
+            header.label.text = sectionTitle
             
-            switch sectionId{
-            case headerSection:
-                header.label.text = "Tasks"
-            case todaySection:
-                header.label.text =  "Today"
-            case allSection:
-                header.label.text =  "All"
-            case doneSection:
-                header.label.text = "Done"
-            case expiredSection:
-                header.label.text = "Expired"
-            case openSection:
-                header.label.text = "Open"
-            case archivedSection:
-                header.label.text = "Archived"
-            case plannedSection:
-                header.label.text = "Planned"
-            default:
-                header.label.text = ""
-            }
+            return header
+        }else {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: taskHeader, for: indexPath) as! HomeDashTaskOverviewCollectionViewHeader
+            
+            header.label.text = sectionTitle
+            
+            
             return header
         }
         
-        return UICollectionReusableView()
+//        return UICollectionReusableView()
     }
     
     //MARK: sizeForHeaderInSection
