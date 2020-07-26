@@ -58,17 +58,21 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
         
         sizeButton.constraintCenterYToSuperview(constant: 0)
         sizeButton.constraintTrailingToSuperview(constant: 5)
-        sizeButton.constraint(width: 25, height: 25)
+        sizeButton.constraint(width: 30, height: 30)
+//        sizeButton.constraintLeadingTo(anchor: trailingAnchor, constant: -180)
         
-        let image = UIImage(systemName: "chevron.compact.down")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 21, weight: .semibold))
+        let image = UIImage(systemName: "chevron.compact.down")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
         
         sizeButton.setImage(image, for: .normal)
         sizeButton.tintColor = .secondaryLabel
         
+        // Edge insets to make the tap area of the button bigger but keeping the image right aligned.
+//        sizeButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 150, bottom: 5, right: 0)
+        
         sizeButton.addTarget(self, action: #selector(toggleCollapse), for: .touchUpInside)
     }
     
-    func toggleSize() {
+    func toggleSize(_ completion: @escaping (Bool) -> Void) {
         if size == .collapsed {
             size = .compact
         }else if size == .compact {
@@ -76,23 +80,56 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
         }else {
             size = .collapsed
         }
+        completion(true)
     }
     
     func reload() {
-        let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 21, weight: .semibold))
+        let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
 
         print("Reload \(size.imageName)")
-        UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
+//        UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
             self.sizeButton.setImage(image, for: .normal)
             self.delegate?.didToggle(self, identifier: self.sectionIdentifier)
-        } completion: { (_) in
-            
-        }
+//        } completion: { (_) in
+//            
+//        }
     }
     
     @objc func toggleCollapse() {
         
-        toggleSize()
-        reload()
+        toggleSize { (_) in
+//            self.unscaleY()
+//            self.unrotate()
+            self.reload()
+        }
+    }
+    
+    
+    private func scaleY(amount: CGFloat, _ completion: ((Bool) -> Void)?) {
+        
+        UIView.animate(withDuration: 0.25) {
+            self.sizeButton.transform = self.sizeButton.transform.scaledBy(x: 1, y: amount)
+        } completion: { (res) in
+            completion?(res)
+        }
+
+        
+    }
+    
+    private func rotate(by degree: CGFloat, _ completion: ((Bool) -> Void)?) {
+        
+        UIView.animate(withDuration: 0.25) {
+            self.sizeButton.transform = self.sizeButton.transform.rotated(by: degree)
+        } completion: { (res) in
+            completion?(res)
+        }
+    }
+    
+    private func unrotate() {
+        self.sizeButton.transform = self.sizeButton.transform.rotated(by: 0)
+    }
+    
+    private func unscaleY() {
+        self.sizeButton.transform = self.sizeButton.transform.scaledBy(x: 1, y: 1)
     }
 }

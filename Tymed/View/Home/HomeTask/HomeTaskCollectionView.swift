@@ -124,7 +124,9 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         if identifier == headerSection {
             return typeCellSelectors.count + 1
         }
-        return 1
+        
+        // The section 
+        return (taskSectionSize[identifier] ?? .compact) != .collapsed ? 1 : 0
     }
     
     private func tasks(for section: String) -> [Task]? {
@@ -306,9 +308,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             let section = self.section(for: indexPath.section)
             let taskCount = self.taskCount(for: section, size: taskSectionSize[section] ?? .compact)
             
-            let constant: CGFloat = taskCount > 0 ? 20 : 0
-            
-            height = constant + CGFloat(taskCount * 60)
+            height = 20 + CGFloat(taskCount * 60)
         }
         
         return CGSize(width: width, height: height)
@@ -326,6 +326,15 @@ extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
     func didToggle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String) {
         taskSectionSize[identifier] = header.size
         let section = self.section(for: identifier) ?? 0
-        reloadItems(at: [IndexPath(row: 0, section: section)])
+        
+        switch header.size {
+        case .collapsed:
+            deleteItems(at: [IndexPath(row: 0, section: section)])
+        case .compact:            
+            insertItems(at: [IndexPath(row: 0, section: section)])
+        case .large:
+            reloadItems(at: [IndexPath(row: 0, section: section)])
+        }
+        
     }
 }
