@@ -24,6 +24,20 @@ enum TaskOverviewSectionSize {
         case .large:     return "chevron.down"
         }
     }
+    
+    var maxItems: Int {
+        switch self {
+        case .collapsed:    return 0
+        case .compact:      return 3
+        case .large:        return Int.max
+        }
+    }
+}
+
+protocol TaskOverviewHeaderDelegate {
+    
+    func didToggle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String)
+    
 }
 
 class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
@@ -31,6 +45,10 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
     var sizeButton = UIButton()
     
     var size: TaskOverviewSectionSize = .compact
+    
+    var sectionIdentifier: String = ""
+    
+    var delegate: TaskOverviewHeaderDelegate?
     
     override func setup() {
         super.setup()
@@ -42,7 +60,7 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
         sizeButton.constraintTrailingToSuperview(constant: 5)
         sizeButton.constraint(width: 25, height: 25)
         
-        let image = UIImage(systemName: "chevron.compact.down")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 23, weight: .bold))
+        let image = UIImage(systemName: "chevron.compact.down")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 21, weight: .semibold))
         
         sizeButton.setImage(image, for: .normal)
         sizeButton.tintColor = .secondaryLabel
@@ -61,14 +79,15 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
     }
     
     func reload() {
-        let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 23, weight: .bold))
+        let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 21, weight: .semibold))
 
-        UIView.transition(with: sizeButton, duration: 0.4, options: .transitionCrossDissolve) {
+        print("Reload \(size.imageName)")
+        UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
             self.sizeButton.setImage(image, for: .normal)
+            self.delegate?.didToggle(self, identifier: self.sectionIdentifier)
         } completion: { (_) in
             
         }
-
     }
     
     @objc func toggleCollapse() {

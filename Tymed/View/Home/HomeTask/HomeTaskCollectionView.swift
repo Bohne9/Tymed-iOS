@@ -34,6 +34,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     var plannedTasks: [Task]?
     
     private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
+    private var taskSectionSize = [String : TaskOverviewSectionSize]()
     
     var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
     
@@ -77,6 +78,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         if tasks?.count ?? 0 > 0 {
             addSection(id: section)
             typeCellSelectors.append(type)
+            
+            if taskSectionSize[section] == nil {
+                taskSectionSize[section] = .compact
+            }
         }
     }
     
@@ -159,10 +164,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             
         } else if identifier == homeDashTaskOverviewCollectionViewCell {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
-            
-            taskCell.taskOverviewDelegate = taskOverviewDelegate
-            
             let section = self.section(for: indexPath.section)
+            
+            taskCell.size = taskSectionSize[section] ?? .compact
+            taskCell.taskOverviewDelegate = taskOverviewDelegate
             
             taskCell.tasks = self.tasks(for: section)
             taskCell.taskDelegate = taskDelegate
@@ -263,13 +268,13 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }else {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: taskHeader, for: indexPath) as! HomeDashTaskOverviewCollectionViewHeader
             
+            header.sectionIdentifier = self.section(for: indexPath.section)
+            header.size = taskSectionSize[self.section(for: indexPath.section)] ?? .compact
             header.label.text = sectionTitle
-            
+            header.delegate = self
             
             return header
         }
-        
-//        return UICollectionReusableView()
     }
     
     //MARK: sizeForHeaderInSection
@@ -277,6 +282,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         let height: CGFloat = 50
         
         return CGSize(width: collectionView.frame.width, height: height)
+    }
+    
+    private func taskCount(for section: String, size: TaskOverviewSectionSize) -> Int {
+        let taskCount = self.tasks(for: section)?.count ?? 0
+        
+        return min(size.maxItems, taskCount)
     }
     
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -292,9 +303,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         if identifier == homeDashTaskOverviewCollectionViewCell {
             
-            let tasks = self.tasks(for: self.section(for: indexPath.section))
+            let section = self.section(for: indexPath.section)
+            let taskCount = self.taskCount(for: section, size: taskSectionSize[section] ?? .compact)
             
-            height = 20 + CGFloat((tasks?.count ?? 0) * 60)
+            let constant: CGFloat = taskCount > 0 ? 20 : 0
+            
+            height = constant + CGFloat(taskCount * 60)
         }
         
         return CGSize(width: width, height: height)
@@ -306,3 +320,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
 }
 
+
+
+extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
+    func didToggle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String) {
+        taskSectionSize[identifier] = header.size
+        let section = self.section(for: identifier) ?? 0
+        reloadItems(at: [IndexPath(row: 0, section: section)])
+    }
+}
