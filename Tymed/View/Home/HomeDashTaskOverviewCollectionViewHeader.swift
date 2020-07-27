@@ -86,20 +86,17 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
     func reload() {
         let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
 
-        print("Reload \(size.imageName)")
-//        UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
+        UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
             self.sizeButton.setImage(image, for: .normal)
             self.delegate?.didToggle(self, identifier: self.sectionIdentifier)
-//        } completion: { (_) in
-//            
-//        }
+        } completion: { (_) in
+            
+        }
     }
     
     @objc func toggleCollapse() {
         
         toggleSize { (_) in
-//            self.unscaleY()
-//            self.unrotate()
             self.reload()
         }
     }

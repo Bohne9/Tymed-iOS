@@ -330,7 +330,7 @@ extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
         switch header.size {
         case .collapsed:
             deleteItems(at: [IndexPath(row: 0, section: section)])
-        case .compact:            
+        case .compact:
             insertItems(at: [IndexPath(row: 0, section: section)])
         case .large:
             reloadItems(at: [IndexPath(row: 0, section: section)])
