@@ -323,7 +323,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
 
 
 extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
-    func didToggle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String) {
+    
+    /// Handles the deletion, insertion, reloading of the sections when a task header changes it's size
+    /// - Parameters:
+    ///   - header: Task Header that is tapped
+    ///   - identifier: Section identifier of the section
+    func onCollapseToogle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String) {
         taskSectionSize[identifier] = header.size
         let section = self.section(for: identifier) ?? 0
         
@@ -336,5 +341,27 @@ extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
             reloadItems(at: [IndexPath(row: 0, section: section)])
         }
         
+    }
+    
+    /// Determines the next size when a task section header is tapped.
+    /// Usually it will return .collapsed -> .compact -> .large -> ...
+    /// But if the tasks for the section aren't more than the .compact can show, displaing
+    /// the large is unnecessary
+    /// - Parameters:
+    ///   - header: Task Header that is tapped
+    ///   - current: Current size of the header
+    ///   - identifier: Section identifier of the section
+    /// - Returns: The next size the header/ section should have
+    func nextSizeFor(_ header: HomeDashTaskOverviewCollectionViewHeader, current: TaskOverviewSectionSize, with identifier: String) -> TaskOverviewSectionSize {
+        let nextSize = current.next()
+        let tasksCount = self.taskCount(for: identifier, size: nextSize)
+            
+        if nextSize == .large {
+            // If there aren't enough tasks to show a large section -> skip .large and go to .collapsed
+            if tasksCount <= TaskOverviewSectionSize.compact.maxItems {
+                return .collapsed
+            }
+        }
+        return nextSize
     }
 }

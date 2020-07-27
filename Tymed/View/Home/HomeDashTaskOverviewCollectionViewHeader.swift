@@ -32,11 +32,21 @@ enum TaskOverviewSectionSize {
         case .large:        return Int.max
         }
     }
+    
+    func next() -> TaskOverviewSectionSize {
+        switch self {
+        case .collapsed:    return .compact
+        case .compact:      return .large
+        case .large:        return .collapsed
+        }
+    }
 }
 
 protocol TaskOverviewHeaderDelegate {
     
-    func didToggle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String)
+    func onCollapseToogle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String)
+    
+    func nextSizeFor(_ header: HomeDashTaskOverviewCollectionViewHeader, current: TaskOverviewSectionSize, with identifier: String) -> TaskOverviewSectionSize
     
 }
 
@@ -72,23 +82,12 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
         sizeButton.addTarget(self, action: #selector(toggleCollapse), for: .touchUpInside)
     }
     
-    func toggleSize(_ completion: @escaping (Bool) -> Void) {
-        if size == .collapsed {
-            size = .compact
-        }else if size == .compact {
-            size = .large
-        }else {
-            size = .collapsed
-        }
-        completion(true)
-    }
-    
     func reload() {
         let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
 
         UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
             self.sizeButton.setImage(image, for: .normal)
-            self.delegate?.didToggle(self, identifier: self.sectionIdentifier)
+            self.delegate?.onCollapseToogle(self, identifier: self.sectionIdentifier)
         } completion: { (_) in
             
         }
@@ -96,9 +95,12 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
     
     @objc func toggleCollapse() {
         
-        toggleSize { (_) in
-            self.reload()
-        }
+//        toggleSize { (_) in
+//            self.reload()
+//        }
+        size = self.delegate?.nextSizeFor(self, current: size, with: sectionIdentifier) ?? .compact
+        reload()
+        
     }
     
     
