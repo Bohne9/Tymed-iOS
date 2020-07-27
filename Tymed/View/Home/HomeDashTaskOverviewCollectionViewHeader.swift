@@ -82,11 +82,15 @@ class HomeDashTaskOverviewCollectionViewHeader: HomeCollectionViewHeader {
         sizeButton.addTarget(self, action: #selector(toggleCollapse), for: .touchUpInside)
     }
     
-    func reload() {
+    func reloadSizeButtonImage() {
         let image = size.image?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
-
+        self.sizeButton.setImage(image, for: .normal)
+    }
+    
+    func reload() {
+        
         UIView.transition(with: sizeButton, duration: 0.25, options: .transitionCrossDissolve) {
-            self.sizeButton.setImage(image, for: .normal)
+            self.reloadSizeButtonImage()
             self.delegate?.onCollapseToogle(self, identifier: self.sectionIdentifier)
         } completion: { (_) in
             

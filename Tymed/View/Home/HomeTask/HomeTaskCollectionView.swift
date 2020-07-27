@@ -80,7 +80,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             typeCellSelectors.append(type)
             
             if taskSectionSize[section] == nil {
-                taskSectionSize[section] = .compact
+                taskSectionSize[section] = section != archivedSection ? .compact : .collapsed
             }
         }
     }
@@ -97,8 +97,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         doneTasks = getTasks(of: .done)
         expiredTasks = getTasks(of: .expired)
         openTasks = getTasks(of: .open)
-        archivedTasks = getTasks(of: .archived)
         plannedTasks = getTasks(of: .planned)
+        archivedTasks = getTasks(of: .archived)
         
         sectionIdentifiers = []
         typeCellSelectors = []
@@ -110,8 +110,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         setupSections(plannedTasks, section: plannedSection, type: .planned)
         setupSections(doneTasks, section: doneSection, type: .done)
         setupSections(expiredTasks, section: expiredSection, type: .expired)
-        setupSections(archivedTasks, section: archivedSection, type: .archived)
         setupSections(allTasks, section: allSection, type: .all)
+        setupSections(archivedTasks, section: archivedSection, type: .archived)
         
     }
     
@@ -274,6 +274,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             header.size = taskSectionSize[self.section(for: indexPath.section)] ?? .compact
             header.label.text = sectionTitle
             header.delegate = self
+            header.reloadSizeButtonImage()
             
             return header
         }
