@@ -36,10 +36,15 @@ class TaskDetailTableViewController: TaskAddViewController {
         navigationItem.leftBarButtonItem = cancel
         
         register(UINib(nibName: "TaskDeleteTableViewCell", bundle: nil), identifier: taskDeleteCell)
+        register(TaskArchiveTableViewCell.self, identifier: TaskArchiveTableViewCell.identifier)
         
+        addSection(with: "archive")
+        addCell(with: TaskArchiveTableViewCell.identifier, at: "archive")
+                
         addSection(with: "delete")
         
         taskDeleteSection = sectionIndex(for: "delete") ?? -1
+        
         
         addCell(with: taskDeleteCell, at: taskDeleteSection)
         
@@ -179,6 +184,9 @@ class TaskDetailTableViewController: TaskAddViewController {
             setupDeleteCell(cell)
             
             break
+        case TaskArchiveTableViewCell.identifier:
+            let cell = cell as! TaskArchiveTableViewCell
+            cell.task = task
         default:
             break
         }
@@ -245,7 +253,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
-        if identifier == taskDeleteCell {
+        if identifier == taskDeleteCell || identifier == TaskArchiveTableViewCell.identifier {
             return 50
         }
         return super.heightForRow(at: indexPath, with: identifier)

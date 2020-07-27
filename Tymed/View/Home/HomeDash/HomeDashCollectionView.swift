@@ -151,6 +151,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             }else if tasks?.count ?? 0 > 0 {
                 let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
                 
+                cell.size = .large
                 cell.tasks = tasks
                 cell.taskDelegate = taskDelegate
                 cell.reload()
