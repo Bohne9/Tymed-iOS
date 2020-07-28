@@ -515,28 +515,29 @@ class TimetableService {
     }
     
     func getAllTasks() -> [Task] {
-        return getTasks().sorted()
+        let predicate = NSPredicate(format: "archived == false")
+        return getTasks(predicate)
     }
     
     func getTasksWithCompleteState(state: Bool) -> [Task] {
-        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: state))
+        let predicate = NSPredicate(format: "completed == %@ and archived == false", NSNumber(value: state))
         return getTasks(predicate)
     }
     
     func getCompletedTasks() -> [Task] {
-        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: true))
+        let predicate = NSPredicate(format: "completed == %@ and archived == false", NSNumber(value: true))
         
         return getTasks(predicate).sorted()
     }
     
     func getExpiredTasks() -> [Task] {
-        let predicate = NSPredicate(format: "due <= %@ AND completed == NO", Date() as NSDate)
+        let predicate = NSPredicate(format: "due <= %@ AND completed == NO and archived == false", Date() as NSDate)
         
         return getTasks(predicate).sorted()
     }
     
     func getOpenTasks() -> [Task] {
-        let predicate = NSPredicate(format: "completed == %@", NSNumber(value: false))
+        let predicate = NSPredicate(format: "completed == %@ and archived == false", NSNumber(value: false))
         
         return getTasks(predicate).sorted()
     }
@@ -548,7 +549,7 @@ class TimetableService {
     }
     
     func getPlannedTasks() -> [Task] {
-        let predicate = NSPredicate(format: "due != nil")
+        let predicate = NSPredicate(format: "due != nil and archived == false")
         
         return getTasks(predicate).sorted()
     }
@@ -556,7 +557,7 @@ class TimetableService {
     
     //MARK: getTasks(lesson: )
     func getTasks(for lesson: Lesson) -> [Task] {
-        return getTasks(NSPredicate(format: "lesson == %@", lesson))
+        return getTasks(NSPredicate(format: "lesson == %@ and archived == false", lesson))
     }
 
     //MARK: getTasks(date: )
@@ -577,7 +578,7 @@ class TimetableService {
     }
     
     func getTasks(between date1: Date, and date2: Date) -> [Task] {
-        return getTasks(NSPredicate(format: "due >= %@ AND due <= %@", date1 as NSDate, date2 as NSDate))
+        return getTasks(NSPredicate(format: "due >= %@ AND due <= %@ and archived == false", date1 as NSDate, date2 as NSDate))
     }
     
     func getTasksOfToday() -> [Task] {

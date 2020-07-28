@@ -17,6 +17,7 @@ internal let taskAttachedLessonCell = "taskAttachedLessonCell"
 internal let taskNotifiactionCell = "taskNotifiactionCell"
 internal let taskNotificationTitleCell = "taskNotificationTitleCell"
 internal let taskNotificationDatePickerCell = "taskNotificationDatePickerCell"
+internal let taskNotificationOffsetPickerCell = "taskNotificationOffsetPickerCell"
 
 internal let titleSection = "titleSection"
 internal let descriptionSection = "descriptionSection"
@@ -35,6 +36,9 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     internal var lesson: Lesson?
     
     internal var dueDate: Date?
+    
+    internal var shouldSendNotification: Bool = false
+    internal var notificationOffset = NotificationOffset.atDueDate
     
     internal var taskTitleSection = 0
     internal var taskDescriptionSection = 1
@@ -67,6 +71,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         register(TaskAttachedLessonTableViewCell.self, identifier: taskAttachedLessonCell)
         register(UINib(nibName: "TaskNotificationTitleTableViewCell", bundle: nil), identifier: taskNotifiactionCell)
         register(UINib(nibName: "TaskDueDateTitleTableViewCell", bundle: nil), identifier: taskNotificationTitleCell)
+        register(UITableViewCell.self, identifier: taskNotificationOffsetPickerCell)
         
         addSection(with: titleSection)
         addCell(with: taskTitleCell, at: titleSection)
@@ -156,7 +161,9 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         TimetableService.shared.save()
         
-        NotificationService.current.scheduleDueDateNotification(for: task)
+        if shouldSendNotification {
+            NotificationService.current.scheduleDueDateNotification(for: task)
+        }
         
         detailDelegate?.detailWillDismiss(self)
         
@@ -220,33 +227,51 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     //MARK: configureCell(cell: ,...)
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         
-        if identifier == taskTitleCell {
+        switch identifier {
+        case taskTitleCell:
             let cell = cell as! TaskTitleTableViewCell
             cell.setCompleteBtn(active: false)
             cell.textField.addTarget(self, action: #selector(changeTaskTitle(_:)), for: .editingChanged)
-        } else if identifier == taskDescriptionCell {
+            return
+        case taskDescriptionCell:
             let cell = cell as! TaskDescriptionTableViewCell
-            
+                        
             cell.textView.delegate = self
-        } else if identifier == taskAttachLessonCell {
+            return
+        case taskAttachLessonCell:
             let cell = cell as! TaskLessonAttachTableViewCell
             cell.attchLesson.addTarget(self, action: #selector(showLessonPicker), for: .touchUpInside)
-        } else if identifier == taskAttachedLessonCell {
+            return
+        case taskAttachedLessonCell:
             let cell = cell as! TaskAttachedLessonTableViewCell
-            
+                       
             cell.removeBtn.addTarget(self, action: #selector(removeLesson), for: .touchUpInside)
-            
             cell.setLesson(lesson)
-        } else if identifier == taskDueDateTitleCell {
+            return
+        case taskDueDateTitleCell:
             let cell = cell as! TaskDueDateTitleTableViewCell
             
             cell.titleLabel.text = "Due"
             cell.valueLabel.text = dueDate?.stringify(dateStyle: .short, timeStyle: .short) ?? "-"
-        } else if identifier == taskDueDateCell {
+            return
+        case taskDueDateCell:
             let cell = cell as! TaskDueDateTableViewCell
             
             cell.dueDate.addTarget(self, action: #selector(updateDueDate(_:)), for: .valueChanged)
             cell.dueDate.date = dueDate ?? Date()
+            return
+        case taskNotifiactionCell:
+            let cell = cell as! TaskNotificationTitleTableViewCell
+            
+            cell.notificationSwitch.isOn = shouldSendNotification
+            
+            cell.notificationSwitch.addTarget(self, action: #selector(onNotificationSwitchToogle(_:)), for: .valueChanged)
+        case taskNotificationOffsetPickerCell:
+            cell.textLabel?.textAlignment = .right
+            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.text = notificationOffset.title
+        default:
+            return
         }
         
     }
@@ -256,12 +281,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         switch identifier {
         case taskTitleCell:
             return 40
-        case taskDueDateTitleCell, taskAttachedLessonCell, taskAttachLessonCell, taskNotifiactionCell:
+        case taskDueDateTitleCell, taskAttachedLessonCell, taskAttachLessonCell, taskNotifiactionCell, taskNotificationOffsetPickerCell:
             return 50
         case taskDescriptionCell:
             return 120
         case taskDueDateCell:
-            return 160
+            return 50
         default:
             return 0
         }
@@ -272,38 +297,52 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         super.didSelectRow(at: indexPath, with: identifier)
         
         let section = indexPath.section
-        let row = indexPath.row
-        let sectionIdentifer = sectionIdentifier(for: section)
         
-        switch sectionIdentifer {
-        case dueSection:
-            if row == 0 {
+        switch identifier {
+        case taskAttachLessonCell:
+            showLessonPicker()
+        case taskNotificationOffsetPickerCell:
+            showNotificationOffsetPicker()
+        case taskDueDateTitleCell:
+            tableView.beginUpdates()
+            
+            if expandDueDateCell {
                 
-                tableView.beginUpdates()
+                removeCell(at: section, row: 1)
+                tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
+                tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
                 
-                if expandDueDateCell {
-                    
-                    removeCell(at: section, row: 1)
-                    tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                    
-                }else {
-                    insertCell(with: taskDueDateCell, in: dueSection, at: 1)
+            }else {
+                insertCell(with: taskDueDateCell, in: dueSection, at: 1)
 
-                    tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                    tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-
-                }
-                
-                tableView.endUpdates()
-                expandDueDateCell.toggle()
+                tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
+                tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
 
             }
-            break
-        case lessonSection:
-            showLessonPicker()
+            
+            tableView.endUpdates()
+            expandDueDateCell.toggle()
         default:
             break
+        }
+
+    }
+    
+    @objc func onNotificationSwitchToogle(_ sender: UISwitch) {
+        shouldSendNotification = sender.isOn
+        
+        if shouldSendNotification {
+            tableView.beginUpdates()
+            addCell(with: taskNotificationOffsetPickerCell, at: dueSection)
+            let section = sectionIndex(for: dueSection) ?? 0
+            tableView.insertRows(at: [IndexPath(row: 2, section: section)], with: .top)
+            tableView.endUpdates()
+        }else {
+            tableView.beginUpdates()
+            removeCell(at: dueSection, row: 2)
+            let section = sectionIndex(for: dueSection) ?? 0
+            tableView.deleteRows(at: [IndexPath(row: 2, section: section)], with: .top)
+            tableView.endUpdates()
         }
     }
     
@@ -314,7 +353,15 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         
         navigationController?.pushViewController(lessonPicker, animated: true)
         
-//        present(UINavigationController(rootViewController: lessonPicker), animated: true, completion: nil)
+    }
+    
+    func showNotificationOffsetPicker() {
+        let offsetPicker = TaskNotificationOffsetPickerTableViewController(style: .insetGrouped)
+        
+        offsetPicker.pickerDelegate = self
+        offsetPicker.selectedOffset = notificationOffset
+        
+        navigationController?.pushViewController(offsetPicker, animated: true)
     }
     
     func taskLessonPicker(_ picker: TaskLessonPickerTableViewController, didSelect lesson: Lesson) {
@@ -372,6 +419,31 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         self.lesson = lesson
     }
 }
+
+extension TaskAddViewController: TaskNotificationOffsetPickerDelegate {
+    func didSelect(_ offset: NotificationOffset) {
+        notificationOffset = offset
+        reload()
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 protocol TaskLessonPickerDelegate {
     
@@ -475,6 +547,23 @@ class TaskLessonPickerTableViewController: UITableViewController, UINavigationCo
     
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //MARK: TaskLessonPickerTableViewCell
 class TaskLessonPickerTableViewCell: UITableViewCell {
     
@@ -561,6 +650,66 @@ class TaskLessonPickerTableViewCell: UITableViewCell {
         let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
         colorIndicator.backgroundColor = color
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+protocol TaskNotificationOffsetPickerDelegate {
+    func didSelect(_ offset: NotificationOffset)
+}
+
+class TaskNotificationOffsetPickerTableViewController: UITableViewController {
+    
+    
+    var selectedOffset: NotificationOffset = .atDueDate
+    
+    var pickerDelegate: TaskNotificationOffsetPickerDelegate?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return NotificationOffset.allCases.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        
+        let offset = NotificationOffset.allCases[indexPath.row]
+        
+        cell.textLabel?.text = offset.title
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        
+        cell.accessoryType = selectedOffset == offset  ? .checkmark : .none
+    
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedOffset = NotificationOffset.allCases[indexPath.row]
+        tableView.reloadData()
+        
+        pickerDelegate?.didSelect(selectedOffset)
+        navigationController?.popViewController(animated: true)
     }
     
 }

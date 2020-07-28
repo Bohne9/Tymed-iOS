@@ -36,10 +36,15 @@ class TaskDetailTableViewController: TaskAddViewController {
         navigationItem.leftBarButtonItem = cancel
         
         register(UINib(nibName: "TaskDeleteTableViewCell", bundle: nil), identifier: taskDeleteCell)
+        register(TaskArchiveTableViewCell.self, identifier: TaskArchiveTableViewCell.identifier)
         
+        addSection(with: "archive")
+        addCell(with: TaskArchiveTableViewCell.identifier, at: "archive")
+                
         addSection(with: "delete")
         
         taskDeleteSection = sectionIndex(for: "delete") ?? -1
+        
         
         addCell(with: taskDeleteCell, at: taskDeleteSection)
         
@@ -179,6 +184,9 @@ class TaskDetailTableViewController: TaskAddViewController {
             setupDeleteCell(cell)
             
             break
+        case TaskArchiveTableViewCell.identifier:
+            let cell = cell as! TaskArchiveTableViewCell
+            cell.task = task
         default:
             break
         }
@@ -219,6 +227,34 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
     }
     
+    override func onNotificationSwitchToogle(_ sender: UISwitch) {
+        super.onNotificationSwitchToogle(sender)
+        
+        guard let task = self.task else {
+            return
+        }
+        
+        if shouldSendNotification {
+            NotificationService.current.scheduleDueDateNotification(for: task)
+        }else {
+            NotificationService.current.removePendingNotifications(of: task)
+        }
+    }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == "archive" {
+            return "tray.full"
+        }
+        return super.iconForSection(with: identifier, at: index)
+    }
+    
+    override func headerForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == "archive" {
+            return "Archive"
+        }
+        return super.headerForSection(with: identifier, at: index)
+    }
+    
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: descriptionSection) {
@@ -245,7 +281,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
-        if identifier == taskDeleteCell {
+        if identifier == taskDeleteCell || identifier == TaskArchiveTableViewCell.identifier {
             return 50
         }
         return super.heightForRow(at: indexPath, with: identifier)

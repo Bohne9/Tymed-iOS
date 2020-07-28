@@ -15,6 +15,7 @@ private let taskSelectionCell = "taskSelection"
 private let tasksSection = "tasksSection"
 private let nowSection = "nowSection"
 private let nextSection = "nextSection"
+private let daySection = "daySection"
 private let weekSection = "weekSection"
 
 class HomeDashCollectionView: HomeBaseCollectionView {
@@ -30,6 +31,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     var nowLessons: [Lesson]?
     
     var nextLessons: [Lesson]?
+    
+    var dayLessons: [Lesson]?
     
     var tasks: [Task]?
     
@@ -61,10 +64,18 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return nowLessons?[indexPath.row]
         case nextSection:
             return nextLessons?[indexPath.row]
+        case daySection:
+            return dayLessons?[indexPath.row]
         case weekSection:
             return lessons?[indexPath.row]
         default:
             return nil
+        }
+    }
+    
+    private func appendSection(_ lessons: [Lesson]?, with identifier: String) {
+        if (lessons?.count ?? 0) > 0 {
+            addSection(id: identifier)
         }
     }
     
@@ -77,34 +88,23 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return l1.startTime < l2.startTime
         })
         
+        dayLessons = TimetableService.shared.getLessons(within: .current)
+        
+        nextLessons = TimetableService.shared.getNextLessons()
+        
         sectionIdentifiers = []
         
         loadTask(for: taskSelection)
         
         addSection(id: tasksSection)
         
-        // Add tasks section
-        if tasks?.count ?? 0 > 0 {
-            
-        }
-        
-        // If there are lessons right now show the "now" section, else show the next
-        if (nowLessons?.count ?? 0) > 0 {
-            addSection(id: nowSection)
-        }
-        
-        nextLessons = TimetableService.shared.getNextLessons()
-        
-        if (nextLessons?.count ?? 0) > 0 {
-            addSection(id: nextSection)
-        }
-        
-        if (lessons?.count ?? 0) > 0 {
-            addSection(id: weekSection)
-        }
+        appendSection(nowLessons, with: nowSection)
+        appendSection(nextLessons, with: nextSection)
+        appendSection(dayLessons, with: daySection)
+        appendSection(lessons, with: weekSection)
         
     }
-    
+
     private func loadTask(for selection: HomeDashTaskSelectorCellType) {
         
         tasks = taskSelection.tasks()
@@ -123,6 +123,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return nowLessons?.count ?? 0
         case nextSection:
             return nextLessons?.count ?? 0
+        case daySection:
+            return dayLessons?.count ?? 0
         case weekSection:
             return lessons?.count ?? 0
         default:
@@ -151,6 +153,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             }else if tasks?.count ?? 0 > 0 {
                 let cell = dequeueCell(homeDashTaskOverviewCollectionViewCell, indexPath) as! HomeDashTaskOverviewCollectionViewCell
                 
+                cell.size = .large
                 cell.tasks = tasks
                 cell.taskDelegate = taskDelegate
                 cell.reload()
@@ -165,22 +168,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return cell
             }
             
-        case nowSection:
+        case nowSection, nextSection, daySection, weekSection:
             let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
             
-            cell.lesson = nowLessons?[indexPath.row]
-            
-            return cell
-        case nextSection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
-            
-            cell.lesson = nextLessons?[indexPath.row]
-            
-            return cell
-        case weekSection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
-            
-            cell.lesson = lessons?[indexPath.row]
+            cell.lesson = lesson(for: indexPath)
             
             return cell
         default:
@@ -189,10 +180,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
     
-    private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
-        if let lesson = lessons?[indexPath.row] {
-            homeDelegate?.lessonDetail(self, for: lesson)
+    private func presentLessonDetail(_ indexPath: IndexPath) {
+        guard let lesson = self.lesson(for: indexPath) else {
+            return
         }
+        homeDelegate?.lessonDetail(self, for: lesson)
     }
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
@@ -201,8 +193,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         case 1:     return .done
         case 2:     return .planned
         case 3:     return .open
-        default:
-            return .all
+        default:    return .all
         }
     }
     
@@ -222,14 +213,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             }
             
             break
-        case nowSection:
-            presentDetail(nowLessons, indexPath)
-            break
-        case nextSection:
-            presentDetail(nextLessons, indexPath)
-            break
-        case weekSection:
-            presentDetail(lessons, indexPath)
+        case nowSection, nextSection, daySection, weekSection:
+            presentLessonDetail(indexPath)
             break
         default:
             break
@@ -237,26 +222,26 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
 
+    private func headerTitle(for section: String) -> String {
+        switch section {
+        case tasksSection:  return "Tasks"
+        case nowSection:    return "Now"
+        case nextSection:   return "Next"
+        case daySection:    return "Today"
+        case weekSection:   return "All"
+        default:            return "-"
+        }
+    }
+    
     //MARK: supplementaryView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            let sectionId = section(for: indexPath)
+            // Set the title of the section header according to the section type
+            header.label.text = headerTitle(for: section(for: indexPath))
             
-            switch sectionId {
-            case tasksSection:
-                header.label.text = "Tasks"
-            case nowSection:
-                header.label.text =  "Now"
-            case nextSection:
-                header.label.text =  "Next"
-            case weekSection:
-                header.label.text = "All"
-            default:
-                header.label.text = "-"
-            }
             return header
         }
         
@@ -355,16 +340,16 @@ extension HomeDashCollectionView {
         
         switch sectionId {
         case tasksSection:
+            // If the task is a selector task
             if indexPath.row < 4 {
                 return CGSize(width: (collectionView.contentSize.width -  20) / 2, height: 50)
-            } else if tasks?.count ?? 0 == 0 {
+            } else if tasks?.count ?? 0 == 0 { // Task add cell
                 return CGSize(width: collectionView.contentSize.width, height: 50)
             }
-            
-//            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
+            // Task Overview cell
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat((tasks?.count ?? 0) * 60))
-        case nowSection, nextSection, weekSection:
-            
+        case nowSection, nextSection, daySection, weekSection:
+            // Lesson cell
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
                 
             return CGSize(width: collectionView.contentSize.width, height: height)

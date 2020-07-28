@@ -46,6 +46,8 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
     var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
     
+    var size: TaskOverviewSectionSize = .compact
+    
     private var cellInsets: UIEdgeInsets?
         
     @IBOutlet weak var tableView: UITableView!
@@ -89,8 +91,9 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return min(tasks?.count ?? 0, 3)
-        return tasks?.count ?? 0
+        let maxItems = size.maxItems
+        
+        return min(tasks?.count ?? 0, maxItems)
     }
    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

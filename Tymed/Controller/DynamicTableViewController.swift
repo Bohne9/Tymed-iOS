@@ -39,7 +39,7 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
         titleLabel.constraint(height: 20)
         titleLabel.constraintTrailingToSuperview(constant: 5)
         
-        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
     }
     
@@ -48,7 +48,7 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
     }
     
     func setIcon(systemName icon: String) {
-        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .bold))
+        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .regular))
         
         iconView.image = image
     }

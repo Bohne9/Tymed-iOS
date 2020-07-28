@@ -9,7 +9,9 @@
 import UIKit
 
 class TaskNotificationTitleTableViewCell: UITableViewCell {
-
+    
+    @IBOutlet weak var notificationSwitch: UISwitch!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -72,6 +72,8 @@
 		4F953464247C424A007E708B /* TaskLessonAttachTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */; };
 		4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */; };
 		4F953468247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */; };
+		4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98635B24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift */; };
+		4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98635D24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift */; };
 		4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */; };
 		4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99D209249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift */; };
 		4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */; };
@@ -85,6 +87,8 @@
 		4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */; };
 		4FCDEAEB247AABE9001B36F4 /* TaskTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */; };
 		4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */; };
+		4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFA61ED24D007E100C9F290 /* SettingsService.swift */; };
+		4FFA61F024D00D7600C9F290 /* BackgroundRoutineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */; };
 		BF4A324ED79EF2FB530A4CE5 /* Pods_TymedTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F826B67608FB6B50D06FC5FC /* Pods_TymedTests.framework */; };
 		D6147D5E2337655390BC650B /* Pods_Tymed.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B945B8ED0E84CB89523C7B19 /* Pods_Tymed.framework */; };
 /* End PBXBuildFile section */
@@ -181,6 +185,8 @@
 		4F953462247C424A007E708B /* TaskLessonAttachTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskLessonAttachTableViewCell.xib; sourceTree = "<group>"; };
 		4F953465247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAttachedLessonTableViewCell.swift; sourceTree = "<group>"; };
 		4F953466247C55C9007E708B /* TaskAttachedLessonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskAttachedLessonTableViewCell.xib; sourceTree = "<group>"; };
+		4F98635B24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewHeader.swift; sourceTree = "<group>"; };
+		4F98635D24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskArchiveTableViewCell.swift; sourceTree = "<group>"; };
 		4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCellConfigurator.swift; sourceTree = "<group>"; };
 		4F99D209249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLessonCellConfigurator.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
@@ -196,6 +202,8 @@
 		4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTitleTableViewCell.swift; sourceTree = "<group>"; };
 		4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTitleTableViewCell.xib; sourceTree = "<group>"; };
 		4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekCollectionView.swift; sourceTree = "<group>"; };
+		4FFA61ED24D007E100C9F290 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
+		4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRoutineService.swift; sourceTree = "<group>"; };
 		74549418143F1244E1FE0E4D /* Pods-TymedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TymedTests.debug.xcconfig"; path = "Target Support Files/Pods-TymedTests/Pods-TymedTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8E323A6F8865A954DBF379A0 /* Pods-TymedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TymedTests.release.xcconfig"; path = "Target Support Files/Pods-TymedTests/Pods-TymedTests.release.xcconfig"; sourceTree = "<group>"; };
 		B5592AD07588257A0B868C1F /* Pods-Tymed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tymed.release.xcconfig"; path = "Target Support Files/Pods-Tymed/Pods-Tymed.release.xcconfig"; sourceTree = "<group>"; };
@@ -285,6 +293,7 @@
 				4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */,
 				4F12658D24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift */,
 				4F12658E24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.xib */,
+				4F98635D24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift */,
 			);
 			path = TaskDetailCells;
 			sourceTree = "<group>";
@@ -442,6 +451,7 @@
 				4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */,
 				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,
 				4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */,
+				4F98635B24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift */,
 				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
 				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 				4FC8210524C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift */,
@@ -485,6 +495,8 @@
 			children = (
 				4F405E83245D72FC00E1E704 /* TimetableService.swift */,
 				4F12658924B0669C000488B8 /* NotificationService.swift */,
+				4FFA61ED24D007E100C9F290 /* SettingsService.swift */,
+				4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -741,6 +753,7 @@
 				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */,
 				4F2A7DC724AFAD22002467E3 /* Task+CoreDataClass.swift in Sources */,
 				4F12658F24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift in Sources */,
+				4FFA61F024D00D7600C9F290 /* BackgroundRoutineService.swift in Sources */,
 				4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,
@@ -749,6 +762,7 @@
 				4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */,
 				4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
+				4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */,
 				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
 				4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* TimetableOverviewCollectionViewController.swift in Sources */,
@@ -763,6 +777,7 @@
 				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
+				4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */,
 				4F7F774B2456C2A000038729 /* Tymed.xcdatamodeld in Sources */,
 				4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */,
 				4F953463247C424A007E708B /* TaskLessonAttachTableViewCell.swift in Sources */,
@@ -775,6 +790,7 @@
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
 				4F9C26D024C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift in Sources */,
+				4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */,
 				4F5B4E9624C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift in Sources */,
 				4F12659224B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift in Sources */,
 				4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */,

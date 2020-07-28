@@ -9,6 +9,45 @@
 import Foundation
 import UserNotifications
 
+enum NotificationOffset: Int, CaseIterable {
+    
+    
+    case atDueDate = 0
+    case min5 = 300
+    case min10 = 600
+    case min15 = 900
+    case min30 = 1800
+    case hour1 = 3600
+    case hour2 = 7200
+    case hour5 = 18000
+    case hour10 = 32000
+    case day1 = 86400
+    case day3 = 259200
+    case week1 = 604800
+    
+    var timeInterval: TimeInterval {
+        return TimeInterval(rawValue)
+    }
+    
+    var title: String {
+        switch self {
+        case .atDueDate:    return "at due date"
+        case .min5:         return "5 minutes before"
+        case .min10:        return "10 minutes before"
+        case .min15:        return "15 minutes before"
+        case .min30:        return "30 minutes before"
+        case .hour1:        return "1 hour before"
+        case .hour2:        return "2 hours before"
+        case .hour5:        return "5 hours before"
+        case .hour10:       return "10 hours before"
+        case .day1:         return "1 day before"
+        case .day3:         return "3 days before"
+        case .week1:        return "1 week before"
+        }
+    }
+}
+
+
 //MARK: NotificationService
 class NotificationService {
 
@@ -79,7 +118,7 @@ class NotificationService {
         return notificationTrigger(at: date)
     }
     
-    private func notificationTriggger(for task: Task, with offset: TimeInterval) -> UNCalendarNotificationTrigger? {
+    private func notificationTrigger(for task: Task, with offset: TimeInterval) -> UNCalendarNotificationTrigger? {
         guard var date = task.due else { return nil }
         
         date = date - offset
@@ -116,8 +155,8 @@ class NotificationService {
         return UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
     }
     
-    func notificationDueDateRequest(for task: Task) -> UNNotificationRequest? {
-        guard let trigger = notificationTrigger(for: task) else {
+    func notificationDueDateRequest(for task: Task, _ offset: NotificationOffset = .atDueDate) -> UNNotificationRequest? {
+        guard let trigger = notificationTrigger(for: task, with: offset.timeInterval) else {
             return nil
         }
         
@@ -137,16 +176,16 @@ class NotificationService {
         }
     }
     
-    func scheduleDueDateNotification(for task: Task) {
-        guard let request = notificationDueDateRequest(for: task) else {
+    func scheduleDueDateNotification(for task: Task, _ offset: NotificationOffset = .atDueDate) {
+        guard let request = notificationDueDateRequest(for: task, offset) else {
             return
         }
         
         scheduleNotification(request)
     }
     
-    
     //MARK: removeNotifications
+    
     func removePendingNotifications(of task: Task) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [task.id.uuidString])
     }

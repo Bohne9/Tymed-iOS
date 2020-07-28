@@ -12,6 +12,8 @@ private let nowReuseIdentifier = "homeNowCell"
 private let taskTypeSelectorIdentifier = "taskTypeSelectorIdentifier"
 private let addTaskIdentifier = "addTaskIdentifier"
 
+private let taskHeader = "taskHeader"
+
 private let headerSection = "typeSection"
 private let todaySection = "todaySection"
 private let allSection = "allSection"
@@ -32,6 +34,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     var plannedTasks: [Task]?
     
     private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
+    private var taskSectionSize = [String : TaskOverviewSectionSize]()
     
     var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
     
@@ -40,6 +43,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         super.setupUserInterface()
         
         register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        register(HomeDashTaskOverviewCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: taskHeader)
+        
         register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
         register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
@@ -73,6 +78,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         if tasks?.count ?? 0 > 0 {
             addSection(id: section)
             typeCellSelectors.append(type)
+            
+            if taskSectionSize[section] == nil {
+                taskSectionSize[section] = section != archivedSection ? .compact : .collapsed
+            }
         }
     }
     
@@ -88,8 +97,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         doneTasks = getTasks(of: .done)
         expiredTasks = getTasks(of: .expired)
         openTasks = getTasks(of: .open)
-        archivedTasks = getTasks(of: .archived)
         plannedTasks = getTasks(of: .planned)
+        archivedTasks = getTasks(of: .archived)
         
         sectionIdentifiers = []
         typeCellSelectors = []
@@ -101,8 +110,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         setupSections(plannedTasks, section: plannedSection, type: .planned)
         setupSections(doneTasks, section: doneSection, type: .done)
         setupSections(expiredTasks, section: expiredSection, type: .expired)
-        setupSections(archivedTasks, section: archivedSection, type: .archived)
         setupSections(allTasks, section: allSection, type: .all)
+        setupSections(archivedTasks, section: archivedSection, type: .archived)
         
     }
     
@@ -115,7 +124,9 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         if identifier == headerSection {
             return typeCellSelectors.count + 1
         }
-        return 1
+        
+        // The section 
+        return (taskSectionSize[identifier] ?? .compact) != .collapsed ? 1 : 0
     }
     
     private func tasks(for section: String) -> [Task]? {
@@ -155,10 +166,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             
         } else if identifier == homeDashTaskOverviewCollectionViewCell {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
-            
-            taskCell.taskOverviewDelegate = taskOverviewDelegate
-            
             let section = self.section(for: indexPath.section)
+            
+            taskCell.size = taskSectionSize[section] ?? .compact
+            taskCell.taskOverviewDelegate = taskOverviewDelegate
             
             taskCell.tasks = self.tasks(for: section)
             taskCell.taskDelegate = taskDelegate
@@ -231,38 +242,42 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func sectionTitle(for sectionId: String) -> String {
+        switch sectionId{
+            case headerSection:     return "Tasks"
+            case todaySection:      return "Today"
+            case allSection:        return "All"
+            case doneSection:       return "Done"
+            case expiredSection:    return "Expired"
+            case openSection:       return "Open"
+            case archivedSection:   return "Archived"
+            case plannedSection:    return "Planned"
+            default:                return ""
+        }
+    }
+    
     //MARK: supplementaryView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if kind == UICollectionView.elementKindSectionHeader {
+        let sectionTitle = self.sectionTitle(for: section(for: indexPath))
+        
+        if kind == UICollectionView.elementKindSectionHeader && indexPath.section == 0 {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            let sectionId = section(for: indexPath)
+            header.label.text = sectionTitle
             
-            switch sectionId{
-            case headerSection:
-                header.label.text = "Tasks"
-            case todaySection:
-                header.label.text =  "Today"
-            case allSection:
-                header.label.text =  "All"
-            case doneSection:
-                header.label.text = "Done"
-            case expiredSection:
-                header.label.text = "Expired"
-            case openSection:
-                header.label.text = "Open"
-            case archivedSection:
-                header.label.text = "Archived"
-            case plannedSection:
-                header.label.text = "Planned"
-            default:
-                header.label.text = ""
-            }
+            return header
+        }else {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: taskHeader, for: indexPath) as! HomeDashTaskOverviewCollectionViewHeader
+            
+            header.sectionIdentifier = self.section(for: indexPath.section)
+            header.size = taskSectionSize[self.section(for: indexPath.section)] ?? .compact
+            header.label.text = sectionTitle
+            header.delegate = self
+            header.reloadSizeButtonImage()
+            
             return header
         }
-        
-        return UICollectionReusableView()
     }
     
     //MARK: sizeForHeaderInSection
@@ -270,6 +285,12 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         let height: CGFloat = 50
         
         return CGSize(width: collectionView.frame.width, height: height)
+    }
+    
+    private func taskCount(for section: String, size: TaskOverviewSectionSize) -> Int {
+        let taskCount = self.tasks(for: section)?.count ?? 0
+        
+        return min(size.maxItems, taskCount)
     }
     
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -285,9 +306,10 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         if identifier == homeDashTaskOverviewCollectionViewCell {
             
-            let tasks = self.tasks(for: self.section(for: indexPath.section))
+            let section = self.section(for: indexPath.section)
+            let taskCount = self.taskCount(for: section, size: taskSectionSize[section] ?? .compact)
             
-            height = 20 + CGFloat((tasks?.count ?? 0) * 60)
+            height = 20 + CGFloat(taskCount * 60)
         }
         
         return CGSize(width: width, height: height)
@@ -299,3 +321,48 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
 }
 
+
+
+extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
+    
+    /// Handles the deletion, insertion, reloading of the sections when a task header changes it's size
+    /// - Parameters:
+    ///   - header: Task Header that is tapped
+    ///   - identifier: Section identifier of the section
+    func onCollapseToogle(_ header: HomeDashTaskOverviewCollectionViewHeader, identifier: String) {
+        taskSectionSize[identifier] = header.size
+        let section = self.section(for: identifier) ?? 0
+        
+        switch header.size {
+        case .collapsed:
+            deleteItems(at: [IndexPath(row: 0, section: section)])
+        case .compact:
+            insertItems(at: [IndexPath(row: 0, section: section)])
+        case .large:
+            reloadItems(at: [IndexPath(row: 0, section: section)])
+        }
+        
+    }
+    
+    /// Determines the next size when a task section header is tapped.
+    /// Usually it will return .collapsed -> .compact -> .large -> ...
+    /// But if the tasks for the section aren't more than the .compact can show, displaing
+    /// the large is unnecessary
+    /// - Parameters:
+    ///   - header: Task Header that is tapped
+    ///   - current: Current size of the header
+    ///   - identifier: Section identifier of the section
+    /// - Returns: The next size the header/ section should have
+    func nextSizeFor(_ header: HomeDashTaskOverviewCollectionViewHeader, current: TaskOverviewSectionSize, with identifier: String) -> TaskOverviewSectionSize {
+        let nextSize = current.next()
+        let tasksCount = self.taskCount(for: identifier, size: nextSize)
+            
+        if nextSize == .large {
+            // If there aren't enough tasks to show a large section -> skip .large and go to .collapsed
+            if tasksCount <= TaskOverviewSectionSize.compact.maxItems {
+                return .collapsed
+            }
+        }
+        return nextSize
+    }
+}
