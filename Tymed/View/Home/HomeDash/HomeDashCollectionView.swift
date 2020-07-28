@@ -222,28 +222,26 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
 
+    private func headerTitle(for section: String) -> String {
+        switch section {
+        case tasksSection:  return "Tasks"
+        case nowSection:    return "Now"
+        case nextSection:   return "Next"
+        case daySection:    return "Today"
+        case weekSection:   return "All"
+        default:            return "-"
+        }
+    }
+    
     //MARK: supplementaryView
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            let sectionId = section(for: indexPath)
+            // Set the title of the section header according to the section type
+            header.label.text = headerTitle(for: section(for: indexPath))
             
-            switch sectionId {
-            case tasksSection:
-                header.label.text = "Tasks"
-            case nowSection:
-                header.label.text =  "Now"
-            case nextSection:
-                header.label.text =  "Next"
-            case daySection:
-                header.label.text = "Today"
-            case weekSection:
-                header.label.text = "All"
-            default:
-                header.label.text = "-"
-            }
             return header
         }
         
@@ -342,16 +340,16 @@ extension HomeDashCollectionView {
         
         switch sectionId {
         case tasksSection:
+            // If the task is a selector task
             if indexPath.row < 4 {
                 return CGSize(width: (collectionView.contentSize.width -  20) / 2, height: 50)
-            } else if tasks?.count ?? 0 == 0 {
+            } else if tasks?.count ?? 0 == 0 { // Task add cell
                 return CGSize(width: collectionView.contentSize.width, height: 50)
             }
-            
-//            return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat(min(3, tasks?.count ?? 0) * 60))
+            // Task Overview cell
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat((tasks?.count ?? 0) * 60))
         case nowSection, nextSection, daySection, weekSection:
-            
+            // Lesson cell
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
                 
             return CGSize(width: collectionView.contentSize.width, height: height)
