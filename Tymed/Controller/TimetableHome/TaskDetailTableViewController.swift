@@ -227,6 +227,34 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
     }
     
+    override func onNotificationSwitchToogle(_ sender: UISwitch) {
+        super.onNotificationSwitchToogle(sender)
+        
+        guard let task = self.task else {
+            return
+        }
+        
+        if shouldSendNotification {
+            NotificationService.current.scheduleDueDateNotification(for: task)
+        }else {
+            NotificationService.current.removePendingNotifications(of: task)
+        }
+    }
+    
+    override func iconForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == "archive" {
+            return "tray.full"
+        }
+        return super.iconForSection(with: identifier, at: index)
+    }
+    
+    override func headerForSection(with identifier: String, at index: Int) -> String? {
+        if identifier == "archive" {
+            return "Archive"
+        }
+        return super.headerForSection(with: identifier, at: index)
+    }
+    
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: descriptionSection) {
