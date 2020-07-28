@@ -6,8 +6,7 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
-import UIKit
-import BackgroundTasks
+import Foundation
 
 class BackgroundRoutineService {
     
@@ -37,7 +36,7 @@ class BackgroundRoutineService {
             
             let now = Date()
             
-            if (due.addingTimeInterval(taskArchivingDelay.timeinterval) < now) {
+            if (due.addingTimeInterval(taskArchivingDelay) < now) {
                 task.archived = true
             }
         }
@@ -45,9 +44,4 @@ class BackgroundRoutineService {
     }
     
     
-    
-    //MARK: Background Tasks
-    
-
 }
-
