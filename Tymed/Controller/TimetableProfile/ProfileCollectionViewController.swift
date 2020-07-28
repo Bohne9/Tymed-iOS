@@ -34,6 +34,10 @@ class ProfileCollectionViewController: UICollectionViewController {
     }
     */
 
+    func reload() {
+        
+    }
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {

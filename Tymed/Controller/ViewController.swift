@@ -48,6 +48,12 @@ class ViewController: UITabBarController {
         viewControllers = [home, add, profile]
     }
     
+    func reload() {
+        homeVC.reload()
+        addVC.reload()
+        profileVC.reload()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
