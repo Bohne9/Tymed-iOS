@@ -261,7 +261,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case taskDescriptionCell:
             return 120
         case taskDueDateCell:
-            return 160
+            return 50
         default:
             return 0
         }

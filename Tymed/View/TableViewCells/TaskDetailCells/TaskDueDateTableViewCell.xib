@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,14 +18,12 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="PH5-2g-0TK">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="292"/>
+                        <rect key="frame" x="-20" y="65" width="320" height="162"/>
                     </datePicker>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="PH5-2g-0TK" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" id="8iC-Mj-D9A"/>
                     <constraint firstItem="PH5-2g-0TK" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="CLX-vW-iuv"/>
-                    <constraint firstItem="PH5-2g-0TK" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" id="Gtm-NF-noh"/>
-                    <constraint firstItem="PH5-2g-0TK" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="nDx-zZ-Iqp"/>
+                    <constraint firstAttribute="trailing" secondItem="PH5-2g-0TK" secondAttribute="trailing" constant="20" id="fqc-bh-kID"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
