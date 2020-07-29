@@ -61,6 +61,8 @@ class DynamicTableViewController: UITableViewController {
     
     private var cells: [String : [String]] = [:]
     
+    internal var tableViewUpdateAnimation: UITableView.RowAnimation = .top
+    
     convenience init() {
         self.init(style: .insetGrouped)
     }
@@ -137,6 +139,15 @@ class DynamicTableViewController: UITableViewController {
     internal func identifier(for indexPath: IndexPath) -> String? {
         let identifier = sectionIdentifier(for: indexPath.section)
         return cells[identifier]?[indexPath.row]
+    }
+    
+    /// Returns the index of a cell identfier in a given section
+    /// - Parameters:
+    ///   - cell: Cell identifier
+    ///   - section: Section identifier
+    /// - Returns: Potential index of the cell. Attention! It is the first index that will be found.
+    internal func identifier(for cell: String, at section: String) -> Int? {
+        return cells[section]?.firstIndex(of: cell)
     }
     
     internal func numerOfCells(for section: String) -> Int {
@@ -225,8 +236,11 @@ class DynamicTableViewController: UITableViewController {
     /// Appends a section to the end the tableView
     /// - Parameter identifier: Unique identifier for the section
     internal func addSection(with identifier: String) {
+        tableView.beginUpdates()
         sections.append(identifier)
         cells[identifier] = []
+        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
+        tableView.endUpdates()
     }
     
     /// Inserts a section into the tableView
@@ -234,8 +248,12 @@ class DynamicTableViewController: UITableViewController {
     ///   - identfier: Unique identifier for the section
     ///   - index: Index where the section will be inserted (index is automatically )
     internal func addSection(with identifier: String, at index: Int) {
-        sections.insert(identifier, at: max(0, min(index, sections.endIndex)))
+        tableView.beginUpdates()
+        let secIndex = max(0, min(index, sections.endIndex))
+        sections.insert(identifier, at: secIndex)
         cells[identifier] = []
+        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
+        tableView.endUpdates()
     }
     
     //MARK: removeSection(...)
@@ -262,7 +280,16 @@ class DynamicTableViewController: UITableViewController {
     ///   - identifier: Identifier for the cell
     ///   - section: Identifier for the section where the cell will be added. The identifier has to be valid otherwise the cell won't be added.
     internal func addCell(with identifier: String, at section: String) {
+        guard cells[section] != nil else {
+            return
+        }
+        tableView.beginUpdates()
         cells[section]?.append(identifier)
+        if let index = cells[section]?.count, let sectionIndex = self.sectionIndex(for: section) {
+            tableView.insertRows(at: [IndexPath(row: index - 1, section: sectionIndex)], with: tableViewUpdateAnimation)
+        }
+        
+        tableView.endUpdates()
     }
     
     /// Appends a cell to the section of the specified section index
@@ -286,7 +313,12 @@ class DynamicTableViewController: UITableViewController {
     }
     
     internal func insertCell(with identifier: String, in section: String, at index: Int) {
-        cells[section]?.insert(identifier, at: index)
+        tableView.beginUpdates()
+        if let sectionIndex = self.sectionIndex(for: section) {
+            cells[section]?.insert(identifier, at: index)
+            tableView.insertRows(at: [IndexPath(row: index, section: sectionIndex)], with: tableViewUpdateAnimation)
+        }
+        tableView.endUpdates()
     }
     
     //MARK: removeCell(...)
@@ -297,8 +329,16 @@ class DynamicTableViewController: UITableViewController {
     ///   - row: Row index of the cell
     internal func removeCell(at section: Int, row: Int) {
         let identifier = sectionIdentifier(for: section)
-        cells[identifier]?.remove(at: row)
         
+        guard cells[identifier] != nil else {
+            return
+        }
+        
+        tableView.beginUpdates()
+        cells[identifier]?.remove(at: row)
+        tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: tableViewUpdateAnimation)
+        
+        tableView.endUpdates()
         if let c = self.cells[identifier] {
             if c.isEmpty {
                 self.cells[identifier] = nil

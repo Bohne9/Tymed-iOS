@@ -193,7 +193,7 @@ class LessonDetailTableViewController: LessonAddViewController {
         }
         
         // Set the values of the cells to the value of the lesson
-        switch identifier {
+        switch identifier { //MARK: lesson
         case lessonTaskOverviewCell:
             guard indexPath.section == lessonTaskOverviewIndex else {
                 break
@@ -211,34 +211,45 @@ class LessonDetailTableViewController: LessonAddViewController {
             // Configure subject color
             (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
-        case lessonTimeTitleCell:
+        case lessonStartTimeTitleCell:
             guard indexPath.section == timeSectionIndex else {
                 break
             }
             // Set the values of the time/ day title cells
             let cell = cell as! LessonTimeTitleCell
-            let row = indexPath.row
-            
-            if row == 0 {
-                cell.value.text = startDate.stringifyTime(with: .short)
-            }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
-                cell.value.text = endDate.stringifyTime(with: .short)
-            }else {
-                cell.value.text = day.string()
-            }
+            cell.value.text = startDate.stringifyTime(with: .short)
             break
-        case lessonTimePickerCell:
+        case lessonEndTimeTitleCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
+            }
+            // Set the values of the time/ day title cells
+            let cell = cell as! LessonTimeTitleCell
+            cell.value.text = endDate.stringifyTime(with: .short)
+            break
+        case lessonDayTitleCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
+            }
+            // Set the values of the time/ day title cells
+            let cell = cell as! LessonTimeTitleCell
+            cell.value.text = day.string()
+            break
+        case lessonStartTimePickerCell:
             guard indexPath.section == timeSectionIndex else {
                 break
             }
             // Set the values of the time pickers
             let cell = cell as! LessonTimePickerCell
-            
-            if indexPath.row == 1 {
-                cell.datePicker.date = startDate
-            }else {
-                cell.datePicker.date = endDate
+            cell.datePicker.date = startDate
+            break
+        case lessonEndTimePickerCell:
+            guard indexPath.section == timeSectionIndex else {
+                break
             }
+            // Set the values of the time pickers
+            let cell = cell as! LessonTimePickerCell
+            cell.datePicker.date = endDate
             break
         case lessonDayPickerCell:
             guard indexPath.section == timeSectionIndex else {

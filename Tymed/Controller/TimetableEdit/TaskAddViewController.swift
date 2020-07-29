@@ -162,7 +162,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         TimetableService.shared.save()
         
         if shouldSendNotification {
-            NotificationService.current.scheduleDueDateNotification(for: task)
+            NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
         }
         
         detailDelegate?.detailWillDismiss(self)
@@ -304,24 +304,15 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case taskNotificationOffsetPickerCell:
             showNotificationOffsetPicker()
         case taskDueDateTitleCell:
-            tableView.beginUpdates()
+            
+            expandDueDateCell.toggle()
             
             if expandDueDateCell {
-                
-                removeCell(at: section, row: 1)
-                tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
-                tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                
-            }else {
                 insertCell(with: taskDueDateCell, in: dueSection, at: 1)
-
-                tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-
+            }else {
+                removeCell(at: section, row: 1)
             }
             
-            tableView.endUpdates()
-            expandDueDateCell.toggle()
         default:
             break
         }
@@ -332,17 +323,10 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         shouldSendNotification = sender.isOn
         
         if shouldSendNotification {
-            tableView.beginUpdates()
             addCell(with: taskNotificationOffsetPickerCell, at: dueSection)
-            let section = sectionIndex(for: dueSection) ?? 0
-            tableView.insertRows(at: [IndexPath(row: 2, section: section)], with: .top)
-            tableView.endUpdates()
         }else {
-            tableView.beginUpdates()
-            removeCell(at: dueSection, row: 2)
-            let section = sectionIndex(for: dueSection) ?? 0
-            tableView.deleteRows(at: [IndexPath(row: 2, section: section)], with: .top)
-            tableView.endUpdates()
+            let index = expandDueDateCell ? 3 : 2
+            removeCell(at: dueSection, row: index)
         }
     }
     
