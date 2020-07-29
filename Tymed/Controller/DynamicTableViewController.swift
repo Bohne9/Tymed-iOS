@@ -62,7 +62,7 @@ class DynamicTableViewController: UITableViewController {
     private var cells: [String : [String]] = [:]
     
     internal var tableViewUpdateAnimation: UITableView.RowAnimation = .top
-    internal var tableViewPerformBatchUpdates = true
+    internal var tableViewPerformBatchUpdates = false
     
     convenience init() {
         self.init(style: .insetGrouped)
@@ -259,11 +259,11 @@ class DynamicTableViewController: UITableViewController {
     /// Appends a section to the end the tableView
     /// - Parameter identifier: Unique identifier for the section
     internal func addSection(with identifier: String) {
-        beginUpdates()
+//        beginUpdates()
         sections.append(identifier)
         cells[identifier] = []
-        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
-        endUpdates()
+//        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
+//        endUpdates()
     }
     
     /// Inserts a section into the tableView
@@ -271,12 +271,12 @@ class DynamicTableViewController: UITableViewController {
     ///   - identfier: Unique identifier for the section
     ///   - index: Index where the section will be inserted (index is automatically )
     internal func addSection(with identifier: String, at index: Int) {
-        beginUpdates()
+//        beginUpdates()
         let secIndex = max(0, min(index, sections.endIndex))
         sections.insert(identifier, at: secIndex)
         cells[identifier] = []
-        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
-        endUpdates()
+//        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
+//        endUpdates()
     }
     
     //MARK: removeSection(...)
@@ -284,16 +284,29 @@ class DynamicTableViewController: UITableViewController {
     /// Removes the section at the specified position
     /// - Parameter index: The position of the section to remove
     internal func removeSection(at index: Int) {
-        cells[sectionIdentifier(for: index)] = nil
-        sections.remove(at: max(0, min(index, sections.endIndex)))
+        let identifier = self.sectionIdentifier(for: index)
+        removeSection(with: identifier)
     }
     
     /// Removes the first section of the specified identifier (in case the identifier exists)
     /// - Parameter identifier: Identifier of the section to remove
     internal func removeSection(with identifier: String) {
-        if let index = sections.firstIndex(of: identifier) {
-            removeSection(at: index)
+        guard let index = sections.firstIndex(of: identifier) else {
+            print("dksl")
+            return
         }
+//        beginUpdates()
+        
+        self.cells[identifier]?.forEach { cell in
+            self.removeCell(at: identifier, row: cell)
+        }
+        
+//        tableView.deleteSections(IndexSet(arrayLiteral: index), with: tableViewUpdateAnimation)
+        
+        cells[identifier] = nil
+        sections.remove(at: index)
+        
+//        endUpdates()
     }
     
     //MARK: addCell(...)

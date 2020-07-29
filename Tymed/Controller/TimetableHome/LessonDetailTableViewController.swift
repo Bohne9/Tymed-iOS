@@ -94,12 +94,16 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func reconfigure() {
-        removeSection(with: taskSection)
-        colorSectionIndex -= 1
-        timeSectionIndex -= 1
-        noteSectionIndex -= 1
+//        removeSection(with: taskSection)
+//        colorSectionIndex -= 1
+//        timeSectionIndex -= 1
+//        noteSectionIndex -= 1
+//
+//        addTaskOverviewSection()
         
-        addTaskOverviewSection()
+        if lesson?.tasks?.count ?? 0 == 0 {
+            removeSection(with: taskSection)
+        }
     }
     
     override func selectColor(_ colorName: String?) {
