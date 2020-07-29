@@ -62,6 +62,7 @@ class DynamicTableViewController: UITableViewController {
     private var cells: [String : [String]] = [:]
     
     internal var tableViewUpdateAnimation: UITableView.RowAnimation = .top
+    internal var tableViewPerformBatchUpdates = true
     
     convenience init() {
         self.init(style: .insetGrouped)
@@ -230,17 +231,39 @@ class DynamicTableViewController: UITableViewController {
     internal func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         
     }
+    
+    internal func beginBatchUpdates() {
+        tableView.beginUpdates()
+        tableViewPerformBatchUpdates = true
+    }
+    
+    internal func beginUpdates() {
+        if !tableViewPerformBatchUpdates {
+            tableView.beginUpdates()
+        }
+    }
 
+    internal func endBatchUpdates() {
+        tableView.endUpdates()
+        tableViewPerformBatchUpdates = false
+    }
+    
+    internal func endUpdates() {
+        if !tableViewPerformBatchUpdates {
+            tableView.endUpdates()
+        }
+    }
+    
     //MARK: addSection(...)
     
     /// Appends a section to the end the tableView
     /// - Parameter identifier: Unique identifier for the section
     internal func addSection(with identifier: String) {
-        tableView.beginUpdates()
+        beginUpdates()
         sections.append(identifier)
         cells[identifier] = []
         tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
-        tableView.endUpdates()
+        endUpdates()
     }
     
     /// Inserts a section into the tableView
@@ -248,12 +271,12 @@ class DynamicTableViewController: UITableViewController {
     ///   - identfier: Unique identifier for the section
     ///   - index: Index where the section will be inserted (index is automatically )
     internal func addSection(with identifier: String, at index: Int) {
-        tableView.beginUpdates()
+        beginUpdates()
         let secIndex = max(0, min(index, sections.endIndex))
         sections.insert(identifier, at: secIndex)
         cells[identifier] = []
         tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
-        tableView.endUpdates()
+        endUpdates()
     }
     
     //MARK: removeSection(...)
@@ -283,13 +306,13 @@ class DynamicTableViewController: UITableViewController {
         guard cells[section] != nil else {
             return
         }
-        tableView.beginUpdates()
+        beginUpdates()
         cells[section]?.append(identifier)
         if let index = cells[section]?.count, let sectionIndex = self.sectionIndex(for: section) {
             tableView.insertRows(at: [IndexPath(row: index - 1, section: sectionIndex)], with: tableViewUpdateAnimation)
         }
         
-        tableView.endUpdates()
+        endUpdates()
     }
     
     /// Appends a cell to the section of the specified section index
@@ -313,12 +336,12 @@ class DynamicTableViewController: UITableViewController {
     }
     
     internal func insertCell(with identifier: String, in section: String, at index: Int) {
-        tableView.beginUpdates()
+        beginUpdates()
         if let sectionIndex = self.sectionIndex(for: section) {
             cells[section]?.insert(identifier, at: index)
             tableView.insertRows(at: [IndexPath(row: index, section: sectionIndex)], with: tableViewUpdateAnimation)
         }
-        tableView.endUpdates()
+        endUpdates()
     }
     
     //MARK: removeCell(...)
@@ -334,11 +357,11 @@ class DynamicTableViewController: UITableViewController {
             return
         }
         
-        tableView.beginUpdates()
+        beginUpdates()
         cells[identifier]?.remove(at: row)
         tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: tableViewUpdateAnimation)
         
-        tableView.endUpdates()
+        endUpdates()
         if let c = self.cells[identifier] {
             if c.isEmpty {
                 self.cells[identifier] = nil
