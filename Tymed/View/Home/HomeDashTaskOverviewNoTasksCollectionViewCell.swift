@@ -47,12 +47,12 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
         
         addButton.setTitle("Add Task", for: .normal)
         addButton.setImage(
-            UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
+            UIImage(systemName: "plus")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
             , for: .normal)
         
         addButton.setTitleColor(.systemBlue, for: .normal)
         
-        addButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        addButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         
         addButton.addTarget(self, action: #selector(addTask), for: .touchUpInside)
         

@@ -445,7 +445,7 @@ class DynamicTableViewController: UITableViewController {
         UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             color = switchColor(errorColor)
         }, completion: { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
                     _ = switchColor(color)
                 }, completion: nil)
@@ -454,7 +454,7 @@ class DynamicTableViewController: UITableViewController {
         })
     }
     
-    internal func labelErrorAnimation(_ label: UILabel, _ errorColor: UIColor = .red) {
+    internal func labelErrorAnimation(_ label: UILabel, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: label, errorColor) { (color) -> UIColor? in
             let prevColor = label.textColor
@@ -465,7 +465,7 @@ class DynamicTableViewController: UITableViewController {
         }
     }
     
-    internal func textFieldErrorAnimation(_ textField: UITextField, _ errorColor: UIColor = .red) {
+    internal func textFieldErrorAnimation(_ textField: UITextField, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: textField, errorColor) { (color) -> UIColor? in
             let prevColor = textField.textColor
@@ -477,7 +477,7 @@ class DynamicTableViewController: UITableViewController {
         }
     }
     
-    internal func textViewErrorAnimation(_ textView: UITextView, _ errorColor: UIColor = .red) {
+    internal func textViewErrorAnimation(_ textView: UITextView, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: textView, errorColor) { (color) -> UIColor? in
             let prevColor = textView.textColor

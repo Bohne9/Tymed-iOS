@@ -175,7 +175,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         let height = HomeLessonCellConfigurator.height(for: lesson)
         
-        return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
+        return CGSize(width: collectionView.frame.width - 2 * 20, height: height)
     }
     
     //MARK: sizeForHeaderInSection
