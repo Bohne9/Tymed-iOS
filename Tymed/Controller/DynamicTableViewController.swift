@@ -264,7 +264,7 @@ class DynamicTableViewController: UITableViewController {
 //        beginUpdates()
         sections.append(identifier)
         cells[identifier] = []
-//        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
+        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
 //        endUpdates()
     }
     
@@ -277,7 +277,7 @@ class DynamicTableViewController: UITableViewController {
         let secIndex = max(0, min(index, sections.endIndex))
         sections.insert(identifier, at: secIndex)
         cells[identifier] = []
-//        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
+        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
 //        endUpdates()
     }
     
@@ -303,7 +303,7 @@ class DynamicTableViewController: UITableViewController {
             self.removeCell(at: identifier, row: cell)
         }
         
-//        tableView.deleteSections(IndexSet(arrayLiteral: index), with: tableViewUpdateAnimation)
+        tableView.deleteSections(IndexSet(arrayLiteral: index), with: tableViewUpdateAnimation)
         
         cells[identifier] = nil
         sections.remove(at: index)
