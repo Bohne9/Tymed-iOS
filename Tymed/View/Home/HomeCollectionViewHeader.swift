@@ -25,9 +25,9 @@ class HomeCollectionViewHeader: UICollectionReusableView  {
         label.translatesAutoresizingMaskIntoConstraints = false
         
         label.constraint(height: 20)
-        label.constraintLeadingToSuperview(constant: 15)
+        label.constraintLeadingToSuperview(constant: 10)
         label.constraintTrailingTo(anchor: centerXAnchor)
-        label.constraintBottomToSuperview(constant: 5)
+        label.constraintBottomToSuperview(constant: 7.5)
         
         label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
     }

@@ -202,11 +202,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case titleSection:
             return ""
         case descriptionSection:
-            return "text.alignleft"
+            return "text.alignleft.fill"
         case lessonSection:
-            return "doc.text"
+            return "doc.text.fill"
         case dueSection:
-            return "alarm"
+            return "alarm.fill"
         default:
             return ""
         }

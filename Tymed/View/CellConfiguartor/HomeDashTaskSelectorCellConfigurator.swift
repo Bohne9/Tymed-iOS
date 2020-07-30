@@ -19,11 +19,11 @@ class HomeDashTaskSelectorCellConfigurator: BaseCollectionViewCellConfigurator<H
         let tint = cell.type.color
         
         cell.label.text = title
-        cell.image.image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 24, weight: .semibold))?.withTintColor(tint)
+        cell.image.image = UIImage(systemName: imageName, withConfiguration: UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold))?.withTintColor(tint)
         cell.image.tintColor = tint
         
         if cell.isSelected {
-            cell.selectedIndicator.image = UIImage(systemName: "checkmark")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .bold))
+            cell.selectedIndicator.image = UIImage(systemName: "checkmark")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))
         }else {
             cell.selectedIndicator.image = nil
         }

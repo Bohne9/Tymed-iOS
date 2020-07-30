@@ -243,7 +243,9 @@ class TaskDetailTableViewController: TaskAddViewController {
     
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         if identifier == "archive" {
-            return "tray.full"
+            return "tray.full.fill"
+        } else if identifier == "delete" {
+            return "trash.fill"
         }
         return super.iconForSection(with: identifier, at: index)
     }
@@ -251,6 +253,8 @@ class TaskDetailTableViewController: TaskAddViewController {
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         if identifier == "archive" {
             return "Archive"
+        } else if identifier == "delete" {
+            return "Delete"
         }
         return super.headerForSection(with: identifier, at: index)
     }

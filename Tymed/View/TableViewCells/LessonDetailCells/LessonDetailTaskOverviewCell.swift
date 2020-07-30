@@ -74,46 +74,16 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         }
         var count = lesson.unarchivedTasks?.count ?? 0
         
-        if count > 0 {
-            print("CHANGE LessonDetailTaskOverviewCell.tableView(.. numberOfRowsInSection > 0!")
+        if count > 3 {
+//            print("CHANGE LessonDetailTaskOverviewCell.tableView(.. numberOfRowsInSection > 0!")
             count += 1
         }
         
         return min(count, 4)
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        // If this is the last cell (see all)
-        let cellCount = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
-        
-        if cellCount >= 0 && indexPath.row == cellCount - 1 {
-            print("dequeue task see all")
-            let cell = tableView.dequeueReusableCell(withIdentifier: taskOverviewSeeAll, for: indexPath) as! LessonDetailTaskOverviewSeeAllCell
-            
-            if indexPath.row == self.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1 {
-                if cellInsets == nil {
-                    cellInsets = cell.separatorInset
-                }
-                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.frame.width, bottom: 0, right: 0)
-            }else if let insets = cellInsets {
-                cell.separatorInset = insets
-            }
-            
-            return cell
-        }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: taskOverviewItem, for: indexPath) as! TaskOverviewTableViewCell
-        
-        guard let lesson = self.lesson else {
-            return cell
-        }
-        
-        guard let tasks = lesson.tasks else {
-            return cell
-        }
-         
-        if indexPath.row == min(self.lesson?.tasks?.count ?? 0, 3) - 1 {
+    private func setCellSeparator(_ cell: UITableViewCell, _ indexPath: IndexPath) {
+        if indexPath.row == self.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1 {
             if cellInsets == nil {
                 cellInsets = cell.separatorInset
             }
@@ -121,9 +91,35 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         }else if let insets = cellInsets {
             cell.separatorInset = insets
         }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let task = tasks.allObjects as! [Task]
-        cell.reload(task[indexPath.row])
+        // If this is the last cell (see all)
+        let cellCount = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
+        
+        if cellCount > 3 && indexPath.row == cellCount - 1 {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: taskOverviewSeeAll, for: indexPath) as! LessonDetailTaskOverviewSeeAllCell
+            
+            setCellSeparator(cell, indexPath)
+            
+            return cell
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: taskOverviewItem, for: indexPath) as! TaskOverviewTableViewCell
+        
+        setCellSeparator(cell, indexPath)
+        
+        guard let lesson = self.lesson else {
+            return cell
+        }
+        
+        guard let task = lesson.unarchivedTasks?[indexPath.row] else {
+            return cell
+        }
+         
+        cell.reload(task)
         
         return cell
     }
@@ -132,8 +128,8 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         // If this is the last cell (see all)
         let cellCount = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
         
-        if cellCount >= 0 && indexPath.row == cellCount - 1 {
-            return 35
+        if cellCount >= 3 && indexPath.row == cellCount - 1 {
+            return 40
         }
         
         return 60
@@ -143,7 +139,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         // If this is the last cell (see all)
         let cellCount = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
         
-        if cellCount >= 0 && indexPath.row == cellCount - 1 {
+        if cellCount >= 3 && indexPath.row == cellCount - 1 {
             
             taskOverviewDelegate?.lessonDetailPresentAllTasks(self)
             
@@ -179,7 +175,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         // If this is the last cell (see all)
         let cellCount = self.tableView(tableView, numberOfRowsInSection: indexPath.section)
         
-        if cellCount >= 0 && indexPath.row == cellCount - 1 {
+        if cellCount >= 3 && indexPath.row == cellCount - 1 {
             return nil
         }
         

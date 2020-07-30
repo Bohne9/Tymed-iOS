@@ -158,8 +158,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskSection {
             return "Tasks"
-        } else if index == lessonDeleteSecionIndex {
-            return nil
+        } else if identifier == lessonDeleteSection {
+            return "Delete"
         } else {
             return super.headerForSection(with: identifier, at: index)
         }
@@ -168,6 +168,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskSection {
             return "list.bullet"
+        } else if identifier == lessonDeleteSection {
+            return "trash.fill"
         } else {
             return super.iconForSection(with: identifier, at: index)
         }
@@ -344,7 +346,7 @@ class LessonDetailTableViewController: LessonAddViewController {
         if identifier == lessonTaskOverviewCell {
             let count = min(3, unarchivedTasks?.count ?? 0)
             
-            let seeAll = (unarchivedTasks?.count ?? 0 > 0) ? 35 : 0
+            let seeAll = (unarchivedTasks?.count ?? 0 > 3) ? 35 : 0
             
             return CGFloat(20 + seeAll + count * 60)
         } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {
