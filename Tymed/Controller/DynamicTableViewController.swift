@@ -297,8 +297,10 @@ class DynamicTableViewController: UITableViewController {
             print("dksl")
             return
         }
-//        beginUpdates()
+        beginUpdates()
         
+        
+        // The last cell will also remove the section -> not required to remove the section by hand.
         self.cells[identifier]?.forEach { cell in
             self.removeCell(at: identifier, row: cell)
         }
@@ -306,9 +308,8 @@ class DynamicTableViewController: UITableViewController {
         tableView.deleteSections(IndexSet(arrayLiteral: index), with: tableViewUpdateAnimation)
         
         cells[identifier] = nil
-        sections.remove(at: index)
         
-//        endUpdates()
+        endUpdates()
     }
     
     //MARK: addCell(...)
