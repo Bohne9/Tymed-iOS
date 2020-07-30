@@ -45,7 +45,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 10
         layer.shadowOffset = .zero
-        layer.shadowOpacity = 0.15
+        layer.shadowOpacity = 0.1
         
         layer.masksToBounds = false
         

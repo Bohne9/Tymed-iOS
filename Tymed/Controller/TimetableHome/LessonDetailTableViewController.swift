@@ -20,6 +20,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     var lesson: Lesson? {
         didSet {
             guard let lesson = self.lesson else { return }
+            unarchivedTasks = lesson.unarchivedTasks
             
             startDate = lesson.startTime.date ?? Date()
             endDate = lesson.endTime.date ?? Date()
@@ -29,6 +30,8 @@ class LessonDetailTableViewController: LessonAddViewController {
             
         }
     }
+    
+    private var unarchivedTasks: [Task]?
     
     private var isEditable: Bool = false
     
@@ -82,7 +85,7 @@ class LessonDetailTableViewController: LessonAddViewController {
         if let lesson = lesson {
             title = lesson.subject?.name
             
-            if lesson.tasks?.count ?? 0 > 0 {
+            if unarchivedTasks?.count ?? 0 > 0 {
                 addSection(with: taskSection, at: 0)
                 addCell(with: lessonTaskOverviewCell, at: taskSection)
                 
@@ -101,7 +104,7 @@ class LessonDetailTableViewController: LessonAddViewController {
 //
 //        addTaskOverviewSection()
         
-        if lesson?.tasks?.count ?? 0 == 0 {
+        if unarchivedTasks?.count ?? 0 == 0 {
             removeSection(with: taskSection)
         }
     }
@@ -339,9 +342,9 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         
         if identifier == lessonTaskOverviewCell {
-            let count = min(3, lesson?.tasks?.count ?? 0)
+            let count = min(3, unarchivedTasks?.count ?? 0)
             
-            let seeAll = (lesson?.tasks?.count ?? 0 > 0) ? 35 : 0
+            let seeAll = (unarchivedTasks?.count ?? 0 > 0) ? 35 : 0
             
             return CGFloat(20 + seeAll + count * 60)
         } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {

@@ -30,20 +30,26 @@ class HomeLessonCellConfigurator: BaseCollectionViewCellConfigurator<HomeLessonC
         }
         
         // If the lesson has any tasks attached
-        if lesson.tasks?.count ?? 0 > 0 {
-            constraintTimeLabelToBottom(cell)
-        }else {
-            constraintTimeLabelToTop(cell)
-        }
+//        if lesson.unarchivedTasks?.count ?? 0 > 0 {
+//            constraintTimeLabelToBottom(cell)
+//            cell.backgroundColor = cell.backgroundColor?.withAlphaComponent(0.3)
+//            let cl = UIColor(lesson)
+//            cell.name.textColor = cl
+//            cell.time.textColor = cl
+//            cell.tasksLabel.textColor = cl
+//            cell.tasksImage.tintColor = cl
+//        }else {
+        constraintTimeLabelToTop(cell)
+//        }
         
     }
     
     static func height(for lesson: Lesson?) -> CGFloat {
         
-        if lesson?.tasks?.count ?? 0 > 0 {
-            return 80
+        if lesson?.unarchivedTasks?.count ?? 0 > 0 {
+            return 70
         }else {
-            return 60
+            return 50
         }
     }
     

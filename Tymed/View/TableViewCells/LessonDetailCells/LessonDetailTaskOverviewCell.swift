@@ -72,7 +72,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         guard let lesson = lesson else {
             return 0
         }
-        var count = lesson.tasks?.count ?? 0
+        var count = lesson.unarchivedTasks?.count ?? 0
         
         if count > 0 {
             print("CHANGE LessonDetailTaskOverviewCell.tableView(.. numberOfRowsInSection > 0!")
@@ -91,7 +91,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             print("dequeue task see all")
             let cell = tableView.dequeueReusableCell(withIdentifier: taskOverviewSeeAll, for: indexPath) as! LessonDetailTaskOverviewSeeAllCell
             
-            if indexPath.row == min(self.lesson?.tasks?.count ?? 0, 3) - 1 {
+            if indexPath.row == self.tableView(tableView, numberOfRowsInSection: indexPath.section) - 1 {
                 if cellInsets == nil {
                     cellInsets = cell.separatorInset
                 }
@@ -170,9 +170,9 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
     }
     
     private func task(for indexPath: IndexPath) -> Task? {
-        let tasks = self.lesson?.tasks?.allObjects as! [Task]
+        let tasks = self.lesson?.unarchivedTasks
         
-        return tasks[indexPath.row]
+        return tasks?[indexPath.row]
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

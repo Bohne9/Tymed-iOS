@@ -41,6 +41,8 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
         
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
+        titleLabel.textColor = .secondaryLabel
+        iconView.tintColor = .secondaryLabel
     }
     
     func setTitle(title: String) {
@@ -48,7 +50,7 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
     }
     
     func setIcon(systemName icon: String) {
-        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .regular))
+        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
         
         iconView.image = image
     }

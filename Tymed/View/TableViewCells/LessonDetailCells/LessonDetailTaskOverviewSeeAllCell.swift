@@ -27,7 +27,8 @@ class LessonDetailTaskOverviewSeeAllCell: UITableViewCell {
     private func setup() {
         contentView.addSubview(label)
         
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = .secondarySystemGroupedBackground
+        contentView.backgroundColor = .secondarySystemGroupedBackground
         
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -41,6 +42,7 @@ class LessonDetailTaskOverviewSeeAllCell: UITableViewCell {
         
         label.text = "See all"
 
+        // This is on purpose not in content view
         addSubview(chevronImage)
         
         chevronImage.translatesAutoresizingMaskIntoConstraints = false

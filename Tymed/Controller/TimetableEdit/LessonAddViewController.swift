@@ -141,9 +141,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     
     private var noteCell: LessonAddNoteCell?
     
-    internal var colorSectionIndex = 0
-    internal var timeSectionIndex = 1
-    internal var noteSectionIndex = 2
+    internal var timeSectionIndex = 0
+    internal var noteSectionIndex = 1
+    internal var colorSectionIndex = 2
     
     // Amount of items in each section
     private var sectionItemCount = [1, 3, 1]
@@ -200,9 +200,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         
         setupNavigationBar()
         
-        addSection(with: colorSection)
         addSection(with: timeSection)
         addSection(with: noteSection)
+        addSection(with: colorSection)
         
         addCell(with: lessonColorPickerCell, at: colorSection)
         
@@ -547,9 +547,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         switch identifier {
         case colorSection:
-            return "paintbrush"
+            return "paintbrush.fill"
         case timeSection:
-            return "clock"
+            return "clock.fill"
         case noteSection:
             return "paperclip"
         default:

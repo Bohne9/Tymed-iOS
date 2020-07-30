@@ -299,10 +299,10 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
             backgroundColor = color
             return
         }
-        name.textColor = .label
-        time.textColor = .label
-        tasksLabel.textColor = .label
-        tasksImage.tintColor = .label
+        name.textColor = .white
+        time.textColor = .white
+        tasksLabel.textColor = .white
+        tasksImage.tintColor = .white
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }

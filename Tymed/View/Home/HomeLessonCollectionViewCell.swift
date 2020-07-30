@@ -17,8 +17,8 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     
     var lesson: Lesson? {
         didSet {
-            configurator.configure(self)
             reload()
+            configurator.configure(self)
         }
     }
     
@@ -58,7 +58,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         name.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         
         name.textColor = .white
-        name.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        name.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         
         //MARK: time
         addSubview(time)
@@ -79,6 +79,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         time.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
         time.textColor = .white
+        name.textColor = .white
         
         setupTaskUserInterface()
         
@@ -87,7 +88,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     private func setupTaskUserInterface() {
         
         // Make sure the lesson has tasks attached
-        guard lesson?.tasks?.count ?? 0 > 0 else {
+        guard lesson?.unarchivedTasks?.count ?? 0 > 0 else {
             tasksImage.isHidden = true
             tasksLabel.isHidden = true
             return
@@ -148,12 +149,10 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         name.sizeToFit()
         
         time.text = "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
-        
-        let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
 
-        backgroundColor = color
+        backgroundColor = UIColor(lesson)
         
-        tasksLabel.text = "\(lesson.tasks?.count ?? 0)"
+        tasksLabel.text = "\(lesson.unarchivedTasks?.count ?? 0)"
     }
     
     
