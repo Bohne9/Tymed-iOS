@@ -13,8 +13,15 @@ private let timeSection = "timeSection"
 private let noteSection = "noteSection"
 
 internal let lessonNoteCell = "lessonNoteCell"
-internal let lessonTimePickerCell = "lessonTimePickerCell"
-internal let lessonTimeTitleCell = "lessonTimeTitleCell"
+
+internal let lessonStartTimePickerCell = "lessonStartTimePickerCell"
+internal let lessonEndTimePickerCell = "lessonEndTimePickerCell"
+
+internal let lessonStartTimeTitleCell = "lessonStartTimeTitleCell"
+internal let lessonEndTimeTitleCell = "lessonEndTimeTitleCell"
+internal let lessonDayTitleCell = "lessonDayTitleCell"
+
+
 internal let lessonColorPickerCell = "lessonColorPickerCell"
 internal let lessonDayPickerCell = "lessonDayPickerCell"
 
@@ -105,28 +112,19 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     
     internal var expandStartTime = false {
         didSet {
-            if self.expandStartTime {
-                expandDay = false
-                expandEndTime = false
-            }
+            configureStartTimePicker()
         }
     }
     internal var expandEndTime = false {
-           didSet {
-               if expandEndTime {
-                   expandDay = false
-                   expandStartTime = false
-               }
-           }
-       }
+        didSet {
+            configureEndTimePicker()
+        }
+    }
     private var expandDay = false {
-           didSet {
-               if expandDay {
-                   expandStartTime = false
-                   expandEndTime = false
-               }
-           }
-       }
+        didSet {
+            configureDayPicker()
+        }
+    }
     private var invalidTimeInterval = false
     
     internal var startDate: Date = TimetableService.shared.dateFor(hour: 12, minute: 30)
@@ -141,16 +139,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     private weak var endPickerCell: LessonTimePickerCell?
     private weak var dayPickerCell: LessonDayPickerCell?
     
-    private var noteCell: LessonAddNoteCell?
-    
-    internal var colorSectionIndex = 0
-    internal var timeSectionIndex = 1
-    internal var noteSectionIndex = 2
-    
-    // Amount of items in each section
-    private var sectionItemCount = [1, 3, 1]
-    
-    private let sectionHeaderTitles = ["Subject color", "Time", "Notes"]
+    internal var noteCell: LessonAddNoteCell?
     
     // Vars for the lesson
     
@@ -173,8 +162,14 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
 
         // Register cell classes
         register(LessonAddNoteCell.self, identifier: lessonNoteCell)
-        register(LessonTimeTitleCell.self, identifier: lessonTimeTitleCell)
-        register(LessonTimePickerCell.self, identifier: lessonTimePickerCell)
+        
+        register(LessonTimeTitleCell.self, identifier: lessonStartTimeTitleCell)
+        register(LessonTimeTitleCell.self, identifier: lessonEndTimeTitleCell)
+        register(LessonTimeTitleCell.self, identifier: lessonDayTitleCell)
+        
+        register(LessonTimePickerCell.self, identifier: lessonStartTimePickerCell)
+        register(LessonTimePickerCell.self, identifier: lessonEndTimePickerCell)
+        
         register(LessonColorPickerCell.self, identifier: lessonColorPickerCell)
         register(LessonDayPickerCell.self, identifier: lessonDayPickerCell)
         
@@ -196,15 +191,15 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         
         setupNavigationBar()
         
-        addSection(with: colorSection)
         addSection(with: timeSection)
         addSection(with: noteSection)
+        addSection(with: colorSection)
         
         addCell(with: lessonColorPickerCell, at: colorSection)
         
-        addCell(with: lessonTimeTitleCell, at: timeSection)
-        addCell(with: lessonTimeTitleCell, at: timeSection)
-        addCell(with: lessonTimeTitleCell, at: timeSection)
+        addCell(with: lessonStartTimeTitleCell, at: timeSection)
+        addCell(with: lessonEndTimeTitleCell, at: timeSection)
+        addCell(with: lessonDayTitleCell, at: timeSection)
         
         addCell(with: lessonNoteCell, at: noteSection)
         
@@ -326,7 +321,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             tapticErrorFeedback()
             
             // Highlight the textfield red for a second to show the user where the error occured
-            viewTextColorErrorAnimation(for: textField, UIColor.red.withAlphaComponent(0.8)) { (color) -> UIColor? in
+            viewTextColorErrorAnimation(for: textField, UIColor.systemRed.withAlphaComponent(0.8)) { (color) -> UIColor? in
                 
                 self.textField.attributedPlaceholder = NSAttributedString(string: "Subject Name", attributes: [NSAttributedString.Key.foregroundColor: color ?? .label])
                 
@@ -403,84 +398,58 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         
         switch identifier {
         case lessonColorPickerCell:
-            guard indexPath.section == colorSectionIndex else {
-                break
-            }
-            
             (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
-        case lessonTimeTitleCell:
-            let row = indexPath.row
+        case lessonStartTimeTitleCell:
+            let first = cell as! LessonTimeTitleCell
+            startTitleCell = first
+            first.title.text = "Start"
+            first.value.text = startDate.timeToString()
+            break
+        case lessonEndTimeTitleCell:
+            let cell = cell as! LessonTimeTitleCell
+            endTitleCell = cell
+            cell.title.text = "End"
+            let attr: [NSAttributedString.Key: Any]  = invalidTimeInterval ? [NSAttributedString.Key
+                                                                                .strikethroughStyle: NSUnderlineStyle.single.rawValue] : [:]
             
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
-            
-            if row == 0 {
-                let first = cell as! LessonTimeTitleCell
-                startTitleCell = first
-                first.title.text = "Start"
-                first.value.text = startDate.timeToString()
-            }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
-                let cell = cell as! LessonTimeTitleCell
-                endTitleCell = cell
-                cell.title.text = "End"
-                let attr: [NSAttributedString.Key: Any]  = invalidTimeInterval ? [NSAttributedString.Key
-                    .strikethroughStyle: NSUnderlineStyle.single.rawValue] : [:]
-                
-                cell.value.attributedText = NSAttributedString(string: endDate.timeToString(), attributes: attr)
-            }else {
-                let cell = cell as! LessonTimeTitleCell
-                dayTitleCell = cell
-                cell.title.text = "Day"
-                cell.value.text = day.date()?.dayToString() ?? "-"
-                
-            }
+            cell.value.attributedText = NSAttributedString(string: endDate.timeToString(), attributes: attr)
             
             break
-        case lessonTimePickerCell:
-            let row = indexPath.row
+        case lessonDayTitleCell:
+            let cell = cell as! LessonTimeTitleCell
+            dayTitleCell = cell
+            cell.title.text = "Day"
+            cell.value.text = day.date()?.dayToString() ?? "-"
+            break
+        case lessonStartTimePickerCell:
+            let cell = cell as! LessonTimePickerCell
+            startPickerCell = cell
+            cell.datePicker.setDate(startDate, animated: false)
             
-            guard indexPath.section == timeSectionIndex else {
-                return
-            }
+            cell.datePicker.removeTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
             
-            if expandStartTime && row == 1 {
-                let cell = cell as! LessonTimePickerCell
-                startPickerCell = cell
-                cell.datePicker.setDate(startDate, animated: false)
-                
-                cell.datePicker.removeTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
-                
-                cell.datePicker.addTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
-                
-            }else if expandEndTime {
-                let cell = cell as! LessonTimePickerCell
-                endPickerCell = cell
-                
-                cell.datePicker.setDate(endDate, animated: false)
+            cell.datePicker.addTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
+            break
+        case lessonEndTimePickerCell:
+            let cell = cell as! LessonTimePickerCell
+            endPickerCell = cell
+            
+            cell.datePicker.setDate(endDate, animated: false)
+            
+            cell.datePicker.removeTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
+            
+            cell.datePicker.addTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
+            
+            break
 
-                cell.datePicker.removeTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
-                
-                cell.datePicker.addTarget(self, action: #selector(setEndTime(_:)), for: .valueChanged)
-                
-            }
-            
-            break
         case lessonDayPickerCell:
-//            guard indexPath.section == timeSectionIndex else {
-//                break
-//            }
-            
             let cell = cell as! LessonDayPickerCell
             dayPickerCell = cell
             cell.picker.selectRow(day == Day.sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
             cell.lessonDelgate = self
             break
         case lessonNoteCell:
-            guard indexPath.section == noteSectionIndex else {
-                break
-            }
             
             let cell = cell as! LessonAddNoteCell
             noteCell = cell
@@ -515,9 +484,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         
         switch identifier {
-        case lessonColorPickerCell, lessonTimeTitleCell:
+        case lessonColorPickerCell, lessonStartTimeTitleCell, lessonEndTimeTitleCell, lessonDayTitleCell:
             return 50
-        case lessonTimePickerCell, lessonDayPickerCell:
+        case lessonStartTimePickerCell, lessonEndTimePickerCell, lessonDayPickerCell:
             return 150
         case lessonNoteCell:
             return 120
@@ -543,9 +512,9 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         switch identifier {
         case colorSection:
-            return "paintbrush"
+            return "paintbrush.fill"
         case timeSection:
-            return "clock"
+            return "clock.fill"
         case noteSection:
             return "paperclip"
         default:
@@ -553,57 +522,64 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         }
     }
     
-//    override func headerForSection(with identifier: String, at index: Int) -> String? {
-//        if index >= 0 && index < sectionHeaderTitles.count {
-//            return sectionHeaderTitles[index]
-//        }
-//        return nil
-//    }
+    private func configurePickerCell(_ expand: Bool, _ titleId: String, pickerId: String, sectionId: String) {
+        guard let titleIndex = identifier(for: titleId, at: sectionId) else {
+            return
+        }
+        if expand {
+            insertCell(with: pickerId, in: sectionId, at: titleIndex + 1)
+        } else if let pickerIndex = identifier(for: pickerId, at: sectionId) {
+            removeCell(at: sectionId, row: pickerId)
+            if let secId = self.sectionIndex(for: sectionId), tableView.cellForRow(at: IndexPath(row: pickerIndex
+                                                                                                    + 1, section: secId)) != nil {
+                tableView.reloadRows(at: [IndexPath(row: pickerIndex + 1, section: secId)], with: tableViewUpdateAnimation)
+            }
+        }
+    }
+    
+    private func configureStartTimePicker() {
+        configurePickerCell(expandStartTime, lessonStartTimeTitleCell, pickerId: lessonStartTimePickerCell, sectionId: timeSection)
+    }
+    
+    private func configureEndTimePicker() {
+        configurePickerCell(expandEndTime, lessonEndTimeTitleCell, pickerId: lessonEndTimePickerCell, sectionId: timeSection)
+    }
+    
+    private func configureDayPicker() {
+        configurePickerCell(expandDay, lessonDayTitleCell, pickerId: lessonDayPickerCell, sectionId: timeSection)
+    }
     
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
+        
         switch identifier {
         case lessonColorPickerCell:
-            guard indexPath.section == colorSectionIndex else {
-                break
-            }
-            
             let detail = LessonColorPickerTableView(style: .insetGrouped)
             detail.lessonDelegate = self
             detail.selectedColor = lessonColor
             navigationController?.pushViewController(detail, animated: true)
             break
-        case lessonTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
+        case lessonStartTimeTitleCell:
+            tableViewUpdateAnimation = .fade
+            expandStartTime.toggle()
+            expandEndTime = false
+            expandDay = false
             
-            let row = indexPath.row
-            
-            if row == 0 {
-                expandStartTime.toggle()
-            }else if row == 1 || (row == 2 && expandStartTime) {
-                expandEndTime.toggle()
-            }else {
-                expandDay.toggle()
-            }
-            
-            setCells(for: timeSection, [String]())
-            
-            addCell(with: lessonTimeTitleCell, at: timeSection)
-            if expandStartTime {
-                addCell(with: lessonTimePickerCell, at: timeSection)
-            }
-            addCell(with: lessonTimeTitleCell, at: timeSection)
-            if expandEndTime {
-                addCell(with: lessonTimePickerCell, at: timeSection)
-            }
-            addCell(with: lessonTimeTitleCell, at: timeSection)
-            if expandDay {
-                addCell(with: lessonDayPickerCell, at: timeSection)
-            }
-            
-            tableView.reloadSections(IndexSet(arrayLiteral: timeSectionIndex), with: .fade)
             break
+        case lessonEndTimeTitleCell:
+            tableViewUpdateAnimation = .fade
+            expandEndTime.toggle()
+            expandStartTime = false
+            expandDay = false
+
+            break
+        case lessonDayTitleCell:
+            tableViewUpdateAnimation = .fade
+            expandDay.toggle()
+            expandStartTime = false
+            expandEndTime = false
+            
+            break
+
         default:
             break
         }
@@ -631,7 +607,7 @@ class LessonAddNoteCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(textView)
+        contentView.addSubview(textView)
         
         textView.backgroundColor = .clear
         
@@ -639,12 +615,11 @@ class LessonAddNoteCell: UITableViewCell {
         
         textView.translatesAutoresizingMaskIntoConstraints = false
         
-        textView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        textView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        textView.constraintTopToSuperview()
+        textView.constraintHeightToSuperview()
         
-        textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        
+        textView.constraintLeadingToSuperview(constant: 20)
+        textView.constraintTrailingToSuperview(constant: 20)
     }
     
     required init?(coder: NSCoder) {
@@ -672,16 +647,17 @@ class LessonTimeTitleCell: UITableViewCell {
         
         title.translatesAutoresizingMaskIntoConstraints = false
         
-        title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        title.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        title.constraintLeadingToSuperview(constant: 20)
+        title.constraintCenterYToSuperview()
         
         title.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
         title.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9).isActive = true
         
         value.translatesAutoresizingMaskIntoConstraints = false
         
-        value.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        value.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        value.constraintTrailingToSuperview(constant: 20)
+        value.constraintCenterYToSuperview()
         
         value.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
         value.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9).isActive = true

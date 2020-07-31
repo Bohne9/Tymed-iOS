@@ -128,31 +128,31 @@ extension UIView {
         self.widthAnchor.constraint(equalTo: anchor).isActive = true
     }
     
-    func constraintLeadingTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat) {
+    func constraintLeadingTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
         self.leadingAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
     }
     
-    func constraintTrailingTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat) {
+    func constraintTrailingTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
         self.trailingAnchor.constraint(equalTo: anchor, constant: -constant).isActive = true
     }
     
-    func constraintTopTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat) {
+    func constraintTopTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) {
         self.topAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
     }
     
-    func constraintBottomTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat) {
+    func constraintBottomTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) {
         self.bottomAnchor.constraint(equalTo: anchor, constant: -constant).isActive = true
     }
     
-    func constraintCenterXTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat) {
+    func constraintCenterXTo(anchor: NSLayoutXAxisAnchor, constant: CGFloat = 0) {
         self.centerXAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
     }
     
-    func constraintCenterYTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat) {
+    func constraintCenterYTo(anchor: NSLayoutYAxisAnchor, constant: CGFloat = 0) {
         self.centerYAnchor.constraint(equalTo: anchor, constant: constant).isActive = true
     }
     
-    func constraintLeadingToSuperview(constant: CGFloat) {
+    func constraintLeadingToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.leadingAnchor else {
             return
         }
@@ -160,7 +160,7 @@ extension UIView {
         self.constraintLeadingTo(anchor: anchor, constant: constant)
     }
     
-    func constraintTrailingToSuperview(constant: CGFloat) {
+    func constraintTrailingToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.trailingAnchor else {
             return
         }
@@ -168,7 +168,7 @@ extension UIView {
         self.constraintTrailingTo(anchor: anchor, constant: constant)
     }
     
-    func constraintTopToSuperview(constant: CGFloat) {
+    func constraintTopToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.topAnchor else {
             return
         }
@@ -176,7 +176,7 @@ extension UIView {
         self.constraintTopTo(anchor: anchor, constant: constant)
     }
     
-    func constraintBottomToSuperview(constant: CGFloat) {
+    func constraintBottomToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.bottomAnchor else {
             return
         }
@@ -184,7 +184,7 @@ extension UIView {
         self.constraintBottomTo(anchor: anchor, constant: constant)
     }
     
-    func constraintCenterXToSuperview(constant: CGFloat) {
+    func constraintCenterXToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.centerXAnchor else {
             return
         }
@@ -192,7 +192,7 @@ extension UIView {
         self.constraintCenterXTo(anchor: anchor, constant: constant)
     }
     
-    func constraintCenterYToSuperview(constant: CGFloat) {
+    func constraintCenterYToSuperview(constant: CGFloat = 0) {
         guard let anchor = superview?.centerYAnchor else {
             return
         }
@@ -216,17 +216,17 @@ extension UIView {
         self.constraintWidthTo(anchor: anchor)
     }
     
-    func constraintHorizontalToSuperview(leading: CGFloat, trailing: CGFloat) {
+    func constraintHorizontalToSuperview(leading: CGFloat = 0, trailing: CGFloat = 0) {
         constraintLeadingToSuperview(constant: leading)
         constraintTrailingToSuperview(constant: trailing)
     }
     
-    func constraintVerticalToSuperview(top: CGFloat, bottom: CGFloat) {
+    func constraintVerticalToSuperview(top: CGFloat = 0, bottom: CGFloat = 0) {
         constraintTopToSuperview(constant: top)
         constraintBottomToSuperview(constant: bottom)
     }
     
-    func constraintToSuperview(top: CGFloat, bottom: CGFloat, leading: CGFloat, trailing: CGFloat) {
+    func constraintToSuperview(top: CGFloat = 0, bottom: CGFloat = 0, leading: CGFloat = 0, trailing: CGFloat = 0) {
         constraintTopToSuperview(constant: top)
         constraintBottomToSuperview(constant: bottom)
         constraintLeadingToSuperview(constant: leading)

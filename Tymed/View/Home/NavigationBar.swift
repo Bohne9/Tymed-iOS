@@ -22,7 +22,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         addSubview(topBar)
         
         topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .clear
+        topBar.backgroundColor = .systemBackground
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
 //        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true

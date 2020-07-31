@@ -24,12 +24,12 @@ class HomeCollectionViewHeader: UICollectionReusableView  {
                 
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        label.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        label.trailingAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        label.constraint(height: 20)
+        label.constraintLeadingToSuperview(constant: 10)
+        label.constraintTrailingTo(anchor: centerXAnchor)
+        label.constraintBottomToSuperview(constant: 7.5)
         
-        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
     }
     
     

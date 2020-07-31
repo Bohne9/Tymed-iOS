@@ -38,14 +38,14 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(image)
         contentView.addSubview(selectedIndicator)
         
-        contentView.layer.cornerRadius = 10
+        contentView.layer.cornerRadius = 8
         
         contentView.backgroundColor = .secondarySystemGroupedBackground
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 10
         layer.shadowOffset = .zero
-        layer.shadowOpacity = 0.15
+        layer.shadowOpacity = 0.1
         
         layer.masksToBounds = false
         

@@ -20,6 +20,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     var lesson: Lesson? {
         didSet {
             guard let lesson = self.lesson else { return }
+            unarchivedTasks = lesson.unarchivedTasks
             
             startDate = lesson.startTime.date ?? Date()
             endDate = lesson.endTime.date ?? Date()
@@ -30,10 +31,9 @@ class LessonDetailTableViewController: LessonAddViewController {
         }
     }
     
-    private var isEditable: Bool = false
+    private var unarchivedTasks: [Task]?
     
-    var lessonTaskOverviewIndex = 0
-    var lessonDeleteSecionIndex = 4
+    private var isEditable: Bool = false
     
     var taskDelegate: HomeTaskDetailDelegate?
     var delegate: HomeDetailTableViewControllerDelegate?
@@ -64,7 +64,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         
         navigationController?.navigationBar.tintColor = .white
         
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,29 +81,20 @@ class LessonDetailTableViewController: LessonAddViewController {
         if let lesson = lesson {
             title = lesson.subject?.name
             
-            if lesson.tasks?.count ?? 0 > 0 {
+            if unarchivedTasks?.count ?? 0 > 0 {
                 addSection(with: taskSection, at: 0)
                 addCell(with: lessonTaskOverviewCell, at: taskSection)
-                
-                colorSectionIndex += 1
-                timeSectionIndex += 1
-                noteSectionIndex += 1
             }
         }
     }
     
     override func reconfigure() {
-        removeSection(with: taskSection)
-        colorSectionIndex -= 1
-        timeSectionIndex -= 1
-        noteSectionIndex -= 1
         
-        addTaskOverviewSection()
+        if unarchivedTasks?.count ?? 0 == 0 {
+            removeSection(with: taskSection)
+        }
     }
     
-    override func selectColor(_ colorName: String?) {
-        
-    }
     
     @objc func dismissDetailView() {
         delegate?.detailWillDismiss(self)
@@ -119,11 +109,14 @@ class LessonDetailTableViewController: LessonAddViewController {
             lesson.dayOfWeek = Int32(day.rawValue)
             
             lesson.subject?.color = lessonColor
+            lesson.note = lessonNote
             
             TimetableService.shared.save()
         }
         
         isEditable.toggle()
+        
+        noteCell?.textView.isEditable = isEditable
         
         btn.title = isEditable ? "Save" : "Edit"
         btn.style = isEditable ? .done : .plain
@@ -151,8 +144,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskSection {
             return "Tasks"
-        } else if index == lessonDeleteSecionIndex {
-            return nil
+        } else if identifier == lessonDeleteSection {
+            return "Delete"
         } else {
             return super.headerForSection(with: identifier, at: index)
         }
@@ -161,6 +154,8 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskSection {
             return "list.bullet"
+        } else if identifier == lessonDeleteSection {
+            return "trash.fill"
         } else {
             return super.iconForSection(with: identifier, at: index)
         }
@@ -193,11 +188,8 @@ class LessonDetailTableViewController: LessonAddViewController {
         }
         
         // Set the values of the cells to the value of the lesson
-        switch identifier {
+        switch identifier { //MARK: lesson
         case lessonTaskOverviewCell:
-            guard indexPath.section == lessonTaskOverviewIndex else {
-                break
-            }
             let cell = cell as! LessonDetailTaskOverviewCell
             
             cell.lesson = lesson
@@ -205,54 +197,43 @@ class LessonDetailTableViewController: LessonAddViewController {
             
             break
         case lessonColorPickerCell:
-            guard indexPath.section == colorSectionIndex else {
-                break
-            }
             // Configure subject color
             (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
-        case lessonTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
+        case lessonStartTimeTitleCell:
             // Set the values of the time/ day title cells
             let cell = cell as! LessonTimeTitleCell
-            let row = indexPath.row
-            
-            if row == 0 {
-                cell.value.text = startDate.stringifyTime(with: .short)
-            }else if (row == 1 && !expandStartTime) || (row == 2 && expandStartTime) {
-                cell.value.text = endDate.stringifyTime(with: .short)
-            }else {
-                cell.value.text = day.string()
-            }
+            cell.value.text = startDate.stringifyTime(with: .short)
             break
-        case lessonTimePickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
+        case lessonEndTimeTitleCell:
+            // Set the values of the time/ day title cells
+            let cell = cell as! LessonTimeTitleCell
+            cell.value.text = endDate.stringifyTime(with: .short)
+            break
+        case lessonDayTitleCell:
+            // Set the values of the time/ day title cells
+            let cell = cell as! LessonTimeTitleCell
+            cell.value.text = day.string()
+            break
+        case lessonStartTimePickerCell:
             // Set the values of the time pickers
             let cell = cell as! LessonTimePickerCell
-            
-            if indexPath.row == 1 {
-                cell.datePicker.date = startDate
-            }else {
-                cell.datePicker.date = endDate
-            }
+            cell.datePicker.date = startDate
+            break
+        case lessonEndTimePickerCell:
+            // Set the values of the time pickers
+            let cell = cell as! LessonTimePickerCell
+            cell.datePicker.date = endDate
             break
         case lessonDayPickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
             // Set the values of the day picker
             let cell = cell as! LessonDayPickerCell
             cell.picker.selectRow(day == .sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
         case lessonNoteCell:
-            guard indexPath.section == noteSectionIndex else {
-                break
-            }
             // Set the value of the note cell
-            (cell as! LessonAddNoteCell).textView.text = lesson.note ?? ""
+            let cell = (cell as! LessonAddNoteCell)
+            cell.textView.text = lesson.note ?? ""
+            noteCell = cell
             break
         case LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell:
             (cell as! LessonDetailSubjectTitleCell).reload(lesson)
@@ -294,7 +275,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     @objc func showDeleteConfirm(_ sender: UIButton) {
         
-        let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Are you sure?", message: "You cannot undo this.", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
             // Delete lesson
@@ -324,9 +305,9 @@ class LessonDetailTableViewController: LessonAddViewController {
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         
         if identifier == lessonTaskOverviewCell {
-            let count = min(3, lesson?.tasks?.count ?? 0)
+            let count = min(3, unarchivedTasks?.count ?? 0)
             
-            let seeAll = (lesson?.tasks?.count ?? 0 > 0) ? 35 : 0
+            let seeAll = (unarchivedTasks?.count ?? 0 > 3) ? 35 : 0
             
             return CGFloat(20 + seeAll + count * 60)
         } else if identifier == LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell {

@@ -22,7 +22,7 @@ class HomeBaseCollectionViewCell: UICollectionViewCell {
     
     internal func setupUserInterface() {
         
-        layer.cornerRadius = 10
+        layer.cornerRadius = 8
         backgroundColor = .secondarySystemGroupedBackground
     }
  

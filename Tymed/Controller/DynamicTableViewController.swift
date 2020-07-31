@@ -41,6 +41,8 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
         
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
+        titleLabel.textColor = .secondaryLabel
+        iconView.tintColor = .secondaryLabel
     }
     
     func setTitle(title: String) {
@@ -48,7 +50,7 @@ class DynamicTableViewControllerHeader: UITableViewHeaderFooterView {
     }
     
     func setIcon(systemName icon: String) {
-        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .regular))
+        let image = UIImage(systemName: icon, withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold))
         
         iconView.image = image
     }
@@ -60,6 +62,9 @@ class DynamicTableViewController: UITableViewController {
     private var sections: [String] = []
     
     private var cells: [String : [String]] = [:]
+    
+    internal var tableViewUpdateAnimation: UITableView.RowAnimation = .top
+    internal var tableViewPerformBatchUpdates = false
     
     convenience init() {
         self.init(style: .insetGrouped)
@@ -137,6 +142,15 @@ class DynamicTableViewController: UITableViewController {
     internal func identifier(for indexPath: IndexPath) -> String? {
         let identifier = sectionIdentifier(for: indexPath.section)
         return cells[identifier]?[indexPath.row]
+    }
+    
+    /// Returns the index of a cell identfier in a given section
+    /// - Parameters:
+    ///   - cell: Cell identifier
+    ///   - section: Section identifier
+    /// - Returns: Potential index of the cell. Attention! It is the first index that will be found.
+    internal func identifier(for cell: String, at section: String) -> Int? {
+        return cells[section]?.firstIndex(of: cell)
     }
     
     internal func numerOfCells(for section: String) -> Int {
@@ -219,14 +233,39 @@ class DynamicTableViewController: UITableViewController {
     internal func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         
     }
+    
+    internal func beginBatchUpdates() {
+        tableView.beginUpdates()
+        tableViewPerformBatchUpdates = true
+    }
+    
+    internal func beginUpdates() {
+        if !tableViewPerformBatchUpdates {
+            tableView.beginUpdates()
+        }
+    }
 
+    internal func endBatchUpdates() {
+        tableView.endUpdates()
+        tableViewPerformBatchUpdates = false
+    }
+    
+    internal func endUpdates() {
+        if !tableViewPerformBatchUpdates {
+            tableView.endUpdates()
+        }
+    }
+    
     //MARK: addSection(...)
     
     /// Appends a section to the end the tableView
     /// - Parameter identifier: Unique identifier for the section
     internal func addSection(with identifier: String) {
+//        beginUpdates()
         sections.append(identifier)
         cells[identifier] = []
+        tableView.insertSections(IndexSet(arrayLiteral: sections.count - 1), with: tableViewUpdateAnimation)
+//        endUpdates()
     }
     
     /// Inserts a section into the tableView
@@ -234,8 +273,12 @@ class DynamicTableViewController: UITableViewController {
     ///   - identfier: Unique identifier for the section
     ///   - index: Index where the section will be inserted (index is automatically )
     internal func addSection(with identifier: String, at index: Int) {
-        sections.insert(identifier, at: max(0, min(index, sections.endIndex)))
+//        beginUpdates()
+        let secIndex = max(0, min(index, sections.endIndex))
+        sections.insert(identifier, at: secIndex)
         cells[identifier] = []
+        tableView.insertSections(IndexSet(arrayLiteral: secIndex), with: tableViewUpdateAnimation)
+//        endUpdates()
     }
     
     //MARK: removeSection(...)
@@ -243,16 +286,30 @@ class DynamicTableViewController: UITableViewController {
     /// Removes the section at the specified position
     /// - Parameter index: The position of the section to remove
     internal func removeSection(at index: Int) {
-        cells[sectionIdentifier(for: index)] = nil
-        sections.remove(at: max(0, min(index, sections.endIndex)))
+        let identifier = self.sectionIdentifier(for: index)
+        removeSection(with: identifier)
     }
     
     /// Removes the first section of the specified identifier (in case the identifier exists)
     /// - Parameter identifier: Identifier of the section to remove
     internal func removeSection(with identifier: String) {
-        if let index = sections.firstIndex(of: identifier) {
-            removeSection(at: index)
+        guard let index = sections.firstIndex(of: identifier) else {
+            print("dksl")
+            return
         }
+        beginUpdates()
+        
+        
+        // The last cell will also remove the section -> not required to remove the section by hand.
+        self.cells[identifier]?.forEach { cell in
+            self.removeCell(at: identifier, row: cell)
+        }
+        
+        tableView.deleteSections(IndexSet(arrayLiteral: index), with: tableViewUpdateAnimation)
+        
+        cells[identifier] = nil
+        
+        endUpdates()
     }
     
     //MARK: addCell(...)
@@ -262,7 +319,16 @@ class DynamicTableViewController: UITableViewController {
     ///   - identifier: Identifier for the cell
     ///   - section: Identifier for the section where the cell will be added. The identifier has to be valid otherwise the cell won't be added.
     internal func addCell(with identifier: String, at section: String) {
+        guard cells[section] != nil else {
+            return
+        }
+        beginUpdates()
         cells[section]?.append(identifier)
+        if let index = cells[section]?.count, let sectionIndex = self.sectionIndex(for: section) {
+            tableView.insertRows(at: [IndexPath(row: index - 1, section: sectionIndex)], with: tableViewUpdateAnimation)
+        }
+        
+        endUpdates()
     }
     
     /// Appends a cell to the section of the specified section index
@@ -286,7 +352,12 @@ class DynamicTableViewController: UITableViewController {
     }
     
     internal func insertCell(with identifier: String, in section: String, at index: Int) {
-        cells[section]?.insert(identifier, at: index)
+        beginUpdates()
+        if let sectionIndex = self.sectionIndex(for: section) {
+            cells[section]?.insert(identifier, at: index)
+            tableView.insertRows(at: [IndexPath(row: index, section: sectionIndex)], with: tableViewUpdateAnimation)
+        }
+        endUpdates()
     }
     
     //MARK: removeCell(...)
@@ -297,8 +368,16 @@ class DynamicTableViewController: UITableViewController {
     ///   - row: Row index of the cell
     internal func removeCell(at section: Int, row: Int) {
         let identifier = sectionIdentifier(for: section)
-        cells[identifier]?.remove(at: row)
         
+        guard cells[identifier] != nil else {
+            return
+        }
+        
+        beginUpdates()
+        cells[identifier]?.remove(at: row)
+        tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: tableViewUpdateAnimation)
+        
+        endUpdates()
         if let c = self.cells[identifier] {
             if c.isEmpty {
                 self.cells[identifier] = nil
@@ -367,7 +446,7 @@ class DynamicTableViewController: UITableViewController {
         UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
             color = switchColor(errorColor)
         }, completion: { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve, animations: {
                     _ = switchColor(color)
                 }, completion: nil)
@@ -376,7 +455,7 @@ class DynamicTableViewController: UITableViewController {
         })
     }
     
-    internal func labelErrorAnimation(_ label: UILabel, _ errorColor: UIColor = .red) {
+    internal func labelErrorAnimation(_ label: UILabel, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: label, errorColor) { (color) -> UIColor? in
             let prevColor = label.textColor
@@ -387,7 +466,7 @@ class DynamicTableViewController: UITableViewController {
         }
     }
     
-    internal func textFieldErrorAnimation(_ textField: UITextField, _ errorColor: UIColor = .red) {
+    internal func textFieldErrorAnimation(_ textField: UITextField, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: textField, errorColor) { (color) -> UIColor? in
             let prevColor = textField.textColor
@@ -399,7 +478,7 @@ class DynamicTableViewController: UITableViewController {
         }
     }
     
-    internal func textViewErrorAnimation(_ textView: UITextView, _ errorColor: UIColor = .red) {
+    internal func textViewErrorAnimation(_ textView: UITextView, _ errorColor: UIColor = .systemRed) {
         
         viewTextColorErrorAnimation(for: textView, errorColor) { (color) -> UIColor? in
             let prevColor = textView.textColor

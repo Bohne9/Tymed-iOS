@@ -40,10 +40,10 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     internal var shouldSendNotification: Bool = false
     internal var notificationOffset = NotificationOffset.atDueDate
     
-    internal var taskTitleSection = 0
-    internal var taskDescriptionSection = 1
-    internal var taskLessonSection = 2
-    internal var taskDueSection = 3
+//    internal var taskTitleSection = 0
+//    internal var taskDescriptionSection = 1
+//    internal var taskLessonSection = 2
+//    internal var taskDueSection = 3
     
     var detailDelegate: HomeDetailTableViewControllerDelegate?
     
@@ -112,7 +112,8 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     }
     
     private func getTaskTitleCell() -> TaskTitleTableViewCell? {
-        tableView.cellForRow(at: IndexPath(row: 0, section: taskTitleSection)) as? TaskTitleTableViewCell
+        guard let section = self.sectionIndex(for: titleSection) else { return nil }
+        return tableView.cellForRow(at: IndexPath(row: 0, section: section)) as? TaskTitleTableViewCell
     }
     
     private func validateValues() -> Bool {
@@ -124,7 +125,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             tapticErrorFeedback()
             
             // Highlight the textfield red for a second to show the user where the error occured
-            viewTextColorErrorAnimation(for: cell.textField, UIColor.red.withAlphaComponent(0.6)) { (color) -> UIColor? in
+            viewTextColorErrorAnimation(for: cell.textField, UIColor.systemRed.withAlphaComponent(0.6)) { (color) -> UIColor? in
                 
                 cell.textField.attributedPlaceholder = NSAttributedString(string: "Task title...", attributes: [NSAttributedString.Key.foregroundColor: color ?? .placeholderText ])
                 
@@ -162,7 +163,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         TimetableService.shared.save()
         
         if shouldSendNotification {
-            NotificationService.current.scheduleDueDateNotification(for: task)
+            NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
         }
         
         detailDelegate?.detailWillDismiss(self)
@@ -202,11 +203,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case titleSection:
             return ""
         case descriptionSection:
-            return "text.alignleft"
+            return "text.alignleft.fill"
         case lessonSection:
-            return "doc.text"
+            return "doc.text.fill"
         case dueSection:
-            return "alarm"
+            return "alarm.fill"
         default:
             return ""
         }
@@ -216,11 +217,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     @objc func removeLesson() {
         
         lesson = nil
-        removeCell(at: taskLessonSection, row: 0)
-        addSection(with: lessonSection, at: taskLessonSection)
-        tableView.deleteRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
+        guard let index = self.sectionIndex(for: lessonSection) else { return }
+        removeCell(at: lessonSection, row: 0)
+        addSection(with: lessonSection, at: index)
+        
         addCell(with: taskAttachLessonCell, at: lessonSection)
-        tableView.insertRows(at: [IndexPath(row: 0, section: taskLessonSection)], with: .fade)
          
     }
     
@@ -304,24 +305,15 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case taskNotificationOffsetPickerCell:
             showNotificationOffsetPicker()
         case taskDueDateTitleCell:
-            tableView.beginUpdates()
+            
+            expandDueDateCell.toggle()
             
             if expandDueDateCell {
-                
-                removeCell(at: section, row: 1)
-                tableView.reloadRows(at: [IndexPath(row: 2, section: section)], with: .fade)
-                tableView.deleteRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                
-            }else {
                 insertCell(with: taskDueDateCell, in: dueSection, at: 1)
-
-                tableView.insertRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-                tableView.reloadRows(at: [IndexPath(row: 1, section: section)], with: .fade)
-
+            }else {
+                removeCell(at: section, row: 1)
             }
             
-            tableView.endUpdates()
-            expandDueDateCell.toggle()
         default:
             break
         }
@@ -332,17 +324,10 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         shouldSendNotification = sender.isOn
         
         if shouldSendNotification {
-            tableView.beginUpdates()
             addCell(with: taskNotificationOffsetPickerCell, at: dueSection)
-            let section = sectionIndex(for: dueSection) ?? 0
-            tableView.insertRows(at: [IndexPath(row: 2, section: section)], with: .top)
-            tableView.endUpdates()
         }else {
-            tableView.beginUpdates()
-            removeCell(at: dueSection, row: 2)
-            let section = sectionIndex(for: dueSection) ?? 0
-            tableView.deleteRows(at: [IndexPath(row: 2, section: section)], with: .top)
-            tableView.endUpdates()
+            let index = expandDueDateCell ? 3 : 2
+            removeCell(at: dueSection, row: index)
         }
     }
     
@@ -395,15 +380,15 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         // -> Remove that and add a "attached lesson" cell to the section
         if self.lesson == nil {
             self.lesson = lesson
-            // Prepare the tableView for changes
-            tableView.beginUpdates()
             
             // Remove the "attach lesson" cell
-            removeCell(at: taskLessonSection, row: 0)
+            guard let index = self.sectionIndex(for: lessonSection) else { return }
+            
+            removeCell(at: lessonSection, row: 0)
             
             // Readd the section (the section will be removed as soon
             // as there aren't any cells in the section
-            addSection(with: lessonSection, at: taskLessonSection)
+            addSection(with: lessonSection, at: index)
             
             // Add "attached lesson" cell
             addCell(with: taskAttachedLessonCell, at: lessonSection)

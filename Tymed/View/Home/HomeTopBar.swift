@@ -54,7 +54,7 @@ class HomeTopBar: UIStackView {
         btn.setTitle(NSLocalizedString(title, comment: ""), for: .normal)
         btn.setAttributedTitle(
             NSAttributedString(string: title,
-                               attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold),
+                               attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22, weight: .bold),
                                             NSAttributedString.Key.foregroundColor: UIColor.label]), for: .normal)
         
         btn.addTarget(self, action: #selector(updateButtons(_:)), for: .touchUpInside)
@@ -73,11 +73,11 @@ class HomeTopBar: UIStackView {
         for btn in btns {
             if btn.tag == page {
                 btn.setAttributedTitle(NSAttributedString(string: btn.title(for: .normal) ?? "",
-                             attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold),
+                             attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22, weight: .bold),
                              NSAttributedString.Key.foregroundColor: UIColor.label]), for: .normal)
             }else {
                 btn.setAttributedTitle(NSAttributedString(string: btn.title(for: .normal) ?? "",
-                    attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 25, weight: .bold),
+                    attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 22, weight: .bold),
                     NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel]), for: .normal)
             }
         }

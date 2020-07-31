@@ -30,7 +30,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     var doneTasks: [Task]?
     var expiredTasks: [Task]?
     var openTasks: [Task]?
-    var archivedTasks: [Task]?
+//    var archivedTasks: [Task]?
     var plannedTasks: [Task]?
     
     private var typeCellSelectors = [HomeDashTaskSelectorCellType]()
@@ -98,7 +98,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         expiredTasks = getTasks(of: .expired)
         openTasks = getTasks(of: .open)
         plannedTasks = getTasks(of: .planned)
-        archivedTasks = getTasks(of: .archived)
+//        archivedTasks = getTasks(of: .archived)
         
         sectionIdentifiers = []
         typeCellSelectors = []
@@ -111,7 +111,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         setupSections(doneTasks, section: doneSection, type: .done)
         setupSections(expiredTasks, section: expiredSection, type: .expired)
         setupSections(allTasks, section: allSection, type: .all)
-        setupSections(archivedTasks, section: archivedSection, type: .archived)
+//        setupSections(archivedTasks, section: archivedSection, type: .archived)
         
     }
     
@@ -141,8 +141,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             return expiredTasks
         case openSection:
             return openTasks
-        case archivedSection:
-            return archivedTasks
+//        case archivedSection:
+//            return archivedTasks
         case plannedSection:
             return plannedTasks
         default:

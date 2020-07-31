@@ -25,6 +25,12 @@ extension Lesson {
     @NSManaged public var subject: Subject?
     @NSManaged public var tasks: NSSet?
 
+    var unarchivedTasks: [Task]? {
+        return (tasks?.allObjects)?.filter { task in
+            !(task as! Task).archived
+        } as? [Task]
+    }
+    
     var day: Day {
         return Day(rawValue: Int(dayOfWeek)) ?? .monday
     }

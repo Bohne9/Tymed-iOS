@@ -10,6 +10,9 @@ import UIKit
 
 private let taskDeleteCell = "taskDeleteIdentifier"
 
+private let taskDeleteSection = "taskDeleteSection"
+private let taskArchiveSection = "taskArchiveSection"
+
 class TaskDetailTableViewController: TaskAddViewController {
 
     var task: Task? {
@@ -19,7 +22,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     private var isEditable: Bool = false
-    private var taskDeleteSection = -1
+//    private var taskDeleteSection = -1
     
     var taskDelegate: HomeTaskDetailDelegate?
     
@@ -38,14 +41,10 @@ class TaskDetailTableViewController: TaskAddViewController {
         register(UINib(nibName: "TaskDeleteTableViewCell", bundle: nil), identifier: taskDeleteCell)
         register(TaskArchiveTableViewCell.self, identifier: TaskArchiveTableViewCell.identifier)
         
-        addSection(with: "archive")
-        addCell(with: TaskArchiveTableViewCell.identifier, at: "archive")
+        addSection(with: taskArchiveSection)
+        addCell(with: TaskArchiveTableViewCell.identifier, at: taskArchiveSection)
                 
-        addSection(with: "delete")
-        
-        taskDeleteSection = sectionIndex(for: "delete") ?? -1
-        
-        
+        addSection(with: taskDeleteSection)
         addCell(with: taskDeleteCell, at: taskDeleteSection)
         
         reload()
@@ -132,13 +131,8 @@ class TaskDetailTableViewController: TaskAddViewController {
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         super.configureCell(cell, for: identifier, at: indexPath)
         
-        let section = indexPath.section
-        
         switch identifier {
         case taskTitleCell:
-            guard section == taskTitleSection else {
-                break
-            }
             let cell = cell as! TaskTitleTableViewCell
             
             cell.setCompleteBtn(active: true)
@@ -148,9 +142,6 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskDescriptionCell:
-            guard section == taskDescriptionSection else {
-                break
-            }
             let cell = cell as! TaskDescriptionTableViewCell
             
             cell.textView.text = task?.text ?? ""
@@ -158,9 +149,6 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskAttachedLessonCell:
-            guard section == taskLessonSection else {
-                break
-            }
             let cell = cell as! TaskAttachedLessonTableViewCell
             
             cell.selectionStyle = isEditable ? .default : .none
@@ -169,18 +157,11 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             break
         case taskDueDateCell:
-            guard section == taskDescriptionSection else {
-                break
-            }
             
             cell.selectionStyle = isEditable ? .default : .none
             
             break
         case taskDeleteCell:
-            guard section == taskDeleteSection else {
-                break
-            }
-            
             setupDeleteCell(cell)
             
             break
@@ -242,15 +223,19 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     override func iconForSection(with identifier: String, at index: Int) -> String? {
-        if identifier == "archive" {
-            return "tray.full"
+        if identifier == taskArchiveSection {
+            return "tray.full.fill"
+        } else if identifier == taskDeleteSection {
+            return "trash.fill"
         }
         return super.iconForSection(with: identifier, at: index)
     }
     
     override func headerForSection(with identifier: String, at index: Int) -> String? {
-        if identifier == "archive" {
+        if identifier == taskArchiveSection {
             return "Archive"
+        } else if identifier == taskDeleteSection {
+            return "Delete"
         }
         return super.headerForSection(with: identifier, at: index)
     }
@@ -258,24 +243,23 @@ class TaskDetailTableViewController: TaskAddViewController {
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: descriptionSection) {
+            tableViewUpdateAnimation = .automatic
             removeSection(at: index)
-            taskLessonSection = taskLessonSection - 1
-            taskDueSection = taskDueSection - 1
-            taskDescriptionSection = -1
-            taskDeleteSection = taskDeleteSection - 1
+            tableViewUpdateAnimation = .top
         }
     }
     
     private func reloadEditable(_ task: Task) {
         
         if sectionIndex(for: descriptionSection) == nil {
-            taskDescriptionSection =  1
-            taskLessonSection = taskLessonSection + 1
-            taskDueSection = taskDueSection + 1
-            taskDeleteSection = taskDeleteSection + 1
-            addSection(with: descriptionSection, at: taskDescriptionSection)
+            tableViewUpdateAnimation = .automatic
+            addSection(with: descriptionSection, at: 1)
             
-            addCell(with: taskDescriptionCell, at: taskDescriptionSection)
+            guard let secIndex = self.sectionIndex(for: descriptionSection) else {
+                return
+            }
+            
+            addCell(with: taskDescriptionCell, at: secIndex)
         }
         
     }

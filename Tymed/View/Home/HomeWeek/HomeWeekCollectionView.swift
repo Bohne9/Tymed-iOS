@@ -175,7 +175,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         let height = HomeLessonCellConfigurator.height(for: lesson)
         
-        return CGSize(width: collectionView.frame.width - 2 * 16, height: height)
+        return CGSize(width: collectionView.frame.width - 2 * 20, height: height)
     }
     
     //MARK: sizeForHeaderInSection
@@ -218,11 +218,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             
             lessonDetail.addSection(with: "subjectTitle", at: 0)
             lessonDetail.addCell(with: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell, at: "subjectTitle")
-            lessonDetail.timeSectionIndex += 1
-            lessonDetail.colorSectionIndex += 1
-            lessonDetail.lessonTaskOverviewIndex += 1
-            lessonDetail.lessonDeleteSecionIndex += 1
-            lessonDetail.noteSectionIndex += 1
             
             lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
             
@@ -299,10 +294,10 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
             backgroundColor = color
             return
         }
-        name.textColor = .label
-        time.textColor = .label
-        tasksLabel.textColor = .label
-        tasksImage.tintColor = .label
+        name.textColor = .white
+        time.textColor = .white
+        tasksLabel.textColor = .white
+        tasksImage.tintColor = .white
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }

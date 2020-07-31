@@ -250,7 +250,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
+        return CGSize(width: collectionView.frame.width, height: 40)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -274,11 +274,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             lessonDetail.addSection(with: "subjectTitle", at: 0)
             lessonDetail.addCell(with: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell, at: "subjectTitle")
-            lessonDetail.timeSectionIndex += 1
-            lessonDetail.colorSectionIndex += 1
-            lessonDetail.lessonTaskOverviewIndex += 1
-            lessonDetail.lessonDeleteSecionIndex += 1
-            lessonDetail.noteSectionIndex += 1
             
             lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
             
