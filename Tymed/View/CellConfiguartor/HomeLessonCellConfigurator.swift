@@ -25,7 +25,7 @@ class HomeLessonCellConfigurator: BaseCollectionViewCellConfigurator<HomeLessonC
     }
     
     override func configure(_ cell: HomeLessonCollectionViewCell) {
-        guard let lesson = cell.lesson else {
+        guard cell.lesson != nil else {
             return
         }
         

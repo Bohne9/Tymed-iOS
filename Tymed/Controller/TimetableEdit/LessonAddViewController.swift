@@ -141,15 +141,6 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     
     private var noteCell: LessonAddNoteCell?
     
-    internal var timeSectionIndex = 0
-    internal var noteSectionIndex = 1
-    internal var colorSectionIndex = 2
-    
-    // Amount of items in each section
-    private var sectionItemCount = [1, 3, 1]
-    
-    private let sectionHeaderTitles = ["Subject color", "Time", "Notes"]
-    
     // Vars for the lesson
     
     internal var lessonColor = "blue"
@@ -330,7 +321,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             tapticErrorFeedback()
             
             // Highlight the textfield red for a second to show the user where the error occured
-            viewTextColorErrorAnimation(for: textField, UIColor.red.withAlphaComponent(0.8)) { (color) -> UIColor? in
+            viewTextColorErrorAnimation(for: textField, UIColor.systemRed.withAlphaComponent(0.8)) { (color) -> UIColor? in
                 
                 self.textField.attributedPlaceholder = NSAttributedString(string: "Subject Name", attributes: [NSAttributedString.Key.foregroundColor: color ?? .label])
                 
@@ -407,25 +398,15 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         
         switch identifier {
         case lessonColorPickerCell:
-            guard indexPath.section == colorSectionIndex else {
-                break
-            }
-            
             (cell as! LessonColorPickerCell).selectColor(named: lessonColor)
             break
         case lessonStartTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
             let first = cell as! LessonTimeTitleCell
             startTitleCell = first
             first.title.text = "Start"
             first.value.text = startDate.timeToString()
             break
         case lessonEndTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
             let cell = cell as! LessonTimeTitleCell
             endTitleCell = cell
             cell.title.text = "End"
@@ -436,18 +417,12 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             
             break
         case lessonDayTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
             let cell = cell as! LessonTimeTitleCell
             dayTitleCell = cell
             cell.title.text = "Day"
             cell.value.text = day.date()?.dayToString() ?? "-"
             break
         case lessonStartTimePickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                return
-            }
             let cell = cell as! LessonTimePickerCell
             startPickerCell = cell
             cell.datePicker.setDate(startDate, animated: false)
@@ -457,9 +432,6 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             cell.datePicker.addTarget(self, action: #selector(setStartTime(_:)), for: .valueChanged)
             break
         case lessonEndTimePickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                return
-            }
             let cell = cell as! LessonTimePickerCell
             endPickerCell = cell
             
@@ -472,19 +444,12 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
             break
 
         case lessonDayPickerCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
-            
             let cell = cell as! LessonDayPickerCell
             dayPickerCell = cell
             cell.picker.selectRow(day == Day.sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
             cell.lessonDelgate = self
             break
         case lessonNoteCell:
-            guard indexPath.section == noteSectionIndex else {
-                break
-            }
             
             let cell = cell as! LessonAddNoteCell
             noteCell = cell
@@ -564,7 +529,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         if expand {
             insertCell(with: pickerId, in: sectionId, at: titleIndex + 1)
         } else if let pickerIndex = identifier(for: pickerId, at: sectionId) {
-            removeCell(at: sectionId, row: pickerIndex)
+            removeCell(at: sectionId, row: pickerId)
             if let secId = self.sectionIndex(for: sectionId), tableView.cellForRow(at: IndexPath(row: pickerIndex
                                                                                                     + 1, section: secId)) != nil {
                 tableView.reloadRows(at: [IndexPath(row: pickerIndex + 1, section: secId)], with: tableViewUpdateAnimation)
@@ -588,31 +553,19 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
         
         switch identifier {
         case lessonColorPickerCell:
-            guard indexPath.section == colorSectionIndex else {
-                break
-            }
-            
             let detail = LessonColorPickerTableView(style: .insetGrouped)
             detail.lessonDelegate = self
             detail.selectedColor = lessonColor
             navigationController?.pushViewController(detail, animated: true)
             break
         case lessonStartTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
-            
             tableViewUpdateAnimation = .fade
             expandStartTime.toggle()
             expandEndTime = false
             expandDay = false
-        
+            
             break
         case lessonEndTimeTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
-            
             tableViewUpdateAnimation = .fade
             expandEndTime.toggle()
             expandStartTime = false
@@ -620,15 +573,11 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
 
             break
         case lessonDayTitleCell:
-            guard indexPath.section == timeSectionIndex else {
-                break
-            }
-            
             tableViewUpdateAnimation = .fade
             expandDay.toggle()
             expandStartTime = false
             expandEndTime = false
-
+            
             break
 
         default:
@@ -658,7 +607,7 @@ class LessonAddNoteCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(textView)
+        contentView.addSubview(textView)
         
         textView.backgroundColor = .clear
         
@@ -666,12 +615,11 @@ class LessonAddNoteCell: UITableViewCell {
         
         textView.translatesAutoresizingMaskIntoConstraints = false
         
-        textView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        textView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        textView.constraintTopToSuperview()
+        textView.constraintHeightToSuperview()
         
-        textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        textView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        
+        textView.constraintLeadingToSuperview(constant: 20)
+        textView.constraintTrailingToSuperview(constant: 20)
     }
     
     required init?(coder: NSCoder) {
@@ -699,16 +647,17 @@ class LessonTimeTitleCell: UITableViewCell {
         
         title.translatesAutoresizingMaskIntoConstraints = false
         
-        title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        title.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        title.constraintLeadingToSuperview(constant: 20)
+        title.constraintCenterYToSuperview()
         
         title.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.4).isActive = true
         title.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9).isActive = true
         
         value.translatesAutoresizingMaskIntoConstraints = false
         
-        value.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        value.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        value.constraintTrailingToSuperview(constant: 20)
+        value.constraintCenterYToSuperview()
         
         value.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
         value.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.9).isActive = true
