@@ -139,7 +139,7 @@ class LessonAddViewController: DynamicTableViewController, UITextFieldDelegate, 
     private weak var endPickerCell: LessonTimePickerCell?
     private weak var dayPickerCell: LessonDayPickerCell?
     
-    private var noteCell: LessonAddNoteCell?
+    internal var noteCell: LessonAddNoteCell?
     
     // Vars for the lesson
     

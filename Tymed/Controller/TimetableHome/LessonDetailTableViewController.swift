@@ -35,9 +35,6 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     private var isEditable: Bool = false
     
-    var lessonTaskOverviewIndex = 0
-    var lessonDeleteSecionIndex = 4
-    
     var taskDelegate: HomeTaskDetailDelegate?
     var delegate: HomeDetailTableViewControllerDelegate?
     
@@ -67,7 +64,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         
         navigationController?.navigationBar.tintColor = .white
         
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,21 +89,12 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
     
     override func reconfigure() {
-//        removeSection(with: taskSection)
-//        colorSectionIndex -= 1
-//        timeSectionIndex -= 1
-//        noteSectionIndex -= 1
-//
-//        addTaskOverviewSection()
         
         if unarchivedTasks?.count ?? 0 == 0 {
             removeSection(with: taskSection)
         }
     }
     
-    override func selectColor(_ colorName: String?) {
-        
-    }
     
     @objc func dismissDetailView() {
         delegate?.detailWillDismiss(self)
@@ -122,11 +109,14 @@ class LessonDetailTableViewController: LessonAddViewController {
             lesson.dayOfWeek = Int32(day.rawValue)
             
             lesson.subject?.color = lessonColor
+            lesson.note = lessonNote
             
             TimetableService.shared.save()
         }
         
         isEditable.toggle()
+        
+        noteCell?.textView.isEditable = isEditable
         
         btn.title = isEditable ? "Save" : "Edit"
         btn.style = isEditable ? .done : .plain
@@ -200,9 +190,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         // Set the values of the cells to the value of the lesson
         switch identifier { //MARK: lesson
         case lessonTaskOverviewCell:
-            guard indexPath.section == lessonTaskOverviewIndex else {
-                break
-            }
             let cell = cell as! LessonDetailTaskOverviewCell
             
             cell.lesson = lesson
@@ -244,7 +231,9 @@ class LessonDetailTableViewController: LessonAddViewController {
             cell.picker.selectRow(day == .sunday ? 6 : day.rawValue - 2, inComponent: 0, animated: false)
         case lessonNoteCell:
             // Set the value of the note cell
-            (cell as! LessonAddNoteCell).textView.text = lesson.note ?? ""
+            let cell = (cell as! LessonAddNoteCell)
+            cell.textView.text = lesson.note ?? ""
+            noteCell = cell
             break
         case LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell:
             (cell as! LessonDetailSubjectTitleCell).reload(lesson)
@@ -286,7 +275,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     @objc func showDeleteConfirm(_ sender: UIButton) {
         
-        let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Are you sure?", message: "You cannot undo this.", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (action) in
             // Delete lesson
