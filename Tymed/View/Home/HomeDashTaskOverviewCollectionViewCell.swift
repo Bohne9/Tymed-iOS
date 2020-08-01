@@ -28,6 +28,8 @@ protocol HomeTaskDetailDelegate: HomeTaskAddDelegate {
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
     
+    func reload()
+    
     func didDeleteTask(_ task: Task)
     
     func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell)
@@ -171,6 +173,17 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 
             }
             
+            let archive = UIAction(title: "Archive", image: UIImage(systemName: "tray.full")) { (action) in
+                guard let task = self.task(for: indexPath) else {
+                    return
+                }
+                
+                task.archived = true
+                TimetableService.shared.save()
+                
+                self.taskDelegate?.reload()
+            }
+            
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
                 
                 guard let task = self.task(for: indexPath) else {
@@ -183,7 +196,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 
             }
             
-            return UIMenu(title: "", image: nil, children: [complete, delete])
+            return UIMenu(title: "", image: nil, children: [complete, archive, delete])
         }
         
         
