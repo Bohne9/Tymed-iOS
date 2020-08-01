@@ -312,6 +312,15 @@ class DynamicTableViewController: UITableViewController {
         endUpdates()
     }
     
+    internal func reload(section: Int) {
+        tableView.reloadSections(IndexSet(arrayLiteral: section), with: tableViewUpdateAnimation)
+    }
+    
+    internal func reload(section: String) {
+        guard let index = self.sectionIndex(for: section) else { return }
+        reload(section: index)
+    }
+    
     //MARK: addCell(...)
     
     /// Appends a cell to the section of the specified section identifier
@@ -366,7 +375,7 @@ class DynamicTableViewController: UITableViewController {
     /// - Parameters:
     ///   - section: Section index of the cell
     ///   - row: Row index of the cell
-    internal func removeCell(at section: Int, row: Int) {
+    internal func removeCell(at section: Int, row: Int, removeSectionIfEmpty: Bool = true) {
         let identifier = sectionIdentifier(for: section)
         
         guard cells[identifier] != nil else {
@@ -377,27 +386,29 @@ class DynamicTableViewController: UITableViewController {
         cells[identifier]?.remove(at: row)
         tableView.deleteRows(at: [IndexPath(row: row, section: section)], with: tableViewUpdateAnimation)
         
-        endUpdates()
-        if let c = self.cells[identifier] {
+        if removeSectionIfEmpty, let c = self.cells[identifier] {
             if c.isEmpty {
                 self.cells[identifier] = nil
                 self.sections.remove(at: section)
+                tableView.deleteSections(IndexSet(arrayLiteral: section), with: tableViewUpdateAnimation)
             }
         }
+        
+        endUpdates()
     }
     
     /// Removes the cell of the specified section - row
     /// - Parameters:
     ///   - section: Section identifier of the cell
     ///   - row: Row identifier of the cell
-    internal func removeCell(at section: String, row: String) {
+    internal func removeCell(at section: String, row: String, removeSectionIfEmpty: Bool = true) {
         guard let secID = sections.firstIndex(of: section) else {
             return
         }
         
         cells[section]?.filter({ $0 == row }).forEach({ row in
             if let cells = cells[section], let index = cells.firstIndex(of: row) {
-                removeCell(at: secID, row: index)
+                removeCell(at: secID, row: index, removeSectionIfEmpty: removeSectionIfEmpty)
             }
         })
     }
@@ -406,20 +417,20 @@ class DynamicTableViewController: UITableViewController {
     /// - Parameters:
     ///   - section: Section index of the cell
     ///   - row: Row identifier of the cell
-    internal func removeCell(at section: Int, row: String) {
-        removeCell(at: sectionIdentifier(for: section), row: row)
+    internal func removeCell(at section: Int, row: String, removeSectionIfEmpty: Bool = true) {
+        removeCell(at: sectionIdentifier(for: section), row: row, removeSectionIfEmpty: removeSectionIfEmpty)
     }
     
     /// Removes the cell of the specified section - row
     /// - Parameters:
     ///   - section: Section identifier of the cell
     ///   - row: Row index of the cell
-    internal func removeCell(at section: String, row: Int) {
+    internal func removeCell(at section: String, row: Int, removeSectionIfEmpty: Bool = true) {
         guard let section = sectionIndex(for: section) else {
             return
         }
         
-        removeCell(at: section, row: row)
+        removeCell(at: section, row: row, removeSectionIfEmpty: removeSectionIfEmpty)
     }
     
     internal func tapticFeedback(_ type: UINotificationFeedbackGenerator.FeedbackType) {

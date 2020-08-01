@@ -47,11 +47,6 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     
     var detailDelegate: HomeDetailTableViewControllerDelegate?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -381,24 +376,23 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         if self.lesson == nil {
             self.lesson = lesson
             
-            // Remove the "attach lesson" cell
-            guard let index = self.sectionIndex(for: lessonSection) else { return }
+//            guard let index = self.sectionIndex(for: lessonSection) else { return }
             
-            removeCell(at: lessonSection, row: 0)
+            tableViewUpdateAnimation = .none
+            removeCell(at: lessonSection, row: 0, removeSectionIfEmpty: false)
             
-            // Readd the section (the section will be removed as soon
-            // as there aren't any cells in the section
-            addSection(with: lessonSection, at: index)
+//            addSection(with: lessonSection, at: index)
             
             // Add "attached lesson" cell
             addCell(with: taskAttachedLessonCell, at: lessonSection)
             
-            // FIXME
+            tableViewUpdateAnimation = .top
+            
             if let date = dueDateForTask() {
                 dueDate = date
             }
             
-            tableView.endUpdates()
+            tableView.reloadData()
         }
         
         self.lesson = lesson
