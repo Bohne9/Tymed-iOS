@@ -7,10 +7,13 @@
 //
 
 import SwiftUI
+import CoreData
 
 class TaskAddViewWrapper: UIViewController {
     
-    let contentView = UIHostingController(rootView: TaskAddView())
+    lazy var contentView = UIHostingController(rootView: TaskAddView(dismiss: {
+        self.dismiss(animated: true, completion: nil)
+    }))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +33,8 @@ class TaskAddViewWrapper: UIViewController {
 //MARK: TaskAddView
 struct TaskAddView: View {
     
+    var dismiss: () -> Void
+    
     @Environment(\.presentationMode) var presentationMode
     
     //MARK: Title states
@@ -42,7 +47,7 @@ struct TaskAddView: View {
     
     //MARK: Due date state
     @State
-    private var hasDueDate = false
+    private var hasDueDate = true
     
     @State
     private var presentDueDatePicker = false
@@ -85,7 +90,7 @@ struct TaskAddView: View {
                         ZStack {
                             Color(.systemRed)
                             Image(systemName: "calendar")
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 15, weight: .bold))
                         }.cornerRadius(6).frame(width: 28, height: 28)
                         
                         HStack {
@@ -120,7 +125,7 @@ struct TaskAddView: View {
                             ZStack {
                                 Color(.systemGreen)
                                 Image(systemName: "alarm.fill")
-                                    .font(.system(size: 18, weight: .bold))
+                                    .font(.system(size: 15, weight: .bold))
                             }.cornerRadius(6).frame(width: 28, height: 28)
                             
                             HStack {
@@ -165,7 +170,7 @@ struct TaskAddView: View {
                         ZStack {
                             Color(.systemBlue)
                             Image(systemName: "doc.text.fill")
-                                .font(.system(size: 18, weight: .bold))
+                                .font(.system(size: 15, weight: .bold))
                         }.cornerRadius(6).frame(width: 28, height: 28)
                         
                         Text("Lesson")
@@ -180,18 +185,22 @@ struct TaskAddView: View {
                             destination: LessonPickerView(lesson: $lesson),
                             label: {
                                 HStack {
-                                    Spacer()
-                                    VStack(alignment: .trailing) {
-                                        Text(titleForLessonCell())
-                                            .foregroundColor(foregroundColorForLessonCell())
-                                        if lesson != nil {
-                                            Spacer()
-                                            Text(textForLessonDate())
-                                                .foregroundColor(Color(.systemBlue))
-                                                .font(.system(size: 12, weight: .semibold))
-                                        }
+                                    if lesson != nil {
+                                        Circle()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(subjectColor(lesson))
                                     }
-                                }
+                                    
+                                    Text(titleForLessonCell())
+                                        .foregroundColor(foregroundColorForLessonCell())
+                                    Spacer()
+                                    if lesson != nil {
+                                        Text(lessonTime(lesson))
+                                    }
+                                        
+                                }.contentShape(Rectangle())
+                                .frame(height: 45)
+                                .font(.system(size: 14, weight: .semibold))
                             }).frame(height: 45)
                     }
                 }
@@ -222,13 +231,20 @@ struct TaskAddView: View {
         return lesson?.subject?.name != nil ? Color(.label) : Color(.systemBlue)
     }
     
-    
-    
     private func textForNotificationCell() -> String {
         return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
+    private func subjectColor(_ lesson: Lesson?) -> Color {
+        return Color(UIColor(lesson) ?? .clear)
+    }
+    
+    private func lessonTime(_ lesson: Lesson?) -> String {
+        return "\(lesson?.startTime.string() ?? "") - \(lesson?.endTime.string() ?? "")"
+    }
+    
     private func cancel() {
+        dismiss()
         presentationMode.wrappedValue.dismiss()
     }
     
@@ -254,6 +270,7 @@ struct TaskAddView: View {
             NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
         }
         
+        dismiss()
         presentationMode.wrappedValue.dismiss()
     }
 }
@@ -298,14 +315,71 @@ struct LessonPickerView: View {
     @Binding
     var lesson: Lesson?
     
+    var lessons: [Day: [Lesson]] = {
+        guard let lessons = TimetableService.shared.fetchLessons() else {
+            return [Day: [Lesson]]()
+        }
+        
+        return TimetableService.shared.sortLessonsByWeekDay(lessons)
+    }()
+    
     var body: some View {
-        Text("Coming soon")
+        List {
+            ForEach(weekDays(), id: \.self) { (day: Day) in
+                Section(header: Text(day.string()).font(.system(size: 12, weight: .semibold))) {
+                    ForEach(lessonsFor(day)) { lesson in
+                        HStack {
+                            Circle()
+                                .frame(width: 10, height: 10)
+                                .foregroundColor(subjectColor(lesson))
+                            
+                            Text(lesson.subject?.name ?? "")
+                            Spacer()
+                            Text(lessonTime(lesson))
+                        }.contentShape(Rectangle())
+                        .frame(height: 45)
+                        .font(.system(size: 16, weight: .semibold))
+                        .onTapGesture {
+                            self.lesson = lesson
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                        
+                    }
+                }
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Lesson")
+    }
+    
+    private func weekDays() -> [Day] {
+        return Array(lessons.keys).sorted(by: { $0 < $1})
+    }
+    
+    private func lessonsFor(_ day: Day) -> [Lesson] {
+        return lessons[day] ?? []
+    }
+    
+    private func subjectColor(_ lesson: Lesson) -> Color {
+        return Color(UIColor(lesson) ?? .clear)
+    }
+    
+    private func lessonTime(_ lesson: Lesson) -> String {
+        return "\(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
     }
 }
 
 
 struct TaskAddView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskAddView().colorScheme(.dark)
+        TaskAddView(dismiss: {
+            
+        }).colorScheme(.dark)
+    }
+}
+
+struct LessonPickerView_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        LessonPickerView(lesson: .constant(nil)).colorScheme(.dark)
     }
 }

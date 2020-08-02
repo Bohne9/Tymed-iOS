@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 
-extension Lesson {
+extension Lesson: Identifiable {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Lesson> {
         return NSFetchRequest<Lesson>(entityName: "Lesson")
