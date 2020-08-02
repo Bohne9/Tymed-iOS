@@ -22,9 +22,12 @@ class TaskEditViewWrapper: UIViewController {
             return
         }
         
-        contentView = UIHostingController(rootView: TaskEditView(task) {
-            self.dismiss(animated: true, completion: nil)
-        })
+        let taskEditView = TaskEditView(task: task, taskTitle: task.title, taskDescription: task.text ?? "",
+                                        dueDate: task.due ?? Date(), isArchived: task.archived, dismiss: {
+                                            self.dismiss(animated: true, completion: nil)
+                                        })
+        
+        contentView = UIHostingController(rootView: taskEditView)
         
         guard let content = contentView else {
             return
@@ -45,23 +48,22 @@ class TaskEditViewWrapper: UIViewController {
 //MARK: TaskEditView
 struct TaskEditView: View {
     
-    var task: Task
+    @State var task: Task
     
-    var dismiss: () -> Void
     
     @Environment(\.presentationMode) var presentationMode
     
     //MARK: Title states
-    @State private var taskTitle: String = ""
+    @State var taskTitle: String
     
-    @State private var taskDescription: String = ""
+    @State var taskDescription: String
     
     //MARK: Due date state
     @State private var hasDueDate = false
     
     @State private var presentDueDatePicker = false
     
-    @State private var dueDate = Date()
+    @State var dueDate: Date
     
     @State private var sendNotification = false
     
@@ -77,17 +79,9 @@ struct TaskEditView: View {
     @State private var lesson: Lesson?
     
     //MARK: Archive state
-    @State private var isArchived = false
+    @State var isArchived: Bool
     
-    init(_ task: Task, _ dismiss: @escaping () -> Void) {
-        self.task = task
-        self.dismiss = dismiss
-        self.taskTitle = task.title
-        self.taskDescription = task.text ?? ""
-        
-        loadTaskValues()
-    }
-    
+    var dismiss: () -> Void
     
     var body: some View {
         NavigationView {
