@@ -17,17 +17,16 @@ class TaskDetailTableViewController: TaskAddViewController {
 
     var task: Task? {
         didSet {
-            reload()
+//            reload()
         }
     }
     
     private var isEditable: Bool = false
-//    private var taskDeleteSection = -1
     
     var taskDelegate: HomeTaskDetailDelegate?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func setup() {
+        super.setup()
         
         let item = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(toogleEditing(_:)))
         
@@ -43,14 +42,14 @@ class TaskDetailTableViewController: TaskAddViewController {
         
         addSection(with: taskArchiveSection)
         addCell(with: TaskArchiveTableViewCell.identifier, at: taskArchiveSection)
-                
+        
         addSection(with: taskDeleteSection)
         addCell(with: taskDeleteCell, at: taskDeleteSection)
         
         reload()
     }
     
-    
+    //MARK: updateTaskValues
     private func updateTaskValues() {
         guard let task = self.task else {
             return
@@ -66,6 +65,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         TimetableService.shared.save()
     }
     
+    //MARK: toogleEditing
     @objc func toogleEditing(_ btn: UIBarButtonItem) {
         if isEditable {
             updateTaskValues()
@@ -84,6 +84,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    //MARK: deleteTask
     private func deleteTask() {
         if let task = self.task {
             
@@ -96,6 +97,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
     }
     
+    //MARK: showDeleteConfirm
     @objc func showDeleteConfirm(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "", message: "Are you sure?", preferredStyle: .actionSheet)
@@ -118,6 +120,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         })
     }
     
+    //MARK: setupDeleteCell
     private func setupDeleteCell(_ cell: UITableViewCell) {
         
         guard let deleteCell = cell as? TaskDeleteTableViewCell else {
@@ -127,7 +130,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         deleteCell.deleteBtn?.addTarget(self, action: #selector(showDeleteConfirm), for: .touchUpInside)
     }
     
-    
+    //MARK: configureCell
     override func configureCell(_ cell: UITableViewCell, for identifier: String, at indexPath: IndexPath) {
         super.configureCell(cell, for: identifier, at: indexPath)
         
@@ -173,7 +176,8 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
         
     }
-
+    
+    //MARK: didSelectRow
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         
         // Disable any cell selection when the view is not in editing mode.
@@ -183,6 +187,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
     
+    //MARK: reload
     override func reload() {
         guard let task = task else {
             // Return since there is no task
@@ -203,11 +208,12 @@ class TaskDetailTableViewController: TaskAddViewController {
         
         selectLesson(task.lesson)
         
-        if tableView.superview != nil {
+//        if tableView.superview != nil {
             tableView.reloadData()
-        }
+//        }
     }
     
+    //MARK: onNotificationSwitchToogle
     override func onNotificationSwitchToogle(_ sender: UISwitch) {
         super.onNotificationSwitchToogle(sender)
         
@@ -222,6 +228,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
     }
     
+    //MARK: iconForSection
     override func iconForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskArchiveSection {
             return "tray.full.fill"
@@ -231,6 +238,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         return super.iconForSection(with: identifier, at: index)
     }
     
+    //MARK: headerForSection
     override func headerForSection(with identifier: String, at index: Int) -> String? {
         if identifier == taskArchiveSection {
             return "Archive"
@@ -240,6 +248,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         return super.headerForSection(with: identifier, at: index)
     }
     
+    //MARK: reloadNoneEditable
     private func reloadNoneEditable(_ task: Task) {
         // Remove the description cell in case the task does not have a description
         if (task.text == nil || task.text == ""), let index = sectionIndex(for: descriptionSection) {
@@ -249,6 +258,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         }
     }
     
+    //MARK: reloadEditable
     private func reloadEditable(_ task: Task) {
         
         if sectionIndex(for: descriptionSection) == nil {
@@ -264,6 +274,7 @@ class TaskDetailTableViewController: TaskAddViewController {
         
     }
     
+    //MARK: heightForRow
     override func heightForRow(at indexPath: IndexPath, with identifier: String) -> CGFloat {
         if identifier == taskDeleteCell || identifier == TaskArchiveTableViewCell.identifier {
             return 50
