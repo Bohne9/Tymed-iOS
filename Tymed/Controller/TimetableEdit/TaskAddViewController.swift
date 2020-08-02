@@ -282,12 +282,12 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
         case taskDescriptionCell:
             return 120
         case taskDueDateCell:
-            return 50
+            return 350
         default:
             return 0
         }
     }
-      
+    
     //MARK: didSelectRow(at: , with: )
     override func didSelectRow(at indexPath: IndexPath, with identifier: String) {
         super.didSelectRow(at: indexPath, with: identifier)
