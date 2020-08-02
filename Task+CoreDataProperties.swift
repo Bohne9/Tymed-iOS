@@ -28,6 +28,9 @@ extension Task {
     @NSManaged public var archived: Bool
     @NSManaged public var timetable: Timetable
 
+    func getNotifications(_ completion: @escaping NotificationFetchRequest) {
+        NotificationService.current.getPendingNotifications(of: self, completion)
+    }
 }
 
 extension Task: Comparable {

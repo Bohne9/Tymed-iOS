@@ -10,7 +10,7 @@ import UIKit
 
 protocol HomeTaskAddDelegate {
     
-    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)?)
+    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewWrapper) -> Void)?)
     
 }
 

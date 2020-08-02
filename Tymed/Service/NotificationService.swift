@@ -47,10 +47,11 @@ enum NotificationOffset: Int, CaseIterable {
     }
 }
 
+typealias NotificationFetchRequest = ([UNNotificationRequest]) -> Void
 
 //MARK: NotificationService
 class NotificationService {
-
+    
     //MARK: NotificationThread
     enum NotificationThread : String {
         
@@ -205,5 +206,13 @@ class NotificationService {
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: completion)
     }
     
+    func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
+        getPendingNotifications { (notifications) in
+            let taskNotifications = notifications.filter { (notification) -> Bool in
+                return notification.identifier == task.id.uuidString
+            }
+            completion(taskNotifications)
+        }
+    }
     
 }

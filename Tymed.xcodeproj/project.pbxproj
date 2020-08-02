@@ -20,6 +20,7 @@
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
+		4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A9F1424D7301C00F99439 /* TaskEditView.swift */; };
 		4F1FCFDD2493F387003693A6 /* DynamicTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */; };
 		4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */; };
 		4F1FCFE12493FF14003693A6 /* TaskDeleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */; };
@@ -126,6 +127,7 @@
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		4F1A9F1424D7301C00F99439 /* TaskEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditView.swift; sourceTree = "<group>"; };
 		4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTableViewControllerTests.swift; sourceTree = "<group>"; };
 		4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDeleteTableViewCell.swift; sourceTree = "<group>"; };
 		4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDeleteTableViewCell.xib; sourceTree = "<group>"; };
@@ -249,7 +251,6 @@
 				4F405E86245DB86E00E1E704 /* TimetableOverviewCollectionViewController.swift */,
 				4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */,
 				4F70014B2478548A001BDF21 /* TaskAddViewController.swift */,
-				4FD11E4724D6CA86008D9772 /* TaskAddView.swift */,
 				4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */,
 				4F80FD0524C8C02200DD65C2 /* TimetableDetailTableViewController.swift */,
 			);
@@ -273,6 +274,15 @@
 				4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */,
 			);
 			path = TimetableProfile;
+			sourceTree = "<group>";
+		};
+		4F1A9F1324D72FE900F99439 /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				4FD11E4724D6CA86008D9772 /* TaskAddView.swift */,
+				4F1A9F1424D7301C00F99439 /* TaskEditView.swift */,
+			);
+			path = Task;
 			sourceTree = "<group>";
 		};
 		4F2A1C8A24A9207800E66C79 /* TaskDetailCells */ = {
@@ -422,6 +432,7 @@
 				4F5B4E8F24C6244C0098F4A7 /* Edit */,
 				4F99D201249FEA7F00A8DFAB /* CellConfiguartor */,
 				4FCDEAE5247AA9C3001B36F4 /* TableViewCells */,
+				4F1A9F1324D72FE900F99439 /* Task */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -804,6 +815,7 @@
 				4F80FD0624C8C02200DD65C2 /* TimetableDetailTableViewController.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
+				4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */,
 				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
 				4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */,
 				4FC8210624C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift in Sources */,
