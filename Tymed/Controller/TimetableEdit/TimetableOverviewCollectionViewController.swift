@@ -84,7 +84,7 @@ class TimetableOverviewCollectionViewController: UITableViewController {
         }))
 
         alert.addAction(UIAlertAction(title: "Task", style: .default , handler:{ (action) in
-            let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
+            let task = TaskAddViewWrapper()
             self.present(task, animated: true, completion: nil)
         }))
 
