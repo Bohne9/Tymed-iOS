@@ -22,8 +22,7 @@ class TaskEditViewWrapper: UIViewController {
             return
         }
         
-        let taskEditView = TaskEditView(task: task, taskTitle: task.title, taskDescription: task.text ?? "",
-                                        dueDate: task.due ?? Date(), isArchived: task.archived, dismiss: {
+        let taskEditView = TaskEditView(task: task, dismiss: {
                                             self.dismiss(animated: true, completion: nil)
                                         })
         
@@ -53,17 +52,19 @@ struct TaskEditView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    //MARK: Title states
-    @State var taskTitle: String
+    @State var showDismissWarning = false
     
-    @State var taskDescription: String
+    //MARK: Title states
+    @State var taskTitle: String = ""
+    
+    @State var taskDescription: String = ""
     
     //MARK: Due date state
     @State private var hasDueDate = false
     
     @State private var presentDueDatePicker = false
     
-    @State var dueDate: Date
+    @State var dueDate: Date = Date()
     
     @State private var sendNotification = false
     
@@ -79,7 +80,10 @@ struct TaskEditView: View {
     @State private var lesson: Lesson?
     
     //MARK: Archive state
-    @State var isArchived: Bool
+    @State var isArchived: Bool = false
+    
+    //MARK: Delete state
+    @State var showDeleteAction = false
     
     var dismiss: () -> Void
     
@@ -217,7 +221,7 @@ struct TaskEditView: View {
                 Section {
                     HStack {
                         ZStack {
-                            Color(.systemBlue)
+                            Color(.systemOrange)
                             Image(systemName: "tray.full.fill")
                                 .font(.system(size: 15, weight: .bold))
                         }.cornerRadius(6).frame(width: 28, height: 28)
@@ -233,7 +237,7 @@ struct TaskEditView: View {
                 Section {
                     HStack {
                         ZStack {
-                            Color(.systemBlue)
+                            Color(.systemRed)
                             Image(systemName: "trash.fill")
                                 .font(.system(size: 15, weight: .bold))
                         }.cornerRadius(6).frame(width: 28, height: 28)
@@ -243,31 +247,59 @@ struct TaskEditView: View {
                         Spacer()
                         
                     }.frame(height: 45)
+                    .contentShape(Rectangle())
                     .onTapGesture {
-                        
+                        showDeleteAction.toggle()
+                    }.actionSheet(isPresented: $showDeleteAction) {
+                        ActionSheet(
+                            title: Text(""),
+                            message: nil,
+                            buttons: [
+                                .destructive(Text("Delete"), action: {
+                                    deleteTask()
+                                }),
+                                .cancel()
+                            ])
                     }
                 }
             }.listStyle(InsetGroupedListStyle())
             .navigationTitle("Task")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel", action: {
+                if hasUnsavedChanges() {
+                    showDismissWarning.toggle()
+                    return
+                }
+                
                 cancel()
             }), trailing: Button("Done", action: {
                 saveTask()
             }))
+            .actionSheet(isPresented: $showDismissWarning) {
+                ActionSheet(
+                    title: Text(""),
+                    message: nil,
+                    buttons: [
+                        .destructive(Text("Discard any changes?"), action: {
+                            showDismissWarning.toggle()
+                            cancel()
+                        }),
+                        .cancel()
+                    ])
+            }
+        }.onAppear {
+            loadTaskValues()
         }
     }
     
     private func loadTaskValues() {
-//        guard let task = task else {
-//            return
-//        }
-        
         
         taskTitle = task.title
         taskDescription = task.text ?? taskDescription
         dueDate = task.due ?? dueDate
+        hasDueDate = task.due != nil
         lesson = task.lesson
+        hasLessonAttached = lesson != nil
         isArchived = task.archived
         
         task.getNotifications { (notifications) in
@@ -309,23 +341,25 @@ struct TaskEditView: View {
         presentationMode.wrappedValue.dismiss()
     }
     
+    private func hasUnsavedChanges() -> Bool {
+        return
+            (task.title != taskTitle) ||
+            (task.text != taskDescription) ||
+            (task.due != dueDate) ||
+            (task.lesson != lesson) ||
+            (task.archived != isArchived) ||
+            (task.lesson != nil && !hasLessonAttached) ||
+            (task.due != nil && !hasDueDate)
+    }
+    
     private func saveTask() {
-//        guard let task = task else {
-//            return
-//        }
         
         task.title = taskTitle
         task.text = taskDescription
         task.due = hasDueDate ? dueDate : nil
         task.lesson = hasLessonAttached ? lesson : nil
-        task.completed = false
         task.priority = 0
-        task.archived = false
-        
-        guard let defaultTimetable = TimetableService.shared.defaultTimetable() else {
-            return
-        }
-        task.timetable = defaultTimetable
+        task.archived = isArchived
         
         TimetableService.shared.save()
         
