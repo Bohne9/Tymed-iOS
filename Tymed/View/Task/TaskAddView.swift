@@ -325,6 +325,17 @@ struct LessonPickerView: View {
     
     var body: some View {
         List {
+            Section {
+                HStack {
+                    Text("None")
+                    Spacer()
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    self.lesson = nil
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            
             ForEach(weekDays(), id: \.self) { (day: Day) in
                 Section(header: Text(day.string()).font(.system(size: 12, weight: .semibold))) {
                     ForEach(lessonsFor(day)) { lesson in

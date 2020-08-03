@@ -133,7 +133,7 @@ struct TaskEditView: View {
                                 .datePickerStyle(GraphicalDatePickerStyle())
                                 .frame(height: 350)
                         }
-                        
+                        //MARK: Notification
                         HStack {
                             ZStack {
                                 Color(.systemGreen)
@@ -209,11 +209,11 @@ struct TaskEditView: View {
                                     Spacer()
                                     if lesson != nil {
                                         Text(lessonTime(lesson))
+                                            .font(.system(size: 14, weight: .semibold))
                                     }
                                         
                                 }.contentShape(Rectangle())
                                 .frame(height: 45)
-                                .font(.system(size: 14, weight: .semibold))
                             }).frame(height: 45)
                     }
                 }
@@ -262,8 +262,10 @@ struct TaskEditView: View {
                             ])
                     }
                 }
-            }.listStyle(InsetGroupedListStyle())
-            .navigationTitle("Task")
+            }
+            .font(.system(size: 15, weight: .semibold))
+            .listStyle(InsetGroupedListStyle())
+            .navigationTitle("Task") //MARK: NavigationBar
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel", action: {
                 if hasUnsavedChanges() {
@@ -292,6 +294,7 @@ struct TaskEditView: View {
         }
     }
     
+    //MARK: loadTaskValues
     private func loadTaskValues() {
         
         taskTitle = task.title
@@ -308,10 +311,12 @@ struct TaskEditView: View {
         
     }
     
+    //MARK: titleForLessonCell
     private func titleForLessonCell() -> String {
         return lesson?.subject?.name ?? "Choose a lesson"
     }
     
+    //MARK: textForLessonDate
     private func textForLessonDate() -> String {
         guard let lesson = self.lesson else {
             return ""
@@ -320,27 +325,33 @@ struct TaskEditView: View {
         return "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
     }
     
+    //MARK: foregroundColorForLessonCell
     private func foregroundColorForLessonCell() -> Color {
         return lesson?.subject?.name != nil ? Color(.label) : Color(.systemBlue)
     }
     
+    //MARK: textForNotificationCell
     private func textForNotificationCell() -> String {
         return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
+    //MARK: subjectColor
     private func subjectColor(_ lesson: Lesson?) -> Color {
         return Color(UIColor(lesson) ?? .clear)
     }
     
+    //MARK: lessonTime
     private func lessonTime(_ lesson: Lesson?) -> String {
         return "\(lesson?.startTime.string() ?? "") - \(lesson?.endTime.string() ?? "")"
     }
     
+    //MARK: cancel
     private func cancel() {
         dismiss()
         presentationMode.wrappedValue.dismiss()
     }
     
+    //MARK: hasUnsavedChanges
     private func hasUnsavedChanges() -> Bool {
         return
             (task.title != taskTitle) ||
@@ -352,6 +363,7 @@ struct TaskEditView: View {
             (task.due != nil && !hasDueDate)
     }
     
+    //MARK: saveTask
     private func saveTask() {
         
         task.title = taskTitle
@@ -377,11 +389,8 @@ struct TaskEditView: View {
         presentationMode.wrappedValue.dismiss()
     }
     
+    //MARK: deleteTask
     private func deleteTask() {
-//        guard let task = task else {
-//            return
-//        }
-        
         TimetableService.shared.deleteTask(task)
         
         dismiss()
