@@ -150,10 +150,11 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         
         let config = UIContextMenuConfiguration(identifier: id, previewProvider: { () -> UIViewController? in
             
-            let detail = TaskDetailTableViewController(style: .insetGrouped)
-            
-            detail.tableView.isScrollEnabled = false
-            detail.tableView.showsVerticalScrollIndicator = false
+//            let detail = TaskDetailTableViewController(style: .insetGrouped)
+//
+//            detail.tableView.isScrollEnabled = false
+//            detail.tableView.showsVerticalScrollIndicator = false
+            let detail = TaskEditViewWrapper()
             
             detail.task = self.task(for: indexPath)
             detail.taskDelegate = self.taskDelegate

@@ -21,6 +21,7 @@
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
 		4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A9F1424D7301C00F99439 /* TaskEditView.swift */; };
+		4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */; };
 		4F1FCFDD2493F387003693A6 /* DynamicTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */; };
 		4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */; };
 		4F1FCFE12493FF14003693A6 /* TaskDeleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */; };
@@ -128,6 +129,7 @@
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		4F1A9F1424D7301C00F99439 /* TaskEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditView.swift; sourceTree = "<group>"; };
+		4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddView.swift; sourceTree = "<group>"; };
 		4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTableViewControllerTests.swift; sourceTree = "<group>"; };
 		4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDeleteTableViewCell.swift; sourceTree = "<group>"; };
 		4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDeleteTableViewCell.xib; sourceTree = "<group>"; };
@@ -285,6 +287,14 @@
 			path = Task;
 			sourceTree = "<group>";
 		};
+		4F1A9F1624D89BA000F99439 /* Lesson */ = {
+			isa = PBXGroup;
+			children = (
+				4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */,
+			);
+			path = Lesson;
+			sourceTree = "<group>";
+		};
 		4F2A1C8A24A9207800E66C79 /* TaskDetailCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,6 +443,7 @@
 				4F99D201249FEA7F00A8DFAB /* CellConfiguartor */,
 				4FCDEAE5247AA9C3001B36F4 /* TableViewCells */,
 				4F1A9F1324D72FE900F99439 /* Task */,
+				4F1A9F1624D89BA000F99439 /* Lesson */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -789,6 +800,7 @@
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
 				4F2A7DC424AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift in Sources */,
 				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
+				4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */,
