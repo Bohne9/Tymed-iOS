@@ -201,6 +201,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     func presentTaskAdd() -> TaskAddViewWrapper {
         let taskAdd = TaskAddViewWrapper()
 
+        taskAdd.taskDelegate = self
+        
         self.present(taskAdd, animated: true, completion: nil)
         
         return taskAdd
@@ -209,6 +211,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
         let taskView = TaskEditViewWrapper()
         taskView.task = task
+        
+        taskView.taskDelegate = self
         
         self.present(taskView, animated: animated, completion: nil)
         

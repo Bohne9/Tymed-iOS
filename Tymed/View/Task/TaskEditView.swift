@@ -11,6 +11,8 @@ import CoreData
 
 class TaskEditViewWrapper: UIViewController {
     
+    var taskDelegate: HomeTaskDetailDelegate?
+    
     var task: Task?
     
     var contentView: UIHostingController<TaskEditView>?
@@ -22,7 +24,9 @@ class TaskEditViewWrapper: UIViewController {
             return
         }
         
-        let taskEditView = TaskEditView(task: task, dismiss: {
+        let taskEditView = TaskEditView(task: task,
+                                        dismiss: {
+                                            self.taskDelegate?.reload()
                                             self.dismiss(animated: true, completion: nil)
                                         })
         
@@ -58,6 +62,9 @@ struct TaskEditView: View {
     @State var taskTitle: String = ""
     
     @State var taskDescription: String = ""
+    
+    //MARK: Completed state
+    @State var isCompleted = false
     
     //MARK: Due date state
     @State private var hasDueDate = false
@@ -95,6 +102,23 @@ struct TaskEditView: View {
                 Section {
                     TextField("Title", text: $taskTitle)
                     TextField("Description", text: $taskDescription).lineLimit(-1)
+                }
+                
+                //MARK: Complete
+                Section {
+                    HStack {
+                        ZStack {
+                            Color(.systemGreen)
+                            Image(systemName: "checkmark.circle")
+                                .font(.system(size: 15, weight: .bold))
+                        }.cornerRadius(6).frame(width: 28, height: 28)
+                        
+                        Text("Completed")
+                        
+                        Spacer()
+                        
+                        Toggle("", isOn: $isCompleted)
+                    }.frame(height: 45)
                 }
                 
                 //MARK: Due Date
@@ -233,6 +257,8 @@ struct TaskEditView: View {
                         Toggle("", isOn: $isArchived)
                     }.frame(height: 45)
                 }
+                
+                
                 //MARK: Delete
                 Section {
                     HStack {
@@ -304,6 +330,7 @@ struct TaskEditView: View {
         lesson = task.lesson
         hasLessonAttached = lesson != nil
         isArchived = task.archived
+        isCompleted = task.completed
         
         task.getNotifications { (notifications) in
             sendNotification = notifications.count != 0
@@ -359,6 +386,7 @@ struct TaskEditView: View {
             (task.due != dueDate) ||
             (task.lesson != lesson) ||
             (task.archived != isArchived) ||
+            (task.completed != isCompleted) ||
             (task.lesson != nil && !hasLessonAttached) ||
             (task.due != nil && !hasDueDate)
     }
@@ -372,6 +400,7 @@ struct TaskEditView: View {
         task.lesson = hasLessonAttached ? lesson : nil
         task.priority = 0
         task.archived = isArchived
+        task.completed = isCompleted
         
         TimetableService.shared.save()
         

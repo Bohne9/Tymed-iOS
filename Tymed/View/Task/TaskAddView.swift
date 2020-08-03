@@ -11,7 +11,10 @@ import CoreData
 
 class TaskAddViewWrapper: UIViewController {
     
+    var taskDelegate: HomeTaskDetailDelegate?
+    
     lazy var contentView = UIHostingController(rootView: TaskAddView(dismiss: {
+        self.taskDelegate?.reload()
         self.dismiss(animated: true, completion: nil)
     }))
     
