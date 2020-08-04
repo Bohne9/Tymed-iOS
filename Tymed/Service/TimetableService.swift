@@ -159,9 +159,12 @@ class TimetableService {
     }
     
     
-    func subject(with name: String) -> Subject {
+    func subject(with name: String, addNewSubjectIfNull: Bool = true) -> Subject? {
         guard let subjects = fetchSubjects() else {
-            return addSubject(name, "blue")
+            if addNewSubjectIfNull {
+                return addSubject(name, "blue")
+            }
+            return nil
         }
         
         for subject in subjects {
@@ -170,7 +173,10 @@ class TimetableService {
             }
         }
         
-        return addSubject(name, "blue")
+        if addNewSubjectIfNull {
+            return addSubject(name, "blue")
+        }
+        return nil
     }
     
     func deleteSubject(_ subject: Subject) {

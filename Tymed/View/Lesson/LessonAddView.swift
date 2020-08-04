@@ -84,7 +84,19 @@ struct LessonAddView: View {
     
     @State private var startTime = Date()
     @State private var endTime = Date() + TimeInterval(3600)
+    @State private var interval: TimeInterval = 3600
+    
     @State private var day: Day = .current
+    
+    //MARK: Note
+    @State private var note = ""
+    
+    //MARK: Timetable
+    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
+    
+    
+    @State private var subjectTimetableAlert = false
+    
     
     var body: some View {
         NavigationView {
@@ -108,9 +120,8 @@ struct LessonAddView: View {
                                 .background(Color(UIColor(subject) ?? .clear))
                                 .cornerRadius(3.0)
                                 .onTapGesture {
-//                                    withAnimation(Animation.easeInOut(duration: 0.5)) {
                                     subjectTitle = subject.name ?? ""
-//                                    }
+                                    timetable = TimetableService.shared.subject(with: subjectTitle)?.timetable
                                 }
                             }
                         }.animation(.easeInOut(duration: 0.5))
@@ -160,7 +171,7 @@ struct LessonAddView: View {
                     if showEndTimePicker {
                         HStack {
                             Spacer()
-                            DatePicker("", selection: $endTime, displayedComponents: DatePickerComponents.hourAndMinute)
+                            DatePicker("", selection: $endTime, in: startTime..., displayedComponents: DatePickerComponents.hourAndMinute)
                                 .labelsHidden()
                                 .datePickerStyle(GraphicalDatePickerStyle())
                         }.frame(height: 45)
@@ -185,6 +196,32 @@ struct LessonAddView: View {
                         .frame(height: 120)
                     }
                 }
+                
+                
+                //MARK: Timetable
+                
+                Section {
+                    HStack {
+                        
+                        NavigationLink(destination: LessonAddTimetablePicker(timetable: $timetable)) {
+                            LessonAddCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                            Spacer()
+                            if timetable == TimetableService.shared.defaultTimetable() {
+                                Text("Default")
+                                    .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                                    .background(Color(.tertiarySystemGroupedBackground))
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .cornerRadius(10)
+                            }
+                        }
+                        
+                    }
+                }
+                
+                Section {
+                    
+                }
+                
             }.listStyle(InsetGroupedListStyle())
             .navigationTitle("Lesson")
             .navigationBarTitleDisplayMode(.inline)
@@ -193,7 +230,37 @@ struct LessonAddView: View {
             }, trailing: Button("Add") {
                 addLesson()
             })
+            .onChange(of: endTime) { value in
+                interval = endTime.timeIntervalSince(startTime)
+                print(interval)
+            }
+            .onChange(of: startTime) { value in
+                endTime = startTime + interval
+            }
+            .alert(isPresented: $subjectTimetableAlert) {
+                Alert(
+                    title: Text("Do you want to switch timetables?"),
+                    message: Text("All other lessons of the subject will change the timetables aswell."),
+                    primaryButton:
+                        .destructive(Text("Use \(timetable?.name ?? "")"),
+                                     action: {
+                                        addLesson()
+                }), secondaryButton:
+                        .cancel(Text("Keep \(timetableNameOfSubject())"),
+                                action: {
+                                    timetable = TimetableService.shared.subject(with: subjectTitle)?.timetable
+                                    addLesson()
+                    }))
+            }
         }
+    }
+    
+    private func timetableNameOfSubject() -> String {
+        return TimetableService.shared.subject(with: subjectTitle, addNewSubjectIfNull: false)?.timetable?.name ?? ""
+    }
+    
+    private func timetableTitle() -> String? {
+        return timetable?.name
     }
     
     private func time(for date: Date) -> String? {
@@ -208,16 +275,67 @@ struct LessonAddView: View {
     
     
     private func addLesson() {
-        let subject = TimetableService.shared.subject(with: subjectTitle)
+        guard let subject = TimetableService.shared.subject(with: subjectTitle) else {
+            return
+        }
         
-        TimetableService.shared.addLesson(subject: subject, day: day, start: startTime, end: endTime, note: nil)
+        if subject.timetable != timetable {
+            subjectTimetableAlert.toggle()
+            return
+        }
         
-        TimetableService.shared.save()
+        subject.timetable = timetable
+        
+        _ = TimetableService.shared.addLesson(subject: subject, day: day, start: startTime, end: endTime, note: nil)
         
         dismiss()
     }
+    
+    
 }
 
+struct LessonAddTimetablePicker: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    @Binding
+    var timetable: Timetable?
+    
+    var body: some View {
+        List {
+            ForEach(timetables(), id: \.self) { timetable in
+                HStack {
+                    Text(timetable?.name ?? "")
+                        
+                    Spacer()
+                    
+                    if timetable == TimetableService.shared.defaultTimetable() {
+                        Text("Default")
+                            .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                            .background(Color(.tertiarySystemGroupedBackground))
+                            .font(.system(size: 13, weight: .semibold))
+                            .cornerRadius(10)
+                    }
+                    
+                    if self.timetable == timetable {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    presentationMode.wrappedValue.dismiss()
+                    self.timetable = timetable
+                    
+                }
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Timetable")
+    }
+    
+    private func timetables() -> [Timetable?] {
+        return TimetableService.shared.fetchTimetables() ?? []
+    }
+}
 
 //MARK: SubjectTitleTextField
 struct SubjectTitleTextField: UIViewRepresentable {
