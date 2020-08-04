@@ -88,6 +88,9 @@ struct LessonAddView: View {
     
     @State private var day: Day = .current
     
+    //MARK: Color
+    @State private var color: String = "blue"
+    
     //MARK: Note
     @State private var note = ""
     
@@ -118,10 +121,12 @@ struct LessonAddView: View {
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.white)
                                 .background(Color(UIColor(subject) ?? .clear))
-                                .cornerRadius(3.0)
+                                .cornerRadius(5.0)
                                 .onTapGesture {
                                     subjectTitle = subject.name ?? ""
-                                    timetable = TimetableService.shared.subject(with: subjectTitle)?.timetable
+                                    let subject = TimetableService.shared.subject(with: subjectTitle)
+                                    timetable = subject?.timetable
+                                    color = subject?.color ?? "blue"
                                 }
                             }
                         }.animation(.easeInOut(duration: 0.5))
@@ -137,6 +142,11 @@ struct LessonAddView: View {
                             showSubjectSuggestions.toggle()
                         }
                     }
+                    
+                    NavigationLink(destination: LessonAddColorPickerView(color: $color)) {
+                        LessonAddCellDescriptor("Color", image: "paintbrush.fill", UIColor(named: color) ?? .clear, value: color.capitalized)
+                    }
+                        
                 }
                 
                 //MARK: Times
@@ -219,7 +229,7 @@ struct LessonAddView: View {
                 }
                 
                 Section {
-                    
+                    TextField("Notes", text: $note)
                 }
                 
             }.listStyle(InsetGroupedListStyle())
@@ -285,6 +295,7 @@ struct LessonAddView: View {
         }
         
         subject.timetable = timetable
+        subject.color = color
         
         _ = TimetableService.shared.addLesson(subject: subject, day: day, start: startTime, end: endTime, note: nil)
         
@@ -334,6 +345,46 @@ struct LessonAddTimetablePicker: View {
     
     private func timetables() -> [Timetable?] {
         return TimetableService.shared.fetchTimetables() ?? []
+    }
+}
+
+//MARK: ColorPickerView
+struct LessonAddColorPickerView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
+    @Binding
+    var color: String
+    
+    var body: some View {
+        List {
+            ForEach(colors(), id: \.self) { color in
+                HStack {
+                    Circle()
+                        .frame(width: 10, height: 10)
+                        .foregroundColor(Color(UIColor(named: color) ?? .clear))
+                    
+                    Text(color.capitalized)
+                        .font(.system(size: 15, weight: .semibold))
+                    
+                    Spacer()
+                    
+                    if self.color == color {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    presentationMode.wrappedValue.dismiss()
+                    self.color = color
+                    
+                }
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Color")
+    }
+    
+    private func colors() -> [String] {
+        return ["blue", "orange", "red", "green", "dark"]
     }
 }
 
