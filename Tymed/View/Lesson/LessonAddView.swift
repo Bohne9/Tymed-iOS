@@ -118,10 +118,11 @@ struct LessonAddView: View {
                                     
                                     Spacer()
                                 }
+                                .frame(height: 30)
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.white)
                                 .background(Color(UIColor(subject) ?? .clear))
-                                .cornerRadius(5.0)
+                                .cornerRadius(10.5)
                                 .onTapGesture {
                                     subjectTitle = subject.name ?? ""
                                     let subject = TimetableService.shared.subject(with: subjectTitle)
@@ -129,7 +130,8 @@ struct LessonAddView: View {
                                     color = subject?.color ?? "blue"
                                 }
                             }
-                        }.animation(.easeInOut(duration: 0.5))
+                        }.frame(height: 45)
+                        .animation(.easeInOut(duration: 0.5))
                         
                     }
                     
@@ -229,7 +231,7 @@ struct LessonAddView: View {
                 }
                 
                 Section {
-                    TextField("Notes", text: $note)
+                    MultilineTextField("Notes", $note)
                 }
                 
             }.listStyle(InsetGroupedListStyle())
