@@ -53,15 +53,77 @@ struct LessonAddView: View {
                         Text("Hello Text")
                     }
                     
-                    TextField("Subject Name", text: $subjectTitle)
-                        .onTapGesture {
+                    SubjectTitleTextField("Subject Name", $subjectTitle) {
+                        withAnimation {
                             test.toggle()
                         }
-                        .disableAutocorrection(true)
+                    } onReturn: {
+                        withAnimation {
+                            test.toggle()
+                        }
+                    }
                 }
             }.listStyle(InsetGroupedListStyle())
         }
     }
+}
+
+
+
+struct SubjectTitleTextField: UIViewRepresentable {
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+
+        @Binding var text: String
+        
+        var onBeginEditing: () -> Void
+        var onReturn: () -> Void
+
+        init(text: Binding<String>, onBeginEditing: @escaping () -> Void, onReturn: @escaping () -> Void) {
+            _text = text
+            self.onBeginEditing = onBeginEditing
+            self.onReturn = onReturn
+        }
+        
+        func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+            onBeginEditing()
+            return true
+        }
+
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            onReturn()
+            textField.resignFirstResponder()
+            return true
+        }
+    }
+
+    var placeholder: String
+    @Binding var text: String
+    var onBeginEditing: () -> Void
+    var onReturn: () -> Void
+    
+    init(_ place: String, _ textBinding: Binding<String>, onBeginEditing: @escaping () -> Void, onReturn: @escaping () -> Void) {
+        placeholder = place
+        _text = textBinding
+        self.onBeginEditing = onBeginEditing
+        self.onReturn = onReturn
+    }
+
+    func makeUIView(context: Context) -> UITextField {
+        let textField = UITextField(frame: .zero)
+        textField.placeholder = placeholder
+        textField.delegate = context.coordinator
+        return textField
+    }
+
+    func makeCoordinator() -> SubjectTitleTextField.Coordinator {
+        return Coordinator(text: $text, onBeginEditing: onBeginEditing, onReturn: onReturn)
+    }
+
+    func updateUIView(_ uiView: UITextField, context: Context) {
+        uiView.text = text
+    }
+    
 }
 
 struct LessonAddView_Previews: PreviewProvider {
