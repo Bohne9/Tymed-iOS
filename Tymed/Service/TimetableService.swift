@@ -186,6 +186,24 @@ class TimetableService {
         return subject
     }
     
+    func subjectSuggestions(for title: String) -> [Subject]  {
+        guard let subjects = fetchSubjects() else {
+            return []
+        }
+        
+        var values = subjects.map { (sub: Subject) in
+            return (sub, sub.name?.levenshteinDistanceScore(to: title) ?? 0.0)
+        }
+        
+        values.sort(by: { (v1, v2) -> Bool in
+            return v1.1 > v2.1
+        })
+        
+        return values.map { (value: (Subject, Double)) in
+            return value.0
+        }
+    }
+    
     //MARK: Lesson fetching
     func fetchLessons() -> [Lesson]? {
         

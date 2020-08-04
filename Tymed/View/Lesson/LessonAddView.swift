@@ -38,38 +38,74 @@ struct LessonAddView: View {
     @State private var subjectTitle = ""
     
     //MARK: Lesson Time state
+    @State private var showSubjectSuggestions = false
     
     @State private var showStartTimePicker = false
     @State private var showEndTimePicker = false
     @State private var showDayPicker = false
     
-    @State private var test = false
     
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    if test {
-                        Text("Hello Text")
+                    if showSubjectSuggestions {
+                        
+                        HStack(spacing: 15) {
+                            ForEach(subjectSuggestions(), id: \.self) { (subject: Subject) in
+                                HStack {
+                                    Spacer()
+                                    Text(subject.name ?? "")
+                                        .minimumScaleFactor(0.01)
+                                        .lineLimit(1)
+                                        .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
+                                    
+                                    Spacer()
+                                }
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .background(Color(UIColor(subject) ?? .clear))
+                                .cornerRadius(3.0)
+                                .onTapGesture {
+//                                    withAnimation(Animation.easeInOut(duration: 0.5)) {
+                                    subjectTitle = subject.name ?? ""
+//                                    }
+                                }
+                            }
+                        }.animation(.easeInOut(duration: 0.5))
+                        
                     }
                     
                     SubjectTitleTextField("Subject Name", $subjectTitle) {
                         withAnimation {
-                            test.toggle()
+                            showSubjectSuggestions.toggle()
                         }
                     } onReturn: {
                         withAnimation {
-                            test.toggle()
+                            showSubjectSuggestions.toggle()
                         }
                     }
                 }
             }.listStyle(InsetGroupedListStyle())
+            .navigationTitle("Lesson")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading: Button("Cancel"){
+                dismiss()
+            }, trailing: Button("Add") {
+                dismiss()
+            })
         }
+    }
+    
+    private func subjectSuggestions() -> [Subject] {
+        return TimetableService.shared.subjectSuggestions(for: subjectTitle)
+            .prefix(3)
+            .map { $0 }
     }
 }
 
 
-
+//MARK: SubjectTitleTextField
 struct SubjectTitleTextField: UIViewRepresentable {
     
     class Coordinator: NSObject, UITextFieldDelegate {
@@ -83,6 +119,10 @@ struct SubjectTitleTextField: UIViewRepresentable {
             _text = text
             self.onBeginEditing = onBeginEditing
             self.onReturn = onReturn
+        }
+        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text = textField.text ?? ""
         }
         
         func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
@@ -112,6 +152,7 @@ struct SubjectTitleTextField: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextField {
         let textField = UITextField(frame: .zero)
         textField.placeholder = placeholder
+        textField.autocorrectionType = .no
         textField.delegate = context.coordinator
         return textField
     }
@@ -126,6 +167,8 @@ struct SubjectTitleTextField: UIViewRepresentable {
     
 }
 
+
+//MARK: LessonAddView_Previews
 struct LessonAddView_Previews: PreviewProvider {
     static var previews: some View {
         LessonAddView {
