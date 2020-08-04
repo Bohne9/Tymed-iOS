@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 //MARK: Day
-enum Day: Int {
+enum Day: Int, CaseIterable {
     
     static var current: Day {
         return Day(rawValue: Calendar.current.component(.weekday, from: Date())) ?? Day.monday
@@ -156,6 +156,21 @@ class TimetableService {
         subject.id = UUID()
         
         return subject
+    }
+    
+    
+    func subject(with name: String) -> Subject {
+        guard let subjects = fetchSubjects() else {
+            return addSubject(name, "blue")
+        }
+        
+        for subject in subjects {
+            if subject.name == name {
+                return subject
+            }
+        }
+        
+        return addSubject(name, "blue")
     }
     
     func deleteSubject(_ subject: Subject) {

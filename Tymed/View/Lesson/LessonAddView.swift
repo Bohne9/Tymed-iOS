@@ -29,7 +29,45 @@ class LessonAddViewWrapper: UIViewController {
     }
 }
 
+struct LessonAddCellDescriptor: View {
+    
+    var image: String
+    var title: String
+    var color: UIColor
+    
+    var value: String?
+    
+    init(_ title: String, image: String, _ color: UIColor, value: String? = nil) {
+        self.title = title
+        self.image = image
+        self.color = color
+        self.value = value
+    }
+    
+    var body: some View {
+        HStack {
+            ZStack {
+                Color(color)
+                Image(systemName: image)
+                    .font(.system(size: 15, weight: .bold))
+            }.cornerRadius(6).frame(width: 28, height: 28)
+            
+            VStack(alignment: .leading) {
+                Text(title)
+                if let value = self.value {
+                    Text(value)
+                        .foregroundColor(Color(.systemBlue))
+                        .font(.system(size: 12, weight: .semibold))
+                }
+            }
+            
+            Spacer()
+        }.frame(height: 45).contentShape(Rectangle())
+    }
+    
+}
 
+//MARK: LessonAddView
 struct LessonAddView: View {
     
     var dismiss: () -> Void
@@ -44,6 +82,9 @@ struct LessonAddView: View {
     @State private var showEndTimePicker = false
     @State private var showDayPicker = false
     
+    @State private var startTime = Date()
+    @State private var endTime = Date() + TimeInterval(3600)
+    @State private var day: Day = .current
     
     var body: some View {
         NavigationView {
@@ -86,21 +127,94 @@ struct LessonAddView: View {
                         }
                     }
                 }
+                
+                //MARK: Times
+                Section {
+                    LessonAddCellDescriptor("Start time", image: "clock.fill", .systemBlue, value: time(for: startTime))
+                        .onTapGesture {
+                            withAnimation {
+                                showStartTimePicker.toggle()
+                                showEndTimePicker = false
+                                showDayPicker = false
+                            }
+                        }
+                    
+                    if showStartTimePicker {
+                        HStack {
+                            Spacer()
+                            DatePicker("", selection: $startTime, displayedComponents: DatePickerComponents.hourAndMinute)
+                                .labelsHidden()
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                        }.frame(height: 45)
+                    }
+                    
+                    LessonAddCellDescriptor("End time", image: "clock.fill", .systemOrange, value: time(for: endTime))
+                        .onTapGesture {
+                            withAnimation {
+                                showEndTimePicker.toggle()
+                                showStartTimePicker = false
+                                showDayPicker = false
+                            }
+                        }
+                    
+                    if showEndTimePicker {
+                        HStack {
+                            Spacer()
+                            DatePicker("", selection: $endTime, displayedComponents: DatePickerComponents.hourAndMinute)
+                                .labelsHidden()
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                        }.frame(height: 45)
+                    }
+                    
+                    
+                    LessonAddCellDescriptor("Day", image: "calendar", .systemGreen, value: day.string())
+                        .onTapGesture {
+                            withAnimation {
+                                showDayPicker.toggle()
+                                showStartTimePicker = false
+                                showEndTimePicker = false
+                            }
+                        }
+                    
+                    if showDayPicker {
+                        Picker("", selection: $day) {
+                            ForEach(Day.allCases, id: \.self) { day in
+                                Text(day.string())
+                            }
+                        }.pickerStyle(WheelPickerStyle())
+                        .frame(height: 120)
+                    }
+                }
             }.listStyle(InsetGroupedListStyle())
             .navigationTitle("Lesson")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel"){
                 dismiss()
             }, trailing: Button("Add") {
-                dismiss()
+                addLesson()
             })
         }
+    }
+    
+    private func time(for date: Date) -> String? {
+        return date.stringifyTime(with: .short)
     }
     
     private func subjectSuggestions() -> [Subject] {
         return TimetableService.shared.subjectSuggestions(for: subjectTitle)
             .prefix(3)
             .map { $0 }
+    }
+    
+    
+    private func addLesson() {
+        let subject = TimetableService.shared.subject(with: subjectTitle)
+        
+        TimetableService.shared.addLesson(subject: subject, day: day, start: startTime, end: endTime, note: nil)
+        
+        TimetableService.shared.save()
+        
+        dismiss()
     }
 }
 
@@ -131,9 +245,12 @@ struct SubjectTitleTextField: UIViewRepresentable {
         }
 
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            onReturn()
             textField.resignFirstResponder()
             return true
+        }
+        
+        func textFieldDidEndEditing(_ textField: UITextField) {
+            onReturn()
         }
     }
 
