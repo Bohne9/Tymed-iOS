@@ -224,17 +224,15 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
     func lessonDetail(_ view: UIView, for lesson: Lesson) {
         
-        let vc = LessonDetailTableViewController(style: .insetGrouped)
+//        let vc = LessonDetailTableViewController(style: .insetGrouped)
+        let vc = LessonEditViewWrapper()
+        
         vc.lesson = lesson
-        vc.taskDelegate = self
+//        vc.taskDelegate = self
         
-        let nav = UINavigationController(rootViewController: vc)
+        vc.lessonDelegate = self
         
-        vc.title = lesson.subject?.name ?? "-"
-        
-        vc.delegate = self
-        
-        self.present(nav, animated: true, completion: nil)
+        self.present(vc, animated: true, completion: nil)
         
     }
     
