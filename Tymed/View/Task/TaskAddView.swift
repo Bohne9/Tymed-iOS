@@ -90,23 +90,8 @@ struct TaskAddView: View {
                 //MARK: Due Date
                 Section {
                     HStack {
-                        ZStack {
-                            Color(.systemRed)
-                            Image(systemName: "calendar")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
                         
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Due date")
-                                if hasDueDate {
-                                    Text(dueDate.stringify(dateStyle: .short, timeStyle: .short))
-                                        .foregroundColor(Color(.systemBlue))
-                                        .font(.system(size: 12, weight: .semibold))
-                                }
-                            }
-                            Spacer()
-                        }.contentShape(Rectangle())
+                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate.stringify(dateStyle: .short, timeStyle: .short))
                         .onTapGesture {
                             withAnimation {
                                 presentDueDatePicker.toggle()
@@ -124,24 +109,9 @@ struct TaskAddView: View {
                                 .frame(height: 350)
                         }
                         
+                        //MARK: Notification
                         HStack {
-                            ZStack {
-                                Color(.systemGreen)
-                                Image(systemName: "alarm.fill")
-                                    .font(.system(size: 15, weight: .bold))
-                            }.cornerRadius(6).frame(width: 28, height: 28)
-                            
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("Notification")
-                                    if sendNotification {
-                                        Text(textForNotificationCell())
-                                            .foregroundColor(Color(.systemBlue))
-                                            .font(.system(size: 12, weight: .semibold))
-                                    }
-                                }
-                                Spacer()
-                            }.contentShape(Rectangle())
+                            DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
                             .onTapGesture {
                                 withAnimation {
                                     presentNotificationPicker.toggle()
@@ -170,18 +140,11 @@ struct TaskAddView: View {
                 Section {
                     
                     HStack {
-                        ZStack {
-                            Color(.systemBlue)
-                            Image(systemName: "doc.text.fill")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
-                        
-                        Text("Lesson")
-                        
-                        Spacer()
+                        DetailCellDescriptor("Lesson", image: "doc.text.fill", .systemBlue)
                         
                         Toggle("", isOn: $hasLessonAttached)
                     }.frame(height: 45)
+                    
                     
                     if hasLessonAttached {
                         NavigationLink(

@@ -119,23 +119,8 @@ struct TaskEditView: View {
                 //MARK: Due Date
                 Section {
                     HStack {
-                        ZStack {
-                            Color(.systemRed)
-                            Image(systemName: "calendar")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
                         
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text("Due date")
-                                if hasDueDate {
-                                    Text(dueDate.stringify(dateStyle: .short, timeStyle: .short))
-                                        .foregroundColor(Color(.systemBlue))
-                                        .font(.system(size: 12, weight: .semibold))
-                                }
-                            }
-                            Spacer()
-                        }.contentShape(Rectangle())
+                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate.stringify(dateStyle: .short, timeStyle: .short))
                         .onTapGesture {
                             withAnimation {
                                 presentDueDatePicker.toggle()
@@ -154,23 +139,7 @@ struct TaskEditView: View {
                         }
                         //MARK: Notification
                         HStack {
-                            ZStack {
-                                Color(.systemGreen)
-                                Image(systemName: "alarm.fill")
-                                    .font(.system(size: 15, weight: .bold))
-                            }.cornerRadius(6).frame(width: 28, height: 28)
-                            
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("Notification")
-                                    if sendNotification {
-                                        Text(textForNotificationCell())
-                                            .foregroundColor(Color(.systemBlue))
-                                            .font(.system(size: 12, weight: .semibold))
-                                    }
-                                }
-                                Spacer()
-                            }.contentShape(Rectangle())
+                            DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
                             .onTapGesture {
                                 withAnimation {
                                     presentNotificationPicker.toggle()
@@ -199,15 +168,7 @@ struct TaskEditView: View {
                 Section {
                     
                     HStack {
-                        ZStack {
-                            Color(.systemBlue)
-                            Image(systemName: "doc.text.fill")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
-                        
-                        Text("Lesson")
-                        
-                        Spacer()
+                        DetailCellDescriptor("Lesson", image: "doc.text.fill", .systemBlue)
                         
                         Toggle("", isOn: $hasLessonAttached)
                     }.frame(height: 45)
@@ -239,15 +200,7 @@ struct TaskEditView: View {
                 //MARK: Archive
                 Section {
                     HStack {
-                        ZStack {
-                            Color(.systemOrange)
-                            Image(systemName: "tray.full.fill")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
-                        
-                        Text("Archived")
-                        
-                        Spacer()
+                        DetailCellDescriptor("Archived", image: "tray.full.fill", .systemOrange)
                         
                         Toggle("", isOn: $isArchived)
                     }.frame(height: 45)
@@ -256,34 +209,24 @@ struct TaskEditView: View {
                 
                 //MARK: Delete
                 Section {
-                    HStack {
-                        ZStack {
-                            Color(.systemRed)
-                            Image(systemName: "trash.fill")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
-                        
-                        Text("Delete")
-                        
-                        Spacer()
-                        
-                    }.frame(height: 45)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showDeleteAction.toggle()
-                    }.actionSheet(isPresented: $showDeleteAction) {
-                        ActionSheet(
-                            title: Text(""),
-                            message: nil,
-                            buttons: [
-                                .destructive(Text("Delete"), action: {
-                                    deleteTask()
-                                }),
-                                .cancel()
-                            ])
-                    }
+                    DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showDeleteAction.toggle()
+                        }.actionSheet(isPresented: $showDeleteAction) {
+                            ActionSheet(
+                                title: Text(""),
+                                message: nil,
+                                buttons: [
+                                    .destructive(Text("Delete"), action: {
+                                        deleteTask()
+                                    }),
+                                    .cancel()
+                                ])
+                        }
                 }
             }
+            .animation(.default)
             .font(.system(size: 16, weight: .semibold))
             .listStyle(InsetGroupedListStyle())
             .navigationTitle("Task") //MARK: NavigationBar
