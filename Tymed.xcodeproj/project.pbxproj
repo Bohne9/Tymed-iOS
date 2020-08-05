@@ -20,6 +20,8 @@
 		4F152391245DB963005F34B6 /* ProfileCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */; };
 		4F152393245E99DE005F34B6 /* LessonDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */; };
 		4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */; };
+		4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A9F1424D7301C00F99439 /* TaskEditView.swift */; };
+		4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */; };
 		4F1FCFDD2493F387003693A6 /* DynamicTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */; };
 		4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */; };
 		4F1FCFE12493FF14003693A6 /* TaskDeleteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */; };
@@ -63,6 +65,12 @@
 		4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */; };
 		4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */; };
 		4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */; };
+		4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */; };
+		4F8E058224DA769600748F47 /* LesonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058124DA769600748F47 /* LesonEditView.swift */; };
+		4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */; };
+		4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058524DA786200748F47 /* AppColorPicker.swift */; };
+		4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058724DA793400748F47 /* AppTimetablePicker.swift */; };
+		4F8E058A24DA798500748F47 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058924DA798500748F47 /* CustomTextField.swift */; };
 		4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */; };
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
@@ -86,6 +94,7 @@
 		4FC8210624C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC8210524C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift */; };
 		4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */; };
 		4FCDEAEB247AABE9001B36F4 /* TaskTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */; };
+		4FD11E4824D6CA86008D9772 /* TaskAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD11E4724D6CA86008D9772 /* TaskAddView.swift */; };
 		4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */; };
 		4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFA61ED24D007E100C9F290 /* SettingsService.swift */; };
 		4FFA61F024D00D7600C9F290 /* BackgroundRoutineService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */; };
@@ -125,6 +134,8 @@
 		4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewController.swift; sourceTree = "<group>"; };
 		4F152392245E99DE005F34B6 /* LessonDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailTableViewController.swift; sourceTree = "<group>"; };
 		4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		4F1A9F1424D7301C00F99439 /* TaskEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditView.swift; sourceTree = "<group>"; };
+		4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddView.swift; sourceTree = "<group>"; };
 		4F1FCFDC2493F387003693A6 /* DynamicTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTableViewControllerTests.swift; sourceTree = "<group>"; };
 		4F1FCFDE2493FF14003693A6 /* TaskDeleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDeleteTableViewCell.swift; sourceTree = "<group>"; };
 		4F1FCFDF2493FF14003693A6 /* TaskDeleteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDeleteTableViewCell.xib; sourceTree = "<group>"; };
@@ -176,6 +187,12 @@
 		4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionView.swift; sourceTree = "<group>"; };
 		4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewHeader.swift; sourceTree = "<group>"; };
+		4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
+		4F8E058124DA769600748F47 /* LesonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LesonEditView.swift; sourceTree = "<group>"; };
+		4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCellDescriptor.swift; sourceTree = "<group>"; };
+		4F8E058524DA786200748F47 /* AppColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorPicker.swift; sourceTree = "<group>"; };
+		4F8E058724DA793400748F47 /* AppTimetablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimetablePicker.swift; sourceTree = "<group>"; };
+		4F8E058924DA798500748F47 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddViewController.swift; sourceTree = "<group>"; };
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -201,6 +218,7 @@
 		4FC8210724C61F7A00694811 /* Tymed-Timetables.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tymed-Timetables.xcdatamodel"; sourceTree = "<group>"; };
 		4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTitleTableViewCell.swift; sourceTree = "<group>"; };
 		4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTitleTableViewCell.xib; sourceTree = "<group>"; };
+		4FD11E4724D6CA86008D9772 /* TaskAddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskAddView.swift; sourceTree = "<group>"; };
 		4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekCollectionView.swift; sourceTree = "<group>"; };
 		4FFA61ED24D007E100C9F290 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundRoutineService.swift; sourceTree = "<group>"; };
@@ -270,6 +288,24 @@
 				4F152390245DB963005F34B6 /* ProfileCollectionViewController.swift */,
 			);
 			path = TimetableProfile;
+			sourceTree = "<group>";
+		};
+		4F1A9F1324D72FE900F99439 /* Task */ = {
+			isa = PBXGroup;
+			children = (
+				4FD11E4724D6CA86008D9772 /* TaskAddView.swift */,
+				4F1A9F1424D7301C00F99439 /* TaskEditView.swift */,
+			);
+			path = Task;
+			sourceTree = "<group>";
+		};
+		4F1A9F1624D89BA000F99439 /* Lesson */ = {
+			isa = PBXGroup;
+			children = (
+				4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */,
+				4F8E058124DA769600748F47 /* LesonEditView.swift */,
+			);
+			path = Lesson;
 			sourceTree = "<group>";
 		};
 		4F2A1C8A24A9207800E66C79 /* TaskDetailCells */ = {
@@ -419,8 +455,23 @@
 				4F5B4E8F24C6244C0098F4A7 /* Edit */,
 				4F99D201249FEA7F00A8DFAB /* CellConfiguartor */,
 				4FCDEAE5247AA9C3001B36F4 /* TableViewCells */,
+				4F8E057E24D9EB2300748F47 /* Common */,
+				4F1A9F1324D72FE900F99439 /* Task */,
+				4F1A9F1624D89BA000F99439 /* Lesson */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		4F8E057E24D9EB2300748F47 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */,
+				4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */,
+				4F8E058524DA786200748F47 /* AppColorPicker.swift */,
+				4F8E058724DA793400748F47 /* AppTimetablePicker.swift */,
+				4F8E058924DA798500748F47 /* CustomTextField.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		4F9405E72463F3940063E4DA /* Helper */ = {
@@ -759,10 +810,12 @@
 				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */,
+				4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */,
 				4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */,
 				4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
 				4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */,
+				4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */,
 				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
 				4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* TimetableOverviewCollectionViewController.swift in Sources */,
@@ -772,9 +825,12 @@
 				4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */,
 				4F2A1C8D24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift in Sources */,
 				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
+				4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
+				4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */,
 				4F2A7DC424AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift in Sources */,
 				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
+				4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */,
@@ -801,7 +857,10 @@
 				4F80FD0624C8C02200DD65C2 /* TimetableDetailTableViewController.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
+				4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */,
+				4F8E058224DA769600748F47 /* LesonEditView.swift in Sources */,
 				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
+				4F8E058A24DA798500748F47 /* CustomTextField.swift in Sources */,
 				4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */,
 				4FC8210624C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift in Sources */,
 				4F3F6295247AF75A00A69202 /* TaskDueDateTableViewCell.swift in Sources */,
@@ -814,6 +873,7 @@
 				4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */,
 				4F2A7DC824AFAD22002467E3 /* Task+CoreDataProperties.swift in Sources */,
 				4F2A1C9124AA69C300E66C79 /* LessonDetailDeleteCell.swift in Sources */,
+				4FD11E4824D6CA86008D9772 /* TaskAddView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

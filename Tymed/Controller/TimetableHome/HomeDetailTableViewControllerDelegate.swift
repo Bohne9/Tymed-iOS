@@ -10,6 +10,6 @@ import UIKit
 
 protocol HomeDetailTableViewControllerDelegate {
     
-    func detailWillDismiss(_ viewController: UIViewController)
+    func detailWillDismiss()
     
 }

@@ -161,14 +161,14 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
         }
         
-        detailDelegate?.detailWillDismiss(self)
+        detailDelegate?.detailWillDismiss()
         
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: cancel()
     @objc func cancel() {
-        detailDelegate?.detailWillDismiss(self)
+        detailDelegate?.detailWillDismiss()
         dismiss(animated: true, completion: nil)
     }
     
@@ -697,11 +697,11 @@ class TaskNotificationOffsetPickerTableViewController: UITableViewController {
 extension TaskAddViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        detailDelegate?.detailWillDismiss(self)
+        detailDelegate?.detailWillDismiss()
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        detailDelegate?.detailWillDismiss(self)
+        detailDelegate?.detailWillDismiss()
     }
     
 }

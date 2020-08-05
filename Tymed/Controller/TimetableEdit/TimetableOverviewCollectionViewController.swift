@@ -79,12 +79,12 @@ class TimetableOverviewCollectionViewController: UITableViewController {
         let alert = UIAlertController(title: "What whould you like to add?", message: "", preferredStyle: .actionSheet)
 
         alert.addAction(UIAlertAction(title: "Lesson", style: .default , handler:{ (action) in
-            let lesson = UINavigationController(rootViewController: LessonAddViewController(style: .insetGrouped))
+            let lesson = LessonAddViewWrapper()
             self.present(lesson, animated: true, completion: nil)
         }))
 
         alert.addAction(UIAlertAction(title: "Task", style: .default , handler:{ (action) in
-            let task = UINavigationController(rootViewController: TaskAddViewController(style: .insetGrouped))
+            let task = TaskAddViewWrapper()
             self.present(task, animated: true, completion: nil)
         }))
 

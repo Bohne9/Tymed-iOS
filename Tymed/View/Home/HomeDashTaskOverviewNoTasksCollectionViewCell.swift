@@ -30,9 +30,6 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
         taskDelegate?.onAddTask(nil, completion: { (viewController) in
             guard let type = self.type else { return }
             
-            if type == .today {
-                viewController.dueDate = Date()
-            }
         })
     }
     

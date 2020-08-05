@@ -198,29 +198,23 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
     }
     
-    func presentTaskAdd() -> TaskAddViewController {
-        let taskAdd = TaskAddViewController(style: .insetGrouped)
-        
-        taskAdd.detailDelegate = self
+    func presentTaskAdd() -> TaskAddViewWrapper {
+        let taskAdd = TaskAddViewWrapper()
 
-        let nav = UINavigationController(rootViewController: taskAdd)
-        self.present(nav, animated: true, completion: nil)
+        taskAdd.taskDelegate = self
+        
+        self.present(taskAdd, animated: true, completion: nil)
         
         return taskAdd
     }
     
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
+        let taskView = TaskEditViewWrapper()
+        taskView.task = task
         
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
-        vc.taskDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
+        taskView.taskDelegate = self
         
-        vc.title = "Task"
-        
-        vc.detailDelegate = self
-        
-        self.present(nav, animated: animated, completion: nil)
+        self.present(taskView, animated: animated, completion: nil)
         
     }
 }
@@ -230,17 +224,15 @@ extension HomeViewController: HomeCollectionViewDelegate {
     
     func lessonDetail(_ view: UIView, for lesson: Lesson) {
         
-        let vc = LessonDetailTableViewController(style: .insetGrouped)
+//        let vc = LessonDetailTableViewController(style: .insetGrouped)
+        let vc = LessonEditViewWrapper()
+        
         vc.lesson = lesson
-        vc.taskDelegate = self
+//        vc.taskDelegate = self
         
-        let nav = UINavigationController(rootViewController: vc)
+        vc.lessonDelegate = self
         
-        vc.title = lesson.subject?.name ?? "-"
-        
-        vc.delegate = self
-        
-        self.present(nav, animated: true, completion: nil)
+        self.present(vc, animated: true, completion: nil)
         
     }
     
@@ -260,7 +252,7 @@ extension HomeViewController: UIAdaptivePresentationControllerDelegate {
 
 extension HomeViewController: HomeDetailTableViewControllerDelegate {
     
-    func detailWillDismiss(_ viewController: UIViewController) {
+    func detailWillDismiss() {
         reload()
     }
     
@@ -273,31 +265,32 @@ extension HomeViewController: HomeDetailTableViewControllerDelegate {
 extension HomeViewController: HomeTaskDetailDelegate {
     
     func showTaskDetail(_ task: Task) {
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
-        vc.taskDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
-        
-        vc.title = "Task"
-        
-        vc.detailDelegate = self
-        
-        self.present(nav, animated: true, completion: nil)
+        presentTaskDetail(task)
+//        let vc = TaskDetailTableViewController(style: .insetGrouped)
+//        vc.task = task
+//        vc.taskDelegate = self
+//        let nav = UINavigationController(rootViewController: vc)
+//
+//        vc.title = "Task"
+//
+//        vc.detailDelegate = self
+//
+//        self.present(nav, animated: true, completion: nil)
     }
     
     func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
-//        presentTaskDetail(task, animated: animated)
+        presentTaskDetail(task, animated: animated)
         
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
-        vc.taskDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
-        
-        vc.title = "Task"
-        
-        vc.detailDelegate = self
-        
-        self.present(nav, animated: animated, completion: nil)
+//        let vc = TaskDetailTableViewController(style: .insetGrouped)
+//        vc.task = task
+//        vc.taskDelegate = self
+//        let nav = UINavigationController(rootViewController: vc)
+//
+//        vc.title = "Task"
+//
+//        vc.detailDelegate = self
+//
+//        self.present(nav, animated: animated, completion: nil)
         
     }
     
@@ -310,7 +303,7 @@ extension HomeViewController: HomeTaskDetailDelegate {
         scrollToSection(1)
     }
 
-    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)? = nil) {
+    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewWrapper) -> Void)? = nil) {
         let task = presentTaskAdd()
         completion?(task)
     }

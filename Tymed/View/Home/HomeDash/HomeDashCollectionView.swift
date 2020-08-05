@@ -263,21 +263,21 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
             
-            let lessonDetail = LessonDetailTableViewController(style: .insetGrouped)
+            let lessonDetail = LessonEditViewWrapper()
             
             lessonDetail.lesson = lesson
-            
-            lessonDetail.tableView.isScrollEnabled = false
-            lessonDetail.tableView.showsVerticalScrollIndicator = false
-            
-            lessonDetail.tableView.beginUpdates()
-            
-            lessonDetail.addSection(with: "subjectTitle", at: 0)
-            lessonDetail.addCell(with: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell, at: "subjectTitle")
-            
-            lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
-            
-            lessonDetail.tableView.endUpdates()
+//
+//            lessonDetail.tableView.isScrollEnabled = false
+//            lessonDetail.tableView.showsVerticalScrollIndicator = false
+//
+//            lessonDetail.tableView.beginUpdates()
+//
+//            lessonDetail.addSection(with: "subjectTitle", at: 0)
+//            lessonDetail.addCell(with: LessonDetailSubjectTitleCell.lessonDetailSubjectTitleCell, at: "subjectTitle")
+//
+//            lessonDetail.tableView.insertSections(IndexSet(arrayLiteral: 0), with: .none)
+//
+//            lessonDetail.tableView.endUpdates()
             
             
             

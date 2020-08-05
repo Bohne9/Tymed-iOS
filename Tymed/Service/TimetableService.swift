@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 //MARK: Day
-enum Day: Int {
+enum Day: Int, CaseIterable {
     
     static var current: Day {
         return Day(rawValue: Calendar.current.component(.weekday, from: Date())) ?? Day.monday
@@ -158,6 +158,27 @@ class TimetableService {
         return subject
     }
     
+    
+    func subject(with name: String, addNewSubjectIfNull: Bool = true) -> Subject? {
+        guard let subjects = fetchSubjects() else {
+            if addNewSubjectIfNull {
+                return addSubject(name, "blue")
+            }
+            return nil
+        }
+        
+        for subject in subjects {
+            if subject.name == name {
+                return subject
+            }
+        }
+        
+        if addNewSubjectIfNull {
+            return addSubject(name, "blue")
+        }
+        return nil
+    }
+    
     func deleteSubject(_ subject: Subject) {
         if let lessons = subject.lessons {
             for lesson in lessons {
@@ -184,6 +205,24 @@ class TimetableService {
         save()
         
         return subject
+    }
+    
+    func subjectSuggestions(for title: String) -> [Subject]  {
+        guard let subjects = fetchSubjects() else {
+            return []
+        }
+        
+        var values = subjects.map { (sub: Subject) in
+            return (sub, sub.name?.levenshteinDistanceScore(to: title) ?? 0.0)
+        }
+        
+        values.sort(by: { (v1, v2) -> Bool in
+            return v1.1 > v2.1
+        })
+        
+        return values.map { (value: (Subject, Double)) in
+            return value.0
+        }
     }
     
     //MARK: Lesson fetching
