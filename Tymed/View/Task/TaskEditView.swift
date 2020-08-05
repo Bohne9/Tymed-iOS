@@ -66,6 +66,8 @@ struct TaskEditView: View {
     //MARK: Completed state
     @State var isCompleted = false
     
+    @State var completionDate: Date?
+    
     //MARK: Due date state
     @State private var hasDueDate = false
     
@@ -107,15 +109,8 @@ struct TaskEditView: View {
                 //MARK: Complete
                 Section {
                     HStack {
-                        ZStack {
-                            Color(.systemGreen)
-                            Image(systemName: "checkmark.circle")
-                                .font(.system(size: 15, weight: .bold))
-                        }.cornerRadius(6).frame(width: 28, height: 28)
-                        
-                        Text("Completed")
-                        
-                        Spacer()
+                        DetailCellDescriptor("Completed", image: completeIcon(), completeColor(), value: completionDate?.stringify(dateStyle: .short, timeStyle: .short))
+                            .animation(.easeOut)
                         
                         Toggle("", isOn: $isCompleted)
                     }.frame(height: 45)
@@ -317,6 +312,8 @@ struct TaskEditView: View {
             }
         }.onAppear {
             loadTaskValues()
+        }.onChange(of: isCompleted) { completed in
+            completionDate = completed ? Date() : nil
         }
     }
     
@@ -331,11 +328,40 @@ struct TaskEditView: View {
         hasLessonAttached = lesson != nil
         isArchived = task.archived
         isCompleted = task.completed
+        completionDate = task.completionDate
         
         task.getNotifications { (notifications) in
             sendNotification = notifications.count != 0
         }
         
+    }
+    
+    private func completeIcon() -> String {
+        if isCompleted {
+            return "checkmark.circle"
+        }else {
+            if Date() < dueDate {
+                return "circle"
+            }else {
+                return "exclamationmark.circle.fill"
+            }
+        }
+    }
+    
+    private func completeColor() -> UIColor {
+        if isCompleted {
+            if completionDate ?? Date() <= dueDate || !hasDueDate {
+                return .systemGreen
+            }else {
+                return .systemOrange
+            }
+        }else {
+            if Date() <= dueDate || !hasDueDate {
+                return .systemBlue
+            }else {
+                return .systemRed
+            }
+        }
     }
     
     //MARK: titleForLessonCell
@@ -401,6 +427,7 @@ struct TaskEditView: View {
         task.priority = 0
         task.archived = isArchived
         task.completed = isCompleted
+        task.completionDate = completionDate
         
         TimetableService.shared.save()
         
