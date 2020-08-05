@@ -25,7 +25,8 @@ class LessonEditViewWrapper: UIViewController {
         contentView = UIHostingController(rootView: LessonEditView(
                                                                 lesson: lesson,
                                                                 dismiss: {
-                        self.dismiss(animated: true, completion: nil)
+                                                                    self.lessonDelegate?.detailWillDismiss()
+                                                                    self.dismiss(animated: true, completion: nil)
                     }))
         
         addChild(contentView)
@@ -215,6 +216,7 @@ struct LessonEditView: View {
                 }
                 
             }.listStyle(InsetGroupedListStyle())
+            .font(.system(size: 16, weight: .semibold))
             .navigationTitle("Lesson")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel"){
@@ -304,10 +306,13 @@ struct LessonEditView: View {
         subject.color = color
         subject.name = subjectTitle
         
+        lesson.subject = subject
+        
         lesson.startTime = Time(from: startTime)
         lesson.endTime = Time(from: endTime)
         lesson.dayOfWeek = Int32(day.rawValue)
         lesson.note = note
+        
         
         TimetableService.shared.save()
         

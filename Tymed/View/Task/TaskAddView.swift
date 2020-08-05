@@ -208,6 +208,7 @@ struct TaskAddView: View {
                     }
                 }
             }.listStyle(InsetGroupedListStyle())
+            .font(.system(size: 16, weight: .semibold))
             .navigationTitle("Task")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel", action: {

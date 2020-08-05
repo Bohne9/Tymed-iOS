@@ -198,6 +198,7 @@ struct LessonAddView: View {
                 }
                 
             }.listStyle(InsetGroupedListStyle())
+            .font(.system(size: 16, weight: .semibold))
             .navigationTitle("Lesson")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel"){

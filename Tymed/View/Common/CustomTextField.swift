@@ -60,6 +60,7 @@ struct CustomTextField: UIViewRepresentable {
         textField.placeholder = placeholder
         textField.autocorrectionType = .no
         textField.delegate = context.coordinator
+        textField.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         return textField
     }
 

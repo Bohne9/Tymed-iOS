@@ -252,7 +252,7 @@ extension HomeViewController: UIAdaptivePresentationControllerDelegate {
 
 extension HomeViewController: HomeDetailTableViewControllerDelegate {
     
-    func detailWillDismiss(_ viewController: UIViewController) {
+    func detailWillDismiss() {
         reload()
     }
     

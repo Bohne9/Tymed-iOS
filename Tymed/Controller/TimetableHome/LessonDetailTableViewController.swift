@@ -97,7 +97,7 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     
     @objc func dismissDetailView() {
-        delegate?.detailWillDismiss(self)
+        delegate?.detailWillDismiss()
         dismiss(animated: true, completion: nil)
     }
     
@@ -283,7 +283,7 @@ class LessonDetailTableViewController: LessonAddViewController {
                 TimetableService.shared.deleteLesson(lesson)
                 self.lesson = nil
                 self.dismiss(animated: true) {
-                    self.delegate?.detailWillDismiss(self)
+                    self.delegate?.detailWillDismiss()
                 }
                 print("delete")
             }
@@ -345,17 +345,17 @@ class LessonDetailTableViewController: LessonAddViewController {
 extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.detailWillDismiss(self)
+        delegate?.detailWillDismiss()
     }
     
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        delegate?.detailWillDismiss(self)
+        delegate?.detailWillDismiss()
     }
     
 }
 
 extension LessonDetailTableViewController: HomeDetailTableViewControllerDelegate {
-    func detailWillDismiss(_ viewController: UIViewController) {
+    func detailWillDismiss() {
         reload()
     }
     
