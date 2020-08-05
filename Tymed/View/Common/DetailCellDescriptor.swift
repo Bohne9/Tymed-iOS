@@ -28,7 +28,7 @@ struct DetailCellDescriptor: View {
             ZStack {
                 Color(color)
                 Image(systemName: image)
-                    .font(.system(size: 15, weight: .bold))
+                    .font(.system(size: 15, weight: .semibold))
             }.cornerRadius(6).frame(width: 28, height: 28)
             
             VStack(alignment: .leading) {

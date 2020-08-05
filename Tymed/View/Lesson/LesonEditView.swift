@@ -124,6 +124,14 @@ struct LessonEditView: View {
                         
                 }
                 
+                if lesson.tasks?.count ?? 0 > 0 {
+                    Section {
+                        ForEach(lessonTasks(), id: \.self) { task in
+                            Text(task.title)
+                        }
+                    }
+                }
+                
                 //MARK: Times
                 Section {
                     DetailCellDescriptor("Start time", image: "clock.fill", .systemBlue, value: time(for: startTime))
@@ -264,6 +272,10 @@ struct LessonEditView: View {
         note = lesson.note ?? ""
     }
     
+    private func lessonTasks() -> [Task] {
+        return (lesson.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
+    }
+    
     private func selectSubjectTitle(_ subject: Subject) {
         subjectTitle = subject.name ?? ""
         let subject = TimetableService.shared.subject(with: subjectTitle)
@@ -326,3 +338,5 @@ struct LessonEditView: View {
         print("Delete not implemented")
     }
 }
+
+
