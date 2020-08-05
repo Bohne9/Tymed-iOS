@@ -29,44 +29,6 @@ class LessonAddViewWrapper: UIViewController {
     }
 }
 
-struct LessonAddCellDescriptor: View {
-    
-    var image: String
-    var title: String
-    var color: UIColor
-    
-    var value: String?
-    
-    init(_ title: String, image: String, _ color: UIColor, value: String? = nil) {
-        self.title = title
-        self.image = image
-        self.color = color
-        self.value = value
-    }
-    
-    var body: some View {
-        HStack {
-            ZStack {
-                Color(color)
-                Image(systemName: image)
-                    .font(.system(size: 15, weight: .bold))
-            }.cornerRadius(6).frame(width: 28, height: 28)
-            
-            VStack(alignment: .leading) {
-                Text(title)
-                if let value = self.value {
-                    Text(value)
-                        .foregroundColor(Color(.systemBlue))
-                        .font(.system(size: 12, weight: .semibold))
-                }
-            }
-            
-            Spacer()
-        }.frame(height: 45).contentShape(Rectangle())
-    }
-    
-}
-
 //MARK: LessonAddView
 struct LessonAddView: View {
     
@@ -135,7 +97,7 @@ struct LessonAddView: View {
                         
                     }
                     
-                    SubjectTitleTextField("Subject Name", $subjectTitle) {
+                    CustomTextField("Subject Name", $subjectTitle) {
                         withAnimation {
                             showSubjectSuggestions.toggle()
                         }
@@ -145,15 +107,15 @@ struct LessonAddView: View {
                         }
                     }
                     
-                    NavigationLink(destination: LessonAddColorPickerView(color: $color)) {
-                        LessonAddCellDescriptor("Color", image: "paintbrush.fill", UIColor(named: color) ?? .clear, value: color.capitalized)
+                    NavigationLink(destination: AppColorPickerView(color: $color)) {
+                        DetailCellDescriptor("Color", image: "paintbrush.fill", UIColor(named: color) ?? .clear, value: color.capitalized)
                     }
                         
                 }
                 
                 //MARK: Times
                 Section {
-                    LessonAddCellDescriptor("Start time", image: "clock.fill", .systemBlue, value: time(for: startTime))
+                    DetailCellDescriptor("Start time", image: "clock.fill", .systemBlue, value: time(for: startTime))
                         .onTapGesture {
                             withAnimation {
                                 showStartTimePicker.toggle()
@@ -171,7 +133,7 @@ struct LessonAddView: View {
                         }.frame(height: 45)
                     }
                     
-                    LessonAddCellDescriptor("End time", image: "clock.fill", .systemOrange, value: time(for: endTime))
+                    DetailCellDescriptor("End time", image: "clock.fill", .systemOrange, value: time(for: endTime))
                         .onTapGesture {
                             withAnimation {
                                 showEndTimePicker.toggle()
@@ -190,7 +152,7 @@ struct LessonAddView: View {
                     }
                     
                     
-                    LessonAddCellDescriptor("Day", image: "calendar", .systemGreen, value: day.string())
+                    DetailCellDescriptor("Day", image: "calendar", .systemGreen, value: day.string())
                         .onTapGesture {
                             withAnimation {
                                 showDayPicker.toggle()
@@ -215,8 +177,8 @@ struct LessonAddView: View {
                 Section {
                     HStack {
                         
-                        NavigationLink(destination: LessonAddTimetablePicker(timetable: $timetable)) {
-                            LessonAddCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        NavigationLink(destination: AppTimetablePicker(timetable: $timetable)) {
+                            DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
                             Spacer()
                             if timetable == TimetableService.shared.defaultTimetable() {
                                 Text("Default")
@@ -230,6 +192,7 @@ struct LessonAddView: View {
                     }
                 }
                 
+                //MARK: Notes
                 Section {
                     MultilineTextField("Notes", $note)
                 }
@@ -267,25 +230,29 @@ struct LessonAddView: View {
         }
     }
     
+    //MARK: timetableNameOfSubject
     private func timetableNameOfSubject() -> String {
         return TimetableService.shared.subject(with: subjectTitle, addNewSubjectIfNull: false)?.timetable?.name ?? ""
     }
     
+    //MARK: timetableTitle
     private func timetableTitle() -> String? {
         return timetable?.name
     }
     
+    //MARK: time
     private func time(for date: Date) -> String? {
         return date.stringifyTime(with: .short)
     }
     
+    //MARK: subjectSuggestions
     private func subjectSuggestions() -> [Subject] {
         return TimetableService.shared.subjectSuggestions(for: subjectTitle)
             .prefix(3)
             .map { $0 }
     }
     
-    
+    //MARK: addLesson
     private func addLesson() {
         guard let subject = TimetableService.shared.subject(with: subjectTitle) else {
             return
@@ -304,154 +271,6 @@ struct LessonAddView: View {
         dismiss()
     }
     
-    
-}
-
-struct LessonAddTimetablePicker: View {
-    
-    @Environment(\.presentationMode) var presentationMode
-    
-    @Binding
-    var timetable: Timetable?
-    
-    var body: some View {
-        List {
-            ForEach(timetables(), id: \.self) { timetable in
-                HStack {
-                    Text(timetable?.name ?? "")
-                        
-                    Spacer()
-                    
-                    if timetable == TimetableService.shared.defaultTimetable() {
-                        Text("Default")
-                            .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-                            .background(Color(.tertiarySystemGroupedBackground))
-                            .font(.system(size: 13, weight: .semibold))
-                            .cornerRadius(10)
-                    }
-                    
-                    if self.timetable == timetable {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(Color(.systemBlue))
-                    }
-                }.contentShape(Rectangle())
-                .onTapGesture {
-                    presentationMode.wrappedValue.dismiss()
-                    self.timetable = timetable
-                    
-                }
-            }
-        }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Timetable")
-    }
-    
-    private func timetables() -> [Timetable?] {
-        return TimetableService.shared.fetchTimetables() ?? []
-    }
-}
-
-//MARK: ColorPickerView
-struct LessonAddColorPickerView: View {
-    @Environment(\.presentationMode) var presentationMode
-    
-    @Binding
-    var color: String
-    
-    var body: some View {
-        List {
-            ForEach(colors(), id: \.self) { color in
-                HStack {
-                    Circle()
-                        .frame(width: 10, height: 10)
-                        .foregroundColor(Color(UIColor(named: color) ?? .clear))
-                    
-                    Text(color.capitalized)
-                        .font(.system(size: 15, weight: .semibold))
-                    
-                    Spacer()
-                    
-                    if self.color == color {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(Color(.systemBlue))
-                    }
-                }.contentShape(Rectangle())
-                .onTapGesture {
-                    presentationMode.wrappedValue.dismiss()
-                    self.color = color
-                    
-                }
-            }
-        }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Color")
-    }
-    
-    private func colors() -> [String] {
-        return ["blue", "orange", "red", "green", "dark"]
-    }
-}
-
-//MARK: SubjectTitleTextField
-struct SubjectTitleTextField: UIViewRepresentable {
-    
-    class Coordinator: NSObject, UITextFieldDelegate {
-
-        @Binding var text: String
-        
-        var onBeginEditing: () -> Void
-        var onReturn: () -> Void
-
-        init(text: Binding<String>, onBeginEditing: @escaping () -> Void, onReturn: @escaping () -> Void) {
-            _text = text
-            self.onBeginEditing = onBeginEditing
-            self.onReturn = onReturn
-        }
-        
-        func textFieldDidChangeSelection(_ textField: UITextField) {
-            text = textField.text ?? ""
-        }
-        
-        func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-            onBeginEditing()
-            return true
-        }
-
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
-        }
-        
-        func textFieldDidEndEditing(_ textField: UITextField) {
-            onReturn()
-        }
-    }
-
-    var placeholder: String
-    @Binding var text: String
-    var onBeginEditing: () -> Void
-    var onReturn: () -> Void
-    
-    init(_ place: String, _ textBinding: Binding<String>, onBeginEditing: @escaping () -> Void, onReturn: @escaping () -> Void) {
-        placeholder = place
-        _text = textBinding
-        self.onBeginEditing = onBeginEditing
-        self.onReturn = onReturn
-    }
-
-    func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField(frame: .zero)
-        textField.placeholder = placeholder
-        textField.autocorrectionType = .no
-        textField.delegate = context.coordinator
-        return textField
-    }
-
-    func makeCoordinator() -> SubjectTitleTextField.Coordinator {
-        return Coordinator(text: $text, onBeginEditing: onBeginEditing, onReturn: onReturn)
-    }
-
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = text
-    }
     
 }
 
