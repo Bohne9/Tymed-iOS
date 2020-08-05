@@ -226,7 +226,6 @@ struct LessonEditView: View {
             })
             .onChange(of: endTime) { value in
                 interval = endTime.timeIntervalSince(startTime)
-                print(interval)
             }
             .onChange(of: startTime) { value in
                 endTime = startTime + interval
@@ -247,6 +246,9 @@ struct LessonEditView: View {
                     }))
             }
         }.onAppear(perform: loadLessonValues)
+        .onDisappear {
+            saveLesson()
+        }
     }
     
     private func loadLessonValues() {

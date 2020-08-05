@@ -257,6 +257,8 @@ struct TaskEditView: View {
             loadTaskValues()
         }.onChange(of: isCompleted) { completed in
             completionDate = completed ? Date() : nil
+        }.onDisappear {
+            saveTask()
         }
     }
     
