@@ -9,7 +9,7 @@
 
 import Foundation
 import CoreData
-
+import UIKit
 
 extension Task {
 
@@ -30,6 +30,34 @@ extension Task {
 
     func getNotifications(_ completion: @escaping NotificationFetchRequest) {
         NotificationService.current.getPendingNotifications(of: self, completion)
+    }
+    
+    func iconForCompletion() -> String {
+        if completed {
+            return "checkmark.circle.fill"
+        }else {
+            if due != nil && Date() < due! {
+                return "circle"
+            }else {
+                return "exclamationmark.circle.fill"
+            }
+        }
+    }
+    
+    func completeColor() -> UIColor {
+        if completed {
+            if due == nil || completionDate ?? Date() <= due ?? Date() {
+                return .systemGreen
+            }else {
+                return .systemOrange
+            }
+        }else {
+            if due == nil || Date() <= due ?? Date() {
+                return .systemBlue
+            }else {
+                return .systemRed
+            }
+        }
     }
 }
 

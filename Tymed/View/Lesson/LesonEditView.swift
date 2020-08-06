@@ -127,8 +127,9 @@ struct LessonEditView: View {
                 if lesson.tasks?.count ?? 0 > 0 {
                     Section {
                         ForEach(lessonTasks(), id: \.self) { task in
-                            Text(task.title)
+                            TaskPreviewCell(task: task)
                         }
+//                        .padding(.vertical, 10)
                     }
                 }
                 
@@ -272,8 +273,8 @@ struct LessonEditView: View {
         note = lesson.note ?? ""
     }
     
-    private func lessonTasks() -> [Task] {
-        return (lesson.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
+    private func lessonTasks(_ limit: Int = 3) -> [Task] {
+        return (lesson.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }.prefix(limit).map { $0 }
     }
     
     private func selectSubjectTitle(_ subject: Subject) {
@@ -340,3 +341,40 @@ struct LessonEditView: View {
 }
 
 
+struct TaskPreviewCell: View {
+    
+    @State
+    var task: Task
+    
+    var body: some View {
+        
+        HStack(alignment: .center) {
+            Image(systemName: task.iconForCompletion())
+                .foregroundColor(Color(task.completeColor()))
+                .font(.system(size: 22, weight: .semibold))
+                .onTapGesture {
+                    task.completed.toggle()
+                    task.completionDate = task.completed ? Date() : nil
+                }
+            VStack {
+                Text(task.title)
+                Spacer()
+                Text(task.text ?? "")
+            }
+            Spacer()
+            
+            VStack(alignment: .trailing) {
+                Circle()
+                    .foregroundColor(Color(UIColor(task.lesson) ?? .clear))
+                    .frame(width: 10, height: 10)
+                if let date = task.due {
+                    Text(date.stringify(dateStyle: .short, timeStyle: .short))
+                        .font(.system(size: 14, weight: .regular))
+                }
+            }
+        }.frame(height: 50)
+        .padding(.vertical, 8)
+        
+    }
+    
+}
