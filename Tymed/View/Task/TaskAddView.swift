@@ -252,7 +252,7 @@ struct NotificationOffsetView: View {
     var notificationOffset: NotificationOffset
     
     var body: some View {
-        List(NotificationOffset.allCases, id: \.rawValue) { offset in
+        List(NotificationOffset.allCases, id: \.value) { offset in
             
             HStack {
                 Text(offset.title)

@@ -9,24 +9,58 @@
 import Foundation
 import UserNotifications
 
-enum NotificationOffset: Int, CaseIterable {
+struct NotificationOffset: Comparable, CaseIterable {
+    typealias AllCases = [NotificationOffset]
     
+    static var allCases: [NotificationOffset] {
+        return
+            [.atDueDate,
+            .min5,
+            .min10,
+            .min15,
+            .min30,
+            .hour1,
+            .hour2,
+            .hour5,
+            .hour10,
+            .day1,
+            .day3,
+            .week1 ]
+    }
+    static func < (lhs: NotificationOffset, rhs: NotificationOffset) -> Bool {
+        return lhs.value < rhs.value
+    }
     
-    case atDueDate = 0
-    case min5 = 300
-    case min10 = 600
-    case min15 = 900
-    case min30 = 1800
-    case hour1 = 3600
-    case hour2 = 7200
-    case hour5 = 18000
-    case hour10 = 32000
-    case day1 = 86400
-    case day3 = 259200
-    case week1 = 604800
+    static func ==(_ lhs: NotificationOffset, _ rhs: NotificationOffset) -> Bool {
+        return lhs.value == rhs.value
+    }
+    
+    static let atDueDate    = NotificationOffset(value: 0)
+    static let min5         = NotificationOffset(value: 300)
+    static let min10        = NotificationOffset(value: 600)
+    static let min15        = NotificationOffset(value: 900)
+    static let min30        = NotificationOffset(value: 1800)
+    static let hour1        = NotificationOffset(value: 3600)
+    static let hour2        = NotificationOffset(value: 7200)
+    static let hour5        = NotificationOffset(value: 18000)
+    static let hour10       = NotificationOffset(value: 32000)
+    static let day1         = NotificationOffset(value: 86400)
+    static let day3         = NotificationOffset(value: 259200)
+    static let week1        = NotificationOffset(value: 604800)
     
     var timeInterval: TimeInterval {
-        return TimeInterval(rawValue)
+        return TimeInterval(value)
+    }
+    
+    var value: Int
+    
+    init(value: Int) {
+        self.value = value
+    }
+    
+    
+    init(value: TimeInterval) {
+        self.value = Int(value)
     }
     
     var title: String {
@@ -43,6 +77,14 @@ enum NotificationOffset: Int, CaseIterable {
         case .day1:         return "1 day before"
         case .day3:         return "3 days before"
         case .week1:        return "1 week before"
+        default:
+            if self < NotificationOffset.hour1 {
+                return "\(value / 60) minutes before"
+            }else if self < NotificationOffset.day1 {
+                return "\(value / 3600) hours before"
+            }else {
+                return "\(value / 86400) days before"
+            }
         }
     }
 }
