@@ -41,6 +41,17 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         weekDays.sort(by: { (d1, d2) -> Bool in
             return d1 < d2
         })
+        
+    }
+    
+    private func duration(of lesson: Lesson) -> Int {
+        return Int(lesson.end - lesson.start)
+    }
+    
+    private func heightRelativeToDuration(of lesson: Lesson) -> CGFloat {
+        let duration = Double(self.duration(of: lesson)) * 0.75
+        
+        return CGFloat(max(25, duration))
     }
     
     //MARK: scrollTo(date: )
@@ -171,9 +182,11 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: sizeForItemAt
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let lesson = self.lesson(for: indexPath)
+        guard let lesson = self.lesson(for: indexPath) else {
+            return .zero
+        }
         
-        let height = HomeLessonCellConfigurator.height(for: lesson)
+        let height = heightRelativeToDuration(of: lesson)
         
         return CGSize(width: collectionView.frame.width - 2 * 20, height: height)
     }
