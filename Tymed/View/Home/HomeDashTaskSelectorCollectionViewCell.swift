@@ -55,7 +55,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         
         image.constraintCenterYToSuperview(constant: 0)
         image.constraintLeadingToSuperview(constant: 20)
-        image.constraint(width: 30, height: 30)
+        image.constraint(width: 25, height: 25)
         image.contentMode = .scaleAspectFit
         
         label.constraintCenterYToSuperview(constant: 0)
@@ -67,7 +67,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
         selectedIndicator.constraintTrailingToSuperview(constant: 20)
         selectedIndicator.constraint(width: 20, height: 20)
     
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.font = .systemFont(ofSize: 15, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         selectedIndicator.tintColor = .systemBlue
         

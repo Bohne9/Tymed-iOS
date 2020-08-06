@@ -47,9 +47,9 @@ class HomeLessonCellConfigurator: BaseCollectionViewCellConfigurator<HomeLessonC
     static func height(for lesson: Lesson?) -> CGFloat {
         
         if lesson?.unarchivedTasks?.count ?? 0 > 0 {
-            return 70
+            return 65
         }else {
-            return 50
+            return 45
         }
     }
     

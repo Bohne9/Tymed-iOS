@@ -53,12 +53,12 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         name.translatesAutoresizingMaskIntoConstraints = false
         
         name.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        name.topAnchor.constraint(equalTo: topAnchor, constant: 11).isActive = true
+        name.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         name.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         name.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         
         name.textColor = .white
-        name.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        name.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         //MARK: time
         addSubview(time)
@@ -68,7 +68,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         time.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
         
         // Setup two constraints for different cells
-        timeTopConstraint = time.topAnchor.constraint(equalTo: topAnchor, constant: 11)
+        timeTopConstraint = time.topAnchor.constraint(equalTo: topAnchor, constant: 10)
         timeBottomConstraint = time.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         
         timeTopConstraint?.isActive = false
@@ -76,7 +76,7 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        time.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        time.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         
         time.textColor = .white
         name.textColor = .white

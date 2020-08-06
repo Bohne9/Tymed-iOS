@@ -24,7 +24,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         topBar.translatesAutoresizingMaskIntoConstraints = false
         topBar.backgroundColor = .systemBackground
         
-        topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
+        topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
 //        topBar.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -12).isActive = true
         topBar.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.95).isActive = true
         topBar.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true

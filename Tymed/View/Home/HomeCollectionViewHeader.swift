@@ -29,7 +29,7 @@ class HomeCollectionViewHeader: UICollectionReusableView  {
         label.constraintTrailingTo(anchor: centerXAnchor)
         label.constraintBottomToSuperview(constant: 7.5)
         
-        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
     }
     
     
