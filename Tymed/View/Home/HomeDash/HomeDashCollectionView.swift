@@ -16,7 +16,7 @@ private let tasksSection = "tasksSection"
 private let nowSection = "nowSection"
 private let nextSection = "nextSection"
 private let daySection = "daySection"
-private let tomorrowSection = "tomorrowSection"
+private let nextDaySection = "nextDaySection"
 private let weekSection = "weekSection"
 
 class HomeDashCollectionView: HomeBaseCollectionView {
@@ -35,7 +35,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     var dayLessons: [Lesson]?
     
-    var tomorrowLessons: [Lesson]?
+    var nextDay: Day?
+    var nextDayLessons: [Lesson]?
     
     var tasks: [Task]?
     
@@ -71,8 +72,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return dayLessons?[indexPath.row]
         case weekSection:
             return lessons?[indexPath.row]
-        case tomorrowSection:
-            return tomorrowLessons?[indexPath.row]
+        case nextDaySection:
+            return nextDayLessons?[indexPath.row]
         default:
             return nil
         }
@@ -99,9 +100,19 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             Time(from: Date()) < lesson.endTime // Only include the lessons with are in the future
         })
         
-        tomorrowLessons = TimetableService.shared.getLessons(within: Day.current.rotatingNext()).sorted(by: { (l1, l2) in
-            return l1.startTime < l2.startTime
-        })
+        
+        var day = Day.current
+        
+        for _ in 0..<6 {
+            day = day.rotatingNext()
+            nextDayLessons = TimetableService.shared.getLessons(within: day).sorted(by: { (l1, l2) in
+                return l1.startTime < l2.startTime
+            })
+            nextDay = day
+            if nextDayLessons?.count ?? 0 > 0 {
+                break
+            }
+        }
         
         nextLessons = TimetableService.shared.getNextLessons()
         
@@ -114,8 +125,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         appendSection(nowLessons, with: nowSection)
         appendSection(nextLessons, with: nextSection)
         appendSection(dayLessons, with: daySection)
-        appendSection(tomorrowLessons, with: tomorrowSection)
-        appendSection(lessons, with: weekSection)
+        appendSection(nextDayLessons, with: nextDaySection)
+//        appendSection(lessons, with: weekSection)
         
     }
 
@@ -141,8 +152,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return dayLessons?.count ?? 0
         case weekSection:
             return lessons?.count ?? 0
-        case tomorrowSection:
-            return tomorrowLessons?.count ?? 0
+        case nextDaySection:
+            let count = nextDayLessons?.count ?? 0
+            return count
         default:
             return 0
             
@@ -184,7 +196,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return cell
             }
             
-        case nowSection, nextSection, daySection, weekSection, tomorrowSection:
+        case nowSection, nextSection, daySection, weekSection, nextDaySection:
             let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
             
             cell.lesson = lesson(for: indexPath)
@@ -229,7 +241,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             }
             
             break
-        case nowSection, nextSection, daySection, weekSection, tomorrowSection:
+        case nowSection, nextSection, daySection, weekSection, nextDaySection:
             presentLessonDetail(indexPath)
             break
         default:
@@ -244,7 +256,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         case nowSection:        return "Now"
         case nextSection:       return "Next"
         case daySection:        return "Today"
-        case tomorrowSection:   return "Tomorrow"
+        case nextDaySection:    return "\(nextDay?.string() ?? "")"
         case weekSection:       return "All"
         default:                return "-"
         }
@@ -346,7 +358,7 @@ extension HomeDashCollectionView {
             }
             // Task Overview cell
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat((tasks?.count ?? 0) * 60))
-        case nowSection, nextSection, daySection, weekSection, tomorrowSection:
+        case nowSection, nextSection, daySection, weekSection, nextDaySection:
             // Lesson cell
             let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
                 

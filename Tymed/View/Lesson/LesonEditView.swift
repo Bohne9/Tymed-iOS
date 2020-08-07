@@ -128,12 +128,11 @@ struct LessonEditView: View {
                         
                 }
                 
-                if lesson.tasks?.count ?? 0 > 0 {
+                if lesson.unarchivedTasks?.count ?? 0 > 0 {
                     Section {
                         ForEach(lessonTasks(), id: \.self) { task in
                             TaskPreviewCell(task: task)
                         }
-//                        .padding(.vertical, 10)
                     }
                 }
                 
@@ -341,7 +340,7 @@ struct LessonEditView: View {
         if !sendNotification {
             return nil
         }
-        return "\(day.string()), \((startTime - notificationOffset.timeInterval).stringify(with: "hh:mm"))"
+        return "\(day.string()), \((startTime - notificationOffset.timeInterval).stringifyTime(with: .short))"
     }
     
     //MARK: subjectSuggestions

@@ -80,7 +80,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             typeCellSelectors.append(type)
             
             if taskSectionSize[section] == nil {
-                taskSectionSize[section] = section != archivedSection ? .compact : .collapsed
+                taskSectionSize[section] = defaultSectionSize(for: section)
             }
         }
     }
@@ -116,6 +116,15 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     }
     
     // MARK: - UICollectionViewDataSource
+    
+    private func defaultSectionSize(for header: String) -> TaskOverviewSectionSize {
+        switch header {
+        case todaySection, openSection:
+            return .compact
+        default:
+            return .collapsed
+        }
+    }
 
     //MARK: numberOfItemsInSection
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,7 +135,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
         
         // The section 
-        return (taskSectionSize[identifier] ?? .compact) != .collapsed ? 1 : 0
+        return (taskSectionSize[identifier] ?? defaultSectionSize(for: identifier)) != .collapsed ? 1 : 0
     }
     
     private func tasks(for section: String) -> [Task]? {
