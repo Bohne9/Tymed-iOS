@@ -64,6 +64,10 @@ struct LessonEditView: View {
     
     @State private var day: Day = .current
     
+    @State private var sendNotification = false
+    @State private var presentNotificationPicker = false
+    @State private var notificationOffset = NotificationOffset.atEvent
+    
     //MARK: Color
     @State private var color: String = "blue"
     
@@ -189,6 +193,30 @@ struct LessonEditView: View {
                         }.pickerStyle(WheelPickerStyle())
                         .frame(height: 120)
                     }
+                    
+                    //MARK: Notification
+                    HStack {
+                        DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
+                        .onTapGesture {
+                            withAnimation {
+                                presentNotificationPicker.toggle()
+                            }
+                        }
+                        
+                        Toggle("", isOn: $sendNotification).labelsHidden()
+                    }.frame(height: 45)
+                    
+                    
+                    if sendNotification && presentNotificationPicker {
+                        NavigationLink(
+                            destination: NotificationOffsetView(notificationOffset: $notificationOffset),
+                            label: {
+                                HStack {
+                                    Spacer()
+                                    Text(notificationOffset.title)
+                                }
+                            }).frame(height: 45)
+                    }
                 }
                 
                 
@@ -271,6 +299,16 @@ struct LessonEditView: View {
         endTime = lesson.endTime.date ?? Date()
         day = lesson.day
         note = lesson.note ?? ""
+        
+        lesson.getNotifications { (notifications) in
+            sendNotification = notifications.count != 0
+            if sendNotification, let not = notifications.first {
+                if let date = (not.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate(),
+                   let start = lesson.startTime.date {
+                    notificationOffset = NotificationOffset(value: start.timeIntervalSince(date))
+                }
+            }
+        }
     }
     
     private func lessonTasks(_ limit: Int = 3) -> [Task] {
@@ -299,6 +337,13 @@ struct LessonEditView: View {
         return date.stringifyTime(with: .short)
     }
     
+    private func textForNotificationCell() -> String? {
+        if !sendNotification {
+            return nil
+        }
+        return "\(day.string()), \((startTime - notificationOffset.timeInterval).stringify(with: "hh:mm"))"
+    }
+    
     //MARK: subjectSuggestions
     private func subjectSuggestions() -> [Subject] {
         return TimetableService.shared.subjectSuggestions(for: subjectTitle)
@@ -315,6 +360,15 @@ struct LessonEditView: View {
         if subject.timetable != timetable {
             subjectTimetableAlert.toggle()
             return
+        }
+        
+        if sendNotification {
+            lesson.getNotifications { (notifications) in
+                NotificationService.current.removeAllNotifications(of: lesson)
+                NotificationService.current.scheduleStartNotification(for: lesson, notificationOffset)
+            }
+        }else {
+            NotificationService.current.removeAllNotifications(of: lesson)
         }
         
         subject.timetable = timetable

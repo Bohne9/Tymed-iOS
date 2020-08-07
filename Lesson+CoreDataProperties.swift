@@ -24,7 +24,7 @@ extension Lesson: Identifiable {
     @NSManaged public var start: Int32
     @NSManaged public var subject: Subject?
     @NSManaged public var tasks: NSSet?
-
+    
     var unarchivedTasks: [Task]? {
         return (tasks?.allObjects)?.filter { task in
             !(task as! Task).archived
@@ -69,6 +69,10 @@ extension Lesson: Identifiable {
         components.minute = endTime.minute
         
         return components
+    }
+    
+    func getNotifications(_ completion: @escaping NotificationFetchRequest) {
+        NotificationService.current.getPendingNotifications(of: self, completion)
     }
 }
 

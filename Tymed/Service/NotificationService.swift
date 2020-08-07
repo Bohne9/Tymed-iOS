@@ -227,13 +227,13 @@ class NotificationService {
         return notificationRequest(identfier, content, trigger)
     }
     
-    func notificationStartTime(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) -> UNNotificationRequest? {
-        guard let trigger = notificationTrigger(for: lesson, with: offset.timeInterval) else {
-            return nil
-        }
+    func notificationStartTimeRequest(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) -> UNNotificationRequest? {
+        let trigger = notificationTrigger(for: lesson.startDateComponents)
         
         let content = notificationStartTimeContentFor(lesson: lesson)
         let identifier = lesson.id.uuidString
+        
+        print("Schedule notification for lesson \(lesson.subject!.name) at: \(trigger.nextTriggerDate())")
         
         return notificationRequest(identifier, content, trigger)
     }
@@ -256,6 +256,14 @@ class NotificationService {
         scheduleNotification(request)
     }
     
+    func scheduleStartNotification(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) {
+        guard let request = notificationStartTimeRequest(for: lesson, offset) else {
+            return
+        }
+        
+        scheduleNotification(request)
+    }
+    
     //MARK: removeNotifications
     
     func removePendingNotifications(of task: Task) {
@@ -271,19 +279,40 @@ class NotificationService {
         removeDeliveredNotifications(of: task)
     }
     
+    func removePendingNotifications(of lesson: Lesson) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [lesson.id.uuidString])
+    }
+    
+    func removeDeliveredNotifications(of lesson: Lesson) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [lesson.id.uuidString])
+    }
+    
+    func removeAllNotifications(of lesson: Lesson) {
+        removePendingNotifications(of: lesson)
+        removeDeliveredNotifications(of: lesson)
+    }
+    
     //MARK: getNotifications
     
     func getPendingNotifications(_ completion: @escaping ([UNNotificationRequest]) -> Void) {
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: completion)
     }
     
-    func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
+    
+    private func getPendingNotifications(of identifier: String, _ completion: @escaping NotificationFetchRequest) {
         getPendingNotifications { (notifications) in
-            let taskNotifications = notifications.filter { (notification) -> Bool in
-                return notification.identifier == task.id.uuidString
+            let notifications = notifications.filter { (notification) -> Bool in
+                return notification.identifier == identifier
             }
-            completion(taskNotifications)
+            completion(notifications)
         }
     }
     
+    func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
+        getPendingNotifications(of: task.id.uuidString, completion)
+    }
+    
+    func getPendingNotifications(of lesson: Lesson, _ completion: @escaping NotificationFetchRequest) {
+        getPendingNotifications(of: lesson.id.uuidString, completion)
+    }
 }

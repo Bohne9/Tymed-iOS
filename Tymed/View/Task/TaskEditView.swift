@@ -379,7 +379,7 @@ struct TaskEditView: View {
                 NotificationService.current.removeAllNotifications(of: task)
             }
         }else {
-            _ = NotificationService.current.notificationDueDateRequest(for: task)
+            NotificationService.current.removeAllNotifications(of: task)
         }
         
         task.title = taskTitle
