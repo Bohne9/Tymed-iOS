@@ -79,7 +79,7 @@ struct TaskEditView: View {
     
     @State private var presentNotificationPicker = false
     
-    @State var notificationOffset: NotificationOffset = NotificationOffset.atDueDate
+    @State var notificationOffset: NotificationOffset = NotificationOffset.atEvent
     
     //MARK: Lesson state
     @State private var hasLessonAttached = false

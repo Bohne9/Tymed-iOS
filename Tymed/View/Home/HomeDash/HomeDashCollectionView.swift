@@ -96,7 +96,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         dayLessons = TimetableService.shared.getLessons(within: .current).sorted(by: { (l1, l2) in
             return l1.startTime < l2.startTime
         }).filter({ (lesson) -> Bool in
-            Date() < lesson.endTime.date ?? Date() // Only include the lessons with are in the future
+            Time(from: Date()) < lesson.endTime // Only include the lessons with are in the future
         })
         
         tomorrowLessons = TimetableService.shared.getLessons(within: Day.current.rotatingNext()).sorted(by: { (l1, l2) in
