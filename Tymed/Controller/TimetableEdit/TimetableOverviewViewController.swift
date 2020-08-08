@@ -53,12 +53,16 @@ class TimetableOverviewViewController: UIViewController {
 //        tableView.register(TimetableOverviewAddTableViewViewCell.self, forCellReuseIdentifier: "addTimetable")
 //        tableView.register(NoTimetablesTableViewCell.self, forCellReuseIdentifier: "noTimetables")
         
-        
+        addChild(timetableOverview)
         view.addSubview(timetableOverview.view)
         
         timetableOverview.view.translatesAutoresizingMaskIntoConstraints = false
         
-        timetableOverview.view.constraintToSuperview()
+        timetableOverview.view.constraintTopTo(anchor: view.safeAreaLayoutGuide.topAnchor)
+        timetableOverview.view.constraintLeadingTo(anchor: view.safeAreaLayoutGuide.leadingAnchor)
+        timetableOverview.view.constraintTrailingTo(anchor: view.safeAreaLayoutGuide.trailingAnchor)
+        timetableOverview.view.constraintBottomTo(anchor: view.safeAreaLayoutGuide.bottomAnchor)
+        
         
         fetchData()
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17162" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17162" systemVersion="20A5343j" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Lesson" representedClassName=".Lesson" syncable="YES">
         <attribute name="dayOfWeek" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="end" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -30,6 +30,8 @@
         <relationship name="timetable" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="tasks" inverseEntity="Timetable"/>
     </entity>
     <entity name="Timetable" representedClassName="Timetable" syncable="YES" codeGenerationType="class">
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="subjects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subject" inverseName="timetable" inverseEntity="Subject"/>
@@ -39,6 +41,6 @@
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="148"/>
         <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="133"/>
         <element name="Task" positionX="-290.4921875" positionY="306.515625" width="128" height="193"/>
-        <element name="Timetable" positionX="74.35546875" positionY="-96.5078125" width="128" height="103"/>
+        <element name="Timetable" positionX="74.35546875" positionY="-96.5078125" width="128" height="119"/>
     </elements>
 </model>
