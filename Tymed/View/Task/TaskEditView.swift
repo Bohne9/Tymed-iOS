@@ -79,7 +79,7 @@ struct TaskEditView: View {
     
     @State private var presentNotificationPicker = false
     
-    @State var notificationOffset: NotificationOffset = NotificationOffset.atDueDate
+    @State var notificationOffset: NotificationOffset = NotificationOffset.atEvent
     
     //MARK: Lesson state
     @State private var hasLessonAttached = false
@@ -277,6 +277,11 @@ struct TaskEditView: View {
         
         task.getNotifications { (notifications) in
             sendNotification = notifications.count != 0
+            if sendNotification, let not = notifications.first {
+                if let date = (not.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() {
+                    notificationOffset = NotificationOffset(value: dueDate.timeIntervalSince(date))
+                }
+            }
         }
         
     }
@@ -330,6 +335,9 @@ struct TaskEditView: View {
     
     //MARK: textForNotificationCell
     private func textForNotificationCell() -> String {
+        if !sendNotification {
+            return ""
+        }
         return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
@@ -365,6 +373,15 @@ struct TaskEditView: View {
     //MARK: saveTask
     private func saveTask() {
         
+        if sendNotification {
+            task.getNotifications { (notifications) in
+                NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+                NotificationService.current.removeAllNotifications(of: task)
+            }
+        }else {
+            NotificationService.current.removeAllNotifications(of: task)
+        }
+        
         task.title = taskTitle
         task.text = taskDescription
         task.due = hasDueDate ? dueDate : nil
@@ -375,16 +392,6 @@ struct TaskEditView: View {
         task.completionDate = completionDate
         
         TimetableService.shared.save()
-        
-        if sendNotification {
-            task.getNotifications { (notifications) in
-                if notifications.count == 0 {
-                    NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
-                }
-            }
-        }else {
-            NotificationService.current.notificationDueDateRequest(for: task)
-        }
         
         dismiss()
         presentationMode.wrappedValue.dismiss()

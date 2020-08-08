@@ -38,7 +38,7 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
     internal var dueDate: Date?
     
     internal var shouldSendNotification: Bool = false
-    internal var notificationOffset = NotificationOffset.atDueDate
+    internal var notificationOffset = NotificationOffset.atEvent
     
 //    internal var taskTitleSection = 0
 //    internal var taskDescriptionSection = 1
@@ -651,7 +651,7 @@ protocol TaskNotificationOffsetPickerDelegate {
 class TaskNotificationOffsetPickerTableViewController: UITableViewController {
     
     
-    var selectedOffset: NotificationOffset = .atDueDate
+    var selectedOffset: NotificationOffset = .atEvent
     
     var pickerDelegate: TaskNotificationOffsetPickerDelegate?
     

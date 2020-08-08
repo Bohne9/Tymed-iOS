@@ -9,29 +9,63 @@
 import Foundation
 import UserNotifications
 
-enum NotificationOffset: Int, CaseIterable {
+struct NotificationOffset: Comparable, CaseIterable {
+    typealias AllCases = [NotificationOffset]
     
+    static var allCases: [NotificationOffset] {
+        return
+            [.atEvent,
+            .min5,
+            .min10,
+            .min15,
+            .min30,
+            .hour1,
+            .hour2,
+            .hour5,
+            .hour10,
+            .day1,
+            .day3,
+            .week1 ]
+    }
+    static func < (lhs: NotificationOffset, rhs: NotificationOffset) -> Bool {
+        return lhs.value < rhs.value
+    }
     
-    case atDueDate = 0
-    case min5 = 300
-    case min10 = 600
-    case min15 = 900
-    case min30 = 1800
-    case hour1 = 3600
-    case hour2 = 7200
-    case hour5 = 18000
-    case hour10 = 32000
-    case day1 = 86400
-    case day3 = 259200
-    case week1 = 604800
+    static func ==(_ lhs: NotificationOffset, _ rhs: NotificationOffset) -> Bool {
+        return lhs.value == rhs.value
+    }
+    
+    static let atEvent    = NotificationOffset(value: 0)
+    static let min5         = NotificationOffset(value: 300)
+    static let min10        = NotificationOffset(value: 600)
+    static let min15        = NotificationOffset(value: 900)
+    static let min30        = NotificationOffset(value: 1800)
+    static let hour1        = NotificationOffset(value: 3600)
+    static let hour2        = NotificationOffset(value: 7200)
+    static let hour5        = NotificationOffset(value: 18000)
+    static let hour10       = NotificationOffset(value: 32000)
+    static let day1         = NotificationOffset(value: 86400)
+    static let day3         = NotificationOffset(value: 259200)
+    static let week1        = NotificationOffset(value: 604800)
     
     var timeInterval: TimeInterval {
-        return TimeInterval(rawValue)
+        return TimeInterval(value)
+    }
+    
+    var value: Int
+    
+    init(value: Int) {
+        self.value = value
+    }
+    
+    
+    init(value: TimeInterval) {
+        self.value = Int(value)
     }
     
     var title: String {
         switch self {
-        case .atDueDate:    return "at due date"
+        case .atEvent:    return "at due date"
         case .min5:         return "5 minutes before"
         case .min10:        return "10 minutes before"
         case .min15:        return "15 minutes before"
@@ -43,6 +77,14 @@ enum NotificationOffset: Int, CaseIterable {
         case .day1:         return "1 day before"
         case .day3:         return "3 days before"
         case .week1:        return "1 week before"
+        default:
+            if self < NotificationOffset.hour1 {
+                return "\(value / 60) minutes before"
+            }else if self < NotificationOffset.day1 {
+                return "\(value / 3600) hours before"
+            }else {
+                return "\(value / 86400) days before"
+            }
         }
     }
 }
@@ -104,9 +146,9 @@ class NotificationService {
         return UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: repeats)
     }
     
-    private func notificationTrigger(at date: Date) -> UNCalendarNotificationTrigger {
+    private func notificationTrigger(at date: Date, repeats: Bool = false) -> UNCalendarNotificationTrigger {
         let comp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        return notificationTrigger(for: comp)
+        return notificationTrigger(for: comp, repeats: repeats)
     }
     
     private func notificationTrigger(for lesson: Lesson) -> UNCalendarNotificationTrigger {
@@ -124,7 +166,17 @@ class NotificationService {
         
         date = date - offset
         
-        return notificationTrigger(at: date)
+        return notificationTrigger(at: date, repeats: true)
+    }
+    
+    private func notificationTrigger(for lesson: Lesson, with offset: TimeInterval) -> UNCalendarNotificationTrigger? {
+        guard var start = lesson.startTime.date else {
+            return nil
+        }
+        
+        start = start - offset
+        
+        return notificationTrigger(at: start)
     }
     
     //MARK: notificationContent
@@ -150,13 +202,21 @@ class NotificationService {
             , sound: .default, category: .task)
     }
     
+    private func notificationStartTimeContentFor(lesson: Lesson) -> UNMutableNotificationContent {
+        
+        let title = lesson.subject?.name ?? ""
+        
+        return notificationContent(title, body: "", thread: .lesson
+                                   , sound: .default, category: .lesson)
+    }
+    
     //MARK: notificationRequest(...)
     
     func notificationRequest(_ identifier: String, _ content: UNMutableNotificationContent, _ trigger: UNNotificationTrigger) -> UNNotificationRequest {
         return UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
     }
     
-    func notificationDueDateRequest(for task: Task, _ offset: NotificationOffset = .atDueDate) -> UNNotificationRequest? {
+    func notificationDueDateRequest(for task: Task, _ offset: NotificationOffset = .atEvent) -> UNNotificationRequest? {
         guard let trigger = notificationTrigger(for: task, with: offset.timeInterval) else {
             return nil
         }
@@ -165,6 +225,17 @@ class NotificationService {
         let identfier = task.id.uuidString
         
         return notificationRequest(identfier, content, trigger)
+    }
+    
+    func notificationStartTimeRequest(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) -> UNNotificationRequest? {
+        let trigger = notificationTrigger(for: lesson.startDateComponents)
+        
+        let content = notificationStartTimeContentFor(lesson: lesson)
+        let identifier = lesson.id.uuidString
+        
+        print("Schedule notification for lesson \(lesson.subject!.name) at: \(trigger.nextTriggerDate())")
+        
+        return notificationRequest(identifier, content, trigger)
     }
     
     //MARK: scheduleNotification
@@ -177,8 +248,16 @@ class NotificationService {
         }
     }
     
-    func scheduleDueDateNotification(for task: Task, _ offset: NotificationOffset = .atDueDate) {
+    func scheduleDueDateNotification(for task: Task, _ offset: NotificationOffset = .atEvent) {
         guard let request = notificationDueDateRequest(for: task, offset) else {
+            return
+        }
+        
+        scheduleNotification(request)
+    }
+    
+    func scheduleStartNotification(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) {
+        guard let request = notificationStartTimeRequest(for: lesson, offset) else {
             return
         }
         
@@ -200,19 +279,40 @@ class NotificationService {
         removeDeliveredNotifications(of: task)
     }
     
+    func removePendingNotifications(of lesson: Lesson) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [lesson.id.uuidString])
+    }
+    
+    func removeDeliveredNotifications(of lesson: Lesson) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [lesson.id.uuidString])
+    }
+    
+    func removeAllNotifications(of lesson: Lesson) {
+        removePendingNotifications(of: lesson)
+        removeDeliveredNotifications(of: lesson)
+    }
+    
     //MARK: getNotifications
     
     func getPendingNotifications(_ completion: @escaping ([UNNotificationRequest]) -> Void) {
         UNUserNotificationCenter.current().getPendingNotificationRequests(completionHandler: completion)
     }
     
-    func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
+    
+    private func getPendingNotifications(of identifier: String, _ completion: @escaping NotificationFetchRequest) {
         getPendingNotifications { (notifications) in
-            let taskNotifications = notifications.filter { (notification) -> Bool in
-                return notification.identifier == task.id.uuidString
+            let notifications = notifications.filter { (notification) -> Bool in
+                return notification.identifier == identifier
             }
-            completion(taskNotifications)
+            completion(notifications)
         }
     }
     
+    func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
+        getPendingNotifications(of: task.id.uuidString, completion)
+    }
+    
+    func getPendingNotifications(of lesson: Lesson, _ completion: @escaping NotificationFetchRequest) {
+        getPendingNotifications(of: lesson.id.uuidString, completion)
+    }
 }
