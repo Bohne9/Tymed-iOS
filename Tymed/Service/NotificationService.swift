@@ -121,7 +121,14 @@ class NotificationService {
     static let current = NotificationService()
     
     internal init () {
-        
+        UNUserNotificationCenter.current().getPendingNotificationRequests { (requests) in
+            if requests.count > 0 {
+                print("Currently scheduled notifications:")
+            }
+            requests.forEach { (request) in
+                print("\t \(request.content.categoryIdentifier)/\(request.content.threadIdentifier): \(request.identifier) - '\(request.content.title)': '\(request.content.body)'")
+            }
+        }
     }
     
     //MARK: requestAuthorization(_:)

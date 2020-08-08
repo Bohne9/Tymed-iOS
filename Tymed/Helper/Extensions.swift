@@ -49,36 +49,42 @@ extension String {
 //MARK: Date
 extension Date {
     
-    func stringify(with format: String) -> String{
+    func stringify(with format: String, relativeFormatting: Bool = true) -> String{
         
         let formatter = DateFormatter()
         
+        formatter.doesRelativeDateFormatting = relativeFormatting
         formatter.dateFormat = format
         
         return formatter.string(from: self)
     }
     
     
-    func stringifyTime(with format: DateFormatter.Style) -> String{
+    func stringifyTime(with format: DateFormatter.Style, relativeFormatting: Bool = true) -> String{
         
         let formatter = DateFormatter()
         
+        formatter.doesRelativeDateFormatting = relativeFormatting
         formatter.timeStyle = format
         
         return formatter.string(from: self)
     }
     
-    func stringify(with style: DateFormatter.Style) -> String{
+    func stringify(with style: DateFormatter.Style, relativeFormatting: Bool = true) -> String{
         
         let formatter = DateFormatter()
+        
+        formatter.doesRelativeDateFormatting = relativeFormatting
         
         formatter.dateStyle = style
         
         return formatter.string(from: self)
     }
     
-    func stringify(dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style) -> String {
+    func stringify(dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style, relativeFormatting: Bool = true) -> String {
         let formatter = DateFormatter()
+        
+        formatter.doesRelativeDateFormatting = relativeFormatting
         
         formatter.dateStyle = dateStyle
         formatter.timeStyle = timeStyle

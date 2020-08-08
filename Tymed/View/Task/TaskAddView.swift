@@ -56,7 +56,13 @@ struct TaskAddView: View {
     private var presentDueDatePicker = false
     
     @State
-    private var dueDate = Date()
+    private var dueDate: Date?
+    
+    @State
+    private var pickerDate = Date()
+    
+    @State
+    private var recommendedDueDate = false
     
     @State
     private var sendNotification = false
@@ -89,9 +95,26 @@ struct TaskAddView: View {
                 
                 //MARK: Due Date
                 Section {
+                    if recommendedDueDate && lesson != nil {
+                        
+                        HStack {
+                            DetailCellDescriptor("Recommended due date",
+                                                 image: "star.fill",
+                                                 .systemYellow,
+                                                 value: lesson!.nextStartDate()?.stringify(dateStyle: .short, timeStyle: .short))
+                                .onTapGesture {
+                                    withAnimation {
+                                        dueDate = lesson!.nextStartDate()
+                                        recommendedDueDate = false
+                                    }
+                                }.font(.system(size: 13, weight: .semibold))
+                        }
+                        
+                    }
+                    
                     HStack {
                         
-                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate.stringify(dateStyle: .short, timeStyle: .short))
+                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate?.stringify(dateStyle: .short, timeStyle: .short))
                         .onTapGesture {
                             withAnimation {
                                 presentDueDatePicker.toggle()
@@ -104,7 +127,7 @@ struct TaskAddView: View {
                     
                     if hasDueDate {
                         if presentDueDatePicker {
-                            DatePicker("", selection: $dueDate)
+                            DatePicker("", selection: $pickerDate)
                                 .datePickerStyle(GraphicalDatePickerStyle())
                                 .frame(height: 350)
                         }
@@ -179,6 +202,11 @@ struct TaskAddView: View {
             }), trailing: Button("Add", action: {
                 addTask()
             }))
+            .onChange(of: pickerDate) { value in
+                dueDate = pickerDate
+            }.onChange(of: lesson) { value in
+                recommendedDueDate = lesson != nil
+            }
         }
     }
     
@@ -199,7 +227,9 @@ struct TaskAddView: View {
     }
     
     private func textForNotificationCell() -> String {
-        return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
+        guard let date = dueDate, sendNotification else { return "" }
+        
+        return (date - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
     private func subjectColor(_ lesson: Lesson?) -> Color {

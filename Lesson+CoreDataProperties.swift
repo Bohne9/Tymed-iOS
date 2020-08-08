@@ -53,6 +53,19 @@ extension Lesson: Identifiable {
         }
     }
     
+    private func nextDate(_ start: Date, _ components: DateComponents) -> Date? {
+        Calendar.current.nextDate(after: start, matching: components, matchingPolicy: .strict)
+    }
+    
+    func nextStartDate(startingFrom date: Date = Date()) -> Date? {
+        nextDate(date, startDateComponents)
+    }
+    
+    
+    func nextEndDate(startingFrom date: Date = Date()) -> Date? {
+        nextDate(date, endDateComponents)
+    }
+    
     var startDateComponents: DateComponents {
         var components = DateComponents()
         components.weekday = Int(dayOfWeek)
