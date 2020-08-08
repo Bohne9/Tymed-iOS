@@ -39,17 +39,38 @@ class TimetableOverviewWrapper: UIViewController {
     
 }
 
+//MARK: TimetableOverview
 struct TimetableOverview: View {
+    
+    @State
+    var timetables: [Timetable] = TimetableService.shared.fetchTimetables() ?? []
+    
     var body: some View {
         List {
-            ForEach(0..<50) { i in
-                NavigationLink(destination: Text("Dest")) {
-                    Text("fjowds")
+            ForEach(timetables, id: \.self) { (timetable: Timetable) in
+                NavigationLink(destination: TimetableDetail(timetable: timetable)) {
+                    TimetableOverviewCell(timetable: timetable)
+                        .frame(height: 45)
                 }
             }
-        }.navigationTitle("Time")
+        }.listStyle(InsetGroupedListStyle())
+        .font(.system(size: 16, weight: .semibold))
     }
 }
+
+//MARK: TimetableOverviewCell
+struct TimetableOverviewCell: View {
+    
+    var timetable: Timetable
+    
+    var body: some View {
+        Text(timetable.name ?? "")
+            .font(.system(size: 15, weight: .semibold))
+    }
+    
+}
+
+
 
 struct TimetableOverview_Previews: PreviewProvider {
     static var previews: some View {
