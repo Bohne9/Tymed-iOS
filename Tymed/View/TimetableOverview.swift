@@ -8,42 +8,18 @@
 
 import SwiftUI
 
-class TimetableOverviewWrapper: UIViewController {
-    
-    var timetableOverview: TimetableOverview!
-    
-    var contentView: UIHostingController<TimetableOverview>!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        timetableOverview = TimetableOverview()
-        contentView = UIHostingController(rootView: timetableOverview)
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        title = "Timetable"
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
-        setupConstraints()
-    }
-    
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        contentView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        contentView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        contentView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    }
-    
-}
-
 //MARK: TimetableOverview
 struct TimetableOverview: View {
     
-    @State
-    var timetables: [Timetable] = TimetableService.shared.fetchTimetables() ?? []
+//    @State
+//    var timetables: [Timetable] = TimetableService.shared.fetchTimetables() ?? []
+    
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(
+        entity: Timetable.entity(),
+        sortDescriptors: [])
+    var timetables: FetchedResults<Timetable>
     
     var body: some View {
         List {
@@ -58,14 +34,30 @@ struct TimetableOverview: View {
     }
 }
 
+
 //MARK: TimetableOverviewCell
 struct TimetableOverviewCell: View {
     
+    @Environment(\.managedObjectContext) var moc
+    
+    @State
     var timetable: Timetable
     
     var body: some View {
-        Text(timetable.name ?? "")
-            .font(.system(size: 15, weight: .semibold))
+        HStack {
+            Text(timetable.name ?? "")
+                .font(.system(size: 15, weight: .semibold))
+            
+            Spacer()
+            
+            if timetable.isDefault {
+                Text("Default")
+                    .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                    .background(Color(.tertiarySystemGroupedBackground))
+                    .font(.system(size: 13, weight: .semibold))
+                    .cornerRadius(10)
+            }
+        }
     }
     
 }

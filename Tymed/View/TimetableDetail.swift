@@ -10,7 +10,13 @@ import SwiftUI
 
 struct TimetableDetail: View {
     
+    @Environment(\.managedObjectContext) var moc
+    
+    @State
     var timetable: Timetable
+    
+    @State
+    var isDefault = false
     
     var maxNumberOfSubjects = 4
     var maxNumberOfTasks = 4
@@ -93,6 +99,15 @@ struct TimetableDetail: View {
                     })
             }
             
+            //MARK: Default
+            Section {
+                HStack {
+                    DetailCellDescriptor("Default timetable", image: "circle.fill", .systemGreen)
+                
+                    Toggle("", isOn: $isDefault).labelsHidden()
+                }
+            }
+            
             //MARK: Delete
             Section {
                 
@@ -103,6 +118,11 @@ struct TimetableDetail: View {
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Timetable")
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: isDefault) { (value) in
+            print("save")
+            timetable.isDefault = isDefault
+            TimetableService.shared.save()
+        }
     }
     
     private func subjects() -> [Subject] {
