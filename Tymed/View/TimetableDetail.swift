@@ -121,8 +121,18 @@ struct TimetableDetail: View {
         .onChange(of: isDefault) { (value) in
             print("save")
             timetable.isDefault = isDefault
-            TimetableService.shared.save()
-        }
+            
+            do {
+                try self.moc.save()
+                print("Saved")
+            } catch {
+                print(error.localizedDescription)
+            }
+        }.onAppear(perform: loadValues)
+    }
+    
+    private func loadValues() {
+        isDefault = timetable.isDefault
     }
     
     private func subjects() -> [Subject] {

@@ -24,13 +24,28 @@ struct TimetableOverview: View {
     var body: some View {
         List {
             ForEach(timetables, id: \.self) { (timetable: Timetable) in
-                NavigationLink(destination: TimetableDetail(timetable: timetable)) {
-                    TimetableOverviewCell(timetable: timetable)
+                NavigationLink(destination: TimetableDetail(timetable: timetable)
+                                .environment(\.managedObjectContext, moc)) {
+                    HStack {
+                        Text(timetable.name ?? "")
+                            .font(.system(size: 15, weight: .semibold))
+                        
+                        Spacer()
+                        
+                        if timetable.isDefault {
+                            Text("Default")
+                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                                .background(Color(.tertiarySystemGroupedBackground))
+                                .font(.system(size: 13, weight: .semibold))
+                                .cornerRadius(10)
+                        }
+                    }
                         .frame(height: 45)
                 }
             }
         }.listStyle(InsetGroupedListStyle())
         .font(.system(size: 16, weight: .semibold))
+        .navigationTitle("Timetable")
     }
 }
 

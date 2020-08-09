@@ -45,7 +45,7 @@ class TimetableOverviewViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightItem
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        title = "Timetables"
+//        title = "Timetables"
         
 //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: addReuseIdentifier)
 //        tableView.register(TimetableOverviewAddTableViewViewCell.self, forCellReuseIdentifier: "addTimetable")
