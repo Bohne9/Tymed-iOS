@@ -273,7 +273,6 @@ struct TaskEditContent: View {
                     }
             }
         }
-        .animation(.default)
         .font(.system(size: 16, weight: .semibold))
         .listStyle(InsetGroupedListStyle())
         .navigationTitle("Task") //MARK: NavigationBar

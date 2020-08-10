@@ -114,7 +114,7 @@ struct TimetableDetail: View {
             //MARK: Archived tasks
             Section {
                 NavigationLink(
-                    destination: Text("Archived Tasks"),
+                    destination: ArchivedTasksOverview(timetable: timetable),
                     label: {
                         DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
                     })
@@ -152,16 +152,108 @@ struct TimetableDetail: View {
         }.onAppear(perform: loadValues)
     }
     
+    //MARK: loadValues
     private func loadValues() {
         isDefault = timetable.isDefault
     }
-    
+    //MARK: subjects
     private func subjects() -> [Subject] {
         return timetable.subjects?.allObjects as? [Subject] ?? []
     }
-    
+    //MARK: unarchivedTasks
     private func unarchivedTasks() -> [Task] {
         return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
     }
 }
 
+
+struct ArchivedTasksOverview: View {
+    
+    @State var timetable: Timetable
+    
+    @State private var showTaskDetail = false
+    @State private var task: Task?
+    
+    var body: some View {
+        List {
+            Section {
+                DetailCellDescriptor("Delete all archived tasks", image: "trash", .systemRed)
+                    .onTapGesture {
+                        deleteAllTasks()
+                    }
+            }
+            
+            Section(header: Text("Manually archived")) {
+                ForEach(archivedTasksWithOutDue(), id: \.self) { (task: Task) in
+                    HStack {
+                        TaskPreviewCell(task: task)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.tertiaryLabel))
+                    }
+                    .frame(height: 50)
+                    .onTapGesture {
+                        self.task = task
+                        self.showTaskDetail.toggle()
+                    }
+                }.onDelete { (index) in
+                    index.forEach { deleteTask(at: $0, hasDue: false) }
+                }
+            }
+            
+            Section(header: Text("Recently expired")) {
+                ForEach(archivedTasksWithDue(), id: \.self) { (task: Task) in
+                    HStack {
+                        TaskPreviewCell(task: task)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.tertiaryLabel))
+                    }
+                    .frame(height: 50)
+                    .onTapGesture {
+                        self.task = task
+                        self.showTaskDetail.toggle()
+                    }
+                }.onDelete { (index) in
+                    index.forEach { deleteTask(at: $0, hasDue: true) }
+                }
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Archived tasks")
+        .sheet(isPresented: $showTaskDetail) {
+            if task != nil {
+                TaskEditView(task: task!) {
+                    
+                }
+            } else {
+                Text("Ups! An error occurred :(")
+            }
+        }
+    }
+    
+    func archivedTasksWithOutDue() -> [Task] {
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due == nil }.sorted()
+    }
+    
+    func archivedTasksWithDue() -> [Task] {
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due != nil }.sorted()
+    }
+    
+    func deleteTask(at index: IndexSet.Element, hasDue: Bool) {
+        
+        let task = (hasDue ? archivedTasksWithDue() : archivedTasksWithOutDue())[index]
+        
+        TimetableService.shared.deleteTask(task)
+        
+    }
+    
+    func deleteAllTasks() {
+        timetable.tasks?.forEach({ (task) in
+            guard let task = task as? Task else {
+                return
+            }
+            
+            TimetableService.shared.deleteTask(task)
+        })
+    }
+}

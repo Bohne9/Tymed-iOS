@@ -48,6 +48,7 @@
 		4F5B4E9124C624860098F4A7 /* NoTimetablesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9024C624860098F4A7 /* NoTimetablesTableViewCell.swift */; };
 		4F5B4E9324C6287B0098F4A7 /* TimetableAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */; };
 		4F5B4E9624C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5B4E9524C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift */; };
+		4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */; };
 		4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */; };
 		4F6C6D0124E0732500E5AEA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4B569524E06EAD00ED193A /* Assets.xcassets */; };
 		4F6F6EFF24DD1DCA006EC4BE /* NotificationOffsetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */; };
@@ -169,6 +170,7 @@
 		4F5B4E9024C624860098F4A7 /* NoTimetablesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoTimetablesTableViewCell.swift; sourceTree = "<group>"; };
 		4F5B4E9224C6287B0098F4A7 /* TimetableAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableAddViewController.swift; sourceTree = "<group>"; };
 		4F5B4E9524C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTitleTableViewCell.swift; sourceTree = "<group>"; };
+		4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreviewCell.swift; sourceTree = "<group>"; };
 		4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableOverview.swift; sourceTree = "<group>"; };
 		4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationOffsetView.swift; sourceTree = "<group>"; };
 		4F6F6F0024DD1DF2006EC4BE /* LessonPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPickerView.swift; sourceTree = "<group>"; };
@@ -490,6 +492,7 @@
 				4F8E058724DA793400748F47 /* AppTimetablePicker.swift */,
 				4F8E058924DA798500748F47 /* CustomTextField.swift */,
 				4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */,
+				4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -830,6 +833,7 @@
 				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */,
+				4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */,
 				4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */,
 				4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */,
 				4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */,
