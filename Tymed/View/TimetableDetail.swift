@@ -65,9 +65,9 @@ struct TimetableDetail: View {
             Section(header: Text("Tasks").font(.system(size: 12, weight: .semibold))) {
                 ForEach(unarchivedTasks().prefix(maxNumberOfTasks), id: \.self) { task in
                     NavigationLink(
-                        destination: TaskEditView(task: task, dismiss: {
+                        destination: TaskEditContent(task: task, dismiss: {
                             
-                        }),
+                        }).navigationBarItems(trailing: EmptyView()) ,
                         label: {
                             HStack {
                                 Text(task.title ?? "")

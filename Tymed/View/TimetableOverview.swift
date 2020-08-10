@@ -68,13 +68,27 @@ struct TimetableOverview: View {
                 }
             }
             
-            HStack {
-                Spacer()
-                
-//                Image("Group 12-1024")
-                
-                Spacer()
+            Section {
+                VStack {
+                    HStack {
+                        Text("Tips")
+                            .font(.system(size: 15, weight: .semibold))
+                        Spacer()
+                    }
+                    Spacer()
+                    HStack {
+                        Text("You can add multiple timetables!")
+                            .font(.system(size: 14, weight: .regular))
+                            .lineLimit(-1)
+                            Spacer()
+                    }
+                }
+                .padding()
+                .frame(height: 70)
+                .background(Color(UIColor(named: "orange")!))
             }
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            
             
         }.listStyle(InsetGroupedListStyle())
         .font(.system(size: 16, weight: .semibold))
