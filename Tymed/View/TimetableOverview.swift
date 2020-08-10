@@ -28,6 +28,9 @@ struct TimetableOverview: View {
     @State private var showTaskAdd = false
     @State private var showTimetableAdd = false
     
+    //MARK: Tips
+    @State private var showTips = true
+    
     var body: some View {
         List {
             //MARK: Timetable list
@@ -67,30 +70,40 @@ struct TimetableOverview: View {
                     showAddView.toggle()
                 }
             }
-            
-            Section {
-                VStack {
-                    HStack {
-                        Text("Tips")
-                            .font(.system(size: 15, weight: .semibold))
-                        Spacer()
-                    }
-                    Spacer()
-                    HStack {
-                        Text("You can add multiple timetables!")
-                            .font(.system(size: 14, weight: .regular))
-                            .lineLimit(-1)
+            if showTips {
+                Section {
+                    VStack {
+                        HStack {
+                            Image(systemName: "lightbulb.fill")
+                            Text("Tips")
                             Spacer()
+                            Button(action: {
+                                withAnimation {
+                                    showTips = false
+                                }
+                            }, label: {
+                                Image(systemName: "multiply")
+                                    .foregroundColor(.white)
+                            })
+                        }.font(.system(size: 15, weight: .semibold))
+                        Spacer()
+                        HStack {
+                            Text("You can add multiple timetables!")
+                                .font(.system(size: 14, weight: .regular))
+                                .lineLimit(-1)
+                                Spacer()
+                        }
                     }
+                    .padding()
+                    .frame(height: 70)
+                    .background(Color(UIColor(named: "orange")!))
                 }
-                .padding()
-                .frame(height: 70)
-                .background(Color(UIColor(named: "orange")!))
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .transition(AnyTransition.scale)
             }
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            
             
         }.listStyle(InsetGroupedListStyle())
+        .transition(.scale)
         .font(.system(size: 16, weight: .semibold))
         .navigationBarItems(trailing: Button {
             showAddActionSheet = true
