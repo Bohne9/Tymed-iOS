@@ -53,10 +53,55 @@ struct TaskEditView: View {
     
     @State var task: Task
     
+    var dismiss: () -> Void
+    
+    var body: some View {
+        NavigationView {
+            TaskEditContent(task: task, dismiss: dismiss)
+        }
+    }
+    
+//    //MARK: cancel
+//    private func cancel() {
+//        dismiss()
+//        presentationMode.wrappedValue.dismiss()
+//    }
+//    
+//    //MARK: saveTask
+//    private func saveTask() {
+//        
+//        if sendNotification {
+//            task.getNotifications { (notifications) in
+//                NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+//                NotificationService.current.removeAllNotifications(of: task)
+//            }
+//        }else {
+//            NotificationService.current.removeAllNotifications(of: task)
+//        }
+//        
+//        task.title = taskTitle
+//        task.text = taskDescription
+//        task.due = hasDueDate ? dueDate : nil
+//        task.lesson = hasLessonAttached ? lesson : nil
+//        task.priority = 0
+//        task.archived = isArchived
+//        task.completed = isCompleted
+//        task.completionDate = completionDate
+//        
+//        TimetableService.shared.save()
+//        
+//        dismiss()
+//        presentationMode.wrappedValue.dismiss()
+//    }
+//    
+}
+
+
+struct TaskEditContent: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @State var showDismissWarning = false
+    @State var task: Task
     
     //MARK: Title states
     @State var taskTitle: String = ""
@@ -91,174 +136,170 @@ struct TaskEditView: View {
     //MARK: Archive state
     @State var isArchived: Bool = false
     
+    @State var showDismissWarning = false
+    
+    
     //MARK: Delete state
     @State var showDeleteAction = false
     
     var dismiss: () -> Void
     
     var body: some View {
-        NavigationView {
-            List {
-                
-                //MARK: Title
-                Section {
-                    TextField("Title", text: $taskTitle)
-                    TextField("Description", text: $taskDescription).lineLimit(-1)
-                }
-                
-                //MARK: Complete
-                Section {
-                    HStack {
-                        DetailCellDescriptor("Completed", image: completeIcon(), completeColor(), value: completionDate?.stringify(dateStyle: .short, timeStyle: .short))
-                            .animation(.easeOut)
-                        
-                        Toggle("", isOn: $isCompleted)
-                    }.frame(height: 45)
-                }
-                
-                //MARK: Due Date
-                Section {
-                    HStack {
-                        
-                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate.stringify(dateStyle: .short, timeStyle: .short))
-                        .onTapGesture {
-                            withAnimation {
-                                presentDueDatePicker.toggle()
-                            }
-                        }
-                        
-                        Toggle("", isOn: $hasDueDate).labelsHidden()
-                    }.frame(height: 45)
+        List {
+            
+            //MARK: Title
+            Section {
+                TextField("Title", text: $task.title)
+                TextField("Description", text: $taskDescription).lineLimit(-1)
+            }
+            
+            //MARK: Complete
+            Section {
+                HStack {
+                    DetailCellDescriptor("Completed", image: completeIcon(), completeColor(), value: task.completionDate?.stringify(dateStyle: .short, timeStyle: .short))
+                        .animation(.easeOut)
                     
+                    Toggle("", isOn: $task.completed)
+                }.frame(height: 45)
+            }
+            
+            //MARK: Due Date
+            Section {
+                HStack {
                     
-                    if hasDueDate {
-                        if presentDueDatePicker {
-                            DatePicker("", selection: $dueDate)
-                                .datePickerStyle(GraphicalDatePickerStyle())
-                                .frame(height: 350)
-                        }
-                        //MARK: Notification
-                        HStack {
-                            DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
-                            .onTapGesture {
-                                withAnimation {
-                                    presentNotificationPicker.toggle()
-                                }
-                            }
-                            
-                            Toggle("", isOn: $sendNotification).labelsHidden()
-                        }.frame(height: 45)
-                        
-                        
-                        if sendNotification && presentNotificationPicker {
-                            NavigationLink(
-                                destination: NotificationOffsetView(notificationOffset: $notificationOffset),
-                                label: {
-                                    HStack {
-                                        Spacer()
-                                        Text(notificationOffset.title)
-                                    }
-                                }).frame(height: 45)
+                    DetailCellDescriptor("Due date", image: "calendar", .systemRed, value:
+                                            hasDueDate ? dueDate.stringify(dateStyle: .short, timeStyle: .short) : nil)
+                    .onTapGesture {
+                        withAnimation {
+                            presentDueDatePicker.toggle()
                         }
                     }
                     
-                }
+                    Toggle("", isOn: $hasDueDate).labelsHidden()
+                }.frame(height: 45)
                 
-                //MARK: Lesson Attach
-                Section {
-                    
+                
+                if hasDueDate {
+                    if presentDueDatePicker {
+                        DatePicker("", selection: $dueDate)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .frame(height: 350)
+                    }
+                    //MARK: Notification
                     HStack {
-                        DetailCellDescriptor("Lesson", image: "doc.text.fill", .systemBlue)
+                        DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
+                        .onTapGesture {
+                            withAnimation {
+                                presentNotificationPicker.toggle()
+                            }
+                        }
                         
-                        Toggle("", isOn: $hasLessonAttached)
+                        Toggle("", isOn: $sendNotification).labelsHidden()
                     }.frame(height: 45)
                     
-                    if hasLessonAttached {
+                    
+                    if sendNotification && presentNotificationPicker {
                         NavigationLink(
-                            destination: LessonPickerView(lesson: $lesson),
+                            destination: NotificationOffsetView(notificationOffset: $notificationOffset),
                             label: {
                                 HStack {
-                                    if lesson != nil {
-                                        Circle()
-                                            .frame(width: 10, height: 10)
-                                            .foregroundColor(subjectColor(lesson))
-                                    }
-                                    
-                                    Text(titleForLessonCell())
-                                        .foregroundColor(foregroundColorForLessonCell())
                                     Spacer()
-                                    if lesson != nil {
-                                        Text(lessonTime(lesson))
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                        
-                                }.contentShape(Rectangle())
-                                .frame(height: 45)
+                                    Text(notificationOffset.title)
+                                }
                             }).frame(height: 45)
                     }
                 }
-                //MARK: Archive
-                Section {
-                    HStack {
-                        DetailCellDescriptor("Archived", image: "tray.full.fill", .systemOrange)
-                        
-                        Toggle("", isOn: $isArchived)
-                    }.frame(height: 45)
-                }
                 
+            }
+            
+            //MARK: Lesson Attach
+            Section {
                 
-                //MARK: Delete
-                Section {
-                    DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            showDeleteAction.toggle()
-                        }.actionSheet(isPresented: $showDeleteAction) {
-                            ActionSheet(
-                                title: Text(""),
-                                message: nil,
-                                buttons: [
-                                    .destructive(Text("Delete"), action: {
-                                        deleteTask()
-                                    }),
-                                    .cancel()
-                                ])
-                        }
+                HStack {
+                    DetailCellDescriptor("Lesson", image: "doc.text.fill", .systemBlue)
+                    
+                    Toggle("", isOn: $hasLessonAttached)
+                }.frame(height: 45)
+                
+                if hasLessonAttached {
+                    NavigationLink(
+                        destination: LessonPickerView(lesson: $lesson),
+                        label: {
+                            HStack {
+                                if lesson != nil {
+                                    Circle()
+                                        .frame(width: 10, height: 10)
+                                        .foregroundColor(subjectColor(lesson))
+                                }
+                                
+                                Text(titleForLessonCell())
+                                    .foregroundColor(foregroundColorForLessonCell())
+                                Spacer()
+                                if lesson != nil {
+                                    Text(lessonTime(lesson))
+                                        .font(.system(size: 14, weight: .semibold))
+                                }
+                                    
+                            }.contentShape(Rectangle())
+                            .frame(height: 45)
+                        }).frame(height: 45)
                 }
             }
-            .animation(.default)
-            .font(.system(size: 16, weight: .semibold))
-            .listStyle(InsetGroupedListStyle())
-            .navigationTitle("Task") //MARK: NavigationBar
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: Button("Cancel", action: {
-                if hasUnsavedChanges() {
-                    showDismissWarning.toggle()
-                    return
-                }
-                
-                cancel()
-            }), trailing: Button("Done", action: {
-                saveTask()
-            }))
-            .actionSheet(isPresented: $showDismissWarning) {
-                ActionSheet(
-                    title: Text(""),
-                    message: nil,
-                    buttons: [
-                        .destructive(Text("Discard any changes?"), action: {
-                            showDismissWarning.toggle()
-                            cancel()
-                        }),
-                        .cancel()
-                    ])
+            //MARK: Archive
+            Section {
+                HStack {
+                    DetailCellDescriptor("Archived", image: "tray.full.fill", .systemOrange)
+                    
+                    Toggle("", isOn: $isArchived)
+                }.frame(height: 45)
             }
-        }.onAppear {
+            
+            
+            //MARK: Delete
+            Section {
+                DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showDeleteAction.toggle()
+                    }.actionSheet(isPresented: $showDeleteAction) {
+                        ActionSheet(
+                            title: Text(""),
+                            message: nil,
+                            buttons: [
+                                .destructive(Text("Delete"), action: {
+                                    deleteTask()
+                                }),
+                                .cancel()
+                            ])
+                    }
+            }
+        }
+        .font(.system(size: 16, weight: .semibold))
+        .listStyle(InsetGroupedListStyle())
+        .navigationTitle("Task") //MARK: NavigationBar
+        .navigationBarTitleDisplayMode(.inline)
+        .actionSheet(isPresented: $showDismissWarning) {
+            ActionSheet(
+                title: Text(""),
+                message: nil,
+                buttons: [
+                    .destructive(Text("Discard any changes?"), action: {
+                        showDismissWarning.toggle()
+                        cancel()
+                    }),
+                    .cancel()
+                ])
+        }.navigationBarItems(leading: Button("Cancel", action: {
+            cancel()
+        }), trailing: Button("Done", action: {
+            saveTask()
+        }))
+        .onAppear {
             loadTaskValues()
         }.onChange(of: isCompleted) { completed in
             completionDate = completed ? Date() : nil
         }.onDisappear {
-            saveTask()
+            saveTask(dismiss: false)
         }
     }
     
@@ -371,8 +412,7 @@ struct TaskEditView: View {
     }
     
     //MARK: saveTask
-    private func saveTask() {
-        
+    private func saveTask(dismiss: Bool = true) {
         if sendNotification {
             task.getNotifications { (notifications) in
                 NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
@@ -393,8 +433,10 @@ struct TaskEditView: View {
         
         TimetableService.shared.save()
         
-        dismiss()
-        presentationMode.wrappedValue.dismiss()
+        if dismiss {
+            self.dismiss()
+            presentationMode.wrappedValue.dismiss()
+        }
     }
     
     //MARK: deleteTask
@@ -406,7 +448,6 @@ struct TaskEditView: View {
         
     }
 }
-
 
 struct TaskEditView_Previews: PreviewProvider {
     static var previews: some View {

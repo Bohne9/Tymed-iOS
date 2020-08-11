@@ -33,8 +33,6 @@ class TimetableOverviewViewController: UIViewController {
 
     var timetables: [Timetable]?
     
-    var timetableOverview = UIHostingController(rootView: TimetableOverview())
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,11 +45,15 @@ class TimetableOverviewViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightItem
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        title = "Timetables"
+//        title = "Timetables"
         
 //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: addReuseIdentifier)
 //        tableView.register(TimetableOverviewAddTableViewViewCell.self, forCellReuseIdentifier: "addTimetable")
 //        tableView.register(NoTimetablesTableViewCell.self, forCellReuseIdentifier: "noTimetables")
+        
+        let timetableOverview = UIHostingController(rootView:
+                                                        TimetableOverview()
+                                                        .environment(\.managedObjectContext, AppDelegate.persistentContainer))
         
         addChild(timetableOverview)
         view.addSubview(timetableOverview.view)

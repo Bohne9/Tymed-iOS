@@ -29,6 +29,7 @@ struct DetailCellDescriptor: View {
                 Color(color)
                 Image(systemName: image)
                     .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.white)
             }.cornerRadius(6).frame(width: 28, height: 28)
             
             VStack(alignment: .leading) {

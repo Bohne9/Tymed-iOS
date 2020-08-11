@@ -70,7 +70,9 @@ class ViewController: UITabBarController {
     private func generateAddViewController() -> UIViewController {
         
         
-        let nav = UINavigationController(rootViewController: addVC)
+        let nav = UINavigationController(rootViewController: UIHostingController(rootView:
+                                                                                    TimetableOverview()
+                                                                                    .environment(\.managedObjectContext, AppDelegate.persistentContainer)))
         
 //        let split = UISplitViewController()
 //

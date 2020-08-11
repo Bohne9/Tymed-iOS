@@ -34,6 +34,8 @@ struct LessonAddView: View {
     
     var dismiss: () -> Void
     
+    @Environment(\.presentationMode) var presentationMode
+    
     //MARK: Lesson Subject Title
     @State private var subjectTitle = ""
     
@@ -57,11 +59,20 @@ struct LessonAddView: View {
     @State private var note = ""
     
     //MARK: Timetable
-    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
+    @State private var timetable: Timetable?
     
     
     @State private var subjectTimetableAlert = false
     
+    init(dismiss: @escaping () -> Void) {
+        self.dismiss = dismiss
+        _timetable = State(initialValue: TimetableService.shared.defaultTimetable())
+    }
+    
+    init(_ defaultTimetable: Timetable, _ dismiss: @escaping () -> Void) {
+        self.dismiss = dismiss
+        _timetable = State(initialValue: defaultTimetable)
+    }
     
     var body: some View {
         NavigationView {
@@ -203,6 +214,7 @@ struct LessonAddView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("Cancel"){
                 dismiss()
+                presentationMode.wrappedValue.dismiss()
             }, trailing: Button("Add") {
                 addLesson()
             })
@@ -269,6 +281,7 @@ struct LessonAddView: View {
         
         _ = TimetableService.shared.addLesson(subject: subject, day: day, start: startTime, end: endTime, note: nil)
         
+        presentationMode.wrappedValue.dismiss()
         dismiss()
     }
     
