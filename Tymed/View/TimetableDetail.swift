@@ -214,7 +214,8 @@ struct ArchivedTasksOverview: View {
                         self.task = task
                         self.showTaskDetail.toggle()
                     }
-                }.onDelete { (index) in
+                }
+                .onDelete { (index) in
                     index.forEach { deleteTask(at: $0, hasDue: true) }
                 }
             }
@@ -223,7 +224,7 @@ struct ArchivedTasksOverview: View {
         .sheet(isPresented: $showTaskDetail) {
             if task != nil {
                 TaskEditView(task: task!) {
-                    
+                    task = nil
                 }
             } else {
                 Text("Ups! An error occurred :(")

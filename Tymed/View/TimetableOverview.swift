@@ -36,8 +36,7 @@ struct TimetableOverview: View {
             //MARK: Timetable list
             Section {
                 ForEach(timetables, id: \.self) { (timetable: Timetable) in
-                    NavigationLink(destination: TimetableDetail(timetable: timetable)
-                                    .environment(\.managedObjectContext, moc)) {
+                    NavigationLink(destination: TimetableDetail(timetable: timetable)) {
                         HStack {
                             Text(timetable.name ?? "")
                                 .font(.system(size: 15, weight: .semibold))

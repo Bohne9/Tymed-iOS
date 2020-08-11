@@ -167,7 +167,8 @@ struct TaskEditContent: View {
             Section {
                 HStack {
                     
-                    DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate.stringify(dateStyle: .short, timeStyle: .short))
+                    DetailCellDescriptor("Due date", image: "calendar", .systemRed, value:
+                                            hasDueDate ? dueDate.stringify(dateStyle: .short, timeStyle: .short) : nil)
                     .onTapGesture {
                         withAnimation {
                             presentDueDatePicker.toggle()
@@ -298,7 +299,7 @@ struct TaskEditContent: View {
         }.onChange(of: isCompleted) { completed in
             completionDate = completed ? Date() : nil
         }.onDisappear {
-            saveTask()
+            saveTask(dismiss: false)
         }
     }
     
@@ -411,8 +412,7 @@ struct TaskEditContent: View {
     }
     
     //MARK: saveTask
-    private func saveTask() {
-        
+    private func saveTask(dismiss: Bool = true) {
         if sendNotification {
             task.getNotifications { (notifications) in
                 NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
@@ -433,8 +433,10 @@ struct TaskEditContent: View {
         
         TimetableService.shared.save()
         
-        dismiss()
-        presentationMode.wrappedValue.dismiss()
+        if dismiss {
+            self.dismiss()
+            presentationMode.wrappedValue.dismiss()
+        }
     }
     
     //MARK: deleteTask
