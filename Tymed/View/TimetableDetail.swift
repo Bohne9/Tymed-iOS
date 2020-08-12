@@ -12,7 +12,7 @@ struct TimetableDetail: View {
     
     @Environment(\.managedObjectContext) var moc
     
-    @State
+    @ObservedObject
     var timetable: Timetable
     
     @State

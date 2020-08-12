@@ -11,7 +11,7 @@ import SwiftUI
 //MARK: TaskPreviewCell
 struct TaskPreviewCell: View {
     
-    @State
+    @ObservedObject
     var task: Task
     
     var body: some View {
@@ -26,8 +26,10 @@ struct TaskPreviewCell: View {
                 }
             VStack(alignment: .leading) {
                 Text(task.title)
+                    .font(.system(size: 14, weight: .semibold))
                 Spacer()
                 Text(task.text ?? "")
+                    .font(.system(size: 12, weight: .semibold))
             }.padding(.vertical, 5)
             Spacer()
             

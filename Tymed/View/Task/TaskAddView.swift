@@ -114,7 +114,7 @@ struct TaskAddView: View {
                     
                     HStack {
                         
-                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: dueDate?.stringify(dateStyle: .short, timeStyle: .short))
+                        DetailCellDescriptor("Due date", image: "calendar", .systemRed, value: hasDueDate ? pickerDate.stringify(dateStyle: .short, timeStyle: .short) : nil)
                         .onTapGesture {
                             withAnimation {
                                 presentDueDatePicker.toggle()
@@ -204,6 +204,8 @@ struct TaskAddView: View {
             }))
             .onChange(of: pickerDate) { value in
                 dueDate = pickerDate
+            }.onChange(of: hasDueDate) { value in
+                dueDate = value ? dueDate : nil
             }.onChange(of: lesson) { value in
                 recommendedDueDate = lesson != nil
             }
