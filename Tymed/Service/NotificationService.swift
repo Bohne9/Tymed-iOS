@@ -274,6 +274,7 @@ class NotificationService {
     //MARK: removeNotifications
     
     func removePendingNotifications(of task: Task) {
+        print("Removing task notifications: \(task.id.uuidString)")
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [task.id.uuidString])
     }
     

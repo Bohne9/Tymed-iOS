@@ -657,9 +657,9 @@ class TimetableService {
     
     //MARK: deleteTask(_: )
     func deleteTask(_ task: Task) {
-        context.delete(task)
-        
         NotificationService.current.removeAllNotifications(of: task)
+        
+        context.delete(task)
         
         save()
     }
