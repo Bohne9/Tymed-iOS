@@ -125,7 +125,7 @@ struct TimetableDetail: View {
                 HStack {
                     DetailCellDescriptor("Default timetable", image: "circle.fill", .systemGreen)
                 
-                    Toggle("", isOn: $isDefault).labelsHidden()
+                    Toggle("", isOn: $timetable.isDefault).labelsHidden()
                 }
             }
             
@@ -139,16 +139,8 @@ struct TimetableDetail: View {
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Timetable")
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: isDefault) { (value) in
-            print("save")
-            timetable.isDefault = isDefault
-            
-            do {
-                try self.moc.save()
-                print("Saved")
-            } catch {
-                print(error.localizedDescription)
-            }
+        .onChange(of: timetable.isDefault) { (value) in
+            TimetableService.shared.setDefaultTimetable(timetable)
         }.onAppear(perform: loadValues)
     }
     
@@ -156,10 +148,12 @@ struct TimetableDetail: View {
     private func loadValues() {
         isDefault = timetable.isDefault
     }
+    
     //MARK: subjects
     private func subjects() -> [Subject] {
         return timetable.subjects?.allObjects as? [Subject] ?? []
     }
+    
     //MARK: unarchivedTasks
     private func unarchivedTasks() -> [Task] {
         return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
