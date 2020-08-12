@@ -112,13 +112,15 @@ struct TimetableDetail: View {
             }
             
             //MARK: Archived tasks
-            Section {
-                NavigationLink(
-                    destination: ArchivedTasksOverview(timetable: timetable),
-                    label: {
-                        DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
-                            .font(.system(size: 15, weight: .semibold))
-                    })
+            if archivedTasks().count > 0 { // Only show the section if there are any archived tasks.
+                Section {
+                    NavigationLink(
+                        destination: ArchivedTasksOverview(timetable: timetable),
+                        label: {
+                            DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
+                                .font(.system(size: 15, weight: .semibold))
+                        })
+                }
             }
             
             //MARK: Default
@@ -158,11 +160,18 @@ struct TimetableDetail: View {
     private func unarchivedTasks() -> [Task] {
         return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
     }
+    
+    //MARK: archivedTasks
+    private func archivedTasks() -> [Task] {
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived }
+    }
 }
 
 
 //MARK: ArchivedTasksOverview
 struct ArchivedTasksOverview: View {
+    
+    @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject
     var timetable: Timetable
@@ -235,5 +244,6 @@ struct ArchivedTasksOverview: View {
             
             TimetableService.shared.deleteTask(task)
         })
+        presentationMode.wrappedValue.dismiss()
     }
 }

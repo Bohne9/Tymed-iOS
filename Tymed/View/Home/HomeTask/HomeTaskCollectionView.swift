@@ -291,7 +291,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let height: CGFloat = 50
+        let height: CGFloat = 40
         
         return CGSize(width: collectionView.frame.width, height: height)
     }

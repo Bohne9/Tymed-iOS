@@ -42,6 +42,10 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return d1 < d2
         })
         
+        reloadData()
+        
+        scrollTo(day: .current)
+        
     }
     
     private func duration(of lesson: Lesson) -> Int {
@@ -173,7 +177,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            header.label.text = lesson(for: indexPath)?.day.date()?.dayToString()
+            header.label.text = lesson(for: indexPath)?.day.string()
             
             return header
         }
@@ -195,7 +199,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
+        return CGSize(width: collectionView.frame.width, height: 40)
     }
     
     
