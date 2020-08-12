@@ -35,13 +35,13 @@ extension Task {
     func iconForCompletion() -> String {
         if completed {
             return "checkmark.circle.fill"
-        }else {
-            if due != nil && Date() < due! {
-                return "circle"
-            }else {
-                return "exclamationmark.circle.fill"
-            }
+        }else if due == nil {
+            return "circle"
+        } else if due != nil  && Date() < due! {
+            return "exclamationmark.circle.fill"
         }
+        // Just a default case
+        return "circle"
     }
     
     func completeColor() -> UIColor {

@@ -67,6 +67,9 @@ struct TaskAddView: View {
     @State
     private var sendNotification = false
     
+    //MARK: Timetable
+    @State private var timetable: Timetable?
+    
     @State
     private var presentNotificationPicker = false
     
@@ -193,6 +196,26 @@ struct TaskAddView: View {
                             }).frame(height: 45)
                     }
                 }
+                
+                //MARK: Timetable
+                
+                Section {
+                    HStack {
+                        
+                        NavigationLink(destination: AppTimetablePicker(timetable: $timetable)) {
+                            DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                            Spacer()
+                            if timetable == TimetableService.shared.defaultTimetable() {
+                                Text("Default")
+                                    .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                                    .background(Color(.tertiarySystemGroupedBackground))
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .cornerRadius(10)
+                            }
+                        }
+                        
+                    }
+                }
             }.listStyle(InsetGroupedListStyle())
             .font(.system(size: 16, weight: .semibold))
             .navigationTitle("Task")
@@ -242,6 +265,11 @@ struct TaskAddView: View {
         return "\(lesson?.startTime.string() ?? "") - \(lesson?.endTime.string() ?? "")"
     }
     
+    //MARK: timetableTitle
+    private func timetableTitle() -> String? {
+        return timetable?.name
+    }
+    
     private func cancel() {
         dismiss()
         presentationMode.wrappedValue.dismiss()
@@ -258,10 +286,11 @@ struct TaskAddView: View {
         task.priority = 0
         task.archived = false
         
-        guard let defaultTimetable = TimetableService.shared.defaultTimetable() else {
-            return
+        if let timetable = self.timetable {
+            task.timetable = timetable
+        } else if let defaultTimetable = TimetableService.shared.defaultTimetable() {
+            task.timetable = defaultTimetable
         }
-        task.timetable = defaultTimetable
         
         TimetableService.shared.save()
         
