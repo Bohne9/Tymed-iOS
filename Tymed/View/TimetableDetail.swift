@@ -12,7 +12,7 @@ struct TimetableDetail: View {
     
     @Environment(\.managedObjectContext) var moc
     
-    @State
+    @ObservedObject
     var timetable: Timetable
     
     @State
@@ -28,7 +28,7 @@ struct TimetableDetail: View {
         
         List {
             //MARK: Name
-            Section {
+            Section(header: Text("Name").font(.system(size: 12, weight: .semibold))) {
                 Text(timetable.name ?? "")
             }
             
@@ -56,7 +56,7 @@ struct TimetableDetail: View {
                             destination: Text("See all subjects"),
                             label: {
                                 HStack {
-                                    Text("See all")
+                                    Text("See all subjects")
                                     Spacer()
                                 }.foregroundColor(Color(.systemBlue))
                                 .font(.system(size: 15, weight: .semibold))
@@ -117,6 +117,7 @@ struct TimetableDetail: View {
                     destination: ArchivedTasksOverview(timetable: timetable),
                     label: {
                         DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
+                            .font(.system(size: 15, weight: .semibold))
                     })
             }
             
@@ -124,31 +125,22 @@ struct TimetableDetail: View {
             Section {
                 HStack {
                     DetailCellDescriptor("Default timetable", image: "circle.fill", .systemGreen)
-                
-                    Toggle("", isOn: $isDefault).labelsHidden()
+                        .font(.system(size: 15, weight: .semibold))
+                    Toggle("", isOn: $timetable.isDefault).labelsHidden()
                 }
             }
             
             //MARK: Delete
             Section {
-                
                 DetailCellDescriptor("Delete", image: "trash", .systemRed)
-                
+                    .font(.system(size: 15, weight: .semibold))
             }
             
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Timetable")
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: isDefault) { (value) in
-            print("save")
-            timetable.isDefault = isDefault
-            
-            do {
-                try self.moc.save()
-                print("Saved")
-            } catch {
-                print(error.localizedDescription)
-            }
+        .onChange(of: timetable.isDefault) { (value) in
+            TimetableService.shared.setDefaultTimetable(timetable)
         }.onAppear(perform: loadValues)
     }
     
@@ -156,10 +148,12 @@ struct TimetableDetail: View {
     private func loadValues() {
         isDefault = timetable.isDefault
     }
+    
     //MARK: subjects
     private func subjects() -> [Subject] {
         return timetable.subjects?.allObjects as? [Subject] ?? []
     }
+    
     //MARK: unarchivedTasks
     private func unarchivedTasks() -> [Task] {
         return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
@@ -167,15 +161,15 @@ struct TimetableDetail: View {
 }
 
 
+//MARK: ArchivedTasksOverview
 struct ArchivedTasksOverview: View {
     
-    @State var timetable: Timetable
-    
-    @State private var showTaskDetail = false
-    @State private var task: Task?
+    @ObservedObject
+    var timetable: Timetable
     
     var body: some View {
         List {
+            //MARK: Delete all
             Section {
                 DetailCellDescriptor("Delete all archived tasks", image: "trash", .systemRed)
                     .onTapGesture {
@@ -183,36 +177,30 @@ struct ArchivedTasksOverview: View {
                     }
             }
             
+            //MARK: Manually archived
             Section(header: Text("Manually archived")) {
                 ForEach(archivedTasksWithOutDue(), id: \.self) { (task: Task) in
-                    HStack {
+                    NavigationLink(destination:
+                                    TaskEditContent(task: task, dismiss: { })
+                                    .navigationBarItems(trailing: EmptyView())
+                    ) {
                         TaskPreviewCell(task: task)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.tertiaryLabel))
-                    }
-                    .frame(height: 50)
-                    .onTapGesture {
-                        self.task = task
-                        self.showTaskDetail.toggle()
+                            .frame(height: 50)
                     }
                 }.onDelete { (index) in
                     index.forEach { deleteTask(at: $0, hasDue: false) }
                 }
             }
             
-            Section(header: Text("Recently expired")) {
+            //MARK: Expired
+            Section(header: Text("Expired")) {
                 ForEach(archivedTasksWithDue(), id: \.self) { (task: Task) in
-                    HStack {
+                    NavigationLink(destination:
+                                    TaskEditContent(task: task, dismiss: { })
+                                    .navigationBarItems(trailing: EmptyView())
+                    ) {
                         TaskPreviewCell(task: task)
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.tertiaryLabel))
-                    }
-                    .frame(height: 50)
-                    .onTapGesture {
-                        self.task = task
-                        self.showTaskDetail.toggle()
+                            .frame(height: 50)
                     }
                 }
                 .onDelete { (index) in
@@ -221,23 +209,14 @@ struct ArchivedTasksOverview: View {
             }
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Archived tasks")
-        .sheet(isPresented: $showTaskDetail) {
-            if task != nil {
-                TaskEditView(task: task!) {
-                    task = nil
-                }
-            } else {
-                Text("Ups! An error occurred :(")
-            }
-        }
     }
     
     func archivedTasksWithOutDue() -> [Task] {
-        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due == nil }.sorted()
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due == nil }.sorted().reversed()
     }
     
     func archivedTasksWithDue() -> [Task] {
-        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due != nil }.sorted()
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived && $0.due != nil }.sorted().reversed()
     }
     
     func deleteTask(at index: IndexSet.Element, hasDue: Bool) {

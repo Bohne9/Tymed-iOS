@@ -126,7 +126,7 @@ class NotificationService {
                 print("Currently scheduled notifications:")
             }
             requests.forEach { (request) in
-                print("\t \(request.content.categoryIdentifier)/\(request.content.threadIdentifier): \(request.identifier) - '\(request.content.title)': '\(request.content.body)'")
+                print("\t \(request.content.categoryIdentifier)/\(request.content.threadIdentifier): Id: \(request.identifier) - Title: '\(request.content.title)', Body: '\(request.content.body)', at: \((request.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()?.stringify(dateStyle: .full, timeStyle: .medium) ?? "")")
             }
         }
     }
@@ -274,6 +274,7 @@ class NotificationService {
     //MARK: removeNotifications
     
     func removePendingNotifications(of task: Task) {
+        print("Removing task notifications: \(task.id.uuidString)")
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [task.id.uuidString])
     }
     

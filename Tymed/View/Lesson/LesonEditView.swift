@@ -44,7 +44,7 @@ class LessonEditViewWrapper: UIViewController {
 //MARK: LessonEditView
 struct LessonEditView: View {
     
-    @State var lesson: Lesson
+    @ObservedObject var lesson: Lesson
     
     var dismiss: () -> Void
     

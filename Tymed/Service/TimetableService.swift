@@ -100,6 +100,17 @@ class TimetableService {
         save()
     }
     
+    /// Sets a new default timetable (the old default timetable will no longer be the default)
+    /// - Parameter timetable: The new default timetable
+    func setDefaultTimetable(_ timetable: Timetable) {
+        fetchTimetables()?.forEach({ (t) in
+            if t.id != timetable.id {
+                t.isDefault = false
+            }
+        })
+        save()
+    }
+    
     /// Returns all timetables
     func fetchTimetables() -> [Timetable]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Timetable")
@@ -114,7 +125,19 @@ class TimetableService {
     }
     
     func defaultTimetable() -> Timetable? {
-        return fetchTimetables()?[0]
+        var timetable: Timetable?
+        
+        fetchTimetables()?.forEach({ (t) in
+            if t.isDefault {
+                timetable = t
+            }
+        })
+        
+        if timetable == nil {
+            timetable = fetchTimetables()?.first
+        }
+        
+        return timetable
     }
     
     //MARK: Subject fetching
@@ -634,9 +657,9 @@ class TimetableService {
     
     //MARK: deleteTask(_: )
     func deleteTask(_ task: Task) {
-        context.delete(task)
-        
         NotificationService.current.removeAllNotifications(of: task)
+        
+        context.delete(task)
         
         save()
     }

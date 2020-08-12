@@ -51,7 +51,7 @@ class TaskEditViewWrapper: UIViewController {
 //MARK: TaskEditView
 struct TaskEditView: View {
     
-    @State var task: Task
+    @ObservedObject var task: Task
     
     var dismiss: () -> Void
     
@@ -101,7 +101,7 @@ struct TaskEditContent: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @State var task: Task
+    @ObservedObject var task: Task
     
     //MARK: Title states
     @State var taskTitle: String = ""
@@ -150,13 +150,14 @@ struct TaskEditContent: View {
             //MARK: Title
             Section {
                 TextField("Title", text: $task.title)
-                TextField("Description", text: $taskDescription).lineLimit(-1)
+                TextField("Description", text: $taskDescription).lineLimit(5)
+                    .font(.system(size: 13, weight: .semibold))
             }
             
             //MARK: Complete
             Section {
                 HStack {
-                    DetailCellDescriptor("Completed", image: completeIcon(), completeColor(), value: task.completionDate?.stringify(dateStyle: .short, timeStyle: .short))
+                    DetailCellDescriptor("Completed", image: task.iconForCompletion(), task.completeColor(), value: task.completionDate?.stringify(dateStyle: .short, timeStyle: .short))
                         .animation(.easeOut)
                     
                     Toggle("", isOn: $task.completed)
@@ -228,16 +229,19 @@ struct TaskEditContent: View {
                             HStack {
                                 if lesson != nil {
                                     Circle()
-                                        .frame(width: 10, height: 10)
+                                        .frame(width: 12, height: 12)
                                         .foregroundColor(subjectColor(lesson))
                                 }
                                 
                                 Text(titleForLessonCell())
                                     .foregroundColor(foregroundColorForLessonCell())
+                                    .font(.system(size: 14, weight: .semibold))
                                 Spacer()
                                 if lesson != nil {
-                                    Text(lessonTime(lesson))
-                                        .font(.system(size: 14, weight: .semibold))
+                                    Text(textForLessonDate())
+                                        .multilineTextAlignment(.trailing)
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .lineLimit(2)
                                 }
                                     
                             }.contentShape(Rectangle())
@@ -250,7 +254,7 @@ struct TaskEditContent: View {
                 HStack {
                     DetailCellDescriptor("Archived", image: "tray.full.fill", .systemOrange)
                     
-                    Toggle("", isOn: $isArchived)
+                    Toggle("", isOn: $task.archived)
                 }.frame(height: 45)
             }
             
@@ -296,10 +300,8 @@ struct TaskEditContent: View {
         }))
         .onAppear {
             loadTaskValues()
-        }.onChange(of: isCompleted) { completed in
+        }.onChange(of: task.completed) { completed in
             completionDate = completed ? Date() : nil
-        }.onDisappear {
-            saveTask(dismiss: false)
         }
     }
     
@@ -327,34 +329,6 @@ struct TaskEditContent: View {
         
     }
     
-    private func completeIcon() -> String {
-        if isCompleted {
-            return "checkmark.circle"
-        }else {
-            if Date() < dueDate {
-                return "circle"
-            }else {
-                return "exclamationmark.circle.fill"
-            }
-        }
-    }
-    
-    private func completeColor() -> UIColor {
-        if isCompleted {
-            if completionDate ?? Date() <= dueDate || !hasDueDate {
-                return .systemGreen
-            }else {
-                return .systemOrange
-            }
-        }else {
-            if Date() <= dueDate || !hasDueDate {
-                return .systemBlue
-            }else {
-                return .systemRed
-            }
-        }
-    }
-    
     //MARK: titleForLessonCell
     private func titleForLessonCell() -> String {
         return lesson?.subject?.name ?? "Choose a lesson"
@@ -366,7 +340,8 @@ struct TaskEditContent: View {
             return ""
         }
         
-        return "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+//        return "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+        return "\(lesson.day.shortString()) \n \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
     }
     
     //MARK: foregroundColorForLessonCell
@@ -422,14 +397,9 @@ struct TaskEditContent: View {
             NotificationService.current.removeAllNotifications(of: task)
         }
         
-        task.title = taskTitle
         task.text = taskDescription
         task.due = hasDueDate ? dueDate : nil
         task.lesson = hasLessonAttached ? lesson : nil
-        task.priority = 0
-        task.archived = isArchived
-        task.completed = isCompleted
-        task.completionDate = completionDate
         
         TimetableService.shared.save()
         
