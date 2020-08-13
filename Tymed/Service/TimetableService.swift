@@ -10,23 +10,23 @@ import Foundation
 import CoreData
 
 //MARK: Day
-enum Day: Int, CaseIterable {
+public enum Day: Int, CaseIterable {
     
-    static var current: Day {
+    public static var current: Day {
         return Day(rawValue: Calendar.current.component(.weekday, from: Date())) ?? Day.monday
     }
     
-    static func <(_ d1: Day, _ d2: Day) -> Bool {
+    public static func <(_ d1: Day, _ d2: Day) -> Bool {
         let v1 = d1.rawValue + (d1 == .sunday ? 7 : 0)
         let v2 = d2.rawValue + (d2 == .sunday ? 7 : 0)
         return v1 < v2
     }
     
-    static func ==(_ d1: Day, _ d2: Day) -> Bool {
+    public static func ==(_ d1: Day, _ d2: Day) -> Bool {
         return d1.rawValue == d2.rawValue
     }
     
-    static func <=(_ d1: Day, _ d2: Day) -> Bool {
+    public static func <=(_ d1: Day, _ d2: Day) -> Bool {
         return d1 < d2 || d1 == d2
     }
     
@@ -39,34 +39,34 @@ enum Day: Int, CaseIterable {
     case saturday = 7
     case sunday = 1
     
-    func date() -> Date? {
+    public func date() -> Date? {
         return TimetableService.shared.dateFor(day: self)
     }
     
-    func string() -> String {
+    public func string() -> String {
         return Calendar.current.weekdaySymbols[rawValue - 1]
     }
     
-    func shortString() -> String {
+    public func shortString() -> String {
         return Calendar.current.shortWeekdaySymbols[rawValue - 1]
     }
     
-    func rotatingNext() -> Day {
+    public func rotatingNext() -> Day {
         if self == .saturday {
             return .sunday
         }
         return Day(rawValue: rawValue + 1)!
     }
     
-    func isToday() -> Bool {
+    public func isToday() -> Bool {
         return Calendar.current.component(.weekday, from: Date()) == self.rawValue
     }
 }
 
 //MARK: TimetableService
-class TimetableService {
+public class TimetableService {
     
-    static let shared = TimetableService()
+    public static let shared = TimetableService()
     
     private let context = AppDelegate.persistentContainer
     
@@ -433,7 +433,7 @@ class TimetableService {
     /// Fetches the lesson of the current timetable that match a given day (.weekday)
     /// - Parameter day: Day of week of the lessons
     /// - Returns: Array containing the lessons (of the current timetable) that match the day of week
-    func getLessons(within day: Day) -> [Lesson] {
+    public func getLessons(within day: Day) -> [Lesson] {
         
         do {
             let fetchRequest: NSFetchRequest<Lesson> = Lesson.fetchRequest()
