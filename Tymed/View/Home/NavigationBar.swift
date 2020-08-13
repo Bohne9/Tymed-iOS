@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 class NavigationBar: UINavigationBar, UINavigationBarDelegate {
 
@@ -19,8 +18,12 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         prefersLargeTitles = false
         isTranslucent = false
         
+        backgroundColor = .systemBackground
+        
         addSubview(topBar)
         
+        barTintColor = .systemBackground
+
         topBar.translatesAutoresizingMaskIntoConstraints = false
         topBar.backgroundColor = .systemBackground
         
