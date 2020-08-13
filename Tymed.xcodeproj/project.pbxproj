@@ -35,6 +35,13 @@
 		4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */; };
 		4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */; };
 		4F2F42B024994FBA009B73A5 /* DayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2F42AF24994FBA009B73A5 /* DayTests.swift */; };
+		4F38C48A24E504270082517E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38C48924E504270082517E /* WidgetKit.framework */; };
+		4F38C48C24E504270082517E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F38C48B24E504270082517E /* SwiftUI.framework */; };
+		4F38C48F24E504270082517E /* Tymed_Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C48E24E504270082517E /* Tymed_Widgets.swift */; };
+		4F38C49224E504290082517E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F38C49124E504290082517E /* Assets.xcassets */; };
+		4F38C49424E504290082517E /* Tymed_Widgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */; };
+		4F38C49524E504290082517E /* Tymed_Widgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */; };
+		4F38C49824E504290082517E /* Tymed-WidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F38C48824E504270082517E /* Tymed-WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */; };
 		4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */; };
 		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
@@ -108,6 +115,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4F38C49624E504290082517E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F7F77352456C2A000038729 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F38C48724E504270082517E;
+			remoteInfo = "Tymed-WidgetsExtension";
+		};
 		4F7F77572456C2A400038729 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F7F77352456C2A000038729 /* Project object */;
@@ -123,6 +137,20 @@
 			remoteInfo = Tymed;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4F38C49924E504290082517E /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4F38C49824E504290082517E /* Tymed-WidgetsExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		24C1E4FCACC9B070AD485278 /* Pods-Tymed-TymedUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tymed-TymedUITests.debug.xcconfig"; path = "Target Support Files/Pods-Tymed-TymedUITests/Pods-Tymed-TymedUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -154,6 +182,13 @@
 		4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2F42AF24994FBA009B73A5 /* DayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTests.swift; sourceTree = "<group>"; };
+		4F38C48824E504270082517E /* Tymed-WidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Tymed-WidgetsExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F38C48924E504270082517E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		4F38C48B24E504270082517E /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		4F38C48E24E504270082517E /* Tymed_Widgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tymed_Widgets.swift; sourceTree = "<group>"; };
+		4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Tymed_Widgets.intentdefinition; sourceTree = "<group>"; };
+		4F38C49124E504290082517E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4F38C49324E504290082517E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		4F3F628F247ABBD900A69202 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -242,6 +277,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4F38C48524E504270082517E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F38C48C24E504270082517E /* SwiftUI.framework in Frameworks */,
+				4F38C48A24E504270082517E /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4F7F773A2456C2A000038729 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -357,6 +401,17 @@
 			path = LessonDetailCells;
 			sourceTree = "<group>";
 		};
+		4F38C48D24E504270082517E /* Tymed-Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				4F38C48E24E504270082517E /* Tymed_Widgets.swift */,
+				4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */,
+				4F38C49124E504290082517E /* Assets.xcassets */,
+				4F38C49324E504290082517E /* Info.plist */,
+			);
+			path = "Tymed-Widgets";
+			sourceTree = "<group>";
+		};
 		4F405E85245DB80D00E1E704 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -399,6 +454,7 @@
 				4F7F773F2456C2A000038729 /* Tymed */,
 				4F7F77592456C2A400038729 /* TymedTests */,
 				4F7F77642456C2A400038729 /* TymedUITests */,
+				4F38C48D24E504270082517E /* Tymed-Widgets */,
 				4F7F773E2456C2A000038729 /* Products */,
 				7DEA87FF450EB4C5F22D9B4A /* Pods */,
 				623734F54A543F75F5356A5E /* Frameworks */,
@@ -411,6 +467,7 @@
 				4F7F773D2456C2A000038729 /* Tymed.app */,
 				4F7F77562456C2A400038729 /* TymedTests.xctest */,
 				4F7F77612456C2A400038729 /* TymedUITests.xctest */,
+				4F38C48824E504270082517E /* Tymed-WidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -593,6 +650,8 @@
 				B945B8ED0E84CB89523C7B19 /* Pods_Tymed.framework */,
 				C1F0E634FE10D118D02F8C1D /* Pods_Tymed_TymedUITests.framework */,
 				F826B67608FB6B50D06FC5FC /* Pods_TymedTests.framework */,
+				4F38C48924E504270082517E /* WidgetKit.framework */,
+				4F38C48B24E504270082517E /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -613,6 +672,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4F38C48724E504270082517E /* Tymed-WidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F38C49C24E504290082517E /* Build configuration list for PBXNativeTarget "Tymed-WidgetsExtension" */;
+			buildPhases = (
+				4F38C48424E504270082517E /* Sources */,
+				4F38C48524E504270082517E /* Frameworks */,
+				4F38C48624E504270082517E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Tymed-WidgetsExtension";
+			productName = "Tymed-WidgetsExtension";
+			productReference = 4F38C48824E504270082517E /* Tymed-WidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		4F7F773C2456C2A000038729 /* Tymed */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4F7F776A2456C2A400038729 /* Build configuration list for PBXNativeTarget "Tymed" */;
@@ -621,10 +697,12 @@
 				4F7F77392456C2A000038729 /* Sources */,
 				4F7F773A2456C2A000038729 /* Frameworks */,
 				4F7F773B2456C2A000038729 /* Resources */,
+				4F38C49924E504290082517E /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4F38C49724E504290082517E /* PBXTargetDependency */,
 			);
 			name = Tymed;
 			productName = Tymed;
@@ -675,10 +753,13 @@
 		4F7F77352456C2A000038729 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1140;
+				LastSwiftUpdateCheck = 1200;
 				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Jonah Schueller";
 				TargetAttributes = {
+					4F38C48724E504270082517E = {
+						CreatedOnToolsVersion = 12.0;
+					};
 					4F7F773C2456C2A000038729 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
@@ -709,11 +790,20 @@
 				4F7F773C2456C2A000038729 /* Tymed */,
 				4F7F77552456C2A400038729 /* TymedTests */,
 				4F7F77602456C2A400038729 /* TymedUITests */,
+				4F38C48724E504270082517E /* Tymed-WidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4F38C48624E504270082517E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F38C49224E504290082517E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4F7F773B2456C2A000038729 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -820,6 +910,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4F38C48424E504270082517E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F38C49424E504290082517E /* Tymed_Widgets.intentdefinition in Sources */,
+				4F38C48F24E504270082517E /* Tymed_Widgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4F7F77392456C2A000038729 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -840,6 +939,7 @@
 				4F953467247C55C9007E708B /* TaskAttachedLessonTableViewCell.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
 				4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */,
+				4F38C49524E504290082517E /* Tymed_Widgets.intentdefinition in Sources */,
 				4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */,
 				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
 				4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */,
@@ -926,6 +1026,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4F38C49724E504290082517E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F38C48724E504270082517E /* Tymed-WidgetsExtension */;
+			targetProxy = 4F38C49624E504290082517E /* PBXContainerItemProxy */;
+		};
 		4F7F77582456C2A400038729 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4F7F773C2456C2A000038729 /* Tymed */;
@@ -960,6 +1065,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4F38C49A24E504290082517E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KE78DLA237;
+				INFOPLIST_FILE = "Tymed-Widgets/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schueller.Tymed.Tymed-Widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4F38C49B24E504290082517E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KE78DLA237;
+				INFOPLIST_FILE = "Tymed-Widgets/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schueller.Tymed.Tymed-Widgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		4F7F77682456C2A400038729 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1082,6 +1229,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CCA178D248AAF9F8D75997C6 /* Pods-Tymed.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = default;
 				CODE_SIGN_STYLE = Automatic;
@@ -1104,6 +1252,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B5592AD07588257A0B868C1F /* Pods-Tymed.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = default;
 				CODE_SIGN_STYLE = Automatic;
@@ -1215,6 +1364,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4F38C49C24E504290082517E /* Build configuration list for PBXNativeTarget "Tymed-WidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F38C49A24E504290082517E /* Debug */,
+				4F38C49B24E504290082517E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4F7F77382456C2A000038729 /* Build configuration list for PBXProject "Tymed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
