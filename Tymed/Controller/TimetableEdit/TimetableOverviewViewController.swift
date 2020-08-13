@@ -53,7 +53,7 @@ class TimetableOverviewViewController: UIViewController {
         
         let timetableOverview = UIHostingController(rootView:
                                                         TimetableOverview()
-                                                        .environment(\.managedObjectContext, AppDelegate.persistentContainer))
+                                                        .environment(\.managedObjectContext, CoreDataStack.shared.persistentContainer.viewContext))
         
         addChild(timetableOverview)
         view.addSubview(timetableOverview.view)

@@ -72,7 +72,7 @@ class ViewController: UITabBarController {
         
         let nav = UINavigationController(rootViewController: UIHostingController(rootView:
                                                                                     TimetableOverview()
-                                                                                    .environment(\.managedObjectContext, AppDelegate.persistentContainer)))
+                                                                                    .environment(\.managedObjectContext, CoreDataStack.shared.persistentContainer.viewContext)))
         
 //        let split = UISplitViewController()
 //

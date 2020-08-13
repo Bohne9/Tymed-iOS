@@ -11,23 +11,33 @@ import SwiftUI
 import Intents
 
 struct Provider: IntentTimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent())
+    func placeholder(in context: Context) -> TimetableEntry {
+        
+        let lessons = TimetableService.shared.getLessons(within: .current)
+        
+        return TimetableEntry(date: Date(), lessons: lessons)
     }
 
-    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), configuration: configuration)
+    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (TimetableEntry) -> ()) {
+        
+        let lessons = TimetableService.shared.getLessons(within: .current)
+        
+        let entry = TimetableEntry(date: Date(), lessons: lessons)
+        
         completion(entry)
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
+        var entries: [TimetableEntry] = []
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+        for _ in 0 ..< 5 {
+            let entryDate = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
+            
+            let lessons = TimetableService.shared.getLessons(within: .current)
+            
+            let entry = TimetableEntry(date: entryDate, lessons: lessons)
             entries.append(entry)
         }
 
@@ -41,11 +51,27 @@ struct SimpleEntry: TimelineEntry {
     let configuration: ConfigurationIntent
 }
 
+struct TimetableEntry: TimelineEntry {
+    var date: Date
+    let lessons: [Lesson]
+}
+
 struct Tymed_WidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        Text(entry.date, style: .time)
+        VStack {
+            Text("Next lessons: \(entry.lessons.count)")
+            ForEach(entry.lessons.prefix(3), id: \.self) {  lesson in
+                HStack {
+                    Text(lesson.subject?.name ?? "fdsa")
+                        .font(.system(size: 12, weight: .semibold))
+                }.padding()
+                .background(Color(UIColor(lesson) ?? .clear))
+                .cornerRadius(8)
+            }
+            
+        }
     }
 }
 
@@ -56,15 +82,9 @@ struct Tymed_Widgets: Widget {
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             Tymed_WidgetsEntryView(entry: entry)
+                .environment(\.managedObjectContext, CoreDataStack.shared.persistentContainer.viewContext)
         }
         .configurationDisplayName("Timetable widget")
         .description("Overview of the timetable")
-    }
-}
-
-struct Tymed_Widgets_Previews: PreviewProvider {
-    static var previews: some View {
-        Tymed_WidgetsEntryView(entry: SimpleEntry(date: Date(), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

@@ -68,7 +68,7 @@ public class TimetableService {
     
     public static let shared = TimetableService()
     
-    private let context = AppDelegate.persistentContainer
+    private let context = CoreDataStack.shared.persistentContainer.viewContext
     
     internal init() {
         

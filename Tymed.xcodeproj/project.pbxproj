@@ -42,6 +42,17 @@
 		4F38C49424E504290082517E /* Tymed_Widgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */; };
 		4F38C49524E504290082517E /* Tymed_Widgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */; };
 		4F38C49824E504290082517E /* Tymed-WidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F38C48824E504270082517E /* Tymed-WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4F38C49D24E5BFC00082517E /* Lesson+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */; };
+		4F38C49E24E5BFC40082517E /* Lesson+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */; };
+		4F38C49F24E5BFC80082517E /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
+		4F38C4A024E5C08A0082517E /* Tymed.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77492456C2A000038729 /* Tymed.xcdatamodeld */; };
+		4F38C4A124E5C0DA0082517E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
+		4F38C4A224E5C11C0082517E /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A7DC524AFAD22002467E3 /* Task+CoreDataClass.swift */; };
+		4F38C4A324E5C11F0082517E /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2A7DC624AFAD22002467E3 /* Task+CoreDataProperties.swift */; };
+		4F38C4A424E5C12E0082517E /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F12658924B0669C000488B8 /* NotificationService.swift */; };
+		4F38C4A524E5C1380082517E /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
+		4F38C4A824E5C1830082517E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C4A724E5C1830082517E /* CoreDataStack.swift */; };
+		4F38C4A924E5C1D50082517E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C4A724E5C1830082517E /* CoreDataStack.swift */; };
 		4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */; };
 		4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */; };
 		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
@@ -189,6 +200,7 @@
 		4F38C49024E504270082517E /* Tymed_Widgets.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Tymed_Widgets.intentdefinition; sourceTree = "<group>"; };
 		4F38C49124E504290082517E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F38C49324E504290082517E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F38C4A724E5C1830082517E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		4F3F628F247ABBD900A69202 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -515,6 +527,7 @@
 		4F7F777B24588DE700038729 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4F38C4A724E5C1830082517E /* CoreDataStack.swift */,
 				4F2A7DC524AFAD22002467E3 /* Task+CoreDataClass.swift */,
 				4F2A7DC624AFAD22002467E3 /* Task+CoreDataProperties.swift */,
 				4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */,
@@ -914,8 +927,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F38C49F24E5BFC80082517E /* TimetableService.swift in Sources */,
+				4F38C4A024E5C08A0082517E /* Tymed.xcdatamodeld in Sources */,
+				4F38C4A524E5C1380082517E /* Time.swift in Sources */,
+				4F38C4A924E5C1D50082517E /* CoreDataStack.swift in Sources */,
+				4F38C4A224E5C11C0082517E /* Task+CoreDataClass.swift in Sources */,
 				4F38C49424E504290082517E /* Tymed_Widgets.intentdefinition in Sources */,
+				4F38C4A324E5C11F0082517E /* Task+CoreDataProperties.swift in Sources */,
+				4F38C49E24E5BFC40082517E /* Lesson+CoreDataProperties.swift in Sources */,
 				4F38C48F24E504270082517E /* Tymed_Widgets.swift in Sources */,
+				4F38C49D24E5BFC00082517E /* Lesson+CoreDataClass.swift in Sources */,
+				4F38C4A424E5C12E0082517E /* NotificationService.swift in Sources */,
+				4F38C4A124E5C0DA0082517E /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -978,6 +1001,7 @@
 				4F46E0AF24BA5A1F0037F26E /* TaskDetailTableViewController.swift in Sources */,
 				4F12659424B5B8FB000488B8 /* HomeDashTaskSelectorCellConfigurator.swift in Sources */,
 				4F2A1C8F24A9233000E66C79 /* TaskOverviewTableViewCell.swift in Sources */,
+				4F38C4A824E5C1830082517E /* CoreDataStack.swift in Sources */,
 				4F6F6EFF24DD1DCA006EC4BE /* NotificationOffsetView.swift in Sources */,
 				4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */,
 				4F80FD0624C8C02200DD65C2 /* TimetableDetailTableViewController.swift in Sources */,
