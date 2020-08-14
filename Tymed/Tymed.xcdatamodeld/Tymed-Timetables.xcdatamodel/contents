@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17162" systemVersion="20A5343j" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17183" systemVersion="20A5343j" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Lesson" representedClassName=".Lesson" syncable="YES">
         <attribute name="dayOfWeek" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="end" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -9,7 +9,7 @@
         <relationship name="subject" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subject" inverseName="lessons" inverseEntity="Subject"/>
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="lesson" inverseEntity="Task"/>
     </entity>
-    <entity name="Subject" representedClassName="Subject" syncable="YES" codeGenerationType="class">
+    <entity name="Subject" representedClassName="Subject" syncable="YES">
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>

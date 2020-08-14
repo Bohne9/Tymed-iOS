@@ -37,13 +37,13 @@ struct TimetableDetail: View {
                 if subjects().count > 0 {
                     ForEach(subjects().prefix(maxNumberOfSubjects), id: \.self) { subject in
                         NavigationLink(
-                            destination: Text("Subject detail"),
+                            destination: SubjectEditView(subject: subject),
                             label: {
                                 HStack {
                                     Circle()
                                         .foregroundColor(Color(UIColor(subject) ?? .clear))
                                         .frame(width: 10, height: 10)
-                                    Text(subject.name ?? "")
+                                    Text(subject.name)
                                         .font(.system(size: 15, weight: .semibold))
                                     Spacer()
                                     Text("\(subject.lessons?.count ?? 0) lessons")
@@ -202,7 +202,7 @@ struct ArchivedTasksOverview: View {
             }
             
             //MARK: Expired
-            Section(header: Text("Expired")) {
+            Section(header: Text("Archived")) {
                 ForEach(archivedTasksWithDue(), id: \.self) { (task: Task) in
                     NavigationLink(destination:
                                     TaskEditContent(task: task, dismiss: { })
@@ -260,7 +260,7 @@ struct AllSubjectsOverviewView: View {
         List {
             ForEach(subjects()) { subject in
                 NavigationLink(
-                    destination: Text("Subject detail"),
+                    destination: SubjectEditView(subject: subject),
                     label: {
                         HStack {
                             Circle()

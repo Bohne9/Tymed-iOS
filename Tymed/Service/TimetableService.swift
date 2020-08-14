@@ -236,7 +236,7 @@ class TimetableService {
         }
         
         var values = subjects.map { (sub: Subject) in
-            return (sub, sub.name?.levenshteinDistanceScore(to: title) ?? 0.0)
+            return (sub, sub.name.levenshteinDistanceScore(to: title))
         }
         
         values.sort(by: { (v1, v2) -> Bool in
