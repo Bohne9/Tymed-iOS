@@ -9,6 +9,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import CoreData
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> TimetableEntry {
@@ -32,10 +33,15 @@ struct Provider: IntentTimelineProvider {
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for _ in 0 ..< 5 {
+        for i in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .minute, value: 10, to: currentDate)!
             
-            let lessons = TimetableService.shared.getLessons(within: .current)
+            
+            guard let lessons = fetchLessons() else {
+                continue
+            }
+            
+            print("Entry \(i) - Lessons: \(lessons.count)")
             
             let entry = TimetableEntry(date: entryDate, lessons: lessons)
             entries.append(entry)
@@ -43,6 +49,21 @@ struct Provider: IntentTimelineProvider {
 
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
+    }
+    
+    func fetchLessons() -> [Lesson]? {
+        
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Lesson")
+        
+        do {
+            
+            let res = try CoreDataStack.shared.persistentContainer.viewContext.fetch(req) as! [Lesson]
+            
+            return res
+            
+        } catch {
+            return nil
+        }
     }
 }
 

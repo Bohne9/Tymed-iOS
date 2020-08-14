@@ -201,6 +201,7 @@
 		4F38C49124E504290082517E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F38C49324E504290082517E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F38C4A724E5C1830082517E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		4F38C4AA24E6511E0082517E /* Tymed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tymed.entitlements; sourceTree = "<group>"; };
 		4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		4F3F628F247ABBD900A69202 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -487,6 +488,7 @@
 		4F7F773F2456C2A000038729 /* Tymed */ = {
 			isa = PBXGroup;
 			children = (
+				4F38C4AA24E6511E0082517E /* Tymed.entitlements */,
 				4F9405E72463F3940063E4DA /* Helper */,
 				4FC2C2CB245D72B300B57682 /* Service */,
 				4F7F777B24588DE700038729 /* Model */,
@@ -1256,6 +1258,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = default;
+				CODE_SIGN_ENTITLEMENTS = Tymed/Tymed.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KE78DLA237;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
@@ -1279,6 +1282,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = default;
+				CODE_SIGN_ENTITLEMENTS = Tymed/Tymed.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = KE78DLA237;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
