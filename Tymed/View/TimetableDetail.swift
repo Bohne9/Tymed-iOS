@@ -266,7 +266,7 @@ struct AllSubjectsOverviewView: View {
                             Circle()
                                 .foregroundColor(Color(UIColor(subject) ?? .clear))
                                 .frame(width: 10, height: 10)
-                            Text(subject.name ?? "")
+                            Text(subject.name)
                                 .font(.system(size: 15, weight: .semibold))
                             Spacer()
                             Text("\(subject.lessons?.count ?? 0) lessons")

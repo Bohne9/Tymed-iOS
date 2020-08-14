@@ -17,7 +17,7 @@ extension Subject {
         return NSFetchRequest<Subject>(entityName: "Subject")
     }
 
-    @NSManaged public var color: String?
+    @NSManaged public var color: String
     @NSManaged public var createdAt: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var name: String

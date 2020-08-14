@@ -10,7 +10,7 @@
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="lesson" inverseEntity="Task"/>
     </entity>
     <entity name="Subject" representedClassName="Subject" syncable="YES">
-        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="color" attributeType="String"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
