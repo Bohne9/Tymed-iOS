@@ -53,7 +53,7 @@ struct TimetableDetail: View {
                     }
                     if subjects().count > maxNumberOfSubjects {
                         NavigationLink(
-                            destination: Text("See all subjects"),
+                            destination: AllSubjectsOverviewView(timetable: timetable),
                             label: {
                                 HStack {
                                     Text("See all subjects")
@@ -245,5 +245,40 @@ struct ArchivedTasksOverview: View {
             TimetableService.shared.deleteTask(task)
         })
         presentationMode.wrappedValue.dismiss()
+    }
+}
+
+
+
+
+struct AllSubjectsOverviewView: View {
+    
+    @ObservedObject
+    var timetable: Timetable
+    
+    var body: some View {
+        List {
+            ForEach(subjects()) { subject in
+                NavigationLink(
+                    destination: Text("Subject detail"),
+                    label: {
+                        HStack {
+                            Circle()
+                                .foregroundColor(Color(UIColor(subject) ?? .clear))
+                                .frame(width: 10, height: 10)
+                            Text(subject.name ?? "")
+                                .font(.system(size: 15, weight: .semibold))
+                            Spacer()
+                            Text("\(subject.lessons?.count ?? 0) lessons")
+                                .font(.system(size: 12, weight: .semibold))
+                        }.frame(height: 45)
+                    })
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("All subjects")
+    }
+    
+    func subjects() -> [Subject] {
+        timetable.subjects?.allObjects as? [Subject] ?? []
     }
 }
