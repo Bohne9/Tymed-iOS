@@ -20,6 +20,10 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override internal func setupUserInterface() {
         super.setupUserInterface()
         
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
+        collectionView.dragInteractionEnabled = true
+        
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
         collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
@@ -130,6 +134,39 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
             }
         }
+    }
+    
+    private func indexPath(for lesson: Lesson) -> IndexPath? {
+        var dayIndex: Int?
+        var day: Day?
+        var row: Int?
+        
+        for (index, item) in weekDays.enumerated() {
+            if item == lesson.day {
+                day = item
+                dayIndex = index
+            }
+        }
+        
+        if day == nil {
+            return nil
+        }
+        
+        guard let d = day, let lessons = week[d] else {
+            return nil
+        }
+        
+        for (index, l) in lessons.enumerated() {
+            if l.id == lesson.id {
+                row = index
+            }
+        }
+        
+        if let r = row, let d = dayIndex {
+            return IndexPath(row: r, section: d)
+        }
+        
+        return nil
     }
     
     /// Returns the lesson for a given uuid
@@ -306,5 +343,77 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }
+    
+}
+
+
+extension HomeWeekCollectionView: UICollectionViewDragDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let item = lesson(for: indexPath) else {
+            return []
+        }
+        
+        guard let id = (item.id?.uuidString ?? "") else {
+            return []
+        }
+        
+        let itemProvider = NSItemProvider(object: id as NSString)
+        
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        return [dragItem]
+    }
+    
+}
+
+extension HomeWeekCollectionView: UICollectionViewDropDelegate {
+    
+    func reorderItems(coordinator: UICollectionViewDropCoordinator, destination: IndexPath, _ collectionView: UICollectionView) {
+        guard let dragItem = coordinator.items.first,
+              let first = dragItem.dragItem.localObject as? Lesson,
+              let source = indexPath(for: first) else {
+            return
+        }
+        
+        collectionView.performBatchUpdates ({
+            let day = weekDays[source.section]
+            let destDay = weekDays[destination.section]
+            week[day]?.remove(at: source.row)
+            week[destDay]?.insert(first, at: destination.item)
+            
+            collectionView.deleteItems(at: [source])
+            collectionView.insertItems(at: [destination])
+        }, completion: nil)
+        collectionView.reloadData()
+        
+        coordinator.drop(dragItem.dragItem, toItemAt: destination)
+
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        
+        var destinationIndexPath: IndexPath
+        
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        }else {
+            destinationIndexPath = IndexPath(row: 1, section: 0)
+        }
+        
+        if coordinator.proposal.operation == .move {
+            reorderItems(coordinator: coordinator, destination: destinationIndexPath, collectionView)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+    
     
 }
