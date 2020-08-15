@@ -11,6 +11,7 @@ import SwiftUI
 struct TimetableDetail: View {
     
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject
     var timetable: Timetable
@@ -23,6 +24,7 @@ struct TimetableDetail: View {
     
     @State private var showLessonAdd = false
     @State private var showTaskAdd = false
+    @State private var showTimetableDeleteAlert = false
     
     var body: some View {
         
@@ -136,6 +138,9 @@ struct TimetableDetail: View {
             Section {
                 DetailCellDescriptor("Delete", image: "trash", .systemRed)
                     .font(.system(size: 15, weight: .semibold))
+                    .onTapGesture {
+                        showTimetableDeleteAlert.toggle()
+                    }
             }
             
         }.listStyle(InsetGroupedListStyle())
@@ -144,6 +149,19 @@ struct TimetableDetail: View {
         .onChange(of: timetable.isDefault) { (value) in
             TimetableService.shared.setDefaultTimetable(timetable)
         }.onAppear(perform: loadValues)
+        .actionSheet(isPresented: $showTimetableDeleteAlert) {
+            ActionSheet(
+                title: Text("Are you sure?"),
+                message: Text("You cannot undo this."),
+                buttons: [.destructive(Text("Delete"), action: {
+                    deleteTimetable()
+                }), .cancel()])
+        }
+    }
+    
+    private func deleteTimetable() {
+        TimetableService.shared.deleteTimetable(timetable)
+        presentationMode.wrappedValue.dismiss()
     }
     
     //MARK: loadValues

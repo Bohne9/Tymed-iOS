@@ -19,7 +19,7 @@ extension Task {
 
     @NSManaged public var completed: Bool
     @NSManaged public var due: Date?
-    @NSManaged public var id: UUID
+    @NSManaged public var id: UUID?
     @NSManaged public var priority: Int32
     @NSManaged public var text: String?
     @NSManaged public var title: String
@@ -37,7 +37,7 @@ extension Task {
             return "checkmark.circle.fill"
         }else if due == nil {
             return "circle"
-        } else if due != nil  && Date() < due! {
+        } else if due != nil  && due! < Date() {
             return "exclamationmark.circle.fill"
         }
         // Just a default case

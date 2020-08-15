@@ -228,17 +228,22 @@ class NotificationService {
             return nil
         }
         
-        let content = notificationContentForDueDate(task: task)
-        let identfier = task.id.uuidString
+        guard let identifier = task.id?.uuidString else {
+            return nil
+        }
         
-        return notificationRequest(identfier, content, trigger)
+        let content = notificationContentForDueDate(task: task)
+        
+        return notificationRequest(identifier, content, trigger)
     }
     
     func notificationStartTimeRequest(for lesson: Lesson, _ offset: NotificationOffset = .atEvent) -> UNNotificationRequest? {
         let trigger = notificationTrigger(for: lesson.startDateComponents)
         
         let content = notificationStartTimeContentFor(lesson: lesson)
-        let identifier = lesson.id.uuidString
+        guard let identifier = lesson.id?.uuidString else {
+            return nil
+        }
         
         print("Schedule notification for lesson \(lesson.subject!.name) at: \(trigger.nextTriggerDate())")
         
@@ -274,12 +279,18 @@ class NotificationService {
     //MARK: removeNotifications
     
     func removePendingNotifications(of task: Task) {
-        print("Removing task notifications: \(task.id.uuidString)")
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [task.id.uuidString])
+        guard let identifier = task.id?.uuidString else {
+            return
+        }
+        print("Removing task notifications: \(identifier)")
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
     
     func removeDeliveredNotifications(of task: Task) {
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [task.id.uuidString])
+        guard let identifier = task.id?.uuidString else {
+            return
+        }
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
     }
     
     func removeAllNotifications(of task: Task) {
@@ -288,11 +299,17 @@ class NotificationService {
     }
     
     func removePendingNotifications(of lesson: Lesson) {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [lesson.id.uuidString])
+        guard let id = lesson.id?.uuidString else {
+            return
+        }
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
     }
     
     func removeDeliveredNotifications(of lesson: Lesson) {
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [lesson.id.uuidString])
+        guard let id = lesson.id?.uuidString else {
+            return
+        }
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [id])
     }
     
     func removeAllNotifications(of lesson: Lesson) {
@@ -317,10 +334,16 @@ class NotificationService {
     }
     
     func getPendingNotifications(of task: Task, _ completion: @escaping NotificationFetchRequest) {
-        getPendingNotifications(of: task.id.uuidString, completion)
+        guard let identifier = task.id?.uuidString else {
+            return
+        }
+        getPendingNotifications(of: identifier, completion)
     }
     
     func getPendingNotifications(of lesson: Lesson, _ completion: @escaping NotificationFetchRequest) {
-        getPendingNotifications(of: lesson.id.uuidString, completion)
+        guard let id = lesson.id?.uuidString else {
+            return
+        }
+        getPendingNotifications(of: id, completion)
     }
 }

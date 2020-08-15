@@ -59,6 +59,9 @@ struct LessonEditView: View {
 //MARK: LessonEditContentView
 struct LessonEditContentView: View {
     
+    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.managedObjectContext) var moc
+    
     @ObservedObject var lesson: Lesson
     
     var dismiss: () -> Void
@@ -94,6 +97,7 @@ struct LessonEditContentView: View {
     
     
     @State private var subjectTimetableAlert = false
+    @State private var showLessonDeleteAlert = false
     
     
     var body: some View {
@@ -261,7 +265,7 @@ struct LessonEditContentView: View {
             Section {
                 DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
                     .onTapGesture {
-                        deleteLesson()
+                        showLessonDeleteAlert.toggle()
                     }
             }
             
@@ -280,6 +284,14 @@ struct LessonEditContentView: View {
         .onChange(of: startTime) { value in
             endTime = startTime + interval
         }
+        .actionSheet(isPresented: $showLessonDeleteAlert) {
+            ActionSheet(
+                title: Text("Are you sure?"),
+                message: Text("You cannot undo this."),
+                buttons: [.destructive(Text("Delete"), action: {
+                    deleteLesson()
+                }), .cancel()])
+        }
         .alert(isPresented: $subjectTimetableAlert) {
             Alert(
                 title: Text("Do you want to switch timetables?"),
@@ -297,6 +309,14 @@ struct LessonEditContentView: View {
         }.onAppear(perform: loadLessonValues)
         .onDisappear {
             saveLesson()
+        }
+    }
+    
+    //MARK: deleteLesson
+    private func deleteLesson() {
+        presentationMode.wrappedValue.dismiss()
+        DispatchQueue.main.async {
+            TimetableService.shared.deleteLesson(lesson)
         }
     }
     
@@ -400,9 +420,5 @@ struct LessonEditContentView: View {
         dismiss()
     }
     
-    //MARK: deleteLesson
-    private func deleteLesson() {
-        print("Delete not implemented")
-    }
 }
 

@@ -9,9 +9,15 @@
 import SwiftUI
 
 struct SubjectEditView: View {
+
+    @Environment(\.presentationMode)
+    var presentationMode
     
     @ObservedObject
     var subject: Subject
+    
+    @State
+    private var showDeleteAlert = false
     
     var body: some View {
         List {
@@ -43,6 +49,8 @@ struct SubjectEditView: View {
                         }.font(.system(size: 14, weight: .semibold))
                         .frame(height: 45)
                     }
+                }.onDelete { (indexSet) in
+                    deleteLessons(indexSet)
                 }
                 
             }
@@ -50,10 +58,35 @@ struct SubjectEditView: View {
             Section {
                 DetailCellDescriptor("Delete", image: "trash", .systemRed)
                     .font(.system(size: 16, weight: .semibold))
+                    .onTapGesture {
+                        showDeleteAlert.toggle()
+                    }
             }
             
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Subject")
+        .actionSheet(isPresented: $showDeleteAlert) {
+            ActionSheet(
+                title: Text("Are you sure?"),
+                message: Text("You cannot undo this."),
+                buttons: [.destructive(Text("Delete"), action: {
+                    deleteSubject()
+                }), .cancel()])
+        }
+    }
+    
+    func deleteLessons(_ indexSet: IndexSet) {
+        indexSet.forEach { (index) in
+            guard let lesson = subject.lessons?.allObjects[index] as? Lesson else {
+                return
+            }
+            TimetableService.shared.deleteLesson(lesson)
+        }
+    }
+    
+    func deleteSubject() {
+        TimetableService.shared.deleteSubject(subject)
+        presentationMode.wrappedValue.dismiss()
     }
     
     func lessons() -> [Lesson] {
