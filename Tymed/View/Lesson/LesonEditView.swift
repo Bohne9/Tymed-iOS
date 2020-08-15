@@ -105,7 +105,7 @@ struct LessonEditContentView: View {
                         ForEach(subjectSuggestions(), id: \.self) { (subject: Subject) in
                             HStack {
                                 Spacer()
-                                Text(subject.name ?? "")
+                                Text(subject.name)
                                     .minimumScaleFactor(0.01)
                                     .lineLimit(1)
                                     .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
@@ -304,7 +304,7 @@ struct LessonEditContentView: View {
         if let subject = lesson.subject {
             selectSubjectTitle(subject)
             timetable = subject.timetable
-            color = subject.color ?? "blue"
+            color = subject.color
         }
         
         startTime = lesson.startTime.date ?? Date()
@@ -328,7 +328,7 @@ struct LessonEditContentView: View {
     }
     
     private func selectSubjectTitle(_ subject: Subject) {
-        subjectTitle = subject.name ?? ""
+        subjectTitle = subject.name
         let subject = TimetableService.shared.subject(with: subjectTitle)
         timetable = subject?.timetable
         color = subject?.color ?? "blue"

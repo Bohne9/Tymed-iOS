@@ -23,6 +23,7 @@ class ViewController: UITabBarController {
         
         tabBar.isTranslucent = false
         
+        view.backgroundColor = .systemBackground
         
         let home = generateHomeViewController()
         
