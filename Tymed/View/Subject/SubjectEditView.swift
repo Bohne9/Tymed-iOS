@@ -24,7 +24,7 @@ struct SubjectEditView: View {
             
             Section {
                 NavigationLink(destination: AppColorPickerView(color: $subject.color)) {
-                    DetailCellDescriptor("Color", image: "paintbrush", UIColor(subject) ?? .clear, value: subject.color.uppercased())
+                    DetailCellDescriptor("Color", image: "paintbrush", UIColor(subject) ?? .clear, value: subject.color.capitalized)
                         .font(.system(size: 16, weight: .semibold))
                 }
             }
@@ -32,9 +32,10 @@ struct SubjectEditView: View {
             Section(header: Text("Lessons")) {
                 
                 ForEach(lessons()) { lesson in
-                    NavigationLink(destination: LessonEditView(lesson: lesson, dismiss: {
+                    NavigationLink(destination: LessonEditContentView(lesson: lesson, dismiss: {
                         
-                    })) {
+                    }).navigationBarItems(trailing: EmptyView())
+                    ) {
                         HStack {
                             Text(textForDay(of: lesson))
                             Spacer()
