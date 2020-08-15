@@ -44,11 +44,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     override internal func setupUserInterface() {
         super.setupUserInterface()
         
-        register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
-        register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
-        register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
-        register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noTaskCell")
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
+        collectionView.register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
+        collectionView.register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noTaskCell")
         
         
     }
@@ -212,7 +212,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         guard let lesson = self.lesson(for: indexPath) else {
             return
         }
-        homeDelegate?.lessonDetail(self, for: lesson)
+        homeDelegate?.lessonDetail(self.collectionView, for: lesson)
     }
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
@@ -226,7 +226,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: didSelectItemAt
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let sectionId = self.section(for: indexPath)
         
@@ -263,7 +263,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: supplementaryView
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
@@ -282,7 +282,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
     
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let lesson = self.lesson(for: indexPath)
         
@@ -307,7 +307,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 
                 TimetableService.shared.deleteLesson(lesson)
                 
-                self.homeDelegate?.lessonDidDelete(self, lesson: lesson)
+                self.homeDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
                 
             }
             
@@ -317,7 +317,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return config
     }
     
-    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         
         guard let id = (configuration.identifier as? NSUUID) as UUID? else {
             return
@@ -328,13 +328,13 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return
             }
             
-            self.homeDelegate?.lessonDetail(self, for: lesson)
+            self.homeDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
         
     }
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         homeDelegate?.didScroll(scrollView)
     }
     

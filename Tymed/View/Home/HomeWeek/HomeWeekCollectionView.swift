@@ -20,8 +20,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override internal func setupUserInterface() {
         super.setupUserInterface()
         
-        register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
     }
     
@@ -42,7 +42,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return d1 < d2
         })
         
-        reloadData()
+        collectionView.reloadData()
         
         scrollTo(day: .current)
         
@@ -77,7 +77,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
         if let section = weekDays.firstIndex(of: day) {
-            scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), animated)
@@ -124,7 +124,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             }
             
             // Scroll to the lesson
-            scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
+            collectionView.scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
@@ -162,7 +162,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
         
         cell.lesson = lesson(for: indexPath)
         cell.tasksImage.isHidden = true
@@ -172,7 +172,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: supplementaryView
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
@@ -205,18 +205,18 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
         if let lesson = lessons?[indexPath.row] {
-            homeDelegate?.lessonDetail(self, for: lesson)
+            homeDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
     }
     
     //MARK: didSelectItemAt
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         presentDetail(lessons(for: indexPath.section), indexPath)
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let lesson = self.lesson(for: indexPath)
         
@@ -241,7 +241,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 
                 TimetableService.shared.deleteLesson(lesson)
                 
-                self.homeDelegate?.lessonDidDelete(self, lesson: lesson)
+                self.homeDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
                 
             }
             
@@ -251,7 +251,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         return config
     }
     
-    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         
         guard let id = (configuration.identifier as? NSUUID) as UUID? else {
             return
@@ -262,12 +262,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 return
             }
             
-            self.homeDelegate?.lessonDetail(self, for: lesson)
+            self.homeDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
         
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         homeDelegate?.didScroll(scrollView)
     }
     
