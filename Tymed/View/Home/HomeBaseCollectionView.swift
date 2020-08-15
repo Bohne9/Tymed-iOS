@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeBaseCollectionView: UICollectionView {
+class HomeBaseCollectionView: UICollectionViewController {
 
     var homeDelegate: HomeCollectionViewDelegate?
     var taskDelegate: HomeTaskDetailDelegate?
@@ -16,12 +16,12 @@ class HomeBaseCollectionView: UICollectionView {
     var sectionIdentifiers: [String] = []
     
     init() {
-        super.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
         
         setupUserInterface()
         
-        delegate = self
-        dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
     }
     
@@ -31,19 +31,19 @@ class HomeBaseCollectionView: UICollectionView {
             
         }
         
-        contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 100, right: 20)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 50, right: 20)
         
-        layoutIfNeeded()
+        collectionView.layoutIfNeeded()
         
-        contentSize = frame.size
+        collectionView.contentSize = collectionView.frame.size
 
-        showsVerticalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
         
-        translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        backgroundColor = .systemBackground
+        collectionView.backgroundColor = .systemBackground
         
-        alwaysBounceVertical = true
+        collectionView.alwaysBounceVertical = true
         
     }
     
@@ -97,7 +97,7 @@ class HomeBaseCollectionView: UICollectionView {
     /// Fetches the data and reloads the collection view
     func reload() {
         fetchData()
-        reloadData()
+        collectionView.reloadData()
     }
     
     internal func fetchData() {
@@ -111,7 +111,7 @@ class HomeBaseCollectionView: UICollectionView {
     ///   - indexPath: indexPath for the cell
     /// - Returns: Returns the dequeued cell
     internal func dequeueCell(_ identifier: String, _ indexPath: IndexPath) -> UICollectionViewCell {
-        return dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
     }
     
     required init?(coder: NSCoder) {
@@ -124,27 +124,27 @@ class HomeBaseCollectionView: UICollectionView {
 
 }
 
-extension HomeBaseCollectionView: UICollectionViewDataSource {
+extension HomeBaseCollectionView {
     
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sectionIdentifiers.count
     }
     
     
  
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let identifier = self.section(for: section)
         
         return self.collectionView(collectionView, numberOfItemsInSection: identifier)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return UICollectionViewCell()
     }
     
 }
 
-extension HomeBaseCollectionView: UICollectionViewDelegate {
+extension HomeBaseCollectionView {
     
 }
 

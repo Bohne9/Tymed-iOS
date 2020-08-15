@@ -11,6 +11,7 @@ import SwiftUI
 struct TimetableDetail: View {
     
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject
     var timetable: Timetable
@@ -23,6 +24,7 @@ struct TimetableDetail: View {
     
     @State private var showLessonAdd = false
     @State private var showTaskAdd = false
+    @State private var showTimetableDeleteAlert = false
     
     var body: some View {
         
@@ -37,13 +39,13 @@ struct TimetableDetail: View {
                 if subjects().count > 0 {
                     ForEach(subjects().prefix(maxNumberOfSubjects), id: \.self) { subject in
                         NavigationLink(
-                            destination: Text("Subject detail"),
+                            destination: SubjectEditView(subject: subject),
                             label: {
                                 HStack {
                                     Circle()
                                         .foregroundColor(Color(UIColor(subject) ?? .clear))
                                         .frame(width: 10, height: 10)
-                                    Text(subject.name ?? "")
+                                    Text(subject.name)
                                         .font(.system(size: 15, weight: .semibold))
                                     Spacer()
                                     Text("\(subject.lessons?.count ?? 0) lessons")
@@ -53,7 +55,7 @@ struct TimetableDetail: View {
                     }
                     if subjects().count > maxNumberOfSubjects {
                         NavigationLink(
-                            destination: Text("See all subjects"),
+                            destination: AllSubjectsOverviewView(timetable: timetable),
                             label: {
                                 HStack {
                                     Text("See all subjects")
@@ -112,13 +114,15 @@ struct TimetableDetail: View {
             }
             
             //MARK: Archived tasks
-            Section {
-                NavigationLink(
-                    destination: ArchivedTasksOverview(timetable: timetable),
-                    label: {
-                        DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
-                            .font(.system(size: 15, weight: .semibold))
-                    })
+            if archivedTasks().count > 0 { // Only show the section if there are any archived tasks.
+                Section {
+                    NavigationLink(
+                        destination: ArchivedTasksOverview(timetable: timetable),
+                        label: {
+                            DetailCellDescriptor("Archived tasks", image: "tray.full.fill", .systemOrange)
+                                .font(.system(size: 15, weight: .semibold))
+                        })
+                }
             }
             
             //MARK: Default
@@ -134,6 +138,9 @@ struct TimetableDetail: View {
             Section {
                 DetailCellDescriptor("Delete", image: "trash", .systemRed)
                     .font(.system(size: 15, weight: .semibold))
+                    .onTapGesture {
+                        showTimetableDeleteAlert.toggle()
+                    }
             }
             
         }.listStyle(InsetGroupedListStyle())
@@ -142,6 +149,19 @@ struct TimetableDetail: View {
         .onChange(of: timetable.isDefault) { (value) in
             TimetableService.shared.setDefaultTimetable(timetable)
         }.onAppear(perform: loadValues)
+        .actionSheet(isPresented: $showTimetableDeleteAlert) {
+            ActionSheet(
+                title: Text("Are you sure?"),
+                message: Text("You cannot undo this."),
+                buttons: [.destructive(Text("Delete"), action: {
+                    deleteTimetable()
+                }), .cancel()])
+        }
+    }
+    
+    private func deleteTimetable() {
+        TimetableService.shared.deleteTimetable(timetable)
+        presentationMode.wrappedValue.dismiss()
     }
     
     //MARK: loadValues
@@ -158,11 +178,18 @@ struct TimetableDetail: View {
     private func unarchivedTasks() -> [Task] {
         return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
     }
+    
+    //MARK: archivedTasks
+    private func archivedTasks() -> [Task] {
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { $0.archived }
+    }
 }
 
 
 //MARK: ArchivedTasksOverview
 struct ArchivedTasksOverview: View {
+    
+    @Environment(\.presentationMode) var presentationMode
     
     @ObservedObject
     var timetable: Timetable
@@ -193,7 +220,7 @@ struct ArchivedTasksOverview: View {
             }
             
             //MARK: Expired
-            Section(header: Text("Expired")) {
+            Section(header: Text("Archived")) {
                 ForEach(archivedTasksWithDue(), id: \.self) { (task: Task) in
                     NavigationLink(destination:
                                     TaskEditContent(task: task, dismiss: { })
@@ -235,5 +262,41 @@ struct ArchivedTasksOverview: View {
             
             TimetableService.shared.deleteTask(task)
         })
+        presentationMode.wrappedValue.dismiss()
+    }
+}
+
+
+
+
+struct AllSubjectsOverviewView: View {
+    
+    @ObservedObject
+    var timetable: Timetable
+    
+    var body: some View {
+        List {
+            ForEach(subjects()) { subject in
+                NavigationLink(
+                    destination: SubjectEditView(subject: subject),
+                    label: {
+                        HStack {
+                            Circle()
+                                .foregroundColor(Color(UIColor(subject) ?? .clear))
+                                .frame(width: 10, height: 10)
+                            Text(subject.name)
+                                .font(.system(size: 15, weight: .semibold))
+                            Spacer()
+                            Text("\(subject.lessons?.count ?? 0) lessons")
+                                .font(.system(size: 12, weight: .semibold))
+                        }.frame(height: 45)
+                    })
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("All subjects")
+    }
+    
+    func subjects() -> [Subject] {
+        timetable.subjects?.allObjects as? [Subject] ?? []
     }
 }

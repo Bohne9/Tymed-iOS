@@ -61,6 +61,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
+        view.backgroundColor = .systemBackground
         
         dashCollectionView.homeDelegate = self
         tasksCollectionView.homeDelegate = self
@@ -122,14 +123,18 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         // Configure the cell
         let baseCell = [dashCollectionView, tasksCollectionView, weekCollectionView][indexPath.row]
         
-        cell.addSubview(baseCell)
+        addChild(baseCell)
+        
+        cell.addSubview(baseCell.view)
                     
-        baseCell.translatesAutoresizingMaskIntoConstraints = false
+        baseCell.didMove(toParent: self)
+        
+        baseCell.view.translatesAutoresizingMaskIntoConstraints = false
 
-        baseCell.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        baseCell.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-        baseCell.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-        baseCell.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+        baseCell.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        baseCell.view.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
+        baseCell.view.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
+        baseCell.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
         
         return cell
     }
@@ -158,8 +163,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let first = Int(page)
         let sec = min(Int(page + 1), 2)
         
-        let firstOff = sceneBaseCollectionView(for: first).contentOffset.y
-        let secOff = sceneBaseCollectionView(for: sec).contentOffset.y
+        let firstOff = sceneBaseCollectionView(for: first).collectionView.contentOffset.y
+        let secOff = sceneBaseCollectionView(for: sec).collectionView.contentOffset.y
         
         let percent = page - CGFloat(Int(page))
         

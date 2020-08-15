@@ -35,6 +35,9 @@
 		4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */; };
 		4F2ECB9B2470636F00FC0148 /* HomeBaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */; };
 		4F2F42B024994FBA009B73A5 /* DayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2F42AF24994FBA009B73A5 /* DayTests.swift */; };
+		4F38C4AD24E69E970082517E /* SubjectEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C4AC24E69E970082517E /* SubjectEditView.swift */; };
+		4F38C4B024E69F020082517E /* Subject+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C4AE24E69F020082517E /* Subject+CoreDataClass.swift */; };
+		4F38C4B124E69F020082517E /* Subject+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F38C4AF24E69F020082517E /* Subject+CoreDataProperties.swift */; };
 		4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */; };
 		4F3F628B247AB68500A69202 /* TaskDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */; };
 		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
@@ -70,7 +73,7 @@
 		4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */; };
 		4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */; };
 		4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */; };
-		4F8E058224DA769600748F47 /* LesonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058124DA769600748F47 /* LesonEditView.swift */; };
+		4F8E058224DA769600748F47 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058124DA769600748F47 /* LessonEditView.swift */; };
 		4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */; };
 		4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058524DA786200748F47 /* AppColorPicker.swift */; };
 		4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058724DA793400748F47 /* AppTimetablePicker.swift */; };
@@ -154,6 +157,9 @@
 		4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2F42AF24994FBA009B73A5 /* DayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTests.swift; sourceTree = "<group>"; };
+		4F38C4AC24E69E970082517E /* SubjectEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubjectEditView.swift; sourceTree = "<group>"; };
+		4F38C4AE24E69F020082517E /* Subject+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subject+CoreDataClass.swift"; sourceTree = "<group>"; };
+		4F38C4AF24E69F020082517E /* Subject+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Subject+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4F3F6288247AB68500A69202 /* TaskDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDescriptionTableViewCell.swift; sourceTree = "<group>"; };
 		4F3F6289247AB68500A69202 /* TaskDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		4F3F628F247ABBD900A69202 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -197,7 +203,7 @@
 		4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewHeader.swift; sourceTree = "<group>"; };
 		4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
-		4F8E058124DA769600748F47 /* LesonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LesonEditView.swift; sourceTree = "<group>"; };
+		4F8E058124DA769600748F47 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonEditView.swift; sourceTree = "<group>"; };
 		4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCellDescriptor.swift; sourceTree = "<group>"; };
 		4F8E058524DA786200748F47 /* AppColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorPicker.swift; sourceTree = "<group>"; };
 		4F8E058724DA793400748F47 /* AppTimetablePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimetablePicker.swift; sourceTree = "<group>"; };
@@ -315,7 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				4F1A9F1724D89BBA00F99439 /* LessonAddView.swift */,
-				4F8E058124DA769600748F47 /* LesonEditView.swift */,
+				4F8E058124DA769600748F47 /* LessonEditView.swift */,
 			);
 			path = Lesson;
 			sourceTree = "<group>";
@@ -355,6 +361,14 @@
 				4F12658724AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift */,
 			);
 			path = LessonDetailCells;
+			sourceTree = "<group>";
+		};
+		4F38C4AB24E69E5D0082517E /* Subject */ = {
+			isa = PBXGroup;
+			children = (
+				4F38C4AC24E69E970082517E /* SubjectEditView.swift */,
+			);
+			path = Subject;
 			sourceTree = "<group>";
 		};
 		4F405E85245DB80D00E1E704 /* Controller */ = {
@@ -458,6 +472,8 @@
 		4F7F777B24588DE700038729 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4F38C4AE24E69F020082517E /* Subject+CoreDataClass.swift */,
+				4F38C4AF24E69F020082517E /* Subject+CoreDataProperties.swift */,
 				4F2A7DC524AFAD22002467E3 /* Task+CoreDataClass.swift */,
 				4F2A7DC624AFAD22002467E3 /* Task+CoreDataProperties.swift */,
 				4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */,
@@ -477,6 +493,7 @@
 				4F8E057E24D9EB2300748F47 /* Common */,
 				4F1A9F1324D72FE900F99439 /* Task */,
 				4F1A9F1624D89BA000F99439 /* Lesson */,
+				4F38C4AB24E69E5D0082517E /* Subject */,
 				4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */,
 				4FB5784924DF32DA0066F130 /* TimetableDetail.swift */,
 			);
@@ -824,6 +841,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F38C4B124E69F020082517E /* Subject+CoreDataProperties.swift in Sources */,
 				4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */,
 				4F2A7DC724AFAD22002467E3 /* Task+CoreDataClass.swift in Sources */,
 				4F12658F24B1C90F000488B8 /* TaskNotificationTitleTableViewCell.swift in Sources */,
@@ -866,6 +884,7 @@
 				4F5B4E9324C6287B0098F4A7 /* TimetableAddViewController.swift in Sources */,
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
 				4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */,
+				4F38C4B024E69F020082517E /* Subject+CoreDataClass.swift in Sources */,
 				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
@@ -885,7 +904,7 @@
 				4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
 				4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */,
-				4F8E058224DA769600748F47 /* LesonEditView.swift in Sources */,
+				4F8E058224DA769600748F47 /* LessonEditView.swift in Sources */,
 				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
 				4F8E058A24DA798500748F47 /* CustomTextField.swift in Sources */,
 				4F9405ED2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift in Sources */,
@@ -898,6 +917,7 @@
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
 				4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */,
 				4F5B4E9124C624860098F4A7 /* NoTimetablesTableViewCell.swift in Sources */,
+				4F38C4AD24E69E970082517E /* SubjectEditView.swift in Sources */,
 				4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */,
 				4F2A7DC824AFAD22002467E3 /* Task+CoreDataProperties.swift in Sources */,
 				4F2A1C9124AA69C300E66C79 /* LessonDetailDeleteCell.swift in Sources */,

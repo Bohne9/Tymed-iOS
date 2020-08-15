@@ -23,24 +23,25 @@ class ViewController: UITabBarController {
         
         tabBar.isTranslucent = false
         
+        view.backgroundColor = .systemBackground
         
         let home = generateHomeViewController()
         
-        let homeTabItem = UITabBarItem(title: nil, image: UIImage(systemName: "house.fill",
+        let homeTabItem = UITabBarItem(title: "", image: UIImage(systemName: "house.fill",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 0)
         
         home.tabBarItem = homeTabItem
         
         let add = generateAddViewController()
         
-        let addTabItem = UITabBarItem(title: nil, image: UIImage(systemName: "plus",
+        let addTabItem = UITabBarItem(title: "", image: UIImage(systemName: "plus",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 1)
         
         add.tabBarItem = addTabItem
         
         let profile = generateProfileViewController()
         
-        let profileTabItem = UITabBarItem(title: nil, image: UIImage(systemName: "person.fill",
+        let profileTabItem = UITabBarItem(title: "", image: UIImage(systemName: "person.fill",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 2)
         
         profile.tabBarItem = profileTabItem
@@ -91,7 +92,7 @@ class ViewController: UITabBarController {
 
         let nav = UINavigationController(navigationBarClass: NavigationBar.self, toolbarClass: nil)
         nav.setViewControllers([homeVC], animated: false)
-
+        
         return nav
     }
     

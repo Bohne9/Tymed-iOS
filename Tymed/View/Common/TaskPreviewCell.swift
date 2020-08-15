@@ -28,7 +28,7 @@ struct TaskPreviewCell: View {
                 Text(task.title)
                     .font(.system(size: 14, weight: .semibold))
                 Spacer()
-                Text(task.text ?? "")
+                Text(task.text ?? "-")
                     .font(.system(size: 12, weight: .semibold))
             }.padding(.vertical, 5)
             Spacer()

@@ -19,7 +19,7 @@ extension Lesson: Identifiable {
 
     @NSManaged public var dayOfWeek: Int32
     @NSManaged public var end: Int32
-    @NSManaged public var id: UUID
+    @NSManaged public var id: UUID?
     @NSManaged public var note: String?
     @NSManaged public var start: Int32
     @NSManaged public var subject: Subject?

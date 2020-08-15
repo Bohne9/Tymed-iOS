@@ -20,8 +20,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override internal func setupUserInterface() {
         super.setupUserInterface()
         
-        register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
+        collectionView.dragInteractionEnabled = true
+        
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
     }
     
@@ -41,6 +45,10 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         weekDays.sort(by: { (d1, d2) -> Bool in
             return d1 < d2
         })
+        
+        collectionView.reloadData()
+        
+        scrollTo(day: .current)
         
     }
     
@@ -73,7 +81,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
         if let section = weekDays.firstIndex(of: day) {
-            scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
+            collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), animated)
@@ -120,12 +128,45 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             }
             
             // Scroll to the lesson
-            scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
+            collectionView.scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
             }
         }
+    }
+    
+    private func indexPath(for lesson: Lesson) -> IndexPath? {
+        var dayIndex: Int?
+        var day: Day?
+        var row: Int?
+        
+        for (index, item) in weekDays.enumerated() {
+            if item == lesson.day {
+                day = item
+                dayIndex = index
+            }
+        }
+        
+        if day == nil {
+            return nil
+        }
+        
+        guard let d = day, let lessons = week[d] else {
+            return nil
+        }
+        
+        for (index, l) in lessons.enumerated() {
+            if l.id == lesson.id {
+                row = index
+            }
+        }
+        
+        if let r = row, let d = dayIndex {
+            return IndexPath(row: r, section: d)
+        }
+        
+        return nil
     }
     
     /// Returns the lesson for a given uuid
@@ -158,7 +199,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
         
         cell.lesson = lesson(for: indexPath)
         cell.tasksImage.isHidden = true
@@ -168,12 +209,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: supplementaryView
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
             
-            header.label.text = lesson(for: indexPath)?.day.date()?.dayToString()
+            header.label.text = lesson(for: indexPath)?.day.string()
             
             return header
         }
@@ -195,24 +236,24 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 50)
+        return CGSize(width: collectionView.frame.width, height: 40)
     }
     
     
     private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
         if let lesson = lessons?[indexPath.row] {
-            homeDelegate?.lessonDetail(self, for: lesson)
+            homeDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
     }
     
     //MARK: didSelectItemAt
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         presentDetail(lessons(for: indexPath.section), indexPath)
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+    override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
         let lesson = self.lesson(for: indexPath)
         
@@ -237,7 +278,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 
                 TimetableService.shared.deleteLesson(lesson)
                 
-                self.homeDelegate?.lessonDidDelete(self, lesson: lesson)
+                self.homeDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
                 
             }
             
@@ -247,7 +288,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         return config
     }
     
-    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+    override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         
         guard let id = (configuration.identifier as? NSUUID) as UUID? else {
             return
@@ -258,12 +299,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 return
             }
             
-            self.homeDelegate?.lessonDetail(self, for: lesson)
+            self.homeDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
         
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         homeDelegate?.didScroll(scrollView)
     }
     
@@ -302,5 +343,84 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
         backgroundColor = .secondarySystemGroupedBackground
         super.reload()
     }
+    
+}
+
+
+extension HomeWeekCollectionView: UICollectionViewDragDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let item = lesson(for: indexPath) else {
+            return []
+        }
+        
+        guard let id = (item.id?.uuidString ?? "") else {
+            return []
+        }
+        
+        let itemProvider = NSItemProvider(object: id as NSString)
+        
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        return [dragItem]
+    }
+    
+}
+
+extension HomeWeekCollectionView: UICollectionViewDropDelegate {
+    
+    func updateLesson(_ lesson: Lesson, destinationIndexPath: IndexPath) {
+        lesson.dayOfWeek = Int32(weekDays[destinationIndexPath.section].rawValue)
+        TimetableService.shared.save()
+    }
+    
+    func reorderItems(coordinator: UICollectionViewDropCoordinator, destination: IndexPath, _ collectionView: UICollectionView) {
+        guard let dragItem = coordinator.items.first,
+              let first = dragItem.dragItem.localObject as? Lesson,
+              let source = indexPath(for: first) else {
+            return
+        }
+        
+        collectionView.performBatchUpdates ({
+            let day = weekDays[source.section]
+            let destDay = weekDays[destination.section]
+            week[day]?.remove(at: source.row)
+            week[destDay]?.insert(first, at: destination.item)
+            
+            updateLesson(first, destinationIndexPath: destination)
+            
+            collectionView.deleteItems(at: [source])
+            collectionView.insertItems(at: [destination])
+        }, completion: nil)
+        collectionView.reloadData()
+        
+        coordinator.drop(dragItem.dragItem, toItemAt: destination)
+
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        
+        var destinationIndexPath: IndexPath
+        
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        }else {
+            destinationIndexPath = IndexPath(row: 0, section: 0)
+        }
+        
+        if coordinator.proposal.operation == .move {
+            reorderItems(coordinator: coordinator, destination: destinationIndexPath, collectionView)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+    
     
 }

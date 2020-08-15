@@ -42,15 +42,15 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     internal override func setupUserInterface() {
         super.setupUserInterface()
         
-        register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        register(HomeDashTaskOverviewCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: taskHeader)
+        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+        collectionView.register(HomeDashTaskOverviewCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: taskHeader)
         
-        register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
+        collectionView.register(HomeTaskCollectionViewCell.self, forCellWithReuseIdentifier: homeTaskCell)
         
-        register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
-        register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
+        collectionView.register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
+        collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         
-        register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: addTaskIdentifier)
+        collectionView.register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: addTaskIdentifier)
         
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -204,7 +204,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private func presentDetail(_ tasks: [Task]?, _ indexPath: IndexPath) {
         if let task = tasks?[indexPath.row] {
-            homeDelegate?.taskDetail(self, for: task)
+            homeDelegate?.taskDetail(self.collectionView, for: task)
         }
     }
     
@@ -221,7 +221,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: didSelectItemAt
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
 //        presentDetail(tasks, indexPath)
         let section = self.section(for: indexPath.section)
@@ -266,7 +266,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: supplementaryView
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
         let sectionTitle = self.sectionTitle(for: section(for: indexPath))
         
@@ -291,7 +291,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForHeaderInSection
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let height: CGFloat = 50
+        let height: CGFloat = 40
         
         return CGSize(width: collectionView.frame.width, height: height)
     }
@@ -324,7 +324,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         return CGSize(width: width, height: height)
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         homeDelegate?.didScroll(scrollView)
     }
     
@@ -344,11 +344,11 @@ extension HomeTaskCollectionView: TaskOverviewHeaderDelegate {
         
         switch header.size {
         case .collapsed:
-            deleteItems(at: [IndexPath(row: 0, section: section)])
+            collectionView.deleteItems(at: [IndexPath(row: 0, section: section)])
         case .compact:
-            insertItems(at: [IndexPath(row: 0, section: section)])
+            collectionView.insertItems(at: [IndexPath(row: 0, section: section)])
         case .large:
-            reloadItems(at: [IndexPath(row: 0, section: section)])
+            collectionView.reloadItems(at: [IndexPath(row: 0, section: section)])
         }
         
     }
