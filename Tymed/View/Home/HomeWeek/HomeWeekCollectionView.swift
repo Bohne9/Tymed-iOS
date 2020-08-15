@@ -369,6 +369,11 @@ extension HomeWeekCollectionView: UICollectionViewDragDelegate {
 
 extension HomeWeekCollectionView: UICollectionViewDropDelegate {
     
+    func updateLesson(_ lesson: Lesson, destinationIndexPath: IndexPath) {
+        lesson.dayOfWeek = Int32(weekDays[destinationIndexPath.section].rawValue)
+        TimetableService.shared.save()
+    }
+    
     func reorderItems(coordinator: UICollectionViewDropCoordinator, destination: IndexPath, _ collectionView: UICollectionView) {
         guard let dragItem = coordinator.items.first,
               let first = dragItem.dragItem.localObject as? Lesson,
@@ -381,6 +386,8 @@ extension HomeWeekCollectionView: UICollectionViewDropDelegate {
             let destDay = weekDays[destination.section]
             week[day]?.remove(at: source.row)
             week[destDay]?.insert(first, at: destination.item)
+            
+            updateLesson(first, destinationIndexPath: destination)
             
             collectionView.deleteItems(at: [source])
             collectionView.insertItems(at: [destination])
@@ -399,7 +406,7 @@ extension HomeWeekCollectionView: UICollectionViewDropDelegate {
         if let indexPath = coordinator.destinationIndexPath {
             destinationIndexPath = indexPath
         }else {
-            destinationIndexPath = IndexPath(row: 1, section: 0)
+            destinationIndexPath = IndexPath(row: 0, section: 0)
         }
         
         if coordinator.proposal.operation == .move {
