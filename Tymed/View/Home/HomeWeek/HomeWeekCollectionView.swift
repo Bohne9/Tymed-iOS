@@ -13,8 +13,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     var lessons: [Lesson] = []
     
-    private var weekDays: [Day] = []
-    private var week: [Day: [Lesson]] = [:]
+    var weekDays: [Day] = []
+    var week: [Day: [Lesson]] = [:]
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
@@ -353,7 +353,7 @@ extension HomeWeekCollectionView: UICollectionViewDragDelegate {
         guard let item = lesson(for: indexPath) else {
             return []
         }
-        
+            
         guard let id = (item.id?.uuidString ?? "") else {
             return []
         }
@@ -369,6 +369,8 @@ extension HomeWeekCollectionView: UICollectionViewDragDelegate {
 
 extension HomeWeekCollectionView: UICollectionViewDropDelegate {
     
+    
+    
     func updateLesson(_ lesson: Lesson, destinationIndexPath: IndexPath) {
         lesson.dayOfWeek = Int32(weekDays[destinationIndexPath.section].rawValue)
         TimetableService.shared.save()
@@ -377,22 +379,24 @@ extension HomeWeekCollectionView: UICollectionViewDropDelegate {
     func reorderItems(coordinator: UICollectionViewDropCoordinator, destination: IndexPath, _ collectionView: UICollectionView) {
         guard let dragItem = coordinator.items.first,
               let first = dragItem.dragItem.localObject as? Lesson,
-              let source = indexPath(for: first) else {
+              let sourceIndexPath = dragItem.sourceIndexPath else {
             return
         }
         
+        print("Reordering items: Source: \(sourceIndexPath.description), Destination: \(sourceIndexPath.description)")
+        
         collectionView.performBatchUpdates ({
-            let day = weekDays[source.section]
+            let day = weekDays[sourceIndexPath.section]
             let destDay = weekDays[destination.section]
-            week[day]?.remove(at: source.row)
-            week[destDay]?.insert(first, at: destination.item)
+            
+            week[day]?.remove(at: sourceIndexPath.row)
+            week[destDay]?.insert(first, at: destination.row)
             
             updateLesson(first, destinationIndexPath: destination)
             
-            collectionView.deleteItems(at: [source])
+            collectionView.deleteItems(at: [sourceIndexPath])
             collectionView.insertItems(at: [destination])
         }, completion: nil)
-        collectionView.reloadData()
         
         coordinator.drop(dragItem.dragItem, toItemAt: destination)
 
