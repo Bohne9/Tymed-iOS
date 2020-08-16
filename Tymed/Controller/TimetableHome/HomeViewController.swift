@@ -35,7 +35,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     var currentPage = 0 {
         didSet {
             if let navBar = (navigationController?.navigationBar as? NavigationBar) {
-                navBar.topBar.highlightPage(currentPage)
+                navBar.updateNavigationBar(currentPage)
             }
         }
     }
@@ -193,7 +193,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let page = Int(pagePercent.rounded())
         if let navBar = navigationController?.navigationBar as? NavigationBar {
             navigationBarAlphaTransition(page: pagePercent)
-            navBar.topBar.highlightPage(page)
+            navBar.updateNavigationBar(page)
         }
     }
     

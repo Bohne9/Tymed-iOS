@@ -36,6 +36,18 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         shadowImage = UIImage()
     }
     
+    func updateNavigationBar(_ page: Int) {
+        topBar.highlightPage(page)
+        
+        UIView.animate(withDuration: 0.25) {
+            self.topBar.alpha = page == 2 ? 0 : 1
+            self.layoutIfNeeded()
+        } completion: { (res) in
+//            self.topBar.isHidden = page == 2
+        }
+
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
