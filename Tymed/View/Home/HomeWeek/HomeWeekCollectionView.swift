@@ -23,10 +23,23 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.dragInteractionEnabled = true
+//
+//        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
+//        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
-        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(HomeWeekDayCollectionViewCell.self,
+                                forCellWithReuseIdentifier: HomeWeekDayCollectionViewCell.identifier)
         
+        collectionView.isPagingEnabled = true
+        
+        collectionView.contentInset = .zero
+        
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+        }
+        
+        title = "Hello"
     }
     
     //MARK: fetchDate()
@@ -45,6 +58,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         weekDays.sort(by: { (d1, d2) -> Bool in
             return d1 < d2
         })
+        
+        updateCurrentDay(index: 0)
         
         collectionView.reloadData()
         
@@ -191,54 +206,36 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return week.keys.count
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return week[weekDays[section]]?.count ?? 0
+        return weekDays.count
+    }
+    
+    private func dequeueHomeDayCell(for indexPath: IndexPath) -> HomeWeekDayCollectionViewCell? {
+        return collectionView.dequeueReusableCell(
+            withReuseIdentifier: HomeWeekDayCollectionViewCell.identifier,
+            for: indexPath) as? HomeWeekDayCollectionViewCell
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeLessonCell, for: indexPath) as! HomeWeekLessonCollectionViewCell
-        
-        cell.lesson = lesson(for: indexPath)
-        cell.tasksImage.isHidden = true
-        cell.tasksLabel.isHidden = true
-        
-        return cell
-    }
-    
-    //MARK: supplementaryView
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "homeHeader", for: indexPath) as! HomeCollectionViewHeader
-            
-            header.label.text = lesson(for: indexPath)?.day.string()
-            
-            return header
+        guard let cell = dequeueHomeDayCell(for: indexPath) else {
+            return UICollectionViewCell()
         }
         
-        return UICollectionReusableView()
+        let colors: [UIColor] = [.red, .green, .blue]
+        
+        cell.contentView.backgroundColor = colors[indexPath.row % 3]
+        
+        return cell
     }
     
     //MARK: sizeForItemAt
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        guard let lesson = self.lesson(for: indexPath) else {
-            return .zero
-        }
-        
-        let height = heightRelativeToDuration(of: lesson)
-        
-        return CGSize(width: collectionView.frame.width - 2 * 20, height: height)
+        return collectionView.frame.size
     }
-    
-    //MARK: sizeForHeaderInSection
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 40)
-    }
-    
     
     private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {
         if let lesson = lessons?[indexPath.row] {
@@ -304,7 +301,23 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
     }
     
+    private func updateCurrentDay(index: Int) {
+        
+        guard let navBar = navigationController?.navigationBar as? NavigationBar else {
+            return
+        }
+        
+        navBar.setWeekTitle(weekDays[index].string())
+    }
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentDay = Int(scrollView.contentOffset.y / scrollView.frame.height)
+        
+        updateCurrentDay(index: currentDay)
+        
+        print("Scrolling to page: \(currentDay)")
+        
+        
         homeDelegate?.didScroll(scrollView)
     }
     
