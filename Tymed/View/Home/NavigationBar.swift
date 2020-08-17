@@ -25,6 +25,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     let titleLabel = UILabel()
     let backBtn = UIButton()
     
+    private(set) var currentPage: Int = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,7 +69,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         titleLabel.alpha = 0
         
         titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         
         // Setup back button
         addSubview(backBtn)
@@ -76,7 +77,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         
         backBtn.constraintLeadingToSuperview(constant: 20)
         backBtn.constraintCenterYToSuperview()
-        backBtn.constraint(width: 30, height: 30)
+        backBtn.constraint(width: 20, height: 40)
         
         let image = UIImage(systemName: "chevron.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
@@ -91,14 +92,18 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     func updateNavigationBar(_ page: Int) {
         topBar.highlightPage(page)
         
-        UIView.animate(withDuration: 0.25) {
-            self.topBar.alpha = page == 2 ? 0 : 1
-            self.titleLabel.alpha = page == 2 ? 1 : 0
-            self.backBtn.alpha = page == 2 ? 1 : 0
-            self.layoutIfNeeded()
-        } completion: { (res) in
-//            self.topBar.isHidden = page == 2
+        if page != currentPage {
+            print("update")
+            UIView.animate(withDuration: 0.25) {
+                self.topBar.alpha = page == 2 ? 0 : 1
+                self.titleLabel.alpha = page == 2 ? 1 : 0
+                self.backBtn.alpha = page == 2 ? 1 : 0
+                self.layoutIfNeeded()
+            } completion: { (res) in
+            }
         }
+        
+        currentPage = page
 
     }
     

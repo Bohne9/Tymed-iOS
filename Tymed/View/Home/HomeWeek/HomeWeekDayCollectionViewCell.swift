@@ -46,7 +46,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     }
     
     private func setupCollectionView() {
-        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: lessonCell)
+        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: lessonCell)
         
         collectionView.delegate = self
         collectionView.dataSource = self

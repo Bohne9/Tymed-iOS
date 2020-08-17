@@ -59,12 +59,12 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return d1 < d2
         })
         
-        updateCurrentDay(index: 0)
         
         collectionView.reloadData()
         
         scrollTo(day: .current)
         
+        updateCurrentDay(index: 0)
     }
     
     private func duration(of lesson: Lesson) -> Int {
@@ -316,9 +316,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         updateCurrentDay(index: currentDay)
         
-        print("Scrolling to page: \(currentDay)")
-        
-        
         homeDelegate?.didScroll(scrollView)
     }
     
@@ -360,7 +357,7 @@ class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
     
 }
 
-
+//MARK: DragDelegate
 extension HomeWeekCollectionView: UICollectionViewDragDelegate {
     
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
@@ -381,6 +378,7 @@ extension HomeWeekCollectionView: UICollectionViewDragDelegate {
     
 }
 
+//MARK: DropDelegate
 extension HomeWeekCollectionView: UICollectionViewDropDelegate {
     
     
