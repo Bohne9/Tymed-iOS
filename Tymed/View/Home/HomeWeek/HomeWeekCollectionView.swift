@@ -226,6 +226,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         let colors: [UIColor] = [.red, .green, .blue]
         
+        cell.lessons = lessons(for: indexPath.row) ?? []
         cell.contentView.backgroundColor = colors[indexPath.row % 3]
         
         return cell
