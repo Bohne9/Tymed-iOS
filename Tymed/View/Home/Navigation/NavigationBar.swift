@@ -75,14 +75,16 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         addSubview(backBtn)
         backBtn.translatesAutoresizingMaskIntoConstraints = false
         
-        backBtn.constraintLeadingToSuperview(constant: 20)
+        backBtn.constraintLeadingToSuperview(constant: 10)
         backBtn.constraintCenterYToSuperview()
-        backBtn.constraint(width: 20, height: 40)
+        backBtn.constraint(width: 40, height: 40)
         
         let image = UIImage(systemName: "chevron.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
         
         backBtn.setImage(image, for: .normal)
+        
+        backBtn.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
         
         backBtn.addTarget(self, action: #selector(onTapBackButton), for: .touchUpInside)
         
@@ -109,6 +111,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     
     func setWeekTitle(_ title: String) {
         titleLabel.text = title
+        layoutIfNeeded()
     }
     
     @objc func onTapBackButton() {

@@ -39,7 +39,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             layout.minimumInteritemSpacing = 0
         }
         
-        title = "Hello"
     }
     
     //MARK: fetchDate()
@@ -59,12 +58,9 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return d1 < d2
         })
         
-        
         collectionView.reloadData()
         
         scrollTo(day: .current)
-        
-        updateCurrentDay(index: 0)
     }
     
     private func duration(of lesson: Lesson) -> Int {
@@ -95,8 +91,9 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
-        if let section = weekDays.firstIndex(of: day) {
-            collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .top, animated: animated)
+        if let day = weekDays.firstIndex(of: day) {
+            collectionView.scrollToItem(at: IndexPath(row: day, section: 0), at: .top, animated: animated)
+            updateCurrentDay(index: day)
         }else {
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), animated)
@@ -224,18 +221,15 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return UICollectionViewCell()
         }
         
-        let colors: [UIColor] = [.red, .green, .blue]
-        
         cell.lessons = lessons(for: indexPath.row) ?? []
-        cell.contentView.backgroundColor = colors[indexPath.row % 3]
         
         return cell
     }
     
     //MARK: sizeForItemAt
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return collectionView.frame.size
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+//        return collectionView.frame.size
     }
     
     private func presentDetail(_ lessons: [Lesson]?, _ indexPath: IndexPath) {

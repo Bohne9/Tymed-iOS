@@ -518,6 +518,15 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		4F907FF824EB0CB200DD53E4 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				4F7F77752456CA6400038729 /* NavigationBar.swift */,
+				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		4F9405E72463F3940063E4DA /* Helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -540,8 +549,7 @@
 		4F99D205249FECA500A8DFAB /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				4F7F77752456CA6400038729 /* NavigationBar.swift */,
-				4F7F777724575AB100038729 /* HomeTopBar.swift */,
+				4F907FF824EB0CB200DD53E4 /* Navigation */,
 				4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */,
 				4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */,
 				4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */,

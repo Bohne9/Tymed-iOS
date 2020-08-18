@@ -50,6 +50,10 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        collectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        
+        collectionView.backgroundColor = .systemBackground
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -73,6 +77,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         
         cell.tasksImage.isHidden = true
         cell.tasksLabel.isHidden = true
+        cell.configurator.configure(cell)
         cell.lesson = lesson
         cell.reload()
         

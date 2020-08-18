@@ -17,11 +17,20 @@ class HomeBaseCollectionView: UICollectionViewController {
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
-        
-        setupUserInterface()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         collectionView.delegate = self
         collectionView.dataSource = self
+             
+        setupUserInterface()
+        fetchData()
         
     }
     
@@ -112,10 +121,6 @@ class HomeBaseCollectionView: UICollectionViewController {
     /// - Returns: Returns the dequeued cell
     internal func dequeueCell(_ identifier: String, _ indexPath: IndexPath) -> UICollectionViewCell {
         return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection identifier: String) -> Int {
