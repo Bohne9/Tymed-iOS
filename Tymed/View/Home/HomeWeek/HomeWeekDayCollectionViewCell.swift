@@ -45,8 +45,12 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         setupCollectionView()
     }
     
+    private func lesson(_ indexPath: IndexPath) -> Lesson? {
+        return lessons[indexPath.row]
+    }
+    
     private func setupCollectionView() {
-        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: lessonCell)
+        HomeWeekLessonCollectionViewCell.register(collectionView)
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -64,8 +68,10 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         return lessons.count
     }
     
-    private func dequeueLessonCell(for indexPath: IndexPath) -> HomeLessonCollectionViewCell? {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: lessonCell, for: indexPath) as? HomeLessonCollectionViewCell
+    private func dequeueLessonCell(for indexPath: IndexPath) -> HomeWeekLessonCollectionViewCell? {
+        return collectionView.dequeueReusableCell(
+            withReuseIdentifier: HomeWeekLessonCollectionViewCell.identifier,
+            for: indexPath) as? HomeWeekLessonCollectionViewCell
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -75,17 +81,31 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         
         let lesson = lessons[indexPath.row]
         
-        cell.tasksImage.isHidden = true
-        cell.tasksLabel.isHidden = true
-        cell.configurator.configure(cell)
         cell.lesson = lesson
         cell.reload()
         
         return cell
     }
     
+    private func duration(of lesson: Lesson) -> Int {
+        return Int(lesson.end - lesson.start)
+    }
+    
+    private func heightRelativeToDuration(of lesson: Lesson) -> CGFloat {
+        
+        let duration = Double(self.duration(of: lesson)) * 0.75
+        
+        return CGFloat(max(25, duration))
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width - 40, height: 45)
+        guard let lesson = self.lesson(indexPath) else {
+            return .zero
+        }
+        
+        let height = heightRelativeToDuration(of: lesson)
+        
+        return CGSize(width: collectionView.frame.width - 40, height: height)
     }
     
 }

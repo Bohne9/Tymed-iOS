@@ -18,17 +18,15 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
-        super.setupUserInterface()
         
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.dragInteractionEnabled = true
-//
-//        collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-//        collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         
         collectionView.register(HomeWeekDayCollectionViewCell.self,
                                 forCellWithReuseIdentifier: HomeWeekDayCollectionViewCell.identifier)
+        
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.isPagingEnabled = true
         
@@ -60,17 +58,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         collectionView.reloadData()
         
-        scrollTo(day: .current)
-    }
-    
-    private func duration(of lesson: Lesson) -> Int {
-        return Int(lesson.end - lesson.start)
-    }
-    
-    private func heightRelativeToDuration(of lesson: Lesson) -> CGFloat {
-        let duration = Double(self.duration(of: lesson)) * 0.75
-        
-        return CGFloat(max(25, duration))
+        scrollTo(day: .current, true)
+           
     }
     
     //MARK: scrollTo(date: )
@@ -311,42 +300,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         updateCurrentDay(index: currentDay)
         
         homeDelegate?.didScroll(scrollView)
-    }
-    
-}
- 
-//MARK: HomeWeekLessonCollectionViewCell
-class HomeWeekLessonCollectionViewCell: HomeLessonCollectionViewCell {
-    
-    override func reload() {
-        
-        if let lesson = lesson, Time.between(lesson.startTime, Time.now, t3: lesson.endTime), lesson.day.isToday() {
-            
-            name.text = lesson.subject?.name
-            
-            name.textColor = .white
-            
-            name.sizeToFit()
-            
-            time.text = "\(lesson.day.string()) - \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
-            
-            time.textColor = .white
-            
-            let color: UIColor? = UIColor(named: lesson.subject?.color ?? "dark") ?? UIColor(named: "dark")
-
-            colorIndicator.backgroundColor = .white
-            
-            tasksLabel.textColor = .white
-            tasksImage.tintColor = .white
-            backgroundColor = color
-            return
-        }
-        name.textColor = .white
-        time.textColor = .white
-        tasksLabel.textColor = .white
-        tasksImage.tintColor = .white
-        backgroundColor = .secondarySystemGroupedBackground
-        super.reload()
     }
     
 }
