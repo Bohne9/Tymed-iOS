@@ -210,6 +210,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return UICollectionViewCell()
         }
         
+        cell.lessonDelegate = homeDelegate
         cell.lessons = lessons(for: indexPath.row) ?? []
         
         return cell

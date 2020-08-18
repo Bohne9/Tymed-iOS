@@ -16,6 +16,8 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
+    var lessonDelegate: HomeCollectionViewDelegate?
+    
     var lessons: [Lesson] = [] {
         didSet {
             collectionView.reloadData()
@@ -72,6 +74,14 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         return collectionView.dequeueReusableCell(
             withReuseIdentifier: HomeWeekLessonCollectionViewCell.identifier,
             for: indexPath) as? HomeWeekLessonCollectionViewCell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let lesson = self.lesson(indexPath) else {
+            return
+        }
+        
+        lessonDelegate?.lessonDetail(collectionView, for: lesson)
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
