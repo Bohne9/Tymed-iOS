@@ -11,7 +11,7 @@ import SwiftUI
 
 let reuseIdentifier = "cell"
 
-class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NavigationBarDelegate {
 
     var dashCollectionView: HomeDashCollectionView = {
         let homeDash = HomeDashCollectionView()
@@ -35,7 +35,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     var currentPage = 0 {
         didSet {
             if let navBar = (navigationController?.navigationBar as? NavigationBar) {
-                navBar.topBar.highlightPage(currentPage)
+                navBar.updateNavigationBar(currentPage)
             }
         }
     }
@@ -46,6 +46,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         //MARK: NavBar setup
         
         if let navBar = (navigationController?.navigationBar as? NavigationBar) {
+            navBar.navigationBarDelegate = self
             navBar.topBar.dash.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.tasks.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
             navBar.topBar.week.addTarget(self, action: #selector(tap(_:)), for: .touchUpInside)
@@ -61,7 +62,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
         
         dashCollectionView.homeDelegate = self
         tasksCollectionView.homeDelegate = self
@@ -85,13 +86,17 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         flowLayout.minimumInteritemSpacing = 0
     }
     
+    func scrollToPage(bar: NavigationBar, page: Int) {
+        scrollToPage(page: page)
+    }
+    
+    func scrollToPage(page: Int) {
+        collectionView.setContentOffset(CGPoint(x: CGFloat(page) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
+        print(collectionView.contentOffset)
+    }
     
     @objc func tap(_ btn: UIButton) {
-        print("Tap: \(btn.currentTitle!) \(btn.tag)")
-        
-//        collectionView.scrollToItem(at: IndexPath(row: btn.tag, section: 0), at: .left, animated: true)
-        collectionView.setContentOffset(CGPoint(x: CGFloat(btn.tag) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
-        print(collectionView.contentOffset)
+        scrollToPage(page: btn.tag)
     }
     
     func reload() {
@@ -193,7 +198,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let page = Int(pagePercent.rounded())
         if let navBar = navigationController?.navigationBar as? NavigationBar {
             navigationBarAlphaTransition(page: pagePercent)
-            navBar.topBar.highlightPage(page)
+            navBar.updateNavigationBar(page)
         }
     }
     

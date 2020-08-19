@@ -93,6 +93,7 @@ struct TimetableOverview: View {
                                 Spacer()
                         }
                     }
+                    .foregroundColor(.white)
                     .padding()
                     .frame(height: 70)
                     .background(Color(UIColor(named: "orange")!))
@@ -123,7 +124,7 @@ struct TimetableOverview: View {
             }
         })
         .actionSheet(isPresented: $showAddActionSheet, content: {
-            ActionSheet(title: Text("What do you want to add?"), message: Text(""), buttons: [
+            ActionSheet(title: Text("What would you like to add?"), message: Text(""), buttons: [
                 .default(Text("Lesson"), action: {
                     showLessonAdd = true
                     showAddView.toggle()
@@ -136,9 +137,7 @@ struct TimetableOverview: View {
                     showTimetableAdd = true
                     showAddView.toggle()
                 }),
-                .destructive(Text("Cancel"), action: {
-                    showAddActionSheet = false
-                })
+                .cancel()
             ])
         })
         .navigationTitle("Timetable")

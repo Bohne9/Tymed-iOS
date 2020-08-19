@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 private let nowReuseIdentifier = "homeNowCell"
 private let taskSelectionCell = "taskSelection"
@@ -284,19 +285,21 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
-        let lesson = self.lesson(for: indexPath)
+        guard let lesson = self.lesson(for: indexPath) else {
+            return nil
+        }
         
-        guard let uuid = lesson?.id else {
+        guard let uuid = lesson.id else {
             return nil
         }
         
         let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
             
-            let lessonDetail = LessonEditViewWrapper()
+            // ViewController to give the user a preview of the lessonEditView
+            let lessonEdit = UIHostingController(
+                rootView: LessonEditContentView(lesson: lesson, dismiss: { }))
             
-            lessonDetail.lesson = lesson
-            
-            return lessonDetail
+            return lessonEdit
         }) { (elements) -> UIMenu? in
             
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
