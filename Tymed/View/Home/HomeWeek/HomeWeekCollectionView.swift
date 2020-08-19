@@ -10,6 +10,7 @@ import UIKit
 //MARK: HomeWeekCollectionView
 class HomeWeekCollectionView: HomeBaseCollectionView {
     
+    private var firstAppear = true
     
     var lessons: [Lesson] = []
     
@@ -39,6 +40,15 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if firstAppear {
+            scrollTo(day: .current)
+            firstAppear = false
+        }
+    }
+    
     //MARK: fetchDate()
     /// Fetches the lesson data from core data
     override func fetchData() {
@@ -58,7 +68,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         collectionView.reloadData()
         
-        scrollTo(day: .current, true)
+//        scrollTo(day: .current, true)
            
     }
     
