@@ -62,7 +62,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.isPagingEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
         
         dashCollectionView.homeDelegate = self
         tasksCollectionView.homeDelegate = self

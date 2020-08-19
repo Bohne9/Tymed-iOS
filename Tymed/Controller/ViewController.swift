@@ -23,25 +23,25 @@ class ViewController: UITabBarController {
         
         tabBar.isTranslucent = false
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
         
         let home = generateHomeViewController()
         
-        let homeTabItem = UITabBarItem(title: "", image: UIImage(systemName: "house.fill",
+        let homeTabItem = UITabBarItem(title: "Start", image: UIImage(systemName: "house.fill",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 0)
         
         home.tabBarItem = homeTabItem
         
         let add = generateAddViewController()
         
-        let addTabItem = UITabBarItem(title: "", image: UIImage(systemName: "plus",
+        let addTabItem = UITabBarItem(title: "Timetable", image: UIImage(systemName: "plus",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 1)
         
         add.tabBarItem = addTabItem
         
         let profile = generateProfileViewController()
         
-        let profileTabItem = UITabBarItem(title: "", image: UIImage(systemName: "person.fill",
+        let profileTabItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill",
                                                             withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 2)
         
         profile.tabBarItem = profileTabItem
