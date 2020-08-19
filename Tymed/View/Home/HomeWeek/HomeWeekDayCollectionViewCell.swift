@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 private let lessonCell = "lessonCell"
 
@@ -57,6 +58,13 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         // Set delegate + dataSource
         collectionView.delegate = self
         collectionView.dataSource = self
+        
+        // Set drag & drop delegate
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
+        
+        // Enable drag interaction for the collectionView
+        collectionView.dragInteractionEnabled = true
         
         // Set content insets
         collectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
@@ -146,52 +154,136 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     
     //MARK: - ContextMenu/-Content
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        // Get the lesson for the context menu
+        guard let lesson = self.lesson(indexPath) else {
+            return nil
+        }
             
-            let lesson = self.lesson(indexPath)
+        // Extract the id of the lesson
+        guard let uuid = lesson.id else {
+            return nil
+        }
             
-            guard let uuid = lesson?.id else {
-                return nil
-            }
+        // Create a context menu configuration
+        let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
             
-            let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
-                
-                let lessonDetail = LessonEditViewWrapper()
-                
-                lessonDetail.lesson = lesson
-                
-                return lessonDetail
-            }) { (elements) -> UIMenu? in
-                
-                let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
-                    
-                    guard let lesson = self.lesson(indexPath) else {
-                        return
-                    }
-                    
-                    TimetableService.shared.deleteLesson(lesson)
-                    
-                    self.lessonDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
-                    
+            // ViewController to give the user a preview of the lessonEditView
+            let lessonEdit = UIHostingController(
+                rootView: LessonEditContentView(lesson: lesson, dismiss: { }))
+            
+            return lessonEdit
+        }) { (elements) -> UIMenu? in
+            // Provide a menu for the context menu
+            
+            // Delete button for the context menu
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                // Get the lesson of the context menu
+                guard let lesson = self.lesson(indexPath) else {
+                    return
                 }
+                // Remove the lesson
+                TimetableService.shared.deleteLesson(lesson)
                 
-                return UIMenu(title: "", image: nil, children: [delete])
+                // Call delegate to reload the home scene
+                self.lessonDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
             }
             
-            return config
+            return UIMenu(title: "", image: nil, children: [delete])
         }
         
-        func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
-            
-            guard let id = (configuration.identifier as? NSUUID) as UUID? else {
+        return config
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
+        
+        guard let id = (configuration.identifier as? NSUUID) as UUID? else {
+            return
+        }
+        
+        animator.addCompletion {
+            guard let lesson = self.lesson(for: id) else {
                 return
             }
             
-            animator.addCompletion {
-                guard let lesson = self.lesson(for: id) else {
-                    return
-                }
-                
-                self.lessonDelegate?.lessonDetail(self.collectionView, for: lesson)
-            }
+            self.lessonDelegate?.lessonDetail(self.collectionView, for: lesson)
         }
+    }
+}
+
+
+//MARK: - Drag & Drop
+extension HomeWeekDayCollectionViewCell: UICollectionViewDragDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let item = lesson(indexPath) else {
+            return []
+        }
+        
+        guard let id = (item.id?.uuidString ?? "") else {
+            return []
+        }
+        
+        let itemProvider = NSItemProvider(object: id as NSString)
+        
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        return [dragItem]
+    }
+    
+}
+
+extension HomeWeekDayCollectionViewCell: UICollectionViewDropDelegate {
+    
+    func updateLesson(_ lesson: Lesson, destinationIndexPath: IndexPath) {
+//        lesson.dayOfWeek = Int32(weekDays[destinationIndexPath.section].rawValue)
+//        TimetableService.shared.save()
+    }
+    
+    func reorderItems(coordinator: UICollectionViewDropCoordinator, destination: IndexPath, _ collectionView: UICollectionView) {
+        guard let dragItem = coordinator.items.first,
+              let first = dragItem.dragItem.localObject as? Lesson,
+              let source = dragItem.sourceIndexPath else {
+            return
+        }
+        
+        collectionView.performBatchUpdates ({
+            lessons.remove(at: source.row)
+            lessons.insert(first, at: destination.row)
+            
+            updateLesson(first, destinationIndexPath: destination)
+            
+            collectionView.deleteItems(at: [source])
+            collectionView.insertItems(at: [destination])
+        }, completion: nil)
+        collectionView.reloadData()
+        
+        coordinator.drop(dragItem.dragItem, toItemAt: destination)
+
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        
+        var destinationIndexPath: IndexPath
+        
+        if let indexPath = coordinator.destinationIndexPath {
+            destinationIndexPath = indexPath
+        }else {
+            destinationIndexPath = IndexPath(row: 0, section: 0)
+        }
+        
+        if coordinator.proposal.operation == .move {
+            reorderItems(coordinator: coordinator, destination: destinationIndexPath, collectionView)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if collectionView.hasActiveDrag {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .forbidden)
+    }
+    
+    
 }
