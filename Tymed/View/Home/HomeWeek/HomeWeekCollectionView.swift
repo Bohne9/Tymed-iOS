@@ -62,7 +62,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         // Fetch all lessons
         lessons = TimetableService.shared.fetchLessons() ?? []
         
-        
+        // Get the lesson grouped by their day
         week = TimetableService.shared.sortLessonsByWeekDay(lessons)
         
         weekDays = Array(week.keys)
@@ -81,70 +81,24 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     ///   - date: Date to search for the alogorithm
     ///   - animated: scroll animation yes/no
     func scrollTo(date: Date, _ animated: Bool = false) {
+        // Get the day of the date
         guard let day = Day(rawValue: Calendar.current.component(.weekday, from: date)) else {
             print("scrollTo(date:) failed")
             return
         }
-        let time = Time(from: date)
         
-        scrollTo(day: day, time: time, animated)
+        scrollTo(day: day, animated)
     }
     
     //MARK: scrollTo(day: )
     func scrollTo(day: Day, _ animated: Bool = false) {
+        // If the day is in the list of days
         if let day = weekDays.firstIndex(of: day) {
             collectionView.scrollToItem(at: IndexPath(row: day, section: 0), at: .top, animated: animated)
             updateCurrentDay(index: day)
-        }else {
+        }else { // Otherwise scroll recursivly to the next day
             if !week.isEmpty {
                 scrollTo(day: day.rotatingNext(), animated)
-            }
-        }
-    }
-    
-    //MARK: scrollTo(day:, time: )
-    func scrollTo(day: Day, time: Time, _ animated: Bool = false) {
-        if let section = weekDays.firstIndex(of: day) {
-            let lessons = self.lessons(for: day) ?? []
-            
-            // In case the last lesson of today ends before the requested time
-            // -> Go to next day
-            if let l = lessons.last, l.endTime < time {
-                if !week.isEmpty { // Avoid endless recursion for the case there are no lessons
-                    scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
-                }
-                return
-            }
-            // Search for the lesson that is closest to the req. time
-            let closest = lessons.reduce(lessons.first) { (l1, l2) -> Lesson? in
-                guard let s1 = l1?.startTime, let e1 = l1?.startTime else {
-                    return nil
-                }
-                // In case the requested time is within a lesson -> return that lesson
-                if Time.between(s1, time, t3: e1) {
-                    return l1
-                }
-                
-                // In case the requested time is before the first lesson -> return that lesson
-                if let t1 = l1?.startTime, time <= t1 {
-                    return l1
-                }
-                
-                return l2
-            }
-            
-            var row = 0
-            
-            if closest != nil {
-                row = lessons.firstIndex(of: closest!) ?? 0
-                print("scrolling to \(closest!.day) - \(closest!.startTime.string()!)")
-            }
-            
-            // Scroll to the lesson
-            collectionView.scrollToItem(at: IndexPath(row: row, section: section), at: .top, animated: animated)
-        }else {
-            if !week.isEmpty {
-                scrollTo(day: day.rotatingNext(), time: Time.zero, animated)
             }
         }
     }
@@ -197,8 +151,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: sizeForItemAt
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
-//        return collectionView.frame.size
+        return collectionView.frame.size
     }
     
     //MARK: updateCurrentDay
