@@ -34,14 +34,14 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         isTranslucent = false
         isUserInteractionEnabled = true
         
-        backgroundColor = .systemBackground
+        backgroundColor = .systemGroupedBackground
         
         addSubview(topBar)
         
-        barTintColor = .systemBackground
+        barTintColor = .systemGroupedBackground
         
         topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .systemBackground
+        topBar.backgroundColor = .systemGroupedBackground
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         topBar.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.95).isActive = true

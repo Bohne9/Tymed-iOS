@@ -41,6 +41,8 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     
     //MARK: setupView
     private func setupView() {
+        backgroundColor = .systemGroupedBackground
+        
         // Add the collectionView to the cell
         contentView.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +72,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         collectionView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         
         // Set background color
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .systemGroupedBackground
     }
     
     //MARK: lesson(for: UUID)

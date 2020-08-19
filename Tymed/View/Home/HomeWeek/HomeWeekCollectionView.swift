@@ -38,6 +38,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         // Remove any content offset
         collectionView.contentInset = .zero
         
+        collectionView.backgroundColor = .systemGroupedBackground
+        
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0

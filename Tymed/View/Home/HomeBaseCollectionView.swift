@@ -50,7 +50,7 @@ class HomeBaseCollectionView: UICollectionViewController {
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .systemGroupedBackground
         
         collectionView.alwaysBounceVertical = true
         
