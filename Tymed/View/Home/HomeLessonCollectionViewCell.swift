@@ -48,12 +48,12 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         super.setupUserInterface()
         
         //MARK: name
-        addSubview(name)
+        contentView.addSubview(name)
         
         name.translatesAutoresizingMaskIntoConstraints = false
         
-        name.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        name.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        name.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        name.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         name.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         name.widthAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
         
@@ -61,15 +61,15 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         name.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         
         //MARK: time
-        addSubview(time)
+        contentView.addSubview(time)
         
         time.translatesAutoresizingMaskIntoConstraints = false
         
-        time.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
+        time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         
         // Setup two constraints for different cells
-        timeTopConstraint = time.topAnchor.constraint(equalTo: topAnchor, constant: 10)
-        timeBottomConstraint = time.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+        timeTopConstraint = time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10)
+        timeBottomConstraint = time.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         
         timeTopConstraint?.isActive = false
         timeBottomConstraint?.isActive = false
@@ -102,13 +102,13 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
             tasksImage = UIImageView(image: image)
             tasksImage.tintColor = .label
             
-            addSubview(tasksImage)
+            contentView.addSubview(tasksImage)
             
             tasksImage.translatesAutoresizingMaskIntoConstraints = false
             tasksLabel.translatesAutoresizingMaskIntoConstraints = false
             
             tasksImage.leadingAnchor.constraint(equalTo: name.leadingAnchor).isActive = true
-            tasksImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+            tasksImage.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
             tasksImage.widthAnchor.constraint(equalToConstant: 17).isActive = true
             tasksImage.heightAnchor.constraint(equalToConstant: 17).isActive = true
             
@@ -118,12 +118,12 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         if tasksLabel.superview == nil {
             
-            addSubview(tasksLabel)
+            contentView.addSubview(tasksLabel)
             
             tasksLabel.text = "-"
             
             tasksLabel.leadingAnchor.constraint(equalTo: tasksImage.trailingAnchor, constant: 5).isActive = true
-            tasksLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
+            tasksLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10).isActive = true
             tasksLabel.widthAnchor.constraint(equalToConstant: 15).isActive = true
             tasksLabel.heightAnchor.constraint(equalToConstant: 15).isActive = true
             
