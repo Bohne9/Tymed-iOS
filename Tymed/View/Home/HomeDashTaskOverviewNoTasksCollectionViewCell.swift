@@ -10,6 +10,9 @@ import UIKit
 
 class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
+    
+    let label = UILabel()
+    
     let addButton = UIButton()
     
     var taskDelegate: HomeTaskAddDelegate?
@@ -34,13 +37,22 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     }
     
     private func setup() {
+        contentView.addSubview(label)
         contentView.addSubview(addButton)
         
+        label.translatesAutoresizingMaskIntoConstraints = false
         addButton.translatesAutoresizingMaskIntoConstraints = false
         
+        label.constraintLeadingToSuperview(constant: 20)
+        label.constraintHeightToSuperview()
+        label.constraintCenterYToSuperview()
+        
         addButton.constraintTopTo(anchor: contentView.topAnchor, constant: 0)
-        addButton.constraintHorizontalToSuperview(leading: 0, trailing: 0)
+        addButton.constraintTrailingToSuperview(constant: 20)
         addButton.constraintBottomToSuperview(constant: 0)
+        
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.text = "No tasks left 👍"
         
         addButton.setTitle("Add Task", for: .normal)
         addButton.setImage(
