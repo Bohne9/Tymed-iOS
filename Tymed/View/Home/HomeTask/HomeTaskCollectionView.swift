@@ -240,7 +240,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
                 }
                 
                 if taskSectionSize[id] == .collapsed {
-                    taskSectionSize[id] = .compact
+                    taskSectionSize[id] = .large
                 }
                 
                 let headerOffset = collectionView.collectionViewLayout
