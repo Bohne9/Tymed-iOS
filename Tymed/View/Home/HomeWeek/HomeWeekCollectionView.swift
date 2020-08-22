@@ -56,7 +56,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         // Scroll to the current day (only for the first time)
         if firstAppear {
-//            scrollTo(day: .current)
+            scrollTo(date: Date())
             firstAppear = false
         }
     }
@@ -69,6 +69,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             CalendarWeekEntry(date: CalendarService.shared.previousWeek(before: Date()) ?? Date()),
             CalendarWeekEntry.entryForCurrentWeek(),
             CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())]
+        
+        collectionView.reloadData()
     }
     
     private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
@@ -79,11 +81,16 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: scrollTo(day: )
     func scrollTo(date: Date, _ animated: Bool = false) {
     
-//        for week in entries {
-//            if week.startOfWeek < date && date < week.startOfWeek.endOfWeek ?? date {
-//                let index =
-//            }
-//        }
+        for (section, week) in entries.enumerated() {
+            if week.startOfWeek < date && date < week.startOfWeek.endOfWeek ?? date {
+                for (index, day) in week.entries.enumerated() {
+                    if day.date.startOfDay < date && date < day.date.endOfDay {
+                        collectionView.scrollToItem(at: IndexPath(row: index, section: section), at: .top
+                                                    , animated: animated)
+                    }
+                }
+            }
+        }
         
     }
     
