@@ -64,58 +64,28 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: fetchDate()
     /// Fetches the lesson data from core data
     override func fetchData() {
-        
-        // Fetch all lessons
-//        lessons = TimetableService.shared.fetchLessons() ?? []
-//
-//        // Get the lesson grouped by their day
-//        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
-//
-//        weekDays = Array(week.keys)
-//
-//        // Sort the days from monday to sunday
-//        weekDays.sort(by: { (d1, d2) -> Bool in
-//            return d1 < d2
-//        })
-        
-        
-        entries = [CalendarWeekEntry.entryForCurrentWeek()]
+    
+        entries = [
+            CalendarWeekEntry(date: CalendarService.shared.previousWeek(before: Date()) ?? Date()),
+            CalendarWeekEntry.entryForCurrentWeek(),
+            CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())]
     }
     
     private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
+        print(indexPath)
         return entries[indexPath.section].calendarDayEntry(for: indexPath.row)
     }
-    
-    /*
-    
-    //MARK: scrollTo(date: )
-    /// Scrolls the collection view to the first lesson that fits the date.
-    /// If there is no lesson that fits the date. The next lesson after that date will be chosen
-    /// - Parameters:
-    ///   - date: Date to search for the alogorithm
-    ///   - animated: scroll animation yes/no
-    func scrollTo(date: Date, _ animated: Bool = false) {
-        // Get the day of the date
-        guard let day = Day(rawValue: Calendar.current.component(.weekday, from: date)) else {
-            print("scrollTo(date:) failed")
-            return
-        }
-        
-        scrollTo(day: day, animated)
-    }
-    
+ 
     //MARK: scrollTo(day: )
-    func scrollTo(day: Date, _ animated: Bool = false) {
-        // If the day is in the list of days
-        if let day = weekDays.firstIndex(of: day) {
-            collectionView.scrollToItem(at: IndexPath(row: day, section: 0), at: .top, animated: animated)
-            updateCurrentDay(index: day)
-        }else { // Otherwise scroll recursivly to the next day
-            if !week.isEmpty {
-                scrollTo(day: day.rotatingNext(), animated)
-            }
-        }
-    } */
+    func scrollTo(date: Date, _ animated: Bool = false) {
+    
+//        for week in entries {
+//            if week.startOfWeek < date && date < week.startOfWeek.endOfWeek ?? date {
+//                let index =
+//            }
+//        }
+        
+    }
     
     //MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -168,12 +138,32 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.y / scrollView.frame.height)
         
-        let week = currentPage / 7
-        let day = currentPage % 7
+//        let week = currentPage / 7
+//        let day = currentPage % 7
+//
+//        updateCurrentDay(indexPath: IndexPath(row: day, section: week))
         
-        updateCurrentDay(indexPath: IndexPath(row: day, section: week))
+//        if let cell = collectionView.visibleCells.first {
+//            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+//        }
         
         homeDelegate?.didScroll(scrollView)
     }
     
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        collectionView.layoutIfNeeded()
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
+    }
+    
+    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        collectionView.layoutIfNeeded()
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
+    }
+    
 }
+
+

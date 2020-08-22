@@ -25,7 +25,8 @@ class CalendarWeekEntry: CalendarEntry {
     
     init(date: Date) {
         self.startOfWeek = date.startOfWeek ?? Date()
-        self.entries = CalendarService.shared.calendarWeekEntries(for: startOfWeek).filter({ (entry) -> Bool in
+        self.entries = CalendarService.shared.calendarWeekEntries(for: startOfWeek)
+            .filter({ (entry) -> Bool in
             return entry.lessonCount > 0
         })
     }
@@ -41,5 +42,7 @@ class CalendarWeekEntry: CalendarEntry {
     func dayForEntry(at index: Int) -> Day? {
         return Day.from(date: entries[index].date)
     }
+    
+    
     
 }

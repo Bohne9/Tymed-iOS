@@ -103,7 +103,7 @@ class CalendarService: Service {
         var components = DateComponents()
         
         // Set it to be the next week
-        components.weekOfMonth = -1
+        components.weekOfMonth = 1
         
         // Get the next week
         return calendar.date(byAdding: components, to: date)
