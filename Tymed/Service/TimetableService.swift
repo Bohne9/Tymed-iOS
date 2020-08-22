@@ -30,6 +30,15 @@ enum Day: Int, CaseIterable {
         return d1 < d2 || d1 == d2
     }
     
+    static func from(date: Date) -> Day? {
+        let comp = Calendar.current.dateComponents([.weekday], from: date)
+        
+        guard let weekDay = comp.weekday else {
+            return nil
+        }
+        return Day(rawValue: weekDay)
+    }
+    
     case monday = 2
     case tuesday = 3
     case wednesday = 4
