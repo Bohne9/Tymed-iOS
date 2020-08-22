@@ -163,7 +163,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return
         }
         
-        navBar.setWeekTitle(weekDays[index].string())
+        navBar.setWeekTitle(weekDays[index])
     }
     
     //MARK: scrollViewDidScroll

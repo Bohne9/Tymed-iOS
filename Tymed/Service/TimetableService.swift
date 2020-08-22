@@ -61,6 +61,15 @@ enum Day: Int, CaseIterable {
     func isToday() -> Bool {
         return Calendar.current.component(.weekday, from: Date()) == self.rawValue
     }
+    
+    func nextDate() -> Date? {
+//        guard let startOfWeek = Date().startOfWeek else { return nil }
+        
+        var comp = DateComponents()
+        comp.weekday = rawValue
+        
+        return Calendar.current.nextDate(after: Date(), matching: comp, matchingPolicy: .strict)
+    }
 }
 
 //MARK: TimetableService

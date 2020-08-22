@@ -22,6 +22,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     let topBar = HomeTopBar()
     
     // Views for Week scene
+    let dateLabel = UILabel()
     let titleLabel = UILabel()
     let backBtn = UIButton()
     
@@ -57,19 +58,34 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         
         // Setup custom title label
         addSubview(titleLabel)
-
+        addSubview(dateLabel)
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.constraintCenterXToSuperview()
-        titleLabel.constraintCenterYToSuperview()
+        titleLabel.constraintTopTo(anchor: centerYAnchor)
         titleLabel.constraintWidthToSuperview()
-        titleLabel.constraintHeightToSuperview()
+        titleLabel.constraintBottomToSuperview(constant: 4)
+        
+        dateLabel.constraintCenterXToSuperview()
+        dateLabel.constraintTopTo(anchor: centerYAnchor)
+        dateLabel.constraintWidthToSuperview()
+        dateLabel.constraintTopToSuperview(constant: 4)
         
         titleLabel.text = "Test"
         titleLabel.alpha = 0
         
+        dateLabel.text = "Date"
+        dateLabel.alpha = 0
+        
         titleLabel.textAlignment = .center
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        
+        dateLabel.textAlignment = .center
+        dateLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        
+        dateLabel.textColor = .secondaryLabel
         
         // Setup back button
         addSubview(backBtn)
@@ -91,6 +107,12 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         backBtn.alpha = 0
     }
     
+    private func setupWeekNavigationBar(_ visible: Bool) {
+        self.titleLabel.alpha = visible ? 1 : 0
+        self.dateLabel.alpha = visible ? 1 : 0
+        self.backBtn.alpha = visible ? 1 : 0
+    }
+    
     func updateNavigationBar(_ page: Int) {
         topBar.highlightPage(page)
         
@@ -98,8 +120,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
             print("update")
             UIView.animate(withDuration: 0.25) {
                 self.topBar.alpha = page == 2 ? 0 : 1
-                self.titleLabel.alpha = page == 2 ? 1 : 0
-                self.backBtn.alpha = page == 2 ? 1 : 0
+                self.setupWeekNavigationBar(page == 2)
                 self.layoutIfNeeded()
             } completion: { (res) in
             }
@@ -109,8 +130,9 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
 
     }
     
-    func setWeekTitle(_ title: String) {
-        titleLabel.text = title
+    func setWeekTitle(_ day: Day) {
+        titleLabel.text = day.string()
+        dateLabel.text = day.nextDate()?.stringify(with: .medium, relativeFormatting: true)
         layoutIfNeeded()
     }
     
