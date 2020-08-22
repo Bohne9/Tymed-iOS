@@ -39,6 +39,13 @@ enum Day: Int, CaseIterable {
         return Day(rawValue: weekDay)
     }
     
+    /// Returns the Day from an index.
+    /// Mon: 0, Tue: 1, Wed: 2, ..., Sun: 6
+    static func from(index: Int) -> Day? {
+        let val = index == 6 ? 1 : index + 1
+        return Day(rawValue: val)
+    }
+    
     case monday = 2
     case tuesday = 3
     case wednesday = 4
@@ -47,6 +54,12 @@ enum Day: Int, CaseIterable {
     
     case saturday = 7
     case sunday = 1
+    
+    /// Returns the rawValue as an index.
+    /// Mon: 0, Tue: 1, Wed: 2, ..., Sun: 6
+    var index: Int {
+        return self != .sunday ? rawValue - 1 : 6
+    }
     
     func date() -> Date? {
         return TimetableService.shared.dateFor(day: self)

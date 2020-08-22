@@ -33,7 +33,7 @@ class CalendarService: Service {
     /// - Parameter date: Date for the CalendarDayEntry
     /// - Returns: A CalendarDayEntry for the date.
     func calendarDayEntry(for date: Date) -> CalendarDayEntry {
-        return CalendarDayEntry(for: date, lessons: lessonsForDay(date: date))
+        return CalendarDayEntry(for: date, entries: lessonsForDay(date: date))
     }
     
     //MARK: calendarWeekEntries

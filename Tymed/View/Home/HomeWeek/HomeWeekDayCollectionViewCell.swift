@@ -22,8 +22,8 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     /// Delegate for displaying LessonEditView etc.
     var lessonDelegate: HomeCollectionViewDelegate?
     
-    /// List of lessons of the day
-    var lessons: [Lesson] = [] {
+    /// CalendarDayEntry for the cell
+    var entry: CalendarDayEntry? {
         didSet {
             collectionView.reloadData()
         }
@@ -75,17 +75,21 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         collectionView.backgroundColor = .systemGroupedBackground
     }
     
+    func lessons() -> [Lesson] {
+        return entry?.entries ?? []
+    }
+    
     //MARK: lesson(for: UUID)
     /// Returns the lesson for a given uuid
     /// - Parameter uuid: UUID of the lesson
     /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
     private func lesson(for uuid: UUID) -> Lesson? {
-        return lessons.filter { return $0.id == uuid }.first
+        return lessons().filter { return $0.id == uuid }.first
     }
     
     //MARK: lesson(_: IndexPath)
     private func lesson(_ indexPath: IndexPath) -> Lesson? {
-        return lessons[indexPath.row]
+        return lessons()[indexPath.row]
     }
 
     //MARK: - DataSource
@@ -94,7 +98,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lessons.count
+        return lessons().count
     }
     
     private func dequeueLessonCell(for indexPath: IndexPath) -> HomeWeekLessonCollectionViewCell? {
@@ -118,7 +122,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
             return UICollectionViewCell()
         }
         // Get lesson for the row
-        let lesson = lessons[indexPath.row]
+        let lesson = lessons()[indexPath.row]
         
         // Set cell lesson and reload UI of the cell
         cell.lesson = lesson
@@ -249,8 +253,9 @@ extension HomeWeekDayCollectionViewCell: UICollectionViewDropDelegate {
         }
         
         collectionView.performBatchUpdates ({
-            lessons.remove(at: source.row)
-            lessons.insert(first, at: destination.row)
+            #warning("Fix HomeWeekDayCollectionView drop reordering!")
+//            lessons().remove(at: source.row)
+//            lessons.insert(first, at: destination.row)
             
             updateLesson(first, destinationIndexPath: destination)
             

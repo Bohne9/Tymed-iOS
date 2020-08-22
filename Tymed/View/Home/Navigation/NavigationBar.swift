@@ -130,9 +130,9 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
 
     }
     
-    func setWeekTitle(_ day: Day) {
-        titleLabel.text = day.string()
-        dateLabel.text = day.nextDate()?.stringify(with: .medium, relativeFormatting: true)
+    func setWeekTitle(_ date: Date) {
+        titleLabel.text = Day.from(date: date)?.string()
+        dateLabel.text = date.stringify(with: .medium, relativeFormatting: true)
         layoutIfNeeded()
     }
     

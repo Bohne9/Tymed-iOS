@@ -14,13 +14,17 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     private var firstAppear = true
     
     /// All lessons
-    var lessons: [Lesson] = []
+//    var lessons: [Lesson] = []
     
     /// List of days which have lessons.
-    var weekDays: [Day] = []
+//    var weekDays: [Day] = []
     
     /// Dictionary of a list of lessons with their day as the key.
-    var week: [Day: [Lesson]] = [:]
+//    var week: [Day: [Lesson]] = [:]
+    
+    var weeks: [Date] = []
+    var entries: [CalendarWeekEntry] = []
+    
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
@@ -52,7 +56,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         // Scroll to the current day (only for the first time)
         if firstAppear {
-            scrollTo(day: .current)
+//            scrollTo(day: .current)
             firstAppear = false
         }
     }
@@ -62,19 +66,27 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override func fetchData() {
         
         // Fetch all lessons
-        lessons = TimetableService.shared.fetchLessons() ?? []
+//        lessons = TimetableService.shared.fetchLessons() ?? []
+//
+//        // Get the lesson grouped by their day
+//        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
+//
+//        weekDays = Array(week.keys)
+//
+//        // Sort the days from monday to sunday
+//        weekDays.sort(by: { (d1, d2) -> Bool in
+//            return d1 < d2
+//        })
         
-        // Get the lesson grouped by their day
-        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
         
-        weekDays = Array(week.keys)
-        
-        // Sort the days from monday to sunday
-        weekDays.sort(by: { (d1, d2) -> Bool in
-            return d1 < d2
-        })
-           
+        entries = [CalendarWeekEntry.entryForCurrentWeek()]
     }
+    
+    private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
+        return entries[indexPath.section].calendarDayEntry(for: indexPath.row)
+    }
+    
+    /*
     
     //MARK: scrollTo(date: )
     /// Scrolls the collection view to the first lesson that fits the date.
@@ -93,7 +105,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: scrollTo(day: )
-    func scrollTo(day: Day, _ animated: Bool = false) {
+    func scrollTo(day: Date, _ animated: Bool = false) {
         // If the day is in the list of days
         if let day = weekDays.firstIndex(of: day) {
             collectionView.scrollToItem(at: IndexPath(row: day, section: 0), at: .top, animated: animated)
@@ -103,34 +115,15 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
                 scrollTo(day: day.rotatingNext(), animated)
             }
         }
-    }
-    
-    //MARK: lesson(for uuid)
-    
-    /// Returns the lesson for a given uuid
-    /// - Parameter uuid: UUID of the lesson
-    /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
-    private func lesson(for uuid: UUID) -> Lesson? {
-        return lessons.filter { return $0.id == uuid }.first
-    }
-    
-    //MARK: lessons(for: Day)
-    private func lessons(for day: Day) -> [Lesson]? {
-        return week[day]
-    }
-    
-    //MARK: lessons(for: Int)
-    private func lessons(for row: Int) -> [Lesson]? {
-        return week[weekDays[row]]
-    }
+    } */
     
     //MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return entries.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weekDays.count
+        return entries[section].entryCount
     }
     
     private func dequeueHomeDayCell(for indexPath: IndexPath) -> HomeWeekDayCollectionViewCell? {
@@ -146,7 +139,10 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         }
         
         cell.lessonDelegate = homeDelegate
-        cell.lessons = lessons(for: indexPath.row) ?? []
+        
+        if let entry = calendarDayEntry(for: indexPath) {
+            cell.entry = entry
+        }
         
         return cell
     }
@@ -157,20 +153,25 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: updateCurrentDay
-    private func updateCurrentDay(index: Int) {
-        
+    private func updateCurrentDay(indexPath: IndexPath) {
         guard let navBar = navigationController?.navigationBar as? NavigationBar else {
             return
         }
         
-        navBar.setWeekTitle(weekDays[index])
+        if let entry = calendarDayEntry(for: indexPath) {
+            navBar.setWeekTitle(entry.date)
+        }
+        
     }
     
     //MARK: scrollViewDidScroll
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentDay = Int(scrollView.contentOffset.y / scrollView.frame.height)
+        let currentPage = Int(scrollView.contentOffset.y / scrollView.frame.height)
         
-        updateCurrentDay(index: currentDay)
+        let week = currentPage / 7
+        let day = currentPage % 7
+        
+        updateCurrentDay(indexPath: IndexPath(row: day, section: week))
         
         homeDelegate?.didScroll(scrollView)
     }

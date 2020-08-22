@@ -8,15 +8,25 @@
 
 import Foundation
 
-struct CalendarDayEntry: CalendarEntry {
+class CalendarDayEntry: CalendarEntry {
+    typealias Entry = Lesson
     
     var date: Date
     
-    var lessons: [Lesson]
+    var entries: [Lesson]
     
-    init(for date: Date, lessons: [Lesson]) {
+    var lessonCount: Int {
+        return entries.count
+    }
+    
+    init(for date: Date, entries: [Lesson]) {
         self.date = date
-        self.lessons = lessons
+        self.entries = entries.sorted(by: { (lhs, rhs) -> Bool in
+            if lhs.startTime != rhs.endTime {
+                return lhs.startTime < rhs.endTime
+            }
+            return lhs.endTime < rhs.endTime
+        })
     }
     
     

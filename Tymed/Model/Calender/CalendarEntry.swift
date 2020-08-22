@@ -9,7 +9,9 @@
 import Foundation
 
 protocol CalendarEntry {
+
+    associatedtype Entry
     
-    var lessons: [Lesson] { get set }
+    var entries: [Entry] { get set }
     
 }
