@@ -14,6 +14,8 @@ class CalendarService: Service {
     
     static var shared: CalendarService = CalendarService()
     
+    private var calendar = Calendar(identifier: .gregorian)
+    
     //MARK: lessonsForDay
     /// Returns a list of lessons that match the weekday of the date.
     /// - Parameter date: Date
@@ -33,21 +35,6 @@ class CalendarService: Service {
     func calendarDayEntry(for date: Date) -> CalendarDayEntry {
         return CalendarDayEntry(for: date, lessons: lessonsForDay(date: date))
     }
-    
-    //MARK: nextDay
-    /// Returns the next day after the given day.
-    /// - Parameter date: Date before the day.
-    /// - Returns: Returns the next day after date
-    private func nextDay(after date: Date) -> Date? {
-        var components = DateComponents()
-        
-        // Set it to be the next day
-        components.day = 1
-        
-        // Get the next day
-        return Calendar.current.date(byAdding: components, to: date)
-    }
-    
     
     //MARK: calendarWeekEntries
     /// Returns a list of CalendarEntries for a given week.
@@ -78,6 +65,48 @@ class CalendarService: Service {
         
         // Return the list of entries
         return entries
+    }
+    
+    //MARK: nextDay
+    /// Returns the next day after the given day.
+    /// - Parameter date: Date before the day.
+    /// - Returns: Returns the next day after date
+    private func nextDay(after date: Date) -> Date? {
+        var components = DateComponents()
+        
+        // Set it to be the next day
+        components.day = 1
+        
+        // Get the next day
+        return calendar.date(byAdding: components, to: date)
+    }
+ 
+    //MARK: previousWeek
+    /// Returns the date one week before the given day.
+    /// - Parameter date: Current date
+    /// - Returns: One week before the current date
+    func previousWeek(before date: Date) -> Date? {
+        var components = DateComponents()
+        
+        // Set it to be the previous week
+        components.weekOfMonth = -1
+        
+        // Get the previous week
+        return calendar.date(byAdding: components, to: date)
+    }
+    
+    //MARK: nextWeek
+    /// Returns the date one week after the given day.
+    /// - Parameter date: Current date
+    /// - Returns: One week after the current date
+    func nextWeek(after date: Date) -> Date? {
+        var components = DateComponents()
+        
+        // Set it to be the next week
+        components.weekOfMonth = -1
+        
+        // Get the next week
+        return calendar.date(byAdding: components, to: date)
     }
     
 }
