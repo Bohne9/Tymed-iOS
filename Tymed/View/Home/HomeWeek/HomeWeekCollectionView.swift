@@ -64,13 +64,17 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: fetchDate()
     /// Fetches the lesson data from core data
     override func fetchData() {
-    
+        
         entries = [
             CalendarWeekEntry(date: CalendarService.shared.previousWeek(before: Date()) ?? Date()),
             CalendarWeekEntry.entryForCurrentWeek(),
             CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())]
         
         collectionView.reloadData()
+        
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
     }
     
     private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
@@ -81,12 +85,19 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     //MARK: scrollTo(day: )
     func scrollTo(date: Date, _ animated: Bool = false) {
     
-        for (section, week) in entries.enumerated() {
-            if week.startOfWeek < date && date < week.startOfWeek.endOfWeek ?? date {
+        outer : for (section, week) in entries.enumerated() {
+            
+            print("Week: \(String(describing: section)), Start: \(week.date.stringify(with: .medium)), End: \(week.date.endOfWeek!.stringify(with: .medium))")
+            if date < week.endOfWeek ?? date {
                 for (index, day) in week.entries.enumerated() {
-                    if day.date.startOfDay < date && date < day.date.endOfDay {
-                        collectionView.scrollToItem(at: IndexPath(row: index, section: section), at: .top
+                    print("\tDay: \(String(describing: index)), Start: \(day.startOfDay!.stringify(dateStyle: .medium, timeStyle: .medium)), End: \(day.endOfDay!.stringify(dateStyle: .medium, timeStyle: .medium))")
+                    if date < day.endOfDay ?? date {
+                        print("---Hit----")
+                        let indexPath = IndexPath(item: index, section: section)
+                        collectionView.scrollToItem(at: indexPath, at: .top
                                                     , animated: animated)
+                        updateCurrentDay(indexPath: indexPath)
+                        break outer
                     }
                 }
             }

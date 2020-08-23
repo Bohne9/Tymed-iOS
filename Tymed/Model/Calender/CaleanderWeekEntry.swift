@@ -17,15 +17,23 @@ class CalendarWeekEntry: CalendarEntry {
     
     var entries: [CalendarDayEntry] = []
     
-    var startOfWeek: Date
+    var date: Date
+    
+    var startOfWeek: Date? {
+        return entries.first?.startOfDay
+    }
+    
+    var endOfWeek: Date? {
+        return entries.last?.endOfDay
+    }
     
     var entryCount: Int {
         return entries.count
     }
     
     init(date: Date) {
-        self.startOfWeek = date.startOfWeek ?? Date()
-        self.entries = CalendarService.shared.calendarWeekEntries(for: startOfWeek)
+        self.date = date.startOfWeek ?? Date()
+        self.entries = CalendarService.shared.calendarWeekEntries(for: date)
             .filter({ (entry) -> Bool in
             return entry.lessonCount > 0
         })
