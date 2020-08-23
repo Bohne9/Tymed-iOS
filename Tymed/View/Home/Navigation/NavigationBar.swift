@@ -27,6 +27,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     let titleLabel = UILabel()
     let backBtn = UIButton()
     var todaybtn = UIButton()
+    var stack: UIStackView!
     let chevronIndicator = UIImageView(image: UIImage(systemName: "chevron.down")?.withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 12, weight: .semibold))))
     
     private(set) var currentPage: Int = 0
@@ -59,19 +60,15 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     
     private func setupWeekScene() {
         
-        let stack = UIStackView(arrangedSubviews: [dateLabel, titleLabel, chevronIndicator])
+        stack = UIStackView(arrangedSubviews: [dateLabel, titleLabel, chevronIndicator])
         
         stack.axis = .vertical
         stack.distribution = .fillProportionally
         
-        // Setup custom title label
-//        addSubview(titleLabel)
-//        addSubview(dateLabel)
         addSubview(todaybtn)
         
         addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
-        
         
         stack.constraintCenterXToSuperview()
         stack.constraintCenterYToSuperview()
@@ -83,17 +80,13 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         chevronIndicator.contentMode = .scaleAspectFit
         chevronIndicator.tintColor = .secondaryLabel
         
-        chevronIndicator.alpha = 0
-        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         todaybtn.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.text = "Test"
-        titleLabel.alpha = 0
         
         dateLabel.text = "Date"
-        dateLabel.alpha = 0
         
         titleLabel.textAlignment = .center
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
@@ -124,28 +117,25 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         
         backBtn.addTarget(self, action: #selector(onTapBackButton), for: .touchUpInside)
         
-        backBtn.alpha = 0
-        
         let img2 = UIImage(systemName: "calendar.circle.fill")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24, weight: .semibold)))
         
         todaybtn.setImage(img2, for: .normal)
         
-//        todaybtn.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-        
         todaybtn.addTarget(self, action: #selector(onTapTodayButton), for: .touchUpInside)
-        
-        todaybtn.alpha = 0
         
         let interaction = UIContextMenuInteraction(delegate: self)
         
         stack.addInteraction(interaction)
         stack.isUserInteractionEnabled = true
+        
+        setupWeekNavigationBar(false)
     }
     
     private func setupWeekNavigationBar(_ visible: Bool) {
         let alpha: CGFloat = visible ? 1 : 0
         
+        self.stack.alpha = alpha
         self.titleLabel.alpha = alpha
         self.dateLabel.alpha = alpha
         self.backBtn.alpha = alpha
