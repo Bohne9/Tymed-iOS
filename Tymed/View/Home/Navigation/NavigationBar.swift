@@ -185,19 +185,19 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
             return nil
         } actionProvider: { (element) -> UIMenu? in
             
-            let week = UIAction(title: "Week") { (action) in
+            let day = UIAction(title: "Day") { (action) in
                 print("Week")
             }
             
-            let month = UIAction(title: "Month") { (action) in
+            let week = UIAction(title: "Week") { (action) in
                 print("Month")
             }
             
-            let year = UIAction(title: "Year") { (action) in
+            let month = UIAction(title: "Month") { (action) in
                 print("Year")
             }
             
-            return UIMenu(title: "Calendar", image: nil, identifier: nil, children: [week, month, year])
+            return UIMenu(title: "Calendar", image: nil, identifier: nil, children: [day, week, month])
         }
 
         return menu
