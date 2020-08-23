@@ -12,6 +12,7 @@ protocol NavigationBarDelegate {
     
     func scrollToPage(bar: NavigationBar, page: Int)
     
+    func scrollToToday(bar: NavigationBar)
 }
 
 class NavigationBar: UINavigationBar, UINavigationBarDelegate {
@@ -25,6 +26,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     let dateLabel = UILabel()
     let titleLabel = UILabel()
     let backBtn = UIButton()
+    var todaybtn = UIButton()
     
     private(set) var currentPage: Int = 0
     
@@ -59,9 +61,11 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         // Setup custom title label
         addSubview(titleLabel)
         addSubview(dateLabel)
+        addSubview(todaybtn)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        todaybtn.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.constraintCenterXToSuperview()
         titleLabel.constraintTopTo(anchor: centerYAnchor)
@@ -95,6 +99,10 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         backBtn.constraintCenterYToSuperview()
         backBtn.constraint(width: 40, height: 40)
         
+        todaybtn.constraintTrailingToSuperview(constant: 10)
+        todaybtn.constraintCenterYToSuperview()
+        todaybtn.constraint(width: 40, height: 40)
+        
         let image = UIImage(systemName: "chevron.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
         
@@ -105,12 +113,25 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         backBtn.addTarget(self, action: #selector(onTapBackButton), for: .touchUpInside)
         
         backBtn.alpha = 0
+        
+        let img2 = UIImage(systemName: "calendar.circle.fill")?
+            .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24, weight: .semibold)))
+        
+        todaybtn.setImage(img2, for: .normal)
+        
+//        todaybtn.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        
+        todaybtn.addTarget(self, action: #selector(onTapTodayButton), for: .touchUpInside)
+        
+        todaybtn.alpha = 0
+        
     }
     
     private func setupWeekNavigationBar(_ visible: Bool) {
         self.titleLabel.alpha = visible ? 1 : 0
         self.dateLabel.alpha = visible ? 1 : 0
         self.backBtn.alpha = visible ? 1 : 0
+        self.todaybtn.alpha = visible ? 1 : 0
     }
     
     func updateNavigationBar(_ page: Int) {
@@ -141,6 +162,9 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         navigationBarDelegate?.scrollToPage(bar: self, page: 1)
     }
     
+    @objc func onTapTodayButton() {
+        navigationBarDelegate?.scrollToToday(bar: self)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

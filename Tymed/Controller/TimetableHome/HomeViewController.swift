@@ -90,6 +90,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         scrollToPage(page: page)
     }
     
+    func scrollToToday(bar: NavigationBar) {
+        weekCollectionView.scrollTo(date: Date(), true)
+    }
+    
     func scrollToPage(page: Int) {
         collectionView.setContentOffset(CGPoint(x: CGFloat(page) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
         print(collectionView.contentOffset)
