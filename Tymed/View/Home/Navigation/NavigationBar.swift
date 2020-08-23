@@ -12,9 +12,10 @@ protocol NavigationBarDelegate {
     
     func scrollToPage(bar: NavigationBar, page: Int)
     
+    func scrollToToday(bar: NavigationBar)
 }
 
-class NavigationBar: UINavigationBar, UINavigationBarDelegate {
+class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInteractionDelegate {
 
     var navigationBarDelegate: NavigationBarDelegate?
     
@@ -22,8 +23,12 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     let topBar = HomeTopBar()
     
     // Views for Week scene
+    let dateLabel = UILabel()
     let titleLabel = UILabel()
     let backBtn = UIButton()
+    var todaybtn = UIButton()
+    var stack: UIStackView!
+    let chevronIndicator = UIImageView(image: UIImage(systemName: "chevron.down")?.withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 12, weight: .semibold))))
     
     private(set) var currentPage: Int = 0
     
@@ -55,21 +60,41 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
     
     private func setupWeekScene() {
         
-        // Setup custom title label
-        addSubview(titleLabel)
-
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        stack = UIStackView(arrangedSubviews: [dateLabel, titleLabel, chevronIndicator])
         
-        titleLabel.constraintCenterXToSuperview()
-        titleLabel.constraintCenterYToSuperview()
-        titleLabel.constraintWidthToSuperview()
-        titleLabel.constraintHeightToSuperview()
+        stack.axis = .vertical
+        stack.distribution = .fillProportionally
+        
+        addSubview(todaybtn)
+        
+        addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        stack.constraintCenterXToSuperview()
+        stack.constraintCenterYToSuperview()
+        stack.constraintHeightToSuperview()
+        stack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
+        
+        chevronIndicator.constraint(width: 30, height: 13)
+        chevronIndicator.translatesAutoresizingMaskIntoConstraints = false
+        chevronIndicator.contentMode = .scaleAspectFit
+        chevronIndicator.tintColor = .secondaryLabel
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        todaybtn.translatesAutoresizingMaskIntoConstraints = false
         
         titleLabel.text = "Test"
-        titleLabel.alpha = 0
+        
+        dateLabel.text = "Date"
         
         titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+        
+        dateLabel.textAlignment = .center
+        dateLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        
+        dateLabel.textColor = .secondaryLabel
         
         // Setup back button
         addSubview(backBtn)
@@ -78,6 +103,10 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         backBtn.constraintLeadingToSuperview(constant: 10)
         backBtn.constraintCenterYToSuperview()
         backBtn.constraint(width: 40, height: 40)
+        
+        todaybtn.constraintTrailingToSuperview(constant: 10)
+        todaybtn.constraintCenterYToSuperview()
+        todaybtn.constraint(width: 40, height: 40)
         
         let image = UIImage(systemName: "chevron.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
@@ -88,7 +117,30 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         
         backBtn.addTarget(self, action: #selector(onTapBackButton), for: .touchUpInside)
         
-        backBtn.alpha = 0
+        let img2 = UIImage(systemName: "calendar.circle.fill")?
+            .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 24, weight: .semibold)))
+        
+        todaybtn.setImage(img2, for: .normal)
+        
+        todaybtn.addTarget(self, action: #selector(onTapTodayButton), for: .touchUpInside)
+        
+        let interaction = UIContextMenuInteraction(delegate: self)
+        
+        stack.addInteraction(interaction)
+        stack.isUserInteractionEnabled = true
+        
+        setupWeekNavigationBar(false)
+    }
+    
+    private func setupWeekNavigationBar(_ visible: Bool) {
+        let alpha: CGFloat = visible ? 1 : 0
+        
+        self.stack.alpha = alpha
+        self.titleLabel.alpha = alpha
+        self.dateLabel.alpha = alpha
+        self.backBtn.alpha = alpha
+        self.todaybtn.alpha = alpha
+        self.chevronIndicator.alpha = alpha
     }
     
     func updateNavigationBar(_ page: Int) {
@@ -98,8 +150,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
             print("update")
             UIView.animate(withDuration: 0.25) {
                 self.topBar.alpha = page == 2 ? 0 : 1
-                self.titleLabel.alpha = page == 2 ? 1 : 0
-                self.backBtn.alpha = page == 2 ? 1 : 0
+                self.setupWeekNavigationBar(page == 2)
                 self.layoutIfNeeded()
             } completion: { (res) in
             }
@@ -109,8 +160,9 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
 
     }
     
-    func setWeekTitle(_ title: String) {
-        titleLabel.text = title
+    func setWeekTitle(_ date: Date) {
+        titleLabel.text = Day.from(date: date)?.string()
+        dateLabel.text = date.stringify(with: .medium, relativeFormatting: true)
         layoutIfNeeded()
     }
     
@@ -119,11 +171,41 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         navigationBarDelegate?.scrollToPage(bar: self, page: 1)
     }
     
+    @objc func onTapTodayButton() {
+        navigationBarDelegate?.scrollToToday(bar: self)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let menu = UIContextMenuConfiguration(identifier: "titleLabel" as NSString) {
+            return nil
+        } actionProvider: { (element) -> UIMenu? in
+            
+            let day = UIAction(title: "Day") { (action) in
+                print("Week")
+            }
+            
+            let week = UIAction(title: "Week") { (action) in
+                print("Month")
+            }
+            
+            let month = UIAction(title: "Month") { (action) in
+                print("Year")
+            }
+            
+            return UIMenu(title: "Calendar", image: nil, identifier: nil, children: [day, week, month])
+        }
+
+        return menu
+    }
     
+    
+    @objc func onTapContextWeek() {
+        print("Context Menu week")
+    }
     
 }

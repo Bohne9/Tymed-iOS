@@ -107,8 +107,10 @@ struct TaskAddView: View {
                                                  value: lesson!.nextStartDate()?.stringify(dateStyle: .short, timeStyle: .short))
                                 .onTapGesture {
                                     withAnimation {
-                                        dueDate = lesson!.nextStartDate()
-                                        recommendedDueDate = false
+                                        if let date = lesson?.nextStartDate() {
+                                            pickerDate = date
+                                            recommendedDueDate = false
+                                        }
                                     }
                                 }.font(.system(size: 13, weight: .semibold))
                         }

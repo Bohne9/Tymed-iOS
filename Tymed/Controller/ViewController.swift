@@ -27,22 +27,32 @@ class ViewController: UITabBarController {
         
         let home = generateHomeViewController()
         
-        let homeTabItem = UITabBarItem(title: "Start", image: UIImage(systemName: "house.fill",
-                                                            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 0)
+        let config = UIImage.SymbolConfiguration(
+            font: .systemFont(
+                ofSize: 16,
+                weight: .semibold),
+            scale: .default)
+        
+        let homeTabItem = UITabBarItem(
+            title: "Start",
+            image: UIImage(systemName: "house", withConfiguration: config), tag: 0)
+
         
         home.tabBarItem = homeTabItem
         
         let add = generateAddViewController()
         
-        let addTabItem = UITabBarItem(title: "Timetable", image: UIImage(systemName: "plus",
-                                                            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 1)
+        let addTabItem = UITabBarItem(
+            title: "Timetables",
+            image: UIImage(systemName: "plus", withConfiguration: config), tag: 1)
         
         add.tabBarItem = addTabItem
         
         let profile = generateProfileViewController()
         
-        let profileTabItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill",
-                                                            withConfiguration: UIImage.SymbolConfiguration(weight: .bold)), tag: 2)
+        let profileTabItem = UITabBarItem(
+            title: "Profile",
+            image: UIImage(systemName: "person", withConfiguration: config), tag: 2)
         
         profile.tabBarItem = profileTabItem
         

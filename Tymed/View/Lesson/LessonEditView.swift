@@ -308,7 +308,7 @@ struct LessonEditContentView: View {
                 }))
         }.onAppear(perform: loadLessonValues)
         .onDisappear {
-            saveLesson()
+            saveLesson(dismiss: false)
         }
     }
     
@@ -384,7 +384,7 @@ struct LessonEditContentView: View {
     }
     
     //MARK: saveLesson
-    private func saveLesson() {
+    private func saveLesson(dismiss: Bool = true) {
         guard let subject = TimetableService.shared.subject(with: subjectTitle) else {
             return
         }
@@ -417,7 +417,9 @@ struct LessonEditContentView: View {
         
         TimetableService.shared.save()
         
-        dismiss()
+        if dismiss {
+            self.dismiss()
+        }
     }
     
 }

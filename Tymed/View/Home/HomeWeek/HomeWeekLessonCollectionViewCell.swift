@@ -80,7 +80,7 @@ class HomeWeekLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         name.sizeToFit()
         
-        time.text = "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+        time.text = "\(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
 
         backgroundColor = UIColor(lesson)
         

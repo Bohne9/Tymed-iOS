@@ -78,7 +78,11 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         descriptionLabel.text = task.text ?? "-"
         
-        dueLabel.text = task.due?.stringify(dateStyle: .short, timeStyle: .short)
+        
+//        if let due = task.due {
+//            dueLabel.text = due.stringify(dateStyle: .short, timeStyle: .short)
+//            dueLabel.textColor = due < Date() ? .systemRed : .systemBlue
+//        }
     }
     
     private func addSubviews(_ views: UIView...) {
@@ -98,7 +102,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         // Setup complete indicator
         complete.constraintLeadingToSuperview(constant: 0)
-        complete.constraint(width: 30, height: 30)
+        complete.constraint(width: 27, height: 27)
         complete.constraintCenterYToSuperview(constant: 0)
         
         complete.addTarget(self, action: #selector(completeToogle), for: .touchUpInside)
@@ -116,7 +120,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         titleLabel.constraintTrailingTo(anchor: subjectIndicator.leadingAnchor, constant: 5)
         titleLabel.constraintTopToSuperview(constant: 5)
         
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
         // Setup due label
         let constraint = dueLabel.leadingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -100)
@@ -126,8 +130,11 @@ class TaskOverviewTableViewCell: UITableViewCell {
         dueLabel.constraintTrailingToSuperview(constant: 5)
         dueLabel.constraintTopTo(anchor: titleLabel.bottomAnchor, constant: 0)
         
-        dueLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        dueLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         dueLabel.textAlignment = .right
+        dueLabel.textColor = .systemBlue
+        
+        dueLabel.text = "-"
         
         // Setup description label
         descriptionLabel.constraintLeadingTo(anchor: complete.trailingAnchor, constant: 10)
@@ -138,7 +145,8 @@ class TaskOverviewTableViewCell: UITableViewCell {
         c2.isActive = true
         descriptionLabel.constraintTopTo(anchor: titleLabel.bottomAnchor, constant: 0)
         
-        descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        descriptionLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        descriptionLabel.textColor = .secondaryLabel
         
         descriptionLabel.text = "-"
         

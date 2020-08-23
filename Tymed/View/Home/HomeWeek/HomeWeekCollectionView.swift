@@ -13,14 +13,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     /// Indicates that the scene will be showed for the first time
     private var firstAppear = true
     
-    /// All lessons
-    var lessons: [Lesson] = []
+    var entries: [CalendarWeekEntry] = []
     
-    /// List of days which have lessons.
-    var weekDays: [Day] = []
-    
-    /// Dictionary of a list of lessons with their day as the key.
-    var week: [Day: [Lesson]] = [:]
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
@@ -52,7 +46,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         // Scroll to the current day (only for the first time)
         if firstAppear {
-            scrollTo(day: .current)
+            scrollTo(date: Date())
             firstAppear = false
         }
     }
@@ -61,76 +55,72 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     /// Fetches the lesson data from core data
     override func fetchData() {
         
-        // Fetch all lessons
-        lessons = TimetableService.shared.fetchLessons() ?? []
+        entries = [
+            CalendarWeekEntry(date: CalendarService.shared.previousWeek(before: Date()) ?? Date()),
+            CalendarWeekEntry.entryForCurrentWeek(),
+            CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())]
         
-        // Get the lesson grouped by their day
-        week = TimetableService.shared.sortLessonsByWeekDay(lessons)
+        collectionView.reloadData()
         
-        weekDays = Array(week.keys)
-        
-        // Sort the days from monday to sunday
-        weekDays.sort(by: { (d1, d2) -> Bool in
-            return d1 < d2
-        })
-           
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
     }
     
-    //MARK: scrollTo(date: )
-    /// Scrolls the collection view to the first lesson that fits the date.
-    /// If there is no lesson that fits the date. The next lesson after that date will be chosen
-    /// - Parameters:
-    ///   - date: Date to search for the alogorithm
-    ///   - animated: scroll animation yes/no
-    func scrollTo(date: Date, _ animated: Bool = false) {
-        // Get the day of the date
-        guard let day = Day(rawValue: Calendar.current.component(.weekday, from: date)) else {
-            print("scrollTo(date:) failed")
+    private func fetchPreviousWeek() {
+        guard let firstWeek = entries.first?.date,
+              let previousWeek = CalendarService.shared.previousWeek(before: firstWeek) else {
             return
         }
         
-        scrollTo(day: day, animated)
+        entries.insert(CalendarWeekEntry(date: previousWeek), at: 0)
+        collectionView.reloadData()
     }
     
+    private func fetchNextWeek() {
+        guard let lastWeek = entries.last?.date,
+              let nextWeek = CalendarService.shared.nextWeek(after: lastWeek) else {
+            return
+        }
+        
+        entries.append(CalendarWeekEntry(date: nextWeek))
+        collectionView.reloadData()
+    }
+    
+    private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
+        return entries[indexPath.section].calendarDayEntry(for: indexPath.row)
+    }
+ 
     //MARK: scrollTo(day: )
-    func scrollTo(day: Day, _ animated: Bool = false) {
-        // If the day is in the list of days
-        if let day = weekDays.firstIndex(of: day) {
-            collectionView.scrollToItem(at: IndexPath(row: day, section: 0), at: .top, animated: animated)
-            updateCurrentDay(index: day)
-        }else { // Otherwise scroll recursivly to the next day
-            if !week.isEmpty {
-                scrollTo(day: day.rotatingNext(), animated)
+    func scrollTo(date: Date, _ animated: Bool = false) {
+    
+        outer : for (section, week) in entries.enumerated() {
+            
+            print("Week: \(String(describing: section)), Start: \(week.date.stringify(with: .medium)), End: \(week.date.endOfWeek!.stringify(with: .medium))")
+            if date < week.endOfWeek ?? date {
+                for (index, day) in week.entries.enumerated() {
+                    print("\tDay: \(String(describing: index)), Start: \(day.startOfDay!.stringify(dateStyle: .medium, timeStyle: .medium)), End: \(day.endOfDay!.stringify(dateStyle: .medium, timeStyle: .medium))")
+                    if date < day.endOfDay ?? date {
+                        print("---Hit----")
+                        let indexPath = IndexPath(item: index, section: section)
+                        collectionView.scrollToItem(at: indexPath, at: .top
+                                                    , animated: animated)
+                        updateCurrentDay(indexPath: indexPath)
+                        break outer
+                    }
+                }
             }
         }
-    }
-    
-    //MARK: lesson(for uuid)
-    
-    /// Returns the lesson for a given uuid
-    /// - Parameter uuid: UUID of the lesson
-    /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
-    private func lesson(for uuid: UUID) -> Lesson? {
-        return lessons.filter { return $0.id == uuid }.first
-    }
-    
-    //MARK: lessons(for: Day)
-    private func lessons(for day: Day) -> [Lesson]? {
-        return week[day]
-    }
-    
-    //MARK: lessons(for: Int)
-    private func lessons(for row: Int) -> [Lesson]? {
-        return week[weekDays[row]]
+        
     }
     
     //MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return entries.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weekDays.count
+        return entries[section].entryCount
     }
     
     private func dequeueHomeDayCell(for indexPath: IndexPath) -> HomeWeekDayCollectionViewCell? {
@@ -146,7 +136,10 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         }
         
         cell.lessonDelegate = homeDelegate
-        cell.lessons = lessons(for: indexPath.row) ?? []
+        
+        if let entry = calendarDayEntry(for: indexPath) {
+            cell.entry = entry
+        }
         
         return cell
     }
@@ -157,22 +150,50 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     }
     
     //MARK: updateCurrentDay
-    private func updateCurrentDay(index: Int) {
-        
+    private func updateCurrentDay(indexPath: IndexPath) {
         guard let navBar = navigationController?.navigationBar as? NavigationBar else {
             return
         }
         
-        navBar.setWeekTitle(weekDays[index].string())
+        if let entry = calendarDayEntry(for: indexPath) {
+            navBar.setWeekTitle(entry.date)
+        }
+        
     }
     
     //MARK: scrollViewDidScroll
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentDay = Int(scrollView.contentOffset.y / scrollView.frame.height)
-        
-        updateCurrentDay(index: currentDay)
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
         
         homeDelegate?.didScroll(scrollView)
     }
     
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        collectionView.layoutIfNeeded()
+        if let cell = collectionView.visibleCells.first {
+            let indexPath = collectionView.indexPath(for: cell)!
+            
+            updateCurrentDay(indexPath: indexPath)
+            
+            if indexPath.section == 0 && indexPath.row == 0 {
+                fetchPreviousWeek()
+                collectionView.scrollToItem(at: IndexPath(row: indexPath.row, section: indexPath.section + 1), at: .top, animated: false)
+            } else if indexPath.section == entries.count - 1 && indexPath.row == (entries.last?.entryCount ?? 0) - 1 {
+                fetchNextWeek()
+            }
+            
+        }
+    }
+    
+    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        collectionView.layoutIfNeeded()
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
+    }
+    
 }
+
+

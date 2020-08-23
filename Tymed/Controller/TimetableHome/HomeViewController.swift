@@ -90,6 +90,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         scrollToPage(page: page)
     }
     
+    func scrollToToday(bar: NavigationBar) {
+        weekCollectionView.scrollTo(date: Date(), true)
+    }
+    
     func scrollToPage(page: Int) {
         collectionView.setContentOffset(CGPoint(x: CGFloat(page) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
         print(collectionView.contentOffset)
@@ -122,24 +126,25 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return 3
     }
 
+    private func baseCellFor(index: Int) -> HomeBaseCollectionView {
+        return [dashCollectionView, tasksCollectionView, weekCollectionView][index]
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
-        let baseCell = [dashCollectionView, tasksCollectionView, weekCollectionView][indexPath.row]
+        let baseCell = baseCellFor(index: indexPath.row)
         
         addChild(baseCell)
         
-        cell.addSubview(baseCell.view)
+        cell.contentView.addSubview(baseCell.view)
                     
         baseCell.didMove(toParent: self)
         
         baseCell.view.translatesAutoresizingMaskIntoConstraints = false
-
-        baseCell.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        baseCell.view.leadingAnchor.constraint(equalTo: cell.leadingAnchor).isActive = true
-        baseCell.view.trailingAnchor.constraint(equalTo: cell.trailingAnchor).isActive = true
-        baseCell.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+        
+        baseCell.view.constraintToSuperview()
         
         return cell
     }

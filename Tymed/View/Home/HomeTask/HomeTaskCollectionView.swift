@@ -239,12 +239,17 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
                     return
                 }
                 
+                if taskSectionSize[id] == .collapsed {
+                    taskSectionSize[id] = .large
+                }
+                
                 let headerOffset = collectionView.collectionViewLayout
                     .layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, at:
                                                         IndexPath(row: 0, section: index))?.frame.origin.y ?? 0
                 
                 collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: headerOffset - collectionView.contentInset.top), animated: true)
                 
+                collectionView.reloadData()
 //                collectionView.scrollToItem(at: IndexPath(row: 0, section: index), at: .top, animated: true)
             }
 
