@@ -27,6 +27,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     let titleLabel = UILabel()
     let backBtn = UIButton()
     var todaybtn = UIButton()
+    let chevronIndicator = UIImageView(image: UIImage(systemName: "chevron.down")?.withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 12, weight: .semibold))))
     
     private(set) var currentPage: Int = 0
     
@@ -58,24 +59,35 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     
     private func setupWeekScene() {
         
+        let stack = UIStackView(arrangedSubviews: [dateLabel, titleLabel, chevronIndicator])
+        
+        stack.axis = .vertical
+        stack.distribution = .fillProportionally
+        
         // Setup custom title label
-        addSubview(titleLabel)
-        addSubview(dateLabel)
+//        addSubview(titleLabel)
+//        addSubview(dateLabel)
         addSubview(todaybtn)
+        
+        addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        stack.constraintCenterXToSuperview()
+        stack.constraintCenterYToSuperview()
+        stack.constraintHeightToSuperview()
+        stack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
+        
+        chevronIndicator.constraint(width: 30, height: 13)
+        chevronIndicator.translatesAutoresizingMaskIntoConstraints = false
+        chevronIndicator.contentMode = .scaleAspectFit
+        chevronIndicator.tintColor = .secondaryLabel
+        
+        chevronIndicator.alpha = 0
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         todaybtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        titleLabel.constraintCenterXToSuperview()
-        titleLabel.constraintTopTo(anchor: centerYAnchor)
-//        titleLabel.constraintWidthToSuperview()
-        titleLabel.constraintBottomToSuperview(constant: 4)
-        
-        dateLabel.constraintCenterXToSuperview()
-        dateLabel.constraintTopTo(anchor: centerYAnchor)
-        dateLabel.constraintWidthToSuperview()
-        dateLabel.constraintTopToSuperview(constant: 4)
         
         titleLabel.text = "Test"
         titleLabel.alpha = 0
@@ -84,10 +96,10 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         dateLabel.alpha = 0
         
         titleLabel.textAlignment = .center
-        titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         
         dateLabel.textAlignment = .center
-        dateLabel.font = .systemFont(ofSize: 13, weight: .semibold)
+        dateLabel.font = .systemFont(ofSize: 12, weight: .semibold)
         
         dateLabel.textColor = .secondaryLabel
         
@@ -127,15 +139,18 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         
         let interaction = UIContextMenuInteraction(delegate: self)
         
-        titleLabel.addInteraction(interaction)
-        titleLabel.isUserInteractionEnabled = true
+        stack.addInteraction(interaction)
+        stack.isUserInteractionEnabled = true
     }
     
     private func setupWeekNavigationBar(_ visible: Bool) {
-        self.titleLabel.alpha = visible ? 1 : 0
-        self.dateLabel.alpha = visible ? 1 : 0
-        self.backBtn.alpha = visible ? 1 : 0
-        self.todaybtn.alpha = visible ? 1 : 0
+        let alpha: CGFloat = visible ? 1 : 0
+        
+        self.titleLabel.alpha = alpha
+        self.dateLabel.alpha = alpha
+        self.backBtn.alpha = alpha
+        self.todaybtn.alpha = alpha
+        self.chevronIndicator.alpha = alpha
     }
     
     func updateNavigationBar(_ page: Int) {
