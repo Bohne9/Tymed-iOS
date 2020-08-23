@@ -15,7 +15,7 @@ protocol NavigationBarDelegate {
     func scrollToToday(bar: NavigationBar)
 }
 
-class NavigationBar: UINavigationBar, UINavigationBarDelegate {
+class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInteractionDelegate {
 
     var navigationBarDelegate: NavigationBarDelegate?
     
@@ -69,7 +69,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         
         titleLabel.constraintCenterXToSuperview()
         titleLabel.constraintTopTo(anchor: centerYAnchor)
-        titleLabel.constraintWidthToSuperview()
+//        titleLabel.constraintWidthToSuperview()
         titleLabel.constraintBottomToSuperview(constant: 4)
         
         dateLabel.constraintCenterXToSuperview()
@@ -125,6 +125,10 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         
         todaybtn.alpha = 0
         
+        let interaction = UIContextMenuInteraction(delegate: self)
+        
+        titleLabel.addInteraction(interaction)
+        titleLabel.isUserInteractionEnabled = true
     }
     
     private func setupWeekNavigationBar(_ visible: Bool) {
@@ -170,6 +174,33 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let menu = UIContextMenuConfiguration(identifier: "titleLabel" as NSString) {
+            return nil
+        } actionProvider: { (element) -> UIMenu? in
+            
+            let week = UIAction(title: "Week") { (action) in
+                print("Week")
+            }
+            
+            let month = UIAction(title: "Month") { (action) in
+                print("Month")
+            }
+            
+            let year = UIAction(title: "Year") { (action) in
+                print("Year")
+            }
+            
+            return UIMenu(title: "Calendar", image: nil, identifier: nil, children: [week, month, year])
+        }
+
+        return menu
+    }
     
+    
+    @objc func onTapContextWeek() {
+        print("Context Menu week")
+    }
     
 }
