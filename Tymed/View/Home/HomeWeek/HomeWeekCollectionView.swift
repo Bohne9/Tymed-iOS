@@ -13,16 +13,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     /// Indicates that the scene will be showed for the first time
     private var firstAppear = true
     
-    /// All lessons
-//    var lessons: [Lesson] = []
-    
-    /// List of days which have lessons.
-//    var weekDays: [Day] = []
-    
-    /// Dictionary of a list of lessons with their day as the key.
-//    var week: [Day: [Lesson]] = [:]
-    
-    var weeks: [Date] = []
     var entries: [CalendarWeekEntry] = []
     
     
@@ -77,8 +67,27 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func fetchPreviousWeek() {
+        guard let firstWeek = entries.first?.date,
+              let previousWeek = CalendarService.shared.previousWeek(before: firstWeek) else {
+            return
+        }
+        
+        entries.insert(CalendarWeekEntry(date: previousWeek), at: 0)
+        collectionView.reloadData()
+    }
+    
+    private func fetchNextWeek() {
+        guard let lastWeek = entries.last?.date,
+              let nextWeek = CalendarService.shared.nextWeek(after: lastWeek) else {
+            return
+        }
+        
+        entries.append(CalendarWeekEntry(date: nextWeek))
+        collectionView.reloadData()
+    }
+    
     private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
-        print(indexPath)
         return entries[indexPath.section].calendarDayEntry(for: indexPath.row)
     }
  
@@ -154,16 +163,9 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     //MARK: scrollViewDidScroll
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentPage = Int(scrollView.contentOffset.y / scrollView.frame.height)
-        
-//        let week = currentPage / 7
-//        let day = currentPage % 7
-//
-//        updateCurrentDay(indexPath: IndexPath(row: day, section: week))
-        
-//        if let cell = collectionView.visibleCells.first {
-//            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
-//        }
+        if let cell = collectionView.visibleCells.first {
+            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+        }
         
         homeDelegate?.didScroll(scrollView)
     }
@@ -171,7 +173,17 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         collectionView.layoutIfNeeded()
         if let cell = collectionView.visibleCells.first {
-            updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
+            let indexPath = collectionView.indexPath(for: cell)!
+            
+            updateCurrentDay(indexPath: indexPath)
+            
+            if indexPath.section == 0 && indexPath.row == 0 {
+                fetchPreviousWeek()
+                collectionView.scrollToItem(at: IndexPath(row: indexPath.row, section: indexPath.section + 1), at: .top, animated: false)
+            } else if indexPath.section == entries.count - 1 && indexPath.row == (entries.last?.entryCount ?? 0) - 1 {
+                fetchNextWeek()
+            }
+            
         }
     }
     
