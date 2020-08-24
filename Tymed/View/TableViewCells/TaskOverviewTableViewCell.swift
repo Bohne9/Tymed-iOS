@@ -76,13 +76,11 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         subjectIndicator.backgroundColor = UIColor(named: task.lesson?.subject?.color ?? "") ?? UIColor.clear
         
-        descriptionLabel.text = task.text ?? "-"
+        descriptionLabel.text = task.text?.isEmpty ?? true ? "-" : task.text
         
-        
-//        if let due = task.due {
-//            dueLabel.text = due.stringify(dateStyle: .short, timeStyle: .short)
-//            dueLabel.textColor = due < Date() ? .systemRed : .systemBlue
-//        }
+        if let due = task.due {
+            dueLabel.text = due.stringify(dateStyle: .short, timeStyle: .short)
+        }
     }
     
     private func addSubviews(_ views: UIView...) {
@@ -132,7 +130,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
         dueLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         dueLabel.textAlignment = .right
-        dueLabel.textColor = .systemBlue
+        dueLabel.textColor = .label
         
         dueLabel.text = "-"
         
