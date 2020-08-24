@@ -15,7 +15,7 @@ private let addTaskIdentifier = "addTaskIdentifier"
 private let taskHeader = "taskHeader"
 
 private let headerSection = "typeSection"
-private let todaySection = "todaySection"
+private let nextSection = "todaySection"
 private let allSection = "allSection"
 private let doneSection = "doneSection"
 private let expiredSection = "expiredSection"
@@ -66,7 +66,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         switch identifier {
         case headerSection:
             return indexPath.row < typeCellSelectors.count ?  taskTypeSelectorIdentifier : addTaskIdentifier
-        case todaySection, allSection, doneSection, expiredSection, openSection, archivedSection, plannedSection:
+        case nextSection, allSection, doneSection, expiredSection, openSection, archivedSection, plannedSection:
             return homeDashTaskOverviewCollectionViewCell
         default:
             return ""
@@ -92,7 +92,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     //MARK: fetchData()
     internal override func fetchData() {
         
-        todayTasks = getTasks(of: .today)
+        todayTasks = getTasks(of: .next)
         allTasks = getTasks(of: .all)
         doneTasks = getTasks(of: .done)
         expiredTasks = getTasks(of: .expired)
@@ -105,7 +105,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         addSection(id: headerSection)
         
-        setupSections(todayTasks, section: todaySection, type: .today)
+        setupSections(todayTasks, section: nextSection, type: .next)
         setupSections(openTasks, section: openSection, type: .open)
         setupSections(plannedTasks, section: plannedSection, type: .planned)
         setupSections(doneTasks, section: doneSection, type: .done)
@@ -119,7 +119,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private func defaultSectionSize(for header: String) -> TaskOverviewSectionSize {
         switch header {
-        case todaySection, openSection:
+        case nextSection, openSection:
             return .compact
         default:
             return .collapsed
@@ -140,7 +140,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private func tasks(for section: String) -> [Task]? {
         switch section {
-        case todaySection:
+        case nextSection:
             return todayTasks
         case allSection:
             return allTasks
@@ -210,7 +210,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private func sectionIdentifier(for type: HomeDashTaskSelectorCellType) -> String? {
         switch type {
-        case .today:    return todaySection
+        case .next:    return nextSection
         case .all:      return allSection
         case .done:     return doneSection
         case .expired:  return expiredSection
@@ -259,7 +259,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     private func sectionTitle(for sectionId: String) -> String {
         switch sectionId{
             case headerSection:     return "Tasks"
-            case todaySection:      return "Today"
+            case nextSection:      return "Today"
             case allSection:        return "All"
             case doneSection:       return "Done"
             case expiredSection:    return "Expired"

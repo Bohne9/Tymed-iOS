@@ -93,7 +93,6 @@ struct ProfileView: View {
             
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Profile")
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 

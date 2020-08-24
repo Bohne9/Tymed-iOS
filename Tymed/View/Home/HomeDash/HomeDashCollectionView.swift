@@ -27,7 +27,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     var subjects: [Subject]?
     var lessons: [Lesson]?
     
-    private var taskSelection: HomeDashTaskSelectorCellType = .today
+    private var taskSelection: HomeDashTaskSelectorCellType = .next
     
     //MARK: Section lesson arrays
     var nowLessons: [Lesson]?
@@ -218,7 +218,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
         switch index {
-        case 0:     return .today
+        case 0:     return .next
         case 1:     return .done
         case 2:     return .planned
         case 3:     return .open
