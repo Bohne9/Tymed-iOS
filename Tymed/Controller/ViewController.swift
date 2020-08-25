@@ -36,6 +36,8 @@ class ViewController: UITabBarController {
         let homeTabItem = UITabBarItem(
             title: "Start",
             image: UIImage(systemName: "house", withConfiguration: config), tag: 0)
+        
+        homeTabItem.selectedImage = UIImage(systemName: "house.fill", withConfiguration: config)
 
         
         home.tabBarItem = homeTabItem
@@ -55,6 +57,8 @@ class ViewController: UITabBarController {
             image: UIImage(systemName: "person", withConfiguration: config), tag: 2)
         
         profile.tabBarItem = profileTabItem
+        
+        profileTabItem.selectedImage = UIImage(systemName: "person.fill", withConfiguration: config)
         
         viewControllers = [home, add, profile]
     }

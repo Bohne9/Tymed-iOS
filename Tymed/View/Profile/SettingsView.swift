@@ -27,7 +27,7 @@ struct SettingsView: View {
                     List {
                         Text("My sounds")
                     }
-                }.font(.system(size: 16, weight: .semibold))
+                }.font(.system(size: 14, weight: .semibold))
                 
                 HStack {
                     DetailCellDescriptor("Send task reminders", image: "list.dash", .systemOrange)
@@ -39,10 +39,10 @@ struct SettingsView: View {
                     List {
                         Text("My sounds")
                     }
-                }.font(.system(size: 16, weight: .semibold))
+                }.font(.system(size: 14, weight: .semibold))
                 
                 HStack {
-                    DetailCellDescriptor("Other notifications", image: "circle.fill", .systemPurple)
+                    DetailCellDescriptor("Other notifications", image: "app.badge", .systemPurple)
                     Toggle("", isOn: $useICloud)
                         .labelsHidden()
                 }
@@ -51,7 +51,19 @@ struct SettingsView: View {
                     List {
                         Text("My sounds")
                     }
-                }.font(.system(size: 16, weight: .semibold))
+                }.font(.system(size: 14, weight: .semibold))
+                
+            }
+            
+            Section (header: Text("Default values")) {
+                
+                NavigationLink (destination: Text("Default notification offset")) {
+                    DetailCellDescriptor("Default notification offset", image: "bell.badge.fill", .systemGreen, value: "15 minutes")
+                }
+                
+                NavigationLink (destination: Text("Auto archive tasks after")) {
+                    DetailCellDescriptor("Auto archive tasks after", image: "tray.full.fill", .systemOrange, value: "1 hour")
+                }
                 
             }
             

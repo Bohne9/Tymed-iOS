@@ -22,21 +22,22 @@ struct ProfileView: View {
             // Me
             Section {
                 
-                HStack {
+                HStack(alignment: .top) {
                     Image(systemName: "person.circle.fill")
                         .resizable()
                         .frame(width: 60, height: 60, alignment: .center)
-                    VStack {
+
+                    VStack() {
                         TextField("Username", text: $username)
-                            .font(.system(size: 22, weight: .semibold))
-                        
-                        Spacer()
+                            .font(.system(size: 20, weight: .semibold))
                         
                         TextField("Email", text: $email)
-                            .font(.system(size: 18, weight: .semibold))
-                    }.padding(20)
-                }.frame(height: 100)
-                
+                            .font(.system(size: 16, weight: .semibold))
+                        
+                        Spacer()
+                    }
+                    Spacer()
+                }.padding(.vertical, 10)
             }
             
             Section {
