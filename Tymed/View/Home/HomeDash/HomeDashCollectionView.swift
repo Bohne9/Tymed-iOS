@@ -119,7 +119,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         sectionIdentifiers = []
         
-        loadTask(for: taskSelection)
+        loadTask()
         
         addSection(id: tasksSection)
         
@@ -131,10 +131,15 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
 
-    private func loadTask(for selection: HomeDashTaskSelectorCellType) {
+    private func loadTask() {
         
         tasks = taskSelection.tasks()
         tasks?.reverse()
+    }
+    
+    override func reload() {
+        loadTask()
+        super.reload()
     }
     
     // MARK: - UICollectionViewDataSource
@@ -184,14 +189,14 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 
                 cell.size = .large
                 cell.tasks = tasks
-                cell.taskDelegate = taskDelegate
+                cell.homeDelegate = homeDelegate
                 cell.reload()
                 
                 return cell
             }else {
                 let cell = dequeueCell("noTaskCell", indexPath) as! HomeDashTaskOverviewNoTasksCollectionViewCell
                 
-                cell.taskDelegate = taskDelegate
+                cell.homeDelegate = homeDelegate
                 cell.type = taskSelection
                 
                 return cell
@@ -213,7 +218,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         guard let lesson = self.lesson(for: indexPath) else {
             return
         }
-        homeDelegate?.lessonDetail(self.collectionView, for: lesson)
+        homeDelegate?.presentLessonEditView(for: lesson)
     }
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
@@ -236,7 +241,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             if indexPath.row < 4 {
                 taskSelection = selectorType(for: indexPath.row)
                 
-                loadTask(for: taskSelection)
+                loadTask()
                 
                 collectionView.reloadSections(IndexSet(arrayLiteral: 0))
             }
@@ -310,7 +315,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 
                 TimetableService.shared.deleteLesson(lesson)
                 
-                self.homeDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
+                
+                self.homeDelegate?.presentLessonEditView(for: lesson)
                 
             }
             
@@ -331,16 +337,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return
             }
             
-            self.homeDelegate?.lessonDetail(self.collectionView, for: lesson)
+            self.homeDelegate?.presentLessonEditView(for: lesson)
         }
         
     }
-    
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        homeDelegate?.didScroll(scrollView)
-    }
-    
     
 }
 

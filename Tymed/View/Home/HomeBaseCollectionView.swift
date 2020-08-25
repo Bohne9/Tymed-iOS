@@ -8,15 +8,19 @@
 
 import UIKit
 
-class HomeBaseCollectionView: UICollectionViewController {
+class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate {
 
-    var homeDelegate: HomeCollectionViewDelegate?
-    var taskDelegate: HomeTaskDetailDelegate?
+//    var homeDelegate: HomeCollectionViewDelegate?
+//    var taskDelegate: HomeTaskDetailDelegate?
+    
+    var homeDelegate: HomeViewSceneDelegate?
 
     var sectionIdentifiers: [String] = []
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        homeDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -147,9 +151,15 @@ extension HomeBaseCollectionView {
         return UICollectionViewCell()
     }
     
-}
-
-extension HomeBaseCollectionView {
+    func present(_ viewController: UIViewController, animated: Bool) {
+        viewController.presentationController?.delegate = self
+        
+        self.present(viewController, animated: animated, completion: nil)
+    }
+    
+    func dismiss(_ animated: Bool) {
+        super.dismiss(animated: animated, completion: nil)
+    }
     
 }
 
@@ -158,5 +168,14 @@ extension HomeBaseCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
          return CGSize(width: collectionView.frame.width - 2 * 20, height: 80)
     }
+    
+}
+
+extension HomeBaseCollectionView: UIAdaptivePresentationControllerDelegate {
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        reload()
+    }
+    
     
 }

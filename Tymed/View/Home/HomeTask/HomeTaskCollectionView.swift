@@ -171,7 +171,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }else if identifier == addTaskIdentifier {
             let addCell = (cell as! HomeDashTaskOverviewNoTasksCollectionViewCell)
             
-            addCell.taskDelegate = taskDelegate
+            addCell.homeDelegate = homeDelegate
             
         } else if identifier == homeDashTaskOverviewCollectionViewCell {
             let taskCell = (cell as! HomeDashTaskOverviewCollectionViewCell)
@@ -181,7 +181,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             taskCell.taskOverviewDelegate = taskOverviewDelegate
             
             taskCell.tasks = self.tasks(for: section)
-            taskCell.taskDelegate = taskDelegate
+            taskCell.homeDelegate = homeDelegate
             taskCell.reload()
             
         }
@@ -204,7 +204,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
     
     private func presentDetail(_ tasks: [Task]?, _ indexPath: IndexPath) {
         if let task = tasks?[indexPath.row] {
-            homeDelegate?.taskDetail(self.collectionView, for: task)
+            homeDelegate?.presentTaskEditView(for: task)
         }
     }
     
@@ -229,7 +229,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
 
         if section == headerSection {
             if identifier == addTaskIdentifier {
-                taskDelegate?.onAddTask(nil, completion: nil)
+                homeDelegate?.presentTaskAddView()
             }else {
                 guard let id = sectionIdentifier(for: typeCellSelectors[indexPath.row]) else {
                     return
@@ -327,10 +327,6 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         }
         
         return CGSize(width: width, height: height)
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        homeDelegate?.didScroll(scrollView)
     }
     
 }

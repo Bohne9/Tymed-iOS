@@ -14,7 +14,7 @@ private let lessonDeleteSection = "lessonDeleteSection"
 private let lessonDeleteCell = "lessonDeleteCell"
 private let lessonTaskOverviewCell = "lessonTaskOverviewCell"
 
-
+@available(*, deprecated)
 class LessonDetailTableViewController: LessonAddViewController {
 
     var lesson: Lesson? {
@@ -34,9 +34,6 @@ class LessonDetailTableViewController: LessonAddViewController {
     private var unarchivedTasks: [Task]?
     
     private var isEditable: Bool = false
-    
-    var taskDelegate: HomeTaskDetailDelegate?
-    var delegate: HomeDetailTableViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,12 +63,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.presentationController?.delegate = self
-    }
-    
     override func setup() {
         super.setup()
         addTaskOverviewSection()
@@ -97,7 +88,6 @@ class LessonDetailTableViewController: LessonAddViewController {
     
     
     @objc func dismissDetailView() {
-        delegate?.detailWillDismiss()
         dismiss(animated: true, completion: nil)
     }
     
@@ -193,7 +183,6 @@ class LessonDetailTableViewController: LessonAddViewController {
             let cell = cell as! LessonDetailTaskOverviewCell
             
             cell.lesson = lesson
-            cell.taskDelegate = self
             
             break
         case lessonColorPickerCell:
@@ -283,7 +272,6 @@ class LessonDetailTableViewController: LessonAddViewController {
                 TimetableService.shared.deleteLesson(lesson)
                 self.lesson = nil
                 self.dismiss(animated: true) {
-                    self.delegate?.detailWillDismiss()
                 }
                 print("delete")
             }
@@ -329,7 +317,6 @@ class LessonDetailTableViewController: LessonAddViewController {
         DispatchQueue.main.async {
             let vc = TaskDetailTableViewController(style: .insetGrouped)
             vc.task = task
-            vc.taskDelegate = self
             let nav = UINavigationController(rootViewController: vc)
             
             vc.title = "Task"
@@ -340,57 +327,4 @@ class LessonDetailTableViewController: LessonAddViewController {
     }
 
   
-}
-
-extension LessonDetailTableViewController: UIAdaptivePresentationControllerDelegate {
-    
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        delegate?.detailWillDismiss()
-    }
-    
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        delegate?.detailWillDismiss()
-    }
-    
-}
-
-extension LessonDetailTableViewController: HomeDetailTableViewControllerDelegate {
-    func detailWillDismiss() {
-        reload()
-    }
-    
-}
-
-extension LessonDetailTableViewController: HomeTaskDetailDelegate {
-    
-    func showTaskDetail(_ task: Task) {
-        let vc = TaskDetailTableViewController(style: .insetGrouped)
-        vc.task = task
-        vc.taskDelegate = self
-        let nav = UINavigationController(rootViewController: vc)
-        
-        vc.title = "Task"
-        
-        vc.detailDelegate = self
-        
-        self.present(nav, animated: true, completion: nil)
-    }
-    
-    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool) {
-        
-    }
-    
-    func didDeleteTask(_ task: Task) {
-        reload()
-    }
-    
-    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewWrapper) -> Void)?) {
-        
-    }
-    
-    func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell) {
-        
-    }
-    
-    
 }

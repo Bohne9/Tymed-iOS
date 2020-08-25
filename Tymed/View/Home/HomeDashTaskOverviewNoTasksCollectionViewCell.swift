@@ -15,7 +15,7 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     
     let addButton = UIButton()
     
-    var taskDelegate: HomeTaskAddDelegate?
+    var homeDelegate: HomeViewSceneDelegate?
     
     var type: HomeDashTaskSelectorCellType?
     
@@ -30,10 +30,9 @@ class HomeDashTaskOverviewNoTasksCollectionViewCell: UICollectionViewCell {
     }
     
     @objc func addTask() {
-        taskDelegate?.onAddTask(nil, completion: { (viewController) in
-            guard let type = self.type else { return }
-            
-        })
+        
+        homeDelegate?.presentTaskAddView()
+        
     }
     
     private func setup() {

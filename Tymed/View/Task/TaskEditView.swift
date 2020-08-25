@@ -11,8 +11,6 @@ import CoreData
 
 class TaskEditViewWrapper: UIViewController {
     
-    var taskDelegate: HomeTaskDetailDelegate?
-    
     var task: Task?
     
     var contentView: UIHostingController<TaskEditView>?
@@ -26,7 +24,6 @@ class TaskEditViewWrapper: UIViewController {
         
         let taskEditView = TaskEditView(task: task,
                                         dismiss: {
-                                            self.taskDelegate?.reload()
                                             self.dismiss(animated: true, completion: nil)
                                         })
         

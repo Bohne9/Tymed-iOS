@@ -135,7 +135,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return UICollectionViewCell()
         }
         
-        cell.lessonDelegate = homeDelegate
+        cell.homeDelegate = homeDelegate
         
         if let entry = calendarDayEntry(for: indexPath) {
             cell.entry = entry
@@ -167,7 +167,6 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
         }
         
-        homeDelegate?.didScroll(scrollView)
     }
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

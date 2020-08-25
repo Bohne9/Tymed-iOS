@@ -10,7 +10,6 @@ import SwiftUI
 
 class LessonEditViewWrapper: UIViewController {
     
-    var lessonDelegate: HomeDetailTableViewControllerDelegate?
     var lesson: Lesson?
     
     var contentView: UIHostingController<LessonEditView>!
@@ -25,7 +24,6 @@ class LessonEditViewWrapper: UIViewController {
         contentView = UIHostingController(rootView: LessonEditView(
                                                                 lesson: lesson,
                                                                 dismiss: {
-                                                                    self.lessonDelegate?.detailWillDismiss()
                                                                     self.dismiss(animated: true, completion: nil)
                     }))
         

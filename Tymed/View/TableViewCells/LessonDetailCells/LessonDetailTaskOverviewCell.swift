@@ -11,12 +11,14 @@ import UIKit
 private let taskOverviewItem = "taskOverviewItem"
 private let taskOverviewSeeAll = "taskOverviewSeeAll"
 
+@available(*, deprecated)
 protocol LessonDetailTaskOverviewDelegate {
     
     func lessonDetailPresentAllTasks(_ cell: LessonDetailTaskOverviewCell)
     
 }
 
+@available(*, deprecated)
 class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
     
 
@@ -31,7 +33,6 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             tableView.reloadData()
         }
     }
-    var taskDelegate: HomeTaskDetailDelegate?
     
     var taskOverviewDelegate: LessonDetailTaskOverviewDelegate?
     
@@ -150,7 +151,6 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             return
         }
         
-        taskDelegate?.showTaskDetail(task)
     }
     
     func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
@@ -160,7 +160,6 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
         animator.addCompletion {
             let task = self.task(for: IndexPath(row: item, section: 0))!
             
-            self.taskDelegate?.showTaskDetail(task)
         }
         
     }
@@ -186,7 +185,6 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
             let detail = TaskDetailTableViewController(style: .insetGrouped)
             
             detail.task = self.task(for: indexPath)
-            detail.taskDelegate = self.taskDelegate
             
             return detail
         }) { (element) -> UIMenu? in
@@ -211,7 +209,6 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
                 
                 TimetableService.shared.deleteTask(task)
                 
-                self.taskDelegate?.didDeleteTask(task)
                 
             }
             
