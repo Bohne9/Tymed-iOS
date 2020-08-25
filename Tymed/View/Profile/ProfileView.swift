@@ -40,8 +40,30 @@ struct ProfileView: View {
             }
             
             Section {
+                HStack {
+                    DetailCellDescriptor("Upgrade to Pro!", image: "star.fill", .clear)
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 13, weight: .semibold))
+                }.foregroundColor(.white)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 5)
+            }
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .background(Color(.systemOrange))
+            
+            Section {
+                NavigationLink (destination: Text("Tell your friends")) {
+                    DetailCellDescriptor("Tell your friends", image: "heart.fill", .systemPink)
+                }
+                
+                NavigationLink (destination: Text("Tips")) {
+                    DetailCellDescriptor("Tips", image: "lightbulb.fill", .systemOrange)
+                }
+            }
+            
+            Section {
                 NavigationLink(
-                    destination: Text("Settings"),
+                    destination: SettingsView(),
                     label: {
                         DetailCellDescriptor("Settings", image: "gear", .systemGray)
                     })
@@ -76,18 +98,18 @@ struct ProfileView: View {
             Section {
                 HStack {
                     Spacer()
-                    VStack(alignment: .center) {
+//                    HStack(alignment: .center) {
                         Image(uiImage: #imageLiteral(resourceName: "logo"))
                             .resizable()
                             .frame(width: 60, height:  60)
                             
                         Text("Tymed")
                             .font(.system(size: 13, weight: .semibold))
-                    }
+//                    }
                     Spacer()
                 }
                 .padding(4)
-                .background(Color(.systemBackground))
+                .background(Color(.systemGroupedBackground))
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             
@@ -98,6 +120,8 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        NavigationView {
+            ProfileView()
+        }.colorScheme(.dark)
     }
 }
