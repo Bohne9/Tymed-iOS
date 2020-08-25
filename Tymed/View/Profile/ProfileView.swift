@@ -56,8 +56,8 @@ struct ProfileView: View {
                     DetailCellDescriptor("Tell your friends", image: "heart.fill", .systemPink)
                 }
                 
-                NavigationLink (destination: Text("Tips")) {
-                    DetailCellDescriptor("Tips", image: "lightbulb.fill", .systemOrange)
+                NavigationLink (destination: Text("Tips & Help")) {
+                    DetailCellDescriptor("Tips & Help", image: "lightbulb.fill", .systemOrange)
                 }
             }
             
