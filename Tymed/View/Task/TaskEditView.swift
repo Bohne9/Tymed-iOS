@@ -9,40 +9,24 @@
 import SwiftUI
 import CoreData
 
-class TaskEditViewWrapper: UIViewController {
+class TaskEditViewWrapper: ViewWrapper<TaskEditView> {
     
     var task: Task?
     
-    var contentView: UIHostingController<TaskEditView>?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func createContent() -> UIHostingController<TaskEditView>? {
         guard let task = task else {
-            return
+            return nil
         }
         
         let taskEditView = TaskEditView(task: task,
                                         dismiss: {
+                                            self.homeDelegate?.reload()
                                             self.dismiss(animated: true, completion: nil)
                                         })
         
-        contentView = UIHostingController(rootView: taskEditView)
-        
-        guard let content = contentView else {
-            return
-        }
-        
-        addChild(content)
-        view.addSubview(content.view)
-        
-        setupConstraints()
+        return UIHostingController(rootView: taskEditView)
     }
-    
-    fileprivate func setupConstraints() {
-        contentView?.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView?.view.constraintToSuperview()
-    }
+
 }
 
 //MARK: TaskEditView

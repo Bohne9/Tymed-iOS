@@ -8,35 +8,23 @@
 
 import SwiftUI
 
-class LessonEditViewWrapper: UIViewController {
+class LessonEditViewWrapper: ViewWrapper<LessonEditView> {
     
     var lesson: Lesson?
     
-    var contentView: UIHostingController<LessonEditView>!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func createContent() -> UIHostingController<LessonEditView>? {
         guard let lesson = lesson else {
-            return
+            return nil
         }
         
-        contentView = UIHostingController(rootView: LessonEditView(
-                                                                lesson: lesson,
-                                                                dismiss: {
-                                                                    self.dismiss(animated: true, completion: nil)
-                    }))
-        
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        setupConstraints()
+        return UIHostingController(rootView: LessonEditView(
+                                    lesson: lesson,
+                                    dismiss: {
+                                        self.homeDelegate?.reload()
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
     }
     
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.constraintToSuperview()
-    }
 }
 
 //MARK: LessonEditView

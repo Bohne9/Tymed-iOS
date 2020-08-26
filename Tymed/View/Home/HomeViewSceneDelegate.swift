@@ -33,6 +33,8 @@ extension HomeViewSceneDelegate {
         let lessonView = LessonEditViewWrapper()
         lessonView.lesson = lesson
         
+        lessonView.homeDelegate = self
+        
         present(lessonView, animated: true)
     }
     
@@ -40,17 +42,23 @@ extension HomeViewSceneDelegate {
         let taskView = TaskEditViewWrapper()
         taskView.task = task
         
+        taskView.homeDelegate = self
+        
         present(taskView, animated: true)
     }
     
     func presentTaskAddView() {
         let taskAdd = TaskAddViewWrapper()
         
+        taskAdd.homeDelegate = self
+        
         present(taskAdd, animated: true)
     }
     
     func presentLessonAddView() {
         let lessonAdd = LessonAddViewWrapper()
+        
+        lessonAdd.homeDelegate = self
         
         present(lessonAdd, animated: true)
     }

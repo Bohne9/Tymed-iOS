@@ -158,7 +158,7 @@ extension HomeBaseCollectionView {
     }
     
     func dismiss(_ animated: Bool) {
-        super.dismiss(animated: animated, completion: nil)
+        dismiss(animated: animated, completion: nil)
     }
     
 }
@@ -179,3 +179,4 @@ extension HomeBaseCollectionView: UIAdaptivePresentationControllerDelegate {
     
     
 }
+

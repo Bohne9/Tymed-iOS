@@ -9,25 +9,15 @@
 import SwiftUI
 import CoreData
 
-class TaskAddViewWrapper: UIViewController {
+class TaskAddViewWrapper: ViewWrapper<TaskAddView> {
     
-    lazy var contentView = UIHostingController(rootView: TaskAddView(dismiss: {
-        self.dismiss(animated: true, completion: nil)
-    }))
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        setupConstraints()
+    override func createContent() -> UIHostingController<TaskAddView>? {
+        return UIHostingController(rootView: TaskAddView(dismiss: {
+            self.homeDelegate?.reload()
+            self.dismiss(animated: true, completion: nil)
+        }))
     }
     
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.constraintToSuperview()
-    }
 }
 
 //MARK: TaskAddView

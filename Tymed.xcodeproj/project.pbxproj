@@ -104,6 +104,7 @@
 		4FB8F4D224F1A4370015EC8E /* CaleanderWeekEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D124F1A4370015EC8E /* CaleanderWeekEntry.swift */; };
 		4FB8F4D424F50DAF0015EC8E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */; };
 		4FB8F4D624F5AD910015EC8E /* HomeViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D524F5AD910015EC8E /* HomeViewSceneDelegate.swift */; };
+		4FB8F4D824F6E4A40015EC8E /* ViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */; };
 		4FB98DDC247DAAD6000130BB /* TaskPriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */; };
 		4FB98DDD247DAAD6000130BB /* TaskPriorityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */; };
 		4FC2C2CA2458A1FA00B57682 /* HomeDashCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */; };
@@ -245,6 +246,7 @@
 		4FB8F4D124F1A4370015EC8E /* CaleanderWeekEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaleanderWeekEntry.swift; sourceTree = "<group>"; };
 		4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4FB8F4D524F5AD910015EC8E /* HomeViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewSceneDelegate.swift; sourceTree = "<group>"; };
+		4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewWrapper.swift; sourceTree = "<group>"; };
 		4FB98DDA247DAAD6000130BB /* TaskPriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPriorityTableViewCell.swift; sourceTree = "<group>"; };
 		4FB98DDB247DAAD6000130BB /* TaskPriorityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskPriorityTableViewCell.xib; sourceTree = "<group>"; };
 		4FC2C2C92458A1FA00B57682 /* HomeDashCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashCollectionView.swift; sourceTree = "<group>"; };
@@ -329,7 +331,6 @@
 			isa = PBXGroup;
 			children = (
 				4F6F6F0024DD1DF2006EC4BE /* LessonPickerView.swift */,
-				4F6F6F0224DD1E25006EC4BE /* Common */,
 				4FD11E4724D6CA86008D9772 /* TaskAddView.swift */,
 				4F1A9F1424D7301C00F99439 /* TaskEditView.swift */,
 			);
@@ -437,13 +438,6 @@
 			path = TimetableDetailCells;
 			sourceTree = "<group>";
 		};
-		4F6F6F0224DD1E25006EC4BE /* Common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		4F7F77342456C2A000038729 = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +542,7 @@
 				4F8E058924DA798500748F47 /* CustomTextField.swift */,
 				4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */,
 				4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */,
+				4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -971,6 +966,7 @@
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
 				4F907FF524EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift in Sources */,
 				4FB8F4CA24F192790015EC8E /* CalendarDayEntry.swift in Sources */,
+				4FB8F4D824F6E4A40015EC8E /* ViewWrapper.swift in Sources */,
 				4F1A9F1524D7301C00F99439 /* TaskEditView.swift in Sources */,
 				4F8E058224DA769600748F47 /* LessonEditView.swift in Sources */,
 				4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */,
