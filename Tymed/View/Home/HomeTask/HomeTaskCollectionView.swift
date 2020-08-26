@@ -10,7 +10,6 @@ import UIKit
 
 private let nowReuseIdentifier = "homeNowCell"
 private let taskTypeSelectorIdentifier = "taskTypeSelectorIdentifier"
-private let addTaskIdentifier = "addTaskIdentifier"
 
 private let taskHeader = "taskHeader"
 
@@ -50,7 +49,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         collectionView.register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskTypeSelectorIdentifier)
         collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         
-        collectionView.register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: addTaskIdentifier)
+        collectionView.register(HomeTaskAddTaskCollectionViewCell.self, forCellWithReuseIdentifier: HomeTaskAddTaskCollectionViewCell.identifier)
         
         
         if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -65,7 +64,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         
         switch identifier {
         case headerSection:
-            return indexPath.row < typeCellSelectors.count ?  taskTypeSelectorIdentifier : addTaskIdentifier
+            return indexPath.row < typeCellSelectors.count ?  taskTypeSelectorIdentifier : HomeTaskAddTaskCollectionViewCell.identifier
         case nextSection, allSection, doneSection, expiredSection, openSection, archivedSection, plannedSection:
             return homeDashTaskOverviewCollectionViewCell
         default:
@@ -168,8 +167,8 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
             cell.type = typeCellSelectors[indexPath.row]
             
             
-        }else if identifier == addTaskIdentifier {
-            let addCell = (cell as! HomeDashTaskOverviewNoTasksCollectionViewCell)
+        }else if identifier == HomeTaskAddTaskCollectionViewCell.identifier {
+            let addCell = (cell as! HomeTaskAddTaskCollectionViewCell)
             
             addCell.homeDelegate = homeDelegate
             
@@ -228,7 +227,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         let identifier = self.identifier(for: indexPath)
 
         if section == headerSection {
-            if identifier == addTaskIdentifier {
+            if identifier == HomeTaskAddTaskCollectionViewCell.identifier {
                 homeDelegate?.presentTaskAddView()
             }else {
                 guard let id = sectionIdentifier(for: typeCellSelectors[indexPath.row]) else {
@@ -314,7 +313,7 @@ class HomeTaskCollectionView: HomeBaseCollectionView {
         var height: CGFloat = 50
         
         if identifier == taskTypeSelectorIdentifier ||
-            (identifier == addTaskIdentifier && typeCellSelectors.count % 2 != 0) {
+            (identifier == HomeTaskAddTaskCollectionViewCell.identifier && typeCellSelectors.count % 2 != 0) {
             width = (collectionView.frame.width - 60) / 2
         }
         
