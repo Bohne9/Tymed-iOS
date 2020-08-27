@@ -303,7 +303,7 @@ struct TaskEditContent: View {
             sendNotification = notifications.count != 0
             if sendNotification, let not = notifications.first {
                 if let date = (not.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() {
-                    notificationOffset = NotificationOffset(value: dueDate.timeIntervalSince(date))
+                    notificationOffset = NotificationOffset.from(dueDate: dueDate, notificationDate: date)
                 }
             }
         }

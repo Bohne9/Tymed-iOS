@@ -43,10 +43,10 @@ struct TaskAddView: View {
     private var presentDueDatePicker = false
     
     @State
-    private var dueDate: Date?
+    private var dueDate: Date? = Date() + 3600
     
     @State
-    private var pickerDate = Date()
+    private var pickerDate = Date() + 3600
     
     @State
     private var recommendedDueDate = false
@@ -55,7 +55,7 @@ struct TaskAddView: View {
     private var sendNotification = false
     
     //MARK: Timetable
-    @State private var timetable: Timetable?
+    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
     
     @State
     private var presentNotificationPicker = false
@@ -215,6 +215,7 @@ struct TaskAddView: View {
                 addTask()
             }))
             .onChange(of: pickerDate) { value in
+                print("pickerDate changed")
                 dueDate = pickerDate
             }.onChange(of: hasDueDate) { value in
                 dueDate = value ? dueDate : nil

@@ -21,6 +21,7 @@ struct NotificationOffsetView: View {
             
             HStack {
                 Text(offset.title)
+                    .font(.system(size: 14, weight: .semibold))
                 Spacer()
                 
                 if offset == notificationOffset {
