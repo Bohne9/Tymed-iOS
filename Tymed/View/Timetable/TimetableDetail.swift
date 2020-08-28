@@ -31,7 +31,9 @@ struct TimetableDetail: View {
         List {
             //MARK: Name
             Section(header: Text("Name").font(.system(size: 12, weight: .semibold))) {
-                Text(timetable.name ?? "")
+                
+                TextField("Timetable name", text: $timetable.name)
+                
             }
             
             //MARK: Subjects

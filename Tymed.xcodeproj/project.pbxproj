@@ -96,6 +96,8 @@
 		4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */; };
 		4F9C26D024C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C26CF24C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift */; };
 		4F9C26D224C8C6CA00142CEE /* BaseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9C26D124C8C6CA00142CEE /* BaseTableViewCell.swift */; };
+		4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */; };
+		4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */; };
 		4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5784924DF32DA0066F130 /* TimetableDetail.swift */; };
 		4FB8F4CA24F192790015EC8E /* CalendarDayEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */; };
 		4FB8F4CC24F192950015EC8E /* CalendarEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */; };
@@ -239,6 +241,8 @@
 		4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeDashTaskOverviewCollectionViewCell.xib; sourceTree = "<group>"; };
 		4F9C26CF24C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailDeleteTableViewCell.swift; sourceTree = "<group>"; };
 		4F9C26D124C8C6CA00142CEE /* BaseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewCell.swift; sourceTree = "<group>"; };
+		4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4FB5784924DF32DA0066F130 /* TimetableDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetail.swift; sourceTree = "<group>"; };
 		4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayEntry.swift; sourceTree = "<group>"; };
 		4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEntry.swift; sourceTree = "<group>"; };
@@ -512,6 +516,8 @@
 				4F2A7DC624AFAD22002467E3 /* Task+CoreDataProperties.swift */,
 				4F0F8729246F28BC00992721 /* Lesson+CoreDataClass.swift */,
 				4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */,
+				4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */,
+				4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */,
 				4F9405EE2468067C0063E4DA /* Time.swift */,
 			);
 			path = Model;
@@ -928,7 +934,9 @@
 				4F2ECB99247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift in Sources */,
 				4FDAFA4E24EC61BA007DC51D /* HomeWeekLessonCollectionViewCell.swift in Sources */,
 				4F2A1C8D24A9213100E66C79 /* LessonDetailTaskOverviewCell.swift in Sources */,
+				4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */,
 				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
+				4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */,
 				4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
 				4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */,
