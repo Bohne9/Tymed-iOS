@@ -61,7 +61,7 @@ struct TaskAddView: View {
     private var presentNotificationPicker = false
     
     @State
-    var notificationOffset: NotificationOffset = NotificationOffset.atEvent
+    var notificationOffset: NotificationOffset?
     
     //MARK: Lesson state
     @State
@@ -143,7 +143,7 @@ struct TaskAddView: View {
                                 label: {
                                     HStack {
                                         Spacer()
-                                        Text(notificationOffset.title)
+                                        Text(notificationOffset?.title ?? "")
                                     }
                                 }).frame(height: 45)
                         }
@@ -244,6 +244,10 @@ struct TaskAddView: View {
     private func textForNotificationCell() -> String {
         guard let date = dueDate, sendNotification else { return "" }
         
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
+        
         return (date - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
@@ -285,7 +289,9 @@ struct TaskAddView: View {
         TimetableService.shared.save()
         
         if sendNotification {
-            NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+            if let notificationOffset = notificationOffset {
+                NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+            }
         }
         
         dismiss()

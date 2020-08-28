@@ -14,7 +14,7 @@ struct NotificationOffsetView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @Binding
-    var notificationOffset: NotificationOffset
+    var notificationOffset: NotificationOffset?
     
     var body: some View {
         List(NotificationOffset.allCases, id: \.value) { offset in
@@ -25,7 +25,9 @@ struct NotificationOffsetView: View {
                 Spacer()
                 
                 if offset == notificationOffset {
-                    Image(systemName: "checkmark").foregroundColor(Color(.systemBlue))
+                    Image(systemName: "checkmark")
+                        .foregroundColor(Color(.systemBlue))
+                        .font(.system(size: 14, weight: .semibold))
                 }
             }
             .contentShape(Rectangle())
@@ -36,6 +38,6 @@ struct NotificationOffsetView: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("")
+        .navigationTitle("Alert")
     }
 }

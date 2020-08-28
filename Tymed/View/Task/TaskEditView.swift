@@ -105,7 +105,7 @@ struct TaskEditContent: View {
     
     @State private var presentNotificationPicker = false
     
-    @State var notificationOffset: NotificationOffset = NotificationOffset.atEvent
+    @State var notificationOffset: NotificationOffset?
     
     //MARK: Lesson state
     @State private var hasLessonAttached = false
@@ -186,7 +186,8 @@ struct TaskEditContent: View {
                             label: {
                                 HStack {
                                     Spacer()
-                                    Text(notificationOffset.title)
+                                    Text(notificationOffset?.title ?? "")
+                                        .font(.system(size: 14, weight: .semibold))
                                 }
                             }).frame(height: 45)
                     }
@@ -276,7 +277,7 @@ struct TaskEditContent: View {
                 ])
         }.navigationBarItems(leading: Button("Cancel", action: {
             cancel()
-        }), trailing: Button("Done", action: {
+        }), trailing: Button("Save", action: {
             saveTask()
         }))
         .onAppear {
@@ -303,7 +304,11 @@ struct TaskEditContent: View {
             sendNotification = notifications.count != 0
             if sendNotification, let not = notifications.first {
                 if let date = (not.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() {
-                    notificationOffset = NotificationOffset.from(dueDate: dueDate, notificationDate: date)
+                    let notificationOffset = NotificationOffset.from(dueDate: dueDate, notificationDate: date)
+                    
+                    if notificationOffset != self.notificationOffset {
+                        self.notificationOffset = notificationOffset
+                    }
                 }
             }
         }
@@ -335,6 +340,11 @@ struct TaskEditContent: View {
         if !sendNotification {
             return ""
         }
+        
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
+        
         return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
@@ -371,6 +381,9 @@ struct TaskEditContent: View {
     private func saveTask(dismiss: Bool = true) {
         if sendNotification {
             task.getNotifications { (notifications) in
+                guard let notificationOffset = notificationOffset else {
+                    return
+                }
                 NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
                 NotificationService.current.removeAllNotifications(of: task)
             }

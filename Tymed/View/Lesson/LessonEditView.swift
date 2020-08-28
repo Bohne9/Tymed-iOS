@@ -70,7 +70,7 @@ struct LessonEditContentView: View {
     
     @State private var sendNotification = false
     @State private var presentNotificationPicker = false
-    @State private var notificationOffset = NotificationOffset.atEvent
+    @State private var notificationOffset: NotificationOffset?
     
     //MARK: Color
     @State private var color: String = "blue"
@@ -216,7 +216,7 @@ struct LessonEditContentView: View {
                         label: {
                             HStack {
                                 Spacer()
-                                Text(notificationOffset.title)
+                                Text(notificationOffset?.title ?? "")
                             }
                         }).frame(height: 45)
                 }
@@ -359,6 +359,10 @@ struct LessonEditContentView: View {
         if !sendNotification {
             return nil
         }
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
+        
         return "\(day.string()), \((startTime - notificationOffset.timeInterval).stringifyTime(with: .short))"
     }
     
@@ -383,6 +387,11 @@ struct LessonEditContentView: View {
         if sendNotification {
             lesson.getNotifications { (notifications) in
                 NotificationService.current.removeAllNotifications(of: lesson)
+                
+                guard let notificationOffset = notificationOffset else {
+                    return
+                }
+                
                 NotificationService.current.scheduleStartNotification(for: lesson, notificationOffset)
             }
         }else {
