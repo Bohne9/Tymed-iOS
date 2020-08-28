@@ -38,6 +38,7 @@ class BackgroundRoutineService {
             let now = Date()
             
             if (due.addingTimeInterval(taskArchivingDelay.timeinterval) < now) {
+                NotificationService.current.removeDeliveredNotifications(of: task)
                 task.archived = true
             }
         }
