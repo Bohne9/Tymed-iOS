@@ -92,16 +92,13 @@ struct TimetableDetail: View {
                                 
                             }).navigationBarItems(trailing: EmptyView()) ,
                             label: {
-                                HStack {
-                                    Text(task.title)
-                                        .font(.system(size: 15, weight: .semibold))
-                                    Spacer()
-                                }.frame(height: 45)
+                                TaskPreviewCell(task: task)
+                                    .frame(height: 50)
                             })
                     }
                     if unarchivedTasks().count > maxNumberOfTasks {
                         NavigationLink(
-                            destination: Text("See all tasks"),
+                            destination: AllTasksOverviewView(timetable: timetable),
                             label: {
                                 HStack {
                                     Text("See all")
@@ -298,5 +295,30 @@ struct AllSubjectsOverviewView: View {
     
     func subjects() -> [Subject] {
         timetable.subjects?.allObjects as? [Subject] ?? []
+    }
+}
+
+struct AllTasksOverviewView: View {
+    
+    @ObservedObject
+    var timetable: Timetable
+    
+    var body: some View {
+        List {
+            ForEach(unarchivedTasks(), id: \.self) { task in
+                NavigationLink(
+                    destination: TaskEditContent(task: task, dismiss: { }).navigationBarItems(leading: EmptyView()),
+                    label: {
+                        TaskPreviewCell(task: task)
+                            .frame(height: 50)
+                    })
+            }
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("All subjects")
+    }
+    
+    //MARK: unarchivedTasks
+    private func unarchivedTasks() -> [Task] {
+        return (timetable.tasks?.allObjects as? [Task] ?? []).filter { !$0.archived }
     }
 }
