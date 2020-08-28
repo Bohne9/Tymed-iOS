@@ -9,43 +9,24 @@
 import SwiftUI
 import CoreData
 
-class TaskEditViewWrapper: UIViewController {
-    
-    var taskDelegate: HomeTaskDetailDelegate?
+class TaskEditViewWrapper: ViewWrapper<TaskEditView> {
     
     var task: Task?
     
-    var contentView: UIHostingController<TaskEditView>?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func createContent() -> UIHostingController<TaskEditView>? {
         guard let task = task else {
-            return
+            return nil
         }
         
         let taskEditView = TaskEditView(task: task,
                                         dismiss: {
-                                            self.taskDelegate?.reload()
+                                            self.homeDelegate?.reload()
                                             self.dismiss(animated: true, completion: nil)
                                         })
         
-        contentView = UIHostingController(rootView: taskEditView)
-        
-        guard let content = contentView else {
-            return
-        }
-        
-        addChild(content)
-        view.addSubview(content.view)
-        
-        setupConstraints()
+        return UIHostingController(rootView: taskEditView)
     }
-    
-    fileprivate func setupConstraints() {
-        contentView?.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView?.view.constraintToSuperview()
-    }
+
 }
 
 //MARK: TaskEditView
@@ -124,7 +105,7 @@ struct TaskEditContent: View {
     
     @State private var presentNotificationPicker = false
     
-    @State var notificationOffset: NotificationOffset = NotificationOffset.atEvent
+    @State var notificationOffset: NotificationOffset?
     
     //MARK: Lesson state
     @State private var hasLessonAttached = false
@@ -205,7 +186,8 @@ struct TaskEditContent: View {
                             label: {
                                 HStack {
                                     Spacer()
-                                    Text(notificationOffset.title)
+                                    Text(notificationOffset?.title ?? "")
+                                        .font(.system(size: 14, weight: .semibold))
                                 }
                             }).frame(height: 45)
                     }
@@ -295,7 +277,7 @@ struct TaskEditContent: View {
                 ])
         }.navigationBarItems(leading: Button("Cancel", action: {
             cancel()
-        }), trailing: Button("Done", action: {
+        }), trailing: Button("Save", action: {
             saveTask()
         }))
         .onAppear {
@@ -322,7 +304,11 @@ struct TaskEditContent: View {
             sendNotification = notifications.count != 0
             if sendNotification, let not = notifications.first {
                 if let date = (not.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() {
-                    notificationOffset = NotificationOffset(value: dueDate.timeIntervalSince(date))
+                    let notificationOffset = NotificationOffset.from(dueDate: dueDate, notificationDate: date)
+                    
+                    if notificationOffset != self.notificationOffset {
+                        self.notificationOffset = notificationOffset
+                    }
                 }
             }
         }
@@ -354,6 +340,11 @@ struct TaskEditContent: View {
         if !sendNotification {
             return ""
         }
+        
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
+        
         return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
@@ -390,6 +381,9 @@ struct TaskEditContent: View {
     private func saveTask(dismiss: Bool = true) {
         if sendNotification {
             task.getNotifications { (notifications) in
+                guard let notificationOffset = notificationOffset else {
+                    return
+                }
                 NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
                 NotificationService.current.removeAllNotifications(of: task)
             }

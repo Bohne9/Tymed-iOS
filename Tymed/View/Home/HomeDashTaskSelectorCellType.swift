@@ -10,7 +10,7 @@ import UIKit
 
 enum HomeDashTaskSelectorCellType : Int {
     
-    case today = 0
+    case next = 0
     case done = 1
     case all = 2
     case expired = 3
@@ -20,7 +20,7 @@ enum HomeDashTaskSelectorCellType : Int {
     
     var title: String {
         switch self {
-        case .today:    return "Today"
+        case .next:    return "Next"
         case .done:     return "Done"
         case .all:      return "All"
         case .expired:  return "Expired"
@@ -32,7 +32,7 @@ enum HomeDashTaskSelectorCellType : Int {
     
     var systemIcon: String {
         switch self {
-        case .today:    return "calendar"
+        case .next:    return "calendar"
         case .done:     return "checkmark.circle.fill"
         case .all:      return "tray.fill"
         case .expired:  return "exclamationmark.circle.fill"
@@ -44,7 +44,7 @@ enum HomeDashTaskSelectorCellType : Int {
     
     var color: UIColor {
         switch self {
-        case .today:    return .systemBlue
+        case .next:    return .systemBlue
         case .done:     return .systemGreen
         case .all:      return .systemGray
         case .expired:  return .systemRed
@@ -58,8 +58,8 @@ enum HomeDashTaskSelectorCellType : Int {
         let service = TimetableService.shared
         
         switch self {
-        case .today:
-            return service.getTasksOfToday()
+        case .next:
+            return service.getNextTasks()
         case .all:
             return service.getAllTasks()
         case .done:

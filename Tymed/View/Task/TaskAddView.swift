@@ -9,28 +9,15 @@
 import SwiftUI
 import CoreData
 
-class TaskAddViewWrapper: UIViewController {
+class TaskAddViewWrapper: ViewWrapper<TaskAddView> {
     
-    var taskDelegate: HomeTaskDetailDelegate?
-    
-    lazy var contentView = UIHostingController(rootView: TaskAddView(dismiss: {
-        self.taskDelegate?.reload()
-        self.dismiss(animated: true, completion: nil)
-    }))
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        setupConstraints()
+    override func createContent() -> UIHostingController<TaskAddView>? {
+        return UIHostingController(rootView: TaskAddView(dismiss: {
+            self.homeDelegate?.reload()
+            self.dismiss(animated: true, completion: nil)
+        }))
     }
     
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.constraintToSuperview()
-    }
 }
 
 //MARK: TaskAddView
@@ -56,10 +43,10 @@ struct TaskAddView: View {
     private var presentDueDatePicker = false
     
     @State
-    private var dueDate: Date?
+    private var dueDate: Date? = Date() + 3600
     
     @State
-    private var pickerDate = Date()
+    private var pickerDate = Date() + 3600
     
     @State
     private var recommendedDueDate = false
@@ -68,13 +55,13 @@ struct TaskAddView: View {
     private var sendNotification = false
     
     //MARK: Timetable
-    @State private var timetable: Timetable?
+    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
     
     @State
     private var presentNotificationPicker = false
     
     @State
-    var notificationOffset: NotificationOffset = NotificationOffset.atEvent
+    var notificationOffset: NotificationOffset?
     
     //MARK: Lesson state
     @State
@@ -156,7 +143,7 @@ struct TaskAddView: View {
                                 label: {
                                     HStack {
                                         Spacer()
-                                        Text(notificationOffset.title)
+                                        Text(notificationOffset?.title ?? "")
                                     }
                                 }).frame(height: 45)
                         }
@@ -228,6 +215,7 @@ struct TaskAddView: View {
                 addTask()
             }))
             .onChange(of: pickerDate) { value in
+                print("pickerDate changed")
                 dueDate = pickerDate
             }.onChange(of: hasDueDate) { value in
                 dueDate = value ? dueDate : nil
@@ -255,6 +243,10 @@ struct TaskAddView: View {
     
     private func textForNotificationCell() -> String {
         guard let date = dueDate, sendNotification else { return "" }
+        
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
         
         return (date - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
@@ -297,7 +289,9 @@ struct TaskAddView: View {
         TimetableService.shared.save()
         
         if sendNotification {
-            NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+            if let notificationOffset = notificationOffset {
+                NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
+            }
         }
         
         dismiss()

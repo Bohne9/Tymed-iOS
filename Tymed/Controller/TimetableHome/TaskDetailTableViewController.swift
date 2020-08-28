@@ -13,6 +13,7 @@ private let taskDeleteCell = "taskDeleteIdentifier"
 private let taskDeleteSection = "taskDeleteSection"
 private let taskArchiveSection = "taskArchiveSection"
 
+@available(*, deprecated)
 class TaskDetailTableViewController: TaskAddViewController {
 
     var task: Task? {
@@ -23,7 +24,6 @@ class TaskDetailTableViewController: TaskAddViewController {
     
     private var isEditable: Bool = false
     
-    var taskDelegate: HomeTaskDetailDelegate?
     
     override func setup() {
         super.setup()
@@ -80,7 +80,7 @@ class TaskDetailTableViewController: TaskAddViewController {
     }
     
     @objc func dismissDetailView() {
-        detailDelegate?.detailWillDismiss()
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -92,7 +92,7 @@ class TaskDetailTableViewController: TaskAddViewController {
             
             self.task = nil
             self.dismiss(animated: true) {
-                self.taskDelegate!.didDeleteTask(task)
+
             }
         }
     }

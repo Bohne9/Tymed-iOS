@@ -49,7 +49,7 @@ class TimetableDetailTableViewController: TimetableAddViewController {
     override func setupSections() { }
     
     func saveTimetable() {
-        timetable?.name = timetableTitle
+        timetable?.name = timetableTitle ?? ""
                 
         TimetableService.shared.save()
         

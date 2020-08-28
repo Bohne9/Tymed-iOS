@@ -8,33 +8,8 @@
 
 import UIKit
 
-protocol HomeTaskAddDelegate {
-    
-    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewWrapper) -> Void)?)
-    
-}
 
-//extension HomeTaskAddDelegate {
-//
-//    func onAddTask(_ cell: UICollectionViewCell?, completion: ((TaskAddViewController) -> Void)? = nil) {
-//
-//    }
-//
-//}
-
-protocol HomeTaskDetailDelegate: HomeTaskAddDelegate {
-    
-    func showTaskDetail(_ task: Task)
-    
-    func didSelectTask(_ cell: HomeDashTaskOverviewCollectionViewCell, _ task: Task, _ at: IndexPath, animated: Bool)
-    
-    func reload()
-    
-    func didDeleteTask(_ task: Task)
-    
-    func onSeeAllTasks(_ cell: HomeDashTaskOverviewCollectionViewCell)
-}
-
+//MARK: HomeDashTaskOverviewCollectionViewCell
 let homeDashTaskOverviewCollectionViewCell = "homeDashTaskOverviewCollectionViewCell"
 class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITableViewDelegate, UITableViewDataSource {
     
@@ -44,7 +19,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     
     var tasks: [Task]?
     
-    var taskDelegate: HomeTaskDetailDelegate?
+    var homeDelegate: HomeViewSceneDelegate?
     
     var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
     
@@ -55,7 +30,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
     @IBOutlet weak var tableView: UITableView!
     
     @IBAction func onAddTask(_ sender: Any) {
-        taskDelegate?.onAddTask(self, completion: nil)
+        homeDelegate?.presentTaskAddView()
     }
     
     override func awakeFromNib() {
@@ -129,7 +104,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
             return
         }
         
-        taskDelegate?.didSelectTask(self, task, indexPath, animated: true)
+        homeDelegate?.presentTaskEditView(for: task)
     }
     
     func tableView(_ tableView: UITableView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
@@ -139,7 +114,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         animator.addCompletion {
             let task = self.task(for: IndexPath(row: item, section: 0))!
             
-            self.taskDelegate?.showTaskDetail(task)
+            self.homeDelegate?.presentTaskEditView(for: task)
         }
         
     }
@@ -150,14 +125,9 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
         
         let config = UIContextMenuConfiguration(identifier: id, previewProvider: { () -> UIViewController? in
             
-//            let detail = TaskDetailTableViewController(style: .insetGrouped)
-//
-//            detail.tableView.isScrollEnabled = false
-//            detail.tableView.showsVerticalScrollIndicator = false
             let detail = TaskEditViewWrapper()
             
             detail.task = self.task(for: indexPath)
-            detail.taskDelegate = self.taskDelegate
             
             return detail
         }) { (element) -> UIMenu? in
@@ -182,7 +152,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 task.archived = true
                 TimetableService.shared.save()
                 
-                self.taskDelegate?.reload()
+                self.homeDelegate?.reload()
             }
             
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
@@ -193,7 +163,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 
                 TimetableService.shared.deleteTask(task)
                 
-                self.taskDelegate?.didDeleteTask(task)
+                self.homeDelegate?.reload()
                 
             }
             

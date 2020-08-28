@@ -35,6 +35,12 @@ struct NotificationOffset: Comparable, CaseIterable {
         return lhs.value == rhs.value
     }
     
+    static func from(dueDate: Date, notificationDate: Date) -> NotificationOffset {
+        let diff = notificationDate.distance(to: dueDate)
+        
+        return NotificationOffset(value: diff)
+    }
+    
     static let atEvent    = NotificationOffset(value: 0)
     static let min5         = NotificationOffset(value: 300)
     static let min10        = NotificationOffset(value: 600)
@@ -61,6 +67,13 @@ struct NotificationOffset: Comparable, CaseIterable {
     
     init(value: TimeInterval) {
         self.value = Int(value)
+    }
+    
+    init(dueDate: Date, notificationTrigger: Date) {
+        
+        let diff = notificationTrigger.distance(to: dueDate)
+        
+        self.init(value: diff)
     }
     
     var title: String {

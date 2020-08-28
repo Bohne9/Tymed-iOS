@@ -20,7 +20,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     /// Delegate for displaying LessonEditView etc.
-    var lessonDelegate: HomeCollectionViewDelegate?
+    var homeDelegate: HomeViewSceneDelegate?
     
     /// CalendarDayEntry for the cell
     var entry: CalendarDayEntry? {
@@ -113,7 +113,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
             return
         }
         // Present a LessonEditView when a lesson cell is selected
-        lessonDelegate?.lessonDetail(collectionView, for: lesson)
+        homeDelegate?.presentLessonEditView(for: lesson)
     }
 
     //MARK: cellForItemAt
@@ -191,7 +191,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
                 TimetableService.shared.deleteLesson(lesson)
                 
                 // Call delegate to reload the home scene
-                self.lessonDelegate?.lessonDidDelete(self.collectionView, lesson: lesson)
+                self.homeDelegate?.presentLessonEditView(for: lesson)
             }
             
             return UIMenu(title: "", image: nil, children: [delete])
@@ -211,7 +211,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
                 return
             }
             
-            self.lessonDelegate?.lessonDetail(self.collectionView, for: lesson)
+            self.homeDelegate?.presentLessonEditView(for: lesson)
         }
     }
 }

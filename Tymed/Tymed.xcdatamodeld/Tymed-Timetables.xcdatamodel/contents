@@ -29,11 +29,11 @@
         <relationship name="lesson" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lesson" inverseName="tasks" inverseEntity="Lesson"/>
         <relationship name="timetable" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="tasks" inverseEntity="Timetable"/>
     </entity>
-    <entity name="Timetable" representedClassName="Timetable" syncable="YES" codeGenerationType="class">
+    <entity name="Timetable" representedClassName="Timetable" syncable="YES">
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isDefault" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String" defaultValueString=" "/>
         <relationship name="subjects" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subject" inverseName="timetable" inverseEntity="Subject"/>
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="timetable" inverseEntity="Task"/>
     </entity>

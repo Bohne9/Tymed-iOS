@@ -25,6 +25,7 @@ internal let lessonSection = "lessonSection"
 internal let dueSection = "dueSection"
 internal let deleteSection = "deleteSection"
 
+@available(*, deprecated)
 //MARK: TaskAddViewController
 class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegate, UITextViewDelegate {
 
@@ -45,12 +46,9 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
 //    internal var taskLessonSection = 2
 //    internal var taskDueSection = 3
     
-    var detailDelegate: HomeDetailTableViewControllerDelegate?
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        self.navigationController?.presentationController?.delegate = self
+
     }
 
     override func setup() {
@@ -161,14 +159,11 @@ class TaskAddViewController: DynamicTableViewController, TaskLessonPickerDelegat
             NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
         }
         
-        detailDelegate?.detailWillDismiss()
-        
         dismiss(animated: true, completion: nil)
     }
     
     //MARK: cancel()
     @objc func cancel() {
-        detailDelegate?.detailWillDismiss()
         dismiss(animated: true, completion: nil)
     }
     
@@ -689,19 +684,6 @@ class TaskNotificationOffsetPickerTableViewController: UITableViewController {
         
         pickerDelegate?.didSelect(selectedOffset)
         navigationController?.popViewController(animated: true)
-    }
-    
-}
-
-
-extension TaskAddViewController: UIAdaptivePresentationControllerDelegate {
-    
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        detailDelegate?.detailWillDismiss()
-    }
-    
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        detailDelegate?.detailWillDismiss()
     }
     
 }

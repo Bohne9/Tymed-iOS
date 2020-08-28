@@ -674,16 +674,16 @@ class TimetableService {
         return getTasks(NSPredicate(format: "due >= %@ AND due <= %@ and archived == false", date1 as NSDate, date2 as NSDate))
     }
     
-    func getTasksOfToday() -> [Task] {
-        let startOfToday = Calendar.current.startOfDay(for: Date())
-        
-        var components = DateComponents()
-        components.day = 1
-        components.second = -1
-
-        guard let endOfToday = Calendar.current.date(byAdding: components, to: startOfToday) else { return [] }
-        
-        return getTasks(between: startOfToday, and: endOfToday).sorted()
+    func getNextTasks() -> [Task] {
+//        let startOfToday = Calendar.current.startOfDay(for: Date())
+//
+//        var components = DateComponents()
+//        components.day = 1
+//        components.second = -1
+//
+//        guard let endOfToday = Calendar.current.date(byAdding: components, to: startOfToday) else { return [] }
+//
+        return getTasks(after: Date()).sorted()
     }
     
     //MARK: deleteTask(_: )

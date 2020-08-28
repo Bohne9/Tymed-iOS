@@ -8,37 +8,23 @@
 
 import SwiftUI
 
-class LessonEditViewWrapper: UIViewController {
+class LessonEditViewWrapper: ViewWrapper<LessonEditView> {
     
-    var lessonDelegate: HomeDetailTableViewControllerDelegate?
     var lesson: Lesson?
     
-    var contentView: UIHostingController<LessonEditView>!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func createContent() -> UIHostingController<LessonEditView>? {
         guard let lesson = lesson else {
-            return
+            return nil
         }
         
-        contentView = UIHostingController(rootView: LessonEditView(
-                                                                lesson: lesson,
-                                                                dismiss: {
-                                                                    self.lessonDelegate?.detailWillDismiss()
-                                                                    self.dismiss(animated: true, completion: nil)
-                    }))
-        
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        setupConstraints()
+        return UIHostingController(rootView: LessonEditView(
+                                    lesson: lesson,
+                                    dismiss: {
+                                        self.homeDelegate?.reload()
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
     }
     
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.constraintToSuperview()
-    }
 }
 
 //MARK: LessonEditView
@@ -84,7 +70,7 @@ struct LessonEditContentView: View {
     
     @State private var sendNotification = false
     @State private var presentNotificationPicker = false
-    @State private var notificationOffset = NotificationOffset.atEvent
+    @State private var notificationOffset: NotificationOffset?
     
     //MARK: Color
     @State private var color: String = "blue"
@@ -230,7 +216,7 @@ struct LessonEditContentView: View {
                         label: {
                             HStack {
                                 Spacer()
-                                Text(notificationOffset.title)
+                                Text(notificationOffset?.title ?? "")
                             }
                         }).frame(height: 45)
                 }
@@ -373,6 +359,10 @@ struct LessonEditContentView: View {
         if !sendNotification {
             return nil
         }
+        guard let notificationOffset = notificationOffset else {
+            return ""
+        }
+        
         return "\(day.string()), \((startTime - notificationOffset.timeInterval).stringifyTime(with: .short))"
     }
     
@@ -397,6 +387,11 @@ struct LessonEditContentView: View {
         if sendNotification {
             lesson.getNotifications { (notifications) in
                 NotificationService.current.removeAllNotifications(of: lesson)
+                
+                guard let notificationOffset = notificationOffset else {
+                    return
+                }
+                
                 NotificationService.current.scheduleStartNotification(for: lesson, notificationOffset)
             }
         }else {

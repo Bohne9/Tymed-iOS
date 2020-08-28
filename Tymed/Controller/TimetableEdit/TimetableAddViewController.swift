@@ -63,7 +63,7 @@ class TimetableAddViewController: DynamicTableViewController {
     internal func createTimetable() -> Timetable? {
         let timetable = TimetableService.shared.timetable()
         
-        timetable.name = timetableTitle
+        timetable.name = timetableTitle ?? ""
         
         return timetable
     }

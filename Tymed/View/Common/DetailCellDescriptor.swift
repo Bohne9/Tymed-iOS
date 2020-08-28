@@ -43,6 +43,7 @@ struct DetailCellDescriptor: View {
             
             Spacer()
         }.frame(height: 45).contentShape(Rectangle())
+        .font(.system(size: 14, weight: .semibold))
     }
     
 }

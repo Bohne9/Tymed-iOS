@@ -36,6 +36,8 @@ class ViewController: UITabBarController {
         let homeTabItem = UITabBarItem(
             title: "Start",
             image: UIImage(systemName: "house", withConfiguration: config), tag: 0)
+        
+        homeTabItem.selectedImage = UIImage(systemName: "house.fill", withConfiguration: config)
 
         
         home.tabBarItem = homeTabItem
@@ -56,6 +58,8 @@ class ViewController: UITabBarController {
         
         profile.tabBarItem = profileTabItem
         
+        profileTabItem.selectedImage = UIImage(systemName: "person.fill", withConfiguration: config)
+        
         viewControllers = [home, add, profile]
     }
     
@@ -72,40 +76,31 @@ class ViewController: UITabBarController {
         
     }
     
-    private func generateProfileViewController() -> UINavigationController {
-        let nav = UINavigationController(rootViewController: profileVC)
-
-        return nav
-    }
-    
-    private func generateAddViewController() -> UIViewController {
-        
-        
-        let nav = UINavigationController(rootViewController: UIHostingController(rootView:
-                                                                                    TimetableOverview()
-                                                                                    .environment(\.managedObjectContext, AppDelegate.persistentContainer)))
-        
-//        let split = UISplitViewController()
-//
-//        split.preferredDisplayMode = UISplitViewController.DisplayMode.oneBesideSecondary
-//        split.viewControllers = [nav]
-//
-//        split.extendedLayoutIncludesOpaqueBars = true
-//
-//
-        
-        return nav
-        
-    }
-    
     private func generateHomeViewController() -> UINavigationController {
 
-        let nav = UINavigationController(navigationBarClass: NavigationBar.self, toolbarClass: nil)
-        nav.setViewControllers([homeVC], animated: false)
+       let nav = UINavigationController(navigationBarClass: NavigationBar.self, toolbarClass: nil)
+       nav.setViewControllers([homeVC], animated: false)
+       
+       return nav
+    }
+       
+       
+    private func generateAddViewController() -> UIViewController {
+        
+        let view = UIHostingController(rootView: TimetableOverview().environment(\.managedObjectContext, AppDelegate.persistentContainer))
+
+        let nav = UINavigationController(rootViewController: view)
+
+        return nav
+        
+    }
+    
+    private func generateProfileViewController() -> UIViewController {
+        let view = UIHostingController(rootView: ProfileView().environment(\.managedObjectContext, AppDelegate.persistentContainer))
+
+        let nav = UINavigationController(rootViewController: view)
         
         return nav
     }
-    
-    
 
 }

@@ -8,25 +8,15 @@
 
 import SwiftUI
 
-class LessonAddViewWrapper: UIViewController {
+class LessonAddViewWrapper: ViewWrapper<LessonAddView> {
     
-    lazy var contentView = UIHostingController(rootView: LessonAddView(dismiss: {
-        self.dismiss(animated: true, completion: nil)
-    }))
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        addChild(contentView)
-        view.addSubview(contentView.view)
-        
-        setupConstraints()
+    override func createContent() -> UIHostingController<LessonAddView>? {
+        return UIHostingController(rootView: LessonAddView(dismiss: {
+            self.homeDelegate?.reload()
+            self.dismiss(animated: true, completion: nil)
+        }))
     }
     
-    fileprivate func setupConstraints() {
-        contentView.view.translatesAutoresizingMaskIntoConstraints = false
-        contentView.view.constraintToSuperview()
-    }
 }
 
 //MARK: LessonAddView

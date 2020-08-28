@@ -14,7 +14,7 @@ class HomeDashTaskSelectorCollectionViewCell: UICollectionViewCell {
     let image = UIImageView()
     let selectedIndicator = UIImageView()
     
-    var type: HomeDashTaskSelectorCellType = .today {
+    var type: HomeDashTaskSelectorCellType = .next {
         didSet {
             configurator.configure(self)
         }
