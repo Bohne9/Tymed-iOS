@@ -155,6 +155,8 @@ struct TimetableDetail: View {
                 buttons: [.destructive(Text("Delete"), action: {
                     deleteTimetable()
                 }), .cancel()])
+        }.onChange(of: timetable.name) { value in
+            TimetableService.shared.save()
         }
     }
     
