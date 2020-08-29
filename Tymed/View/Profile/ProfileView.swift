@@ -16,10 +16,15 @@ struct ProfileView: View {
     @State
     private var email = ""
     
+    
+    @State
+    private var showProAccessPreview = false
+    
     var body: some View {
         List {
             
             // Me
+            /*
             Section {
                 
                 HStack(alignment: .top) {
@@ -38,16 +43,25 @@ struct ProfileView: View {
                     }
                     Spacer()
                 }.padding(.vertical, 10)
-            }
+            } */
+            
+            
             
             Section {
-                HStack {
-                    DetailCellDescriptor("Upgrade to Pro!", image: "star.fill", .clear)
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13, weight: .semibold))
-                }.foregroundColor(.white)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 5)
+                Button(action: {
+                    showProAccessPreview.toggle()
+                }, label: {
+                    HStack {
+                        DetailCellDescriptor("Upgrade to Pro!", image: "star.fill", .clear)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                    }.foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 5)
+                })
+                .sheet(isPresented: $showProAccessPreview, content: {
+                    ProAccesPreview()
+                })
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .background(Color(.systemOrange))
