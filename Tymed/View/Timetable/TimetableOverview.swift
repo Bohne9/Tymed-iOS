@@ -38,7 +38,7 @@ struct TimetableOverview: View {
                 ForEach(timetables, id: \.self) { (timetable: Timetable) in
                     NavigationLink(destination: TimetableDetail(timetable: timetable)) {
                         HStack {
-                            Text(timetable.name ?? "")
+                            Text(timetable.name)
                                 .font(.system(size: 15, weight: .semibold))
                             
                             Spacer()

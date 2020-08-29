@@ -14,7 +14,7 @@ class SettingsService {
     //MARK: SettingsServiceKeys
     enum SettingsServiceKeys: String {
         case taskAutoArchiveDelay = "taskAutoArchiveDelay"
-        
+        case notificationOffset = "notificationOffset"
         
     }
     
@@ -58,6 +58,19 @@ class SettingsService {
             }
             self.init(Int(delay))
         }
+        
+        var title: String {
+            switch self {
+            default:
+                if delay < 3600 {
+                    return "After \(delay / 60) minutes"
+                }else if delay < 3600 * 24 {
+                    return "After \(delay / 3600) hours"
+                }else {
+                    return "After \(delay / 86400) days"
+                }
+            }
+        }
     }
     
     //MARK: Variables
@@ -71,6 +84,18 @@ class SettingsService {
 
     // User defaults
     let defaults = UserDefaults.standard
+    
+    var notificationOffset: NotificationOffset? {
+        get {
+            guard let value = integer(.notificationOffset) else {
+                return nil
+            }
+            return NotificationOffset(value: value)
+        }
+        set {
+            set(newValue?.value, key: .notificationOffset)
+        }
+    }
     
     var taskAutoArchivingDelay: TaskAutoArchiveDelay? {
         get {

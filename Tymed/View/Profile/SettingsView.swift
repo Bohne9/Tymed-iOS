@@ -8,10 +8,14 @@
 
 import SwiftUI
 
+//MARK: SettingsView
 struct SettingsView: View {
     
     @State
     private var useICloud = false
+    
+    @State
+    private var notificationOffset: NotificationOffset? = SettingsService.shared.notificationOffset
     
     var body: some View {
         List {
@@ -57,12 +61,20 @@ struct SettingsView: View {
             
             Section (header: Text("Default values")) {
                 
-                NavigationLink (destination: Text("Default notification offset")) {
-                    DetailCellDescriptor("Default notification offset", image: "bell.badge.fill", .systemGreen, value: "15 minutes")
+                HStack {
+                    NavigationLink (destination: NotificationOffsetView(notificationOffset: $notificationOffset)) {
+                        DetailCellDescriptor("Default notification offset",
+                                             image: "bell.badge.fill",
+                                             .systemGreen,
+                                             value: defaultNotificationOffset())
+                    }
                 }
                 
                 NavigationLink (destination: Text("Auto archive tasks after")) {
-                    DetailCellDescriptor("Auto archive tasks after", image: "tray.full.fill", .systemOrange, value: "1 hour")
+                    DetailCellDescriptor("Auto archive tasks after",
+                                         image: "tray.full.fill",
+                                         .systemOrange,
+                                         value: autoArchiveTasks())
                 }
                 
             }
@@ -77,12 +89,39 @@ struct SettingsView: View {
             
             Section (header: Text("Danger zone")) {
                 DetailCellDescriptor("Reset app", image: "trash.fill", .systemRed)
-            }
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 11)
+                            .stroke(Color(.systemRed), lineWidth: 4)
+                    )
+            }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             
         }.listStyle(InsetGroupedListStyle())
         .navigationBarTitle("Settings")
+        .onChange(of: notificationOffset) { (value) in
+            SettingsService.shared.notificationOffset = notificationOffset
+        }
+        .onAppear {
+            
+        }
+    }
+    
+    private func defaultNotificationOffset() -> String {
+        guard let value = notificationOffset else {
+            return "-"
+        }
+        return value.title
+    }
+    
+    private func autoArchiveTasks() -> String {
+        guard let value = SettingsService.shared.taskAutoArchivingDelay else {
+            return "-"
+        }
+        return value.title
     }
 }
+
+
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
