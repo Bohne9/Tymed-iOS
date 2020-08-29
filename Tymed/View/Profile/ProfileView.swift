@@ -52,19 +52,41 @@ struct ProfileView: View {
                     showProAccessPreview.toggle()
                 }, label: {
                     HStack {
-                        DetailCellDescriptor("Upgrade to Pro!", image: "star.fill", .clear)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Tymed")
+                                Rectangle()
+                                    .frame(width: 65, height: 7.5)
+                                    .foregroundColor(Color(.white))
+                            }
+                                .font(.system(size: 18, weight: .heavy))
+                            
+                            Text("Pro")
+                                .font(.system(size: 16, weight: .heavy))
+                                .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                                .background(Color(.white))
+                                .cornerRadius(18)
+                                .foregroundColor(Color(.systemBlue))
+                         
+                            Spacer()
+                        }.font(.system(size: 13, weight: .semibold))
+                        
+                        Spacer()
+                        
+                        Text("Learn more")
+                            .font(.system(size: 14, weight: .semibold))
+                        
                         Image(systemName: "chevron.right")
                             .font(.system(size: 13, weight: .semibold))
                     }.foregroundColor(.white)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 5)
+                    .padding(20)
                 })
                 .sheet(isPresented: $showProAccessPreview, content: {
                     ProAccesPreview()
                 })
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            .background(Color(.systemOrange))
+            .background(Color(.systemBlue))
             
             Section {
                 NavigationLink (destination: Text("Tell your friends")) {
