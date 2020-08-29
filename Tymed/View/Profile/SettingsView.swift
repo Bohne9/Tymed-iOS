@@ -17,6 +17,9 @@ struct SettingsView: View {
     @State
     private var notificationOffset: NotificationOffset? = SettingsService.shared.notificationOffset
     
+    @State
+    private var autoArchive: SettingsService.TaskAutoArchiveDelay? = SettingsService.shared.taskAutoArchivingDelay
+    
     var body: some View {
         List {
             
@@ -70,7 +73,7 @@ struct SettingsView: View {
                     }
                 }
                 
-                NavigationLink (destination: Text("Auto archive tasks after")) {
+                NavigationLink (destination: AutoArchiveDelayTaskPickerView(autoArchiveDelay: $autoArchive)) {
                     DetailCellDescriptor("Auto archive tasks after",
                                          image: "tray.full.fill",
                                          .systemOrange,
@@ -100,7 +103,9 @@ struct SettingsView: View {
         .navigationBarTitle("Settings")
         .onChange(of: notificationOffset) { (value) in
             SettingsService.shared.notificationOffset = notificationOffset
-        }
+        }.onChange(of: autoArchive, perform: { (value) in
+            SettingsService.shared.taskAutoArchivingDelay = autoArchive
+        })
         .onAppear {
             
         }
@@ -114,13 +119,73 @@ struct SettingsView: View {
     }
     
     private func autoArchiveTasks() -> String {
-        guard let value = SettingsService.shared.taskAutoArchivingDelay else {
-            return "-"
+        guard let value = autoArchive else {
+            return "Never"
         }
         return value.title
     }
 }
 
+
+struct AutoArchiveDelayTaskPickerView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
+    @Binding
+    var autoArchiveDelay: SettingsService.TaskAutoArchiveDelay?
+    
+    var body: some View {
+        List {
+            
+            Section(header: Text("Info")) {
+                
+                Text("The app can automatically archive tasks with an expired due date. You can select how much time has to pass after the due date expires until the task is automatically archived.")
+                    .font(.system(size: 14, weight: .semibold))
+                
+            }
+            
+            HStack {
+                Text("Never")
+                    .font(.system(size: 14, weight: .semibold))
+                Spacer()
+                
+                if autoArchiveDelay == nil {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(Color(.systemBlue))
+                        .font(.system(size: 14, weight: .semibold))
+                }
+            }
+            .contentShape(Rectangle())
+            .frame(height: 45)
+            .onTapGesture {
+                autoArchiveDelay = nil
+                presentationMode.wrappedValue.dismiss()
+            }
+            
+            ForEach(SettingsService.TaskAutoArchiveDelay.allCases, id: \.delay) { delay in
+                HStack {
+                    Text(delay.title)
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                    
+                    if delay == autoArchiveDelay {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                }
+                .contentShape(Rectangle())
+                .frame(height: 45)
+                .onTapGesture {
+                    autoArchiveDelay = delay
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Alert")
+    }
+
+}
 
 
 struct SettingsView_Previews: PreviewProvider {

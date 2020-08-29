@@ -19,16 +19,27 @@ class SettingsService {
     }
     
     //MARK: TaskAutoArchiveDefault
-    class TaskAutoArchiveDelay: Equatable {
+    struct TaskAutoArchiveDelay: Equatable, CaseIterable {
+        
+        typealias AllCases = [TaskAutoArchiveDelay]
+        
         static func == (lhs: SettingsService.TaskAutoArchiveDelay, rhs: SettingsService.TaskAutoArchiveDelay) -> Bool {
             return lhs.delay == rhs.delay
         }
         
-        static let none: TaskAutoArchiveDelay? = nil
         static let immediately = TaskAutoArchiveDelay(0)
         static let hour = TaskAutoArchiveDelay(3600)
         static let day = TaskAutoArchiveDelay(86400)
         static let week = TaskAutoArchiveDelay(604800)
+        
+        static var allCases: [TaskAutoArchiveDelay] {
+            return [
+                immediately!,
+                hour!,
+                day!,
+                week!
+            ]
+        }
         
         static func other(delay: Int?) -> TaskAutoArchiveDelay? {
             return TaskAutoArchiveDelay(delay)
@@ -51,7 +62,7 @@ class SettingsService {
             self.delay = delay
         }
         
-        internal convenience init?(_ delay: TimeInterval?) {
+        internal init?(_ delay: TimeInterval?) {
             guard let delay = delay else {
                 self.init(0)
                 return
