@@ -57,11 +57,14 @@ struct TimetableAddView: View {
         
         timetable.name = timetableName
         
-        TimetableService.shared.save()
         
         if isNewDefault {
             TimetableService.shared.setDefaultTimetable(timetable)
+        }else {
+            timetable.isDefault = false
         }
+        
+        TimetableService.shared.save()
         
         presentationMode.wrappedValue.dismiss()
     }
