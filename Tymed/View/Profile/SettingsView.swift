@@ -182,7 +182,7 @@ struct AutoArchiveDelayTaskPickerView: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Alert")
+        .navigationTitle("Task auto archiving")
     }
 
 }

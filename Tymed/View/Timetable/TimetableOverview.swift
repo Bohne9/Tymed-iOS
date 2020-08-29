@@ -124,7 +124,7 @@ struct TimetableOverview: View {
             }else if showTaskAdd {
                 TaskAddView(dismiss: { })
             }else {
-                Text("Timetable")
+                TimetableAddView()
             }
         })
         .actionSheet(isPresented: $showAddActionSheet, content: {
