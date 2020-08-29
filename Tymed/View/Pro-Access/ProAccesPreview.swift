@@ -9,6 +9,10 @@
 import SwiftUI
 
 struct ProAccesPreview: View {
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
     var body: some View {
 //        ScrollView {
             VStack {
@@ -29,6 +33,14 @@ struct ProAccesPreview: View {
                         .foregroundColor(.white)
                  
                     Spacer()
+                    
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Image(systemName: "multiply.circle.fill")
+                            .font(.system(size: 25, weight: .bold))
+                            .foregroundColor(.gray)
+                    })
                 }
                 .padding(.bottom, 20)
                 

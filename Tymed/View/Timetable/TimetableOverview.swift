@@ -102,6 +102,10 @@ struct TimetableOverview: View {
                 .transition(AnyTransition.scale)
             }
             
+            Section {
+                ProAccessBadge()
+            }
+            
         }.listStyle(InsetGroupedListStyle())
         .transition(.scale)
         .font(.system(size: 16, weight: .semibold))
