@@ -14,6 +14,9 @@ struct TaskPreviewCell: View {
     @ObservedObject
     var task: Task
     
+    @State
+    private var showDetail = false
+    
     var body: some View {
         
         HStack(alignment: .center) {
@@ -40,12 +43,20 @@ struct TaskPreviewCell: View {
                 Spacer()
                 if let date = task.due {
                     Text(date.stringify(dateStyle: .short, timeStyle: .short))
-                        .font(.system(size: 14, weight: .regular))
+                        .font(.system(size: 12, weight: .semibold))
                 }
             }.padding(.vertical, 5)
         }.frame(height: 50)
         .padding(.vertical, 8)
         .contentShape(Rectangle())
+        .onTapGesture {
+            showDetail.toggle()
+        }
+        .sheet(isPresented: $showDetail, content: {
+            TaskEditView(task: task) {
+                
+            }
+        })
         
     }
     
