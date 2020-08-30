@@ -13,6 +13,8 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
 //    var homeDelegate: HomeCollectionViewDelegate?
 //    var taskDelegate: HomeTaskDetailDelegate?
     
+    var homeViewControllerDelegate: HomeViewControllerDelegate?
+    
     var homeDelegate: HomeViewSceneDelegate?
 
     var sectionIdentifiers: [String] = []
@@ -108,9 +110,13 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
     }
     
     /// Fetches the data and reloads the collection view
-    func reload() {
+    func reloadData() {
         fetchData()
         collectionView.reloadData()
+    }
+    
+    func reload() {
+        homeViewControllerDelegate?.reloadHomeView()
     }
     
     internal func fetchData() {

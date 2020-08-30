@@ -11,26 +11,19 @@ import SwiftUI
 
 let reuseIdentifier = "cell"
 
+protocol HomeViewControllerDelegate {
+    
+    func reloadHomeView()
+    
+}
+
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NavigationBarDelegate {
 
-    var dashCollectionView: HomeDashCollectionView = {
-        let homeDash = HomeDashCollectionView()
-        
-        return homeDash
-    }()
+    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
     
-    var tasksCollectionView: HomeTaskCollectionView = {
-        let homeTask = HomeTaskCollectionView()
-        
-        return homeTask
-    }()
+    var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
     
-    var weekCollectionView: HomeWeekCollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        let homeWeek = HomeWeekCollectionView()
-        
-        return homeWeek
-    }()
+    var weekCollectionView: HomeWeekCollectionView = HomeWeekCollectionView()
     
     var currentPage = 0 {
         didSet {
@@ -63,6 +56,11 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         view.backgroundColor = .systemGroupedBackground
         
         tasksCollectionView.taskOverviewDelegate = self
+        
+        
+        dashCollectionView.homeViewControllerDelegate = self
+        tasksCollectionView.homeViewControllerDelegate = self
+        weekCollectionView.homeViewControllerDelegate = self
     }
     
     func setupFlowLayout() {
@@ -95,9 +93,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func reload() {
-        dashCollectionView.reload()
-        tasksCollectionView.reload()
-        weekCollectionView.reload()
+        dashCollectionView.reloadData()
+        tasksCollectionView.reloadData()
+        weekCollectionView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -190,11 +188,22 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.present(taskView, animated: animated, completion: nil)
         
     }
+    
+    
 }
 
 extension HomeViewController: TaskOverviewTableviewCellDelegate {
 
     func onChange(_ cell: TaskOverviewTableViewCell) {
+        reload()
+    }
+    
+}
+
+
+extension HomeViewController: HomeViewControllerDelegate {
+    
+    func reloadHomeView() {
         reload()
     }
     
