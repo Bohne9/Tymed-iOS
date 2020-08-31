@@ -55,8 +55,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.backgroundColor = .systemGroupedBackground
         view.backgroundColor = .systemGroupedBackground
         
+        dashCollectionView.taskOverviewDelegate = self
         tasksCollectionView.taskOverviewDelegate = self
-        
         
         dashCollectionView.homeViewControllerDelegate = self
         tasksCollectionView.homeViewControllerDelegate = self

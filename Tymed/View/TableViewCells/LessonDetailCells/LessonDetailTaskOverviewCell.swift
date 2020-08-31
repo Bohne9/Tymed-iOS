@@ -196,7 +196,7 @@ class LessonDetailTaskOverviewCell: UITableViewCell, UITableViewDelegate, UITabl
                 // Delay the complete toogle for the animation.
                 // The context menu animation has to end
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                    cell.completeToogle()
+                    cell.completeToggle()
                 }
                 
             }

@@ -139,7 +139,7 @@ class HomeDashTaskOverviewCollectionViewCell: HomeBaseCollectionViewCell, UITabl
                 // Delay the complete toogle for the animation.
                 // The context menu animation has to e-nd
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                    cell.completeToogle()
+                    cell.completeToggle()
                 }
                 
             }

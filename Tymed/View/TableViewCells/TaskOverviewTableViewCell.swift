@@ -103,7 +103,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         complete.constraint(width: 27, height: 27)
         complete.constraintCenterYToSuperview(constant: 0)
         
-        complete.addTarget(self, action: #selector(completeToogle), for: .touchUpInside)
+        complete.addTarget(self, action: #selector(completeToggle), for: .touchUpInside)
         
         // Setup subject indicator
         subjectIndicator.constraint(width: 10, height: 10)
@@ -150,7 +150,7 @@ class TaskOverviewTableViewCell: UITableViewCell {
         
     }
     
-    @objc func completeToogle() {
+    @objc func completeToggle() {
         task.completed.toggle()
         
         task.completionDate = task.completed ? Date() : nil
@@ -175,10 +175,12 @@ class TaskOverviewTableViewCell: UITableViewCell {
                 }
             })
         }else {
-            UIView.transition(with: self.titleLabel, duration: 0.35, options: .transitionCrossDissolve, animations: {
+            UIView.transition(with: self.titleLabel, duration: 0.3, options: .transitionCrossDissolve) {
                 self.reload(self.task)
+            } completion: { _ in
                 self.taskOverviewDelegate?.onChange(self)
-            })
+            }
+
         }
         
         layoutIfNeeded()
