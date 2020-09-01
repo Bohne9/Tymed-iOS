@@ -99,6 +99,7 @@
 		4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */; };
 		4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */; };
 		4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5784924DF32DA0066F130 /* TimetableDetail.swift */; };
+		4FB62F1624FE2C7A00174CB5 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */; };
 		4FB8F4CA24F192790015EC8E /* CalendarDayEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */; };
 		4FB8F4CC24F192950015EC8E /* CalendarEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */; };
 		4FB8F4CE24F195CC0015EC8E /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */; };
@@ -247,6 +248,7 @@
 		4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4FB5784924DF32DA0066F130 /* TimetableDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetail.swift; sourceTree = "<group>"; };
+		4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayEntry.swift; sourceTree = "<group>"; };
 		4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEntry.swift; sourceTree = "<group>"; };
 		4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 			children = (
 				4F2BBFBD24F4451400CE92DD /* ProfileView.swift */,
 				4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */,
+				4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -944,6 +947,7 @@
 				4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */,
 				4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */,
 				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
+				4FB62F1624FE2C7A00174CB5 /* FeedbackView.swift in Sources */,
 				4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* TimetableOverviewViewController.swift in Sources */,
 				4F12659624B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift in Sources */,
