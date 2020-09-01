@@ -91,7 +91,7 @@ struct SettingsView: View {
             }
             
             Section (header: Text("Danger zone")) {
-                DetailCellDescriptor("Reset app", image: "trash.fill", .systemRed)
+                DetailCellDescriptor("Reset the app", image: "trash.fill", .systemRed)
                     .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     .overlay(
                         RoundedRectangle(cornerRadius: 11)
