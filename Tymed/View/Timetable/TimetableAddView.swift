@@ -71,6 +71,7 @@ struct TimetableAddView: View {
                     
                 }
                 
+                //MARK: Add subject
                 Section {
                     HStack {
                         
@@ -86,14 +87,14 @@ struct TimetableAddView: View {
                                     .foregroundColor(Color(.systemBlue))
                                     .font(.system(size: 20, weight: .semibold))
                                 Text("Add subject")
-                                    .font(.system(size: 15, weight: .semibold))
+                                    .font(.system(size: 13, weight: .semibold))
                             }
                                                         
                         }
 
                         Spacer()
                         
-                    }
+                    }.padding(.vertical, 4)
                 }
                 
             }
@@ -139,6 +140,7 @@ struct TimetableAddView: View {
     }
 }
 
+//MARK: SubjectAddSection
 struct SubjectAddSection: View {
     
     @ObservedObject
@@ -149,7 +151,7 @@ struct SubjectAddSection: View {
             HStack {
                 
                 TextField("Name", text: $subject.name)
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                 
                 Spacer()
                 
@@ -163,6 +165,9 @@ struct SubjectAddSection: View {
                 }.labelsHidden()
                 .pickerStyle(InlinePickerStyle())
                 .frame(width: 30, height: 30)
+                .padding(4)
+                .clipped()
+                .contentShape(RoundedRectangle(cornerRadius: 5))
             }
         }
     }
