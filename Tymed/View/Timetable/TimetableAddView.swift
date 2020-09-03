@@ -19,6 +19,9 @@ struct TimetableAddView: View {
     @State
     private var isNewDefault = false
     
+    @State
+    private var subjects: [Subject] = []
+    
     var body: some View {
         NavigationView {
             List {
@@ -33,6 +36,63 @@ struct TimetableAddView: View {
                         
                         Toggle("", isOn: $isNewDefault)
                             .labelsHidden()
+                    }
+                }
+                
+                //MARK: Subjects
+                ForEach(subjects) { subject in
+                    
+                    Section {
+                        VStack {
+                            HStack(alignment: .top) {
+                                
+                                Text("Subject")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundColor(Color(.systemGray))
+                                
+                                Spacer()
+                                
+                                Button {
+                                    subjects.removeAll { (sub) -> Bool in
+                                        sub.id == subject.id
+                                    }
+                                } label: {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .foregroundColor(Color(.systemGray))
+                                        .font(.system(size: 16, weight: .semibold))
+                                }
+                                
+                            }.frame(height: 40)
+                            .padding(.bottom)
+                            
+                            SubjectAddSection(subject: subject)
+                        }
+                    }
+                    
+                }
+                
+                Section {
+                    HStack {
+                        
+                        Spacer()
+                        
+                        Button {
+                            withAnimation {
+                                addSubject("")
+                            }
+                        } label: {
+                            VStack {
+                                Image(systemName: "plus.circle.fill")
+                                    .foregroundColor(Color(.systemBlue))
+                                    .font(.system(size: 20, weight: .semibold))
+                                Text("Add subject")
+                                    .font(.system(size: 15, weight: .semibold))
+                            }
+                                                        
+                        }
+
+                        Spacer()
+                        
                     }
                 }
                 
@@ -68,7 +128,48 @@ struct TimetableAddView: View {
         
         presentationMode.wrappedValue.dismiss()
     }
+ 
+    private func addSubject(_ name: String) {
+        
+        guard let subject = TimetableService.shared.subject(with: name) else {
+            return
+        }
+        
+        subjects.append(subject)
+    }
+}
+
+struct SubjectAddSection: View {
     
+    @ObservedObject
+    var subject: Subject
+    
+    var body: some View {
+        VStack {
+            HStack {
+                
+                TextField("Name", text: $subject.name)
+                    .font(.system(size: 15, weight: .semibold))
+                
+                Spacer()
+                
+                Picker("", selection: $subject.color) {
+                    ForEach(colors(), id: \.self) { color in
+                        Rectangle()
+                            .frame(width: 25, height: 25)
+                            .foregroundColor(Color(UIColor(named: color)!))
+                            .cornerRadius(5)
+                    }
+                }.labelsHidden()
+                .pickerStyle(InlinePickerStyle())
+                .frame(width: 30, height: 30)
+            }
+        }
+    }
+    
+    private func colors() -> [String] {
+        return ["red", "blue", "orange", "green", "dark"]
+    }
 }
 
 struct TimetableAddView_Previews: PreviewProvider {
