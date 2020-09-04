@@ -46,6 +46,10 @@ struct TimetableAddView: View {
                         VStack {
                             HStack(alignment: .top) {
                                 
+                                Image(systemName: "plus.square.fill")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(.white)
+                                
                                 Text("Subject")
                                     .font(.system(size: 14, weight: .regular))
                                     .foregroundColor(Color(.systemGray))
@@ -53,17 +57,19 @@ struct TimetableAddView: View {
                                 Spacer()
                                 
                                 Button {
-                                    subjects.removeAll { (sub) -> Bool in
-                                        sub.id == subject.id
+                                    withAnimation {
+                                        subjects.removeAll { (sub) -> Bool in
+                                            sub.id == subject.id
+                                        }
+                                        TimetableService.shared.deleteSubject(subject)
                                     }
                                 } label: {
                                     Image(systemName: "multiply.circle.fill")
                                         .foregroundColor(Color(.systemGray))
-                                        .font(.system(size: 16, weight: .semibold))
+                                        .font(.system(size: 20, weight: .semibold))
                                 }
                                 
-                            }.frame(height: 40)
-                            .padding(.bottom)
+                            }.frame(height: 30)
                             
                             SubjectAddSection(subject: subject)
                         }
@@ -79,13 +85,14 @@ struct TimetableAddView: View {
                         
                         Button {
                             withAnimation {
-                                addSubject("")
+                                addSubject()
                             }
                         } label: {
                             VStack {
                                 Image(systemName: "plus.circle.fill")
                                     .foregroundColor(Color(.systemBlue))
                                     .font(.system(size: 20, weight: .semibold))
+                                    .padding(.bottom, 4)
                                 Text("Add subject")
                                     .font(.system(size: 13, weight: .semibold))
                             }
@@ -118,6 +125,9 @@ struct TimetableAddView: View {
         
         timetable.name = timetableName
         
+        subjects.forEach { (subject) in
+            subject.timetable = timetable
+        }
         
         if isNewDefault {
             TimetableService.shared.setDefaultTimetable(timetable)
@@ -130,11 +140,12 @@ struct TimetableAddView: View {
         presentationMode.wrappedValue.dismiss()
     }
  
-    private func addSubject(_ name: String) {
+    private func addSubject() {
         
-        guard let subject = TimetableService.shared.subject(with: name) else {
-            return
-        }
+        let subject = TimetableService.shared.subject()
+        
+        subject.name = ""
+        subject.color = "red"
         
         subjects.append(subject)
     }
@@ -169,11 +180,44 @@ struct SubjectAddSection: View {
                 .clipped()
                 .contentShape(RoundedRectangle(cornerRadius: 5))
             }
+            
+            Divider()
+            
+            ForEach(lessons()) { lesson in
+                Text("lesson")
+                Divider()
+            }
+            
+            HStack {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundColor(Color(.systemGreen))
+                    .font(.system(size: 20, weight: .semibold))
+                Text("Add lesson")
+                Spacer()
+            }.contentShape(Rectangle())
+            .frame(height: 40)
+            .padding(.bottom, 5)
+            .onTapGesture {
+                withAnimation {
+                    addLesson()
+                }
+            }
+            
         }
     }
     
     private func colors() -> [String] {
         return ["red", "blue", "orange", "green", "dark"]
+    }
+    
+    private func lessons() -> [Lesson] {
+        return subject.lessons?.allObjects as? [Lesson] ?? []
+    }
+    
+    private func addLesson() {
+        let lesson = TimetableService.shared.lesson()
+        
+        lesson.subject = subject
     }
 }
 
