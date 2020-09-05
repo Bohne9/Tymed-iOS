@@ -39,6 +39,10 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         fatalError("init(coder:) has not been implemented")
     }
     
+    func reload() {
+        collectionView.reloadData()
+    }
+    
     //MARK: setupView
     private func setupView() {
         backgroundColor = .systemGroupedBackground

@@ -38,7 +38,7 @@ struct TimetableOverview: View {
                 ForEach(timetables, id: \.self) { (timetable: Timetable) in
                     NavigationLink(destination: TimetableDetail(timetable: timetable)) {
                         HStack {
-                            Text(timetable.name ?? "")
+                            Text(timetable.name)
                                 .font(.system(size: 15, weight: .semibold))
                             
                             Spacer()
@@ -102,6 +102,10 @@ struct TimetableOverview: View {
                 .transition(AnyTransition.scale)
             }
             
+            Section {
+                ProAccessBadge()
+            }
+            
         }.listStyle(InsetGroupedListStyle())
         .transition(.scale)
         .font(.system(size: 16, weight: .semibold))
@@ -120,7 +124,7 @@ struct TimetableOverview: View {
             }else if showTaskAdd {
                 TaskAddView(dismiss: { })
             }else {
-                Text("Timetable")
+                TimetableAddView()
             }
         })
         .actionSheet(isPresented: $showAddActionSheet, content: {

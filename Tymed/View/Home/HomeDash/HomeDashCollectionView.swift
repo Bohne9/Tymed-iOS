@@ -41,6 +41,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     
     var tasks: [Task]?
     
+    var taskOverviewDelegate: TaskOverviewTableviewCellDelegate?
+    
     //MARK: UI setup
     override internal func setupUserInterface() {
         super.setupUserInterface()
@@ -190,6 +192,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 cell.size = .large
                 cell.tasks = tasks
                 cell.homeDelegate = homeDelegate
+                cell.taskOverviewDelegate = taskOverviewDelegate
                 cell.reload()
                 
                 return cell

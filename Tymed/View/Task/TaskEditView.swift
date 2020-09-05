@@ -206,20 +206,20 @@ struct TaskEditContent: View {
                 
                 if hasLessonAttached {
                     NavigationLink(
-                        destination: LessonPickerView(lesson: $lesson),
+                        destination: LessonPickerView(lesson: $task.lesson),
                         label: {
                             HStack {
-                                if lesson != nil {
+                                if task.lesson != nil {
                                     Circle()
                                         .frame(width: 12, height: 12)
-                                        .foregroundColor(subjectColor(lesson))
+                                        .foregroundColor(subjectColor(task.lesson))
                                 }
                                 
                                 Text(titleForLessonCell())
                                     .foregroundColor(foregroundColorForLessonCell())
                                     .font(.system(size: 14, weight: .semibold))
                                 Spacer()
-                                if lesson != nil {
+                                if task.lesson != nil {
                                     Text(textForLessonDate())
                                         .multilineTextAlignment(.trailing)
                                         .font(.system(size: 12, weight: .semibold))
@@ -317,12 +317,12 @@ struct TaskEditContent: View {
     
     //MARK: titleForLessonCell
     private func titleForLessonCell() -> String {
-        return lesson?.subject?.name ?? "Choose a lesson"
+        return task.lesson?.subject?.name ?? "Choose a lesson"
     }
     
     //MARK: textForLessonDate
     private func textForLessonDate() -> String {
-        guard let lesson = self.lesson else {
+        guard let lesson = self.task.lesson else {
             return ""
         }
         
@@ -332,7 +332,7 @@ struct TaskEditContent: View {
     
     //MARK: foregroundColorForLessonCell
     private func foregroundColorForLessonCell() -> Color {
-        return lesson?.subject?.name != nil ? Color(.label) : Color(.systemBlue)
+        return task.lesson?.subject?.name != nil ? Color(.label) : Color(.systemBlue)
     }
     
     //MARK: textForNotificationCell

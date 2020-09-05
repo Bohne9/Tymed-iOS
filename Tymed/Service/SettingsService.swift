@@ -14,21 +14,32 @@ class SettingsService {
     //MARK: SettingsServiceKeys
     enum SettingsServiceKeys: String {
         case taskAutoArchiveDelay = "taskAutoArchiveDelay"
-        
+        case notificationOffset = "notificationOffset"
         
     }
     
     //MARK: TaskAutoArchiveDefault
-    class TaskAutoArchiveDelay: Equatable {
+    struct TaskAutoArchiveDelay: Equatable, CaseIterable {
+        
+        typealias AllCases = [TaskAutoArchiveDelay]
+        
         static func == (lhs: SettingsService.TaskAutoArchiveDelay, rhs: SettingsService.TaskAutoArchiveDelay) -> Bool {
             return lhs.delay == rhs.delay
         }
         
-        static let none: TaskAutoArchiveDelay? = nil
         static let immediately = TaskAutoArchiveDelay(0)
         static let hour = TaskAutoArchiveDelay(3600)
         static let day = TaskAutoArchiveDelay(86400)
         static let week = TaskAutoArchiveDelay(604800)
+        
+        static var allCases: [TaskAutoArchiveDelay] {
+            return [
+                immediately!,
+                hour!,
+                day!,
+                week!
+            ]
+        }
         
         static func other(delay: Int?) -> TaskAutoArchiveDelay? {
             return TaskAutoArchiveDelay(delay)
@@ -51,12 +62,25 @@ class SettingsService {
             self.delay = delay
         }
         
-        internal convenience init?(_ delay: TimeInterval?) {
+        internal init?(_ delay: TimeInterval?) {
             guard let delay = delay else {
                 self.init(0)
                 return
             }
             self.init(Int(delay))
+        }
+        
+        var title: String {
+            switch self {
+            default:
+                if delay < 3600 {
+                    return "After \(delay / 60) minutes"
+                }else if delay < 3600 * 24 {
+                    return "After \(delay / 3600) hours"
+                }else {
+                    return "After \(delay / 86400) days"
+                }
+            }
         }
     }
     
@@ -71,6 +95,18 @@ class SettingsService {
 
     // User defaults
     let defaults = UserDefaults.standard
+    
+    var notificationOffset: NotificationOffset? {
+        get {
+            guard let value = integer(.notificationOffset) else {
+                return nil
+            }
+            return NotificationOffset(value: value)
+        }
+        set {
+            set(newValue?.value, key: .notificationOffset)
+        }
+    }
     
     var taskAutoArchivingDelay: TaskAutoArchiveDelay? {
         get {

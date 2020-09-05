@@ -58,7 +58,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         entries = [
             CalendarWeekEntry(date: CalendarService.shared.previousWeek(before: Date()) ?? Date()),
             CalendarWeekEntry.entryForCurrentWeek(),
-            CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())]
+            CalendarWeekEntry(date: CalendarService.shared.nextWeek(after: Date()) ?? Date())
+        ]
         
         collectionView.reloadData()
         
@@ -140,6 +141,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         if let entry = calendarDayEntry(for: indexPath) {
             cell.entry = entry
         }
+        
+        cell.reload()
         
         return cell
     }

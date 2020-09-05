@@ -209,6 +209,8 @@ class TimetableService {
         let subject = Subject(context: context)
         subject.id = UUID()
         
+        subject.createdAt = Date()
+        
         return subject
     }
     

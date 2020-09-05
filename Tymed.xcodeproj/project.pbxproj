@@ -99,6 +99,7 @@
 		4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */; };
 		4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */; };
 		4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB5784924DF32DA0066F130 /* TimetableDetail.swift */; };
+		4FB62F1624FE2C7A00174CB5 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */; };
 		4FB8F4CA24F192790015EC8E /* CalendarDayEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */; };
 		4FB8F4CC24F192950015EC8E /* CalendarEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */; };
 		4FB8F4CE24F195CC0015EC8E /* CalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */; };
@@ -116,6 +117,9 @@
 		4FCDEAEA247AABE9001B36F4 /* TaskTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */; };
 		4FCDEAEB247AABE9001B36F4 /* TaskTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */; };
 		4FD11E4824D6CA86008D9772 /* TaskAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD11E4724D6CA86008D9772 /* TaskAddView.swift */; };
+		4FD270C624FADBE500D0075C /* TimetableAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD270C524FADBE500D0075C /* TimetableAddView.swift */; };
+		4FD92C2824FA080D00A51441 /* ProAccesPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD92C2724FA080C00A51441 /* ProAccesPreview.swift */; };
+		4FD92C2A24FA11DB00A51441 /* ProAccessBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD92C2924FA11DB00A51441 /* ProAccessBadge.swift */; };
 		4FDAFA4E24EC61BA007DC51D /* HomeWeekLessonCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAFA4D24EC61BA007DC51D /* HomeWeekLessonCollectionViewCell.swift */; };
 		4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */; };
 		4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFA61ED24D007E100C9F290 /* SettingsService.swift */; };
@@ -244,6 +248,7 @@
 		4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4FB5784924DF32DA0066F130 /* TimetableDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetail.swift; sourceTree = "<group>"; };
+		4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayEntry.swift; sourceTree = "<group>"; };
 		4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEntry.swift; sourceTree = "<group>"; };
 		4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarService.swift; sourceTree = "<group>"; };
@@ -262,6 +267,9 @@
 		4FCDEAE8247AABE9001B36F4 /* TaskTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTitleTableViewCell.swift; sourceTree = "<group>"; };
 		4FCDEAE9247AABE9001B36F4 /* TaskTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTitleTableViewCell.xib; sourceTree = "<group>"; };
 		4FD11E4724D6CA86008D9772 /* TaskAddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskAddView.swift; sourceTree = "<group>"; };
+		4FD270C524FADBE500D0075C /* TimetableAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableAddView.swift; sourceTree = "<group>"; };
+		4FD92C2724FA080C00A51441 /* ProAccesPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProAccesPreview.swift; sourceTree = "<group>"; };
+		4FD92C2924FA11DB00A51441 /* ProAccessBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProAccessBadge.swift; sourceTree = "<group>"; };
 		4FDAFA4D24EC61BA007DC51D /* HomeWeekLessonCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekLessonCollectionViewCell.swift; sourceTree = "<group>"; };
 		4FEE40F1246B2D5C00DFFF73 /* HomeWeekCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekCollectionView.swift; sourceTree = "<group>"; };
 		4FFA61ED24D007E100C9F290 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
@@ -394,6 +402,7 @@
 			children = (
 				4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */,
 				4FB5784924DF32DA0066F130 /* TimetableDetail.swift */,
+				4FD270C524FADBE500D0075C /* TimetableAddView.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -403,6 +412,7 @@
 			children = (
 				4F2BBFBD24F4451400CE92DD /* ProfileView.swift */,
 				4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */,
+				4FB62F1524FE2C7A00174CB5 /* FeedbackView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -536,6 +546,7 @@
 				4F38C4AB24E69E5D0082517E /* Subject */,
 				4F2BBFBB24F444E700CE92DD /* Timetable */,
 				4F2BBFBC24F444F900CE92DD /* Profile */,
+				4FD92C2624FA07DD00A51441 /* Pro-Access */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -668,6 +679,15 @@
 				4F5B4E9424C62A2A0098F4A7 /* TimetableDetailCells */,
 			);
 			path = TableViewCells;
+			sourceTree = "<group>";
+		};
+		4FD92C2624FA07DD00A51441 /* Pro-Access */ = {
+			isa = PBXGroup;
+			children = (
+				4FD92C2724FA080C00A51441 /* ProAccesPreview.swift */,
+				4FD92C2924FA11DB00A51441 /* ProAccessBadge.swift */,
+			);
+			path = "Pro-Access";
 			sourceTree = "<group>";
 		};
 		623734F54A543F75F5356A5E /* Frameworks */ = {
@@ -927,6 +947,7 @@
 				4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */,
 				4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */,
 				4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */,
+				4FB62F1624FE2C7A00174CB5 /* FeedbackView.swift in Sources */,
 				4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* TimetableOverviewViewController.swift in Sources */,
 				4F12659624B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift in Sources */,
@@ -937,10 +958,12 @@
 				4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */,
 				4F3F628A247AB68500A69202 /* TaskDescriptionTableViewCell.swift in Sources */,
 				4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */,
+				4FD92C2A24FA11DB00A51441 /* ProAccessBadge.swift in Sources */,
 				4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
 				4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */,
 				4F2A7DC424AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift in Sources */,
+				4FD92C2824FA080D00A51441 /* ProAccesPreview.swift in Sources */,
 				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
 				4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */,
 				4FB8F4CE24F195CC0015EC8E /* CalendarService.swift in Sources */,
@@ -987,6 +1010,7 @@
 				4FC8210624C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift in Sources */,
 				4F3F6295247AF75A00A69202 /* TaskDueDateTableViewCell.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
+				4FD270C624FADBE500D0075C /* TimetableAddView.swift in Sources */,
 				4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */,
 				4FB8F4D424F50DAF0015EC8E /* SettingsView.swift in Sources */,
 				4F6F6F0124DD1DF2006EC4BE /* LessonPickerView.swift in Sources */,

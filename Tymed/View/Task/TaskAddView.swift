@@ -61,7 +61,7 @@ struct TaskAddView: View {
     private var presentNotificationPicker = false
     
     @State
-    var notificationOffset: NotificationOffset?
+    var notificationOffset: NotificationOffset? = SettingsService.shared.notificationOffset
     
     //MARK: Lesson state
     @State
