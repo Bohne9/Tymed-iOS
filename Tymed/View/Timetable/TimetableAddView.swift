@@ -184,7 +184,7 @@ struct SubjectAddSection: View {
             Divider()
             
             ForEach(lessons()) { lesson in
-                Text("lesson")
+                LessonAddRow(lesson: lesson)
                 Divider()
             }
             
@@ -218,6 +218,49 @@ struct SubjectAddSection: View {
         let lesson = TimetableService.shared.lesson()
         
         lesson.subject = subject
+    }
+}
+
+struct LessonAddRow: View {
+    
+    @ObservedObject
+    var lesson: Lesson
+    
+    @State
+    var startDate: Date = Date()
+    
+    @State
+    var endDate: Date = Date()
+    
+    var body: some View {
+        HStack {
+            
+            Picker("", selection: $lesson.dayOfWeek) {
+                ForEach(Day.allCases, id: \.rawValue) { day in
+                    Text(day.string())
+                        .cornerRadius(4)
+                }
+            }
+            .labelsHidden()
+            .pickerStyle(WheelPickerStyle())
+            .frame(width: 130, height: 40)
+            .clipped()
+            .contentShape(RoundedRectangle(cornerRadius: 5))
+            
+            Spacer()
+            
+            DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .labelsHidden()
+                .frame(width: 80, height: 40)
+            
+            Text(":")
+            
+            DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
+                .datePickerStyle(GraphicalDatePickerStyle())
+                .labelsHidden()
+                .frame(width: 80, height: 40)
+        }.frame(height: 45)
     }
 }
 
