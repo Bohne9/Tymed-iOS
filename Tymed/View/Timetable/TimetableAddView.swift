@@ -39,6 +39,8 @@ struct TimetableAddView: View {
                     }
                 }
                 
+                Text("Quick setup")
+                
                 //MARK: Subjects
                 ForEach(subjects) { subject in
                     
