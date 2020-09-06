@@ -223,46 +223,54 @@ struct SubjectAddSection: View {
     }
 }
 
+//MARK: LessonAddRow
 struct LessonAddRow: View {
     
     @ObservedObject
     var lesson: Lesson
     
     @State
-    var startDate: Date = Date()
+    private var day: Int32 = 1
     
     @State
-    var endDate: Date = Date()
+    private var startDate: Date = Date()
+    
+    @State
+    private var endDate: Date = Date()
     
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             
-            Picker("", selection: $lesson.dayOfWeek) {
+            Picker("", selection: $day) {
                 ForEach(Day.allCases, id: \.rawValue) { day in
                     Text(day.string())
-                        .cornerRadius(4)
                 }
             }
             .labelsHidden()
             .pickerStyle(WheelPickerStyle())
-            .frame(width: 130, height: 40)
+            .frame(maxWidth: 130)
+            .padding(4)
             .clipped()
             .contentShape(RoundedRectangle(cornerRadius: 5))
             
             Spacer()
             
-            DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                .datePickerStyle(GraphicalDatePickerStyle())
-                .labelsHidden()
-                .frame(width: 80, height: 40)
+            HStack {
+                
+                Spacer()
+                
+                DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .labelsHidden()
+                
+                Text(":")
+                
+                DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .labelsHidden()
+            }
             
-            Text(":")
-            
-            DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
-                .datePickerStyle(GraphicalDatePickerStyle())
-                .labelsHidden()
-                .frame(width: 80, height: 40)
-        }.frame(height: 45)
+        }
     }
 }
 
