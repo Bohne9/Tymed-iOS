@@ -17,7 +17,9 @@ struct TimetableAddView: View {
     private var timetableName: String = ""
     
     @State
-    private var isNewDefault = false
+    private var isNewDefault = {
+        return !(TimetableService.shared.defaultTimetable() != nil)
+    }()
     
     @State
     private var subjects: [Subject] = []
@@ -145,10 +147,11 @@ struct TimetableAddView: View {
         let subject = TimetableService.shared.subject()
         
         subject.name = ""
-        subject.color = "red"
+        subject.color = "blue"
         
         subjects.append(subject)
     }
+
 }
 
 //MARK: SubjectAddSection
@@ -175,7 +178,7 @@ struct SubjectAddSection: View {
                     }
                 }.labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .frame(width: 30, height: 30)
+                .frame(width: 30, height: 40)
                 .padding(4)
                 .clipped()
                 .contentShape(RoundedRectangle(cornerRadius: 5))
@@ -183,10 +186,28 @@ struct SubjectAddSection: View {
             
             Divider()
             
-            ForEach(lessons()) { lesson in
-                LessonAddRow(lesson: lesson)
-                Divider()
-            }
+//            List {
+                ForEach(lessons()) { lesson in
+                    VStack {
+                        HStack {
+                            
+                            ZStack {
+                                
+                            }
+                            
+                            Image(systemName: "trash")
+                            LessonAddRow(lesson: lesson)
+//                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                                .background(Color(.secondarySystemGroupedBackground))
+                        }
+                        
+                        Divider()
+                    }
+                }.background(Color(.secondarySystemGroupedBackground))
+//            }
+//            .frame(height: CGFloat(lessons().count) * 110)
+//            .listStyle(DefaultListStyle())
+//            .background(Color(.secondarySystemGroupedBackground))
             
             HStack {
                 Image(systemName: "plus.circle.fill")
