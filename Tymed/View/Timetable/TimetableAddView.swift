@@ -50,27 +50,25 @@ struct TimetableAddView: View {
                                 
                                 Image(systemName: "plus.square.fill")
                                     .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(.secondaryLabel))
                                 
                                 Text("Subject")
                                     .font(.system(size: 14, weight: .regular))
-                                    .foregroundColor(Color(.systemGray))
+                                    .foregroundColor(Color(.secondaryLabel))
                                 
                                 Spacer()
                                 
-                                Button {
-                                    withAnimation {
-                                        subjects.removeAll { (sub) -> Bool in
-                                            sub.id == subject.id
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(Color(.systemGray))
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .onTapGesture {
+                                        withAnimation {
+                                            subjects.removeAll { (sub) -> Bool in
+                                                sub.id == subject.id
+                                            }
+                                            TimetableService.shared.deleteSubject(subject)
                                         }
-                                        TimetableService.shared.deleteSubject(subject)
                                     }
-                                } label: {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(Color(.systemGray))
-                                        .font(.system(size: 20, weight: .semibold))
-                                }
-                                
                             }.frame(height: 30)
                             
                             SubjectAddSection(subject: subject)
@@ -163,7 +161,7 @@ struct SubjectAddSection: View {
         VStack {
             HStack {
                 
-                TextField("Name", text: $subject.name)
+                TextField("Subject Name", text: $subject.name)
                     .font(.system(size: 18, weight: .semibold))
                 
                 Spacer()
@@ -236,11 +234,11 @@ struct LessonAddRow: View {
     private var startDate: Date = Date()
     
     @State
-    private var endDate: Date = Date()
+    private var endDate: Date = Date() + 3600
     
     var body: some View {
-        HStack(spacing: 0) {
-            
+        VStack {
+        
             Picker("", selection: $day) {
                 ForEach(Day.allCases, id: \.rawValue) { day in
                     Text(day.string())
@@ -248,16 +246,11 @@ struct LessonAddRow: View {
             }
             .labelsHidden()
             .pickerStyle(WheelPickerStyle())
-            .frame(maxWidth: 130)
-            .padding(4)
+            .frame(height: 45)
             .clipped()
-            .contentShape(RoundedRectangle(cornerRadius: 5))
-            
-            Spacer()
+            .padding(4)
             
             HStack {
-                
-                Spacer()
                 
                 DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
                     .datePickerStyle(GraphicalDatePickerStyle())
@@ -270,6 +263,13 @@ struct LessonAddRow: View {
                     .labelsHidden()
             }
             
+        }.frame(height: 110)
+        .onChange(of: day) { (value) in
+            lesson.dayOfWeek = day
+        }.onChange(of: startDate) { (value) in
+            lesson.startTime = Time(from: startDate)
+        }.onChange(of: endDate) { (value) in
+            lesson.endTime = Time(from: endDate)
         }
     }
 }
