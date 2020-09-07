@@ -24,6 +24,9 @@ struct TimetableAddView: View {
     @State
     private var subjects: [Subject] = []
     
+    @State
+    private var shouldSave = false
+    
     var body: some View {
         NavigationView {
             List {
@@ -114,11 +117,15 @@ struct TimetableAddView: View {
             }, label: {
                 Text("Cancel")
             }), trailing: Button(action: {
+                shouldSave = true
                 addTimetable()
             }, label: {
                 Text("Add")
             }))
             .navigationTitle("Timetable")
+            .onDisappear() {
+                discardChanges()
+            }
         }
     }
     
@@ -152,6 +159,14 @@ struct TimetableAddView: View {
         subjects.append(subject)
     }
 
+    /// In case the user hits the "Cancel" button or dismisses the view by swiping down all the created core data objects must be deleted.
+    private func discardChanges() {
+        if !shouldSave {
+            subjects.forEach { (subject) in
+                TimetableService.shared.deleteSubject(subject)
+            }
+        }
+    }
 }
 
 //MARK: SubjectAddSection
