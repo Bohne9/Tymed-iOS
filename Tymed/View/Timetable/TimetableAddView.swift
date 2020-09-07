@@ -186,28 +186,14 @@ struct SubjectAddSection: View {
             
             Divider()
             
-//            List {
-                ForEach(lessons()) { lesson in
-                    VStack {
-                        HStack {
-                            
-                            ZStack {
-                                
-                            }
-                            
-                            Image(systemName: "trash")
-                            LessonAddRow(lesson: lesson)
-//                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                .background(Color(.secondarySystemGroupedBackground))
-                        }
-                        
-                        Divider()
-                    }
-                }.background(Color(.secondarySystemGroupedBackground))
-//            }
-//            .frame(height: CGFloat(lessons().count) * 110)
-//            .listStyle(DefaultListStyle())
-//            .background(Color(.secondarySystemGroupedBackground))
+            ForEach(lessons()) { lesson in
+                VStack {
+                    LessonAddRow(lesson: lesson)
+                        .background(Color(.secondarySystemGroupedBackground))
+                
+                    Divider()
+                }
+            }.background(Color(.secondarySystemGroupedBackground))
             
             HStack {
                 Image(systemName: "plus.circle.fill")
@@ -239,6 +225,9 @@ struct SubjectAddSection: View {
         let lesson = TimetableService.shared.lesson()
         
         lesson.subject = subject
+        lesson.day = Day.current
+        lesson.startTime = Time(from: Date())
+        lesson.endTime = Time(from: Date() + 3600)
     }
 }
 
@@ -248,50 +237,28 @@ struct LessonAddRow: View {
     @ObservedObject
     var lesson: Lesson
     
-    @State
-    private var day: Int32 = 1
-    
-    @State
-    private var startDate: Date = Date()
-    
-    @State
-    private var endDate: Date = Date() + 3600
-    
     var body: some View {
-        VStack {
         
-            Picker("", selection: $day) {
-                ForEach(Day.allCases, id: \.rawValue) { day in
-                    Text(day.string())
-                }
-            }
-            .labelsHidden()
-            .pickerStyle(WheelPickerStyle())
-            .frame(height: 45)
-            .clipped()
-            .padding(4)
+        NavigationLink(destination: LessonEditContentView(lesson: lesson, dismiss: {
             
+        }).navigationBarItems(leading: EmptyView())) {
             HStack {
                 
-                DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(GraphicalDatePickerStyle())
-                    .labelsHidden()
+                Text(lesson.day.string())
                 
-                Text(":")
+                Spacer()
                 
-                DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(GraphicalDatePickerStyle())
-                    .labelsHidden()
-            }
-            
-        }.frame(height: 110)
-        .onChange(of: day) { (value) in
-            lesson.dayOfWeek = day
-        }.onChange(of: startDate) { (value) in
-            lesson.startTime = Time(from: startDate)
-        }.onChange(of: endDate) { (value) in
-            lesson.endTime = Time(from: endDate)
+                Text(textForTime())
+                
+            }.font(.system(size: 17, weight: .semibold))
+            .cornerRadius(5)
+            .frame(height: 40)
         }
+        
+    }
+    
+    private func textForTime() -> String {
+        return "\(lesson.startTime.string() ?? "-") - \(lesson.endTime.string() ?? "-")"
     }
 }
 
