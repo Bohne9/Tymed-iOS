@@ -108,6 +108,8 @@ class TimetableService {
     func timetable() -> Timetable {
         let timetable = Timetable(context: context)
         timetable.id = UUID()
+        timetable.isDefault = false
+        timetable.name = ""
         
         return timetable
     }
