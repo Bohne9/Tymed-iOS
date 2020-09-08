@@ -17,10 +17,15 @@ struct TimetableAddView: View {
     private var timetableName: String = ""
     
     @State
-    private var isNewDefault = false
+    private var isNewDefault = {
+        return !(TimetableService.shared.defaultTimetable() != nil)
+    }()
     
     @State
     private var subjects: [Subject] = []
+    
+    @State
+    private var shouldSave = false
     
     var body: some View {
         NavigationView {
@@ -50,27 +55,25 @@ struct TimetableAddView: View {
                                 
                                 Image(systemName: "plus.square.fill")
                                     .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color(.secondaryLabel))
                                 
                                 Text("Subject")
                                     .font(.system(size: 14, weight: .regular))
-                                    .foregroundColor(Color(.systemGray))
+                                    .foregroundColor(Color(.secondaryLabel))
                                 
                                 Spacer()
                                 
-                                Button {
-                                    withAnimation {
-                                        subjects.removeAll { (sub) -> Bool in
-                                            sub.id == subject.id
+                                Image(systemName: "multiply.circle.fill")
+                                    .foregroundColor(Color(.systemGray))
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .onTapGesture {
+                                        withAnimation {
+                                            subjects.removeAll { (sub) -> Bool in
+                                                sub.id == subject.id
+                                            }
+                                            TimetableService.shared.deleteSubject(subject)
                                         }
-                                        TimetableService.shared.deleteSubject(subject)
                                     }
-                                } label: {
-                                    Image(systemName: "multiply.circle.fill")
-                                        .foregroundColor(Color(.systemGray))
-                                        .font(.system(size: 20, weight: .semibold))
-                                }
-                                
                             }.frame(height: 30)
                             
                             SubjectAddSection(subject: subject)
@@ -114,11 +117,15 @@ struct TimetableAddView: View {
             }, label: {
                 Text("Cancel")
             }), trailing: Button(action: {
+                shouldSave = true
                 addTimetable()
             }, label: {
                 Text("Add")
             }))
             .navigationTitle("Timetable")
+            .onDisappear() {
+                discardChanges()
+            }
         }
     }
     
@@ -147,9 +154,18 @@ struct TimetableAddView: View {
         let subject = TimetableService.shared.subject()
         
         subject.name = ""
-        subject.color = "red"
+        subject.color = "blue"
         
         subjects.append(subject)
+    }
+
+    /// In case the user hits the "Cancel" button or dismisses the view by swiping down all the created core data objects must be deleted.
+    private func discardChanges() {
+        if !shouldSave {
+            subjects.forEach { (subject) in
+                TimetableService.shared.deleteSubject(subject)
+            }
+        }
     }
 }
 
@@ -163,7 +179,7 @@ struct SubjectAddSection: View {
         VStack {
             HStack {
                 
-                TextField("Name", text: $subject.name)
+                TextField("Subject Name", text: $subject.name)
                     .font(.system(size: 18, weight: .semibold))
                 
                 Spacer()
@@ -177,7 +193,7 @@ struct SubjectAddSection: View {
                     }
                 }.labelsHidden()
                 .pickerStyle(InlinePickerStyle())
-                .frame(width: 30, height: 30)
+                .frame(width: 30, height: 40)
                 .padding(4)
                 .clipped()
                 .contentShape(RoundedRectangle(cornerRadius: 5))
@@ -186,9 +202,13 @@ struct SubjectAddSection: View {
             Divider()
             
             ForEach(lessons()) { lesson in
-                LessonAddRow(lesson: lesson)
-                Divider()
-            }
+                VStack {
+                    LessonAddRow(lesson: lesson)
+                        .background(Color(.secondarySystemGroupedBackground))
+                
+                    Divider()
+                }
+            }.background(Color(.secondarySystemGroupedBackground))
             
             HStack {
                 Image(systemName: "plus.circle.fill")
@@ -220,49 +240,40 @@ struct SubjectAddSection: View {
         let lesson = TimetableService.shared.lesson()
         
         lesson.subject = subject
+        lesson.day = Day.current
+        lesson.startTime = Time(from: Date())
+        lesson.endTime = Time(from: Date() + 3600)
     }
 }
 
+//MARK: LessonAddRow
 struct LessonAddRow: View {
     
     @ObservedObject
     var lesson: Lesson
     
-    @State
-    var startDate: Date = Date()
-    
-    @State
-    var endDate: Date = Date()
-    
     var body: some View {
-        HStack {
+        
+        NavigationLink(destination: LessonEditContentView(lesson: lesson, dismiss: {
             
-            Picker("", selection: $lesson.dayOfWeek) {
-                ForEach(Day.allCases, id: \.rawValue) { day in
-                    Text(day.string())
-                        .cornerRadius(4)
-                }
-            }
-            .labelsHidden()
-            .pickerStyle(WheelPickerStyle())
-            .frame(width: 130, height: 40)
-            .clipped()
-            .contentShape(RoundedRectangle(cornerRadius: 5))
-            
-            Spacer()
-            
-            DatePicker("", selection: $startDate, displayedComponents: .hourAndMinute)
-                .datePickerStyle(GraphicalDatePickerStyle())
-                .labelsHidden()
-                .frame(width: 80, height: 40)
-            
-            Text(":")
-            
-            DatePicker("", selection: $endDate, displayedComponents: .hourAndMinute)
-                .datePickerStyle(GraphicalDatePickerStyle())
-                .labelsHidden()
-                .frame(width: 80, height: 40)
-        }.frame(height: 45)
+        }).navigationBarItems(leading: EmptyView())) {
+            HStack {
+                
+                Text(lesson.day.string())
+                
+                Spacer()
+                
+                Text(textForTime())
+                
+            }.font(.system(size: 17, weight: .semibold))
+            .cornerRadius(5)
+            .frame(height: 40)
+        }
+        
+    }
+    
+    private func textForTime() -> String {
+        return "\(lesson.startTime.string() ?? "-") - \(lesson.endTime.string() ?? "-")"
     }
 }
 

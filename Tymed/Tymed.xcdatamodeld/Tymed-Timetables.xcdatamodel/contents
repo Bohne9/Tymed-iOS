@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17183" systemVersion="20A5354i" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17189" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Lesson" representedClassName=".Lesson" syncable="YES">
         <attribute name="dayOfWeek" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="end" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -15,7 +15,7 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <relationship name="lessons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Lesson" inverseName="subject" inverseEntity="Lesson"/>
-        <relationship name="timetable" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="subjects" inverseEntity="Timetable"/>
+        <relationship name="timetable" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="subjects" inverseEntity="Timetable"/>
     </entity>
     <entity name="Task" representedClassName="Task" syncable="YES">
         <attribute name="archived" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -27,7 +27,7 @@
         <attribute name="text" optional="YES" attributeType="String"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="lesson" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Lesson" inverseName="tasks" inverseEntity="Lesson"/>
-        <relationship name="timetable" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="tasks" inverseEntity="Timetable"/>
+        <relationship name="timetable" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Timetable" inverseName="tasks" inverseEntity="Timetable"/>
     </entity>
     <entity name="Timetable" representedClassName="Timetable" syncable="YES">
         <attribute name="color" optional="YES" attributeType="String"/>
@@ -39,7 +39,7 @@
     </entity>
     <elements>
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="148"/>
-        <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="119"/>
+        <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="133"/>
         <element name="Task" positionX="-290.4921875" positionY="306.515625" width="128" height="193"/>
         <element name="Timetable" positionX="74.35546875" positionY="-96.5078125" width="128" height="119"/>
     </elements>

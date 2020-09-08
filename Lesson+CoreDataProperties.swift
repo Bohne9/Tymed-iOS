@@ -32,7 +32,12 @@ extension Lesson: Identifiable {
     }
     
     var day: Day {
-        return Day(rawValue: Int(dayOfWeek)) ?? .monday
+        get {
+            return Day(rawValue: Int(dayOfWeek)) ?? .monday
+        }
+        set {
+            dayOfWeek = Int32(newValue.rawValue)
+        }
     }
     
     var startTime: Time {
