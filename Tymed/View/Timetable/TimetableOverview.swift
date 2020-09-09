@@ -27,6 +27,7 @@ struct TimetableOverview: View {
     @State private var showLessonAdd = false
     @State private var showTaskAdd = false
     @State private var showTimetableAdd = false
+    @State private var showEventAdd = false
     
     //MARK: Tips
     @State private var showTips = true
@@ -123,7 +124,9 @@ struct TimetableOverview: View {
                 LessonAddView(dismiss: { })
             }else if showTaskAdd {
                 TaskAddView(dismiss: { })
-            }else {
+            }else if showEventAdd {
+                EventAddView()
+            }else {            
                 TimetableAddView()
             }
         })
@@ -135,6 +138,10 @@ struct TimetableOverview: View {
                 }),
                 .default(Text("Task"), action: {
                     showTaskAdd = true
+                    showAddView.toggle()
+                }),
+                .default(Text("Event"), action: {
+                    showEventAdd = true
                     showAddView.toggle()
                 }),
                 .default(Text("Timetable"), action: {

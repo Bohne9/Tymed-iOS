@@ -193,6 +193,7 @@ class TimetableService {
         let event = Event(context: context)
         
         event.id = UUID()
+        event.createdAt = Date()
         
         return event
     }
