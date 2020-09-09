@@ -523,8 +523,6 @@
 		4F7F777B24588DE700038729 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */,
-				4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */,
 				4FB8F4C824F192680015EC8E /* Calender */,
 				4F38C4AE24E69F020082517E /* Subject+CoreDataClass.swift */,
 				4F38C4AF24E69F020082517E /* Subject+CoreDataProperties.swift */,
@@ -534,6 +532,8 @@
 				4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */,
 				4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */,
 				4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */,
+				4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */,
+				4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */,
 				4F9405EE2468067C0063E4DA /* Time.swift */,
 			);
 			path = Model;

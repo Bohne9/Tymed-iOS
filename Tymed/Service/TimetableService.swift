@@ -173,9 +173,38 @@ class TimetableService {
         return timetable
     }
     
+    //MARK: Events
+    
+    func fetchEvents() -> [Event]? {
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Event")
+        
+        do {
+            
+            let res = try context.fetch(req) as! [Event]
+            
+            return res
+            
+        } catch {
+            return nil
+        }
+    }
+    
+    func event() -> Event {
+        let event = Event(context: context)
+        
+        event.id = UUID()
+        
+        return event
+    }
+    
+    func deleteEvent(_ event: Event) {
+        context.delete(event)
+        
+        save()
+    }
+    
     //MARK: Subject fetching
     func fetchSubjects() -> [Subject]? {
-    
         let req = NSFetchRequest<NSManagedObject>(entityName: "Subject")
         
         do {
