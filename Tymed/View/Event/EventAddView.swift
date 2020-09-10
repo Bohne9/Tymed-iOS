@@ -41,8 +41,15 @@ class EventModel: ObservableObject {
     @Published
     public var timetable: Timetable?
     
+    func isValid() -> Bool {
+        return !title.isEmpty
+    }
     
-    func create() -> Event {
+    func create() -> Event? {
+        
+        if !isValid() {
+            return nil
+        }
         
         let event = TimetableService.shared.event()
         
@@ -65,6 +72,9 @@ struct EventAddView: View {
     
     var event = EventModel()
     
+    @Environment(\.presentationMode)
+    var presentaionMode
+    
     var body: some View {
         NavigationView {
             EventAddViewContent(event: event)
@@ -76,12 +86,22 @@ struct EventAddView: View {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
                 }), trailing: Button(action: {
-                    
+                    addEvent()
                 }, label: {
                     Text("Add")
                         .font(.system(size: 16, weight: .semibold))
                 }))
         }
+    }
+    
+    func addEvent() {
+        
+        guard event.create() != nil else {
+            return
+        }
+        
+        presentaionMode.wrappedValue.dismiss()
+        
     }
 }
 
