@@ -37,13 +37,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     var timeTopConstraint: NSLayoutConstraint?
     var timeBottomConstraint: NSLayoutConstraint?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupUserInterface()
-        
-    }
-    
     internal override func setupUserInterface() {
         super.setupUserInterface()
         

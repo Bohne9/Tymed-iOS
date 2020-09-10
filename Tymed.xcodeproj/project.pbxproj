@@ -71,6 +71,7 @@
 		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
 		4F80FD0624C8C02200DD65C2 /* TimetableDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F80FD0524C8C02200DD65C2 /* TimetableDetailTableViewController.swift */; };
+		4F85C653250AB9BD001BDAE8 /* HomeEventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C652250AB9BD001BDAE8 /* HomeEventCollectionViewCell.swift */; };
 		4F85C9EE247EDEFD00A49A90 /* HomeTaskCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */; };
 		4F85C9F0247EE12900A49A90 /* HomeTaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */; };
 		4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */; };
@@ -222,6 +223,7 @@
 		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4F80FD0524C8C02200DD65C2 /* TimetableDetailTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableDetailTableViewController.swift; sourceTree = "<group>"; };
+		4F85C652250AB9BD001BDAE8 /* HomeEventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEventCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F85C9ED247EDEFD00A49A90 /* HomeTaskCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionView.swift; sourceTree = "<group>"; };
 		4F85C9EF247EE12900A49A90 /* HomeTaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F8CDCCD24BF917300579E56 /* HomeCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewHeader.swift; sourceTree = "<group>"; };
@@ -622,6 +624,7 @@
 				4F152394245E9C05005F34B6 /* HomeCollectionViewDelegate.swift */,
 				4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */,
 				4F9405EC2465DCBD0063E4DA /* HomeLessonCollectionViewCell.swift */,
+				4F85C652250AB9BD001BDAE8 /* HomeEventCollectionViewCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1029,6 +1032,7 @@
 				4FC8210624C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift in Sources */,
 				4F3F6295247AF75A00A69202 /* TaskDueDateTableViewCell.swift in Sources */,
 				4F2AA0DE25080F040056CC54 /* Event+CoreDataClass.swift in Sources */,
+				4F85C653250AB9BD001BDAE8 /* HomeEventCollectionViewCell.swift in Sources */,
 				4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */,
 				4FD270C624FADBE500D0075C /* TimetableAddView.swift in Sources */,
 				4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */,
