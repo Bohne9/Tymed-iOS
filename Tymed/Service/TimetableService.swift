@@ -110,6 +110,7 @@ class TimetableService {
         timetable.id = UUID()
         timetable.isDefault = false
         timetable.name = ""
+        timetable.color = "red"
         
         return timetable
     }

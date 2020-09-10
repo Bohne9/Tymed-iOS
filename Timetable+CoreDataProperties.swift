@@ -17,7 +17,7 @@ extension Timetable {
         return NSFetchRequest<Timetable>(entityName: "Timetable")
     }
 
-    @NSManaged public var color: String?
+    @NSManaged public var color: String
     @NSManaged public var id: UUID?
     @NSManaged public var isDefault: Bool
     @NSManaged public var name: String

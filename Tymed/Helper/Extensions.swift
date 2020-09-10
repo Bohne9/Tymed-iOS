@@ -283,6 +283,16 @@ extension UIColor {
         self.init(lesson?.subject)
     }
     
+    convenience init? (_ timetable: Timetable) {
+        self.init(named: timetable.color)
+    }
+    
+    convenience init? (_ event: Event) {
+        guard let timetable = event.timetable else {
+            return nil
+        }
+        self.init(timetable)
+    }
 }
 
 
