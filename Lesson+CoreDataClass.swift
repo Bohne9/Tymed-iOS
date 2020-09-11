@@ -13,4 +13,7 @@ import CoreData
 
 public class Lesson: NSManagedObject {
 
+    /// A date object from where the next lesson dates can be computed
+    var anchorDate = Date()
+    
 }

@@ -71,3 +71,38 @@ extension Task: Comparable {
     }
     
 }
+
+
+extension Task: CalendarEvent {
+        
+    var startDate: Date? {
+        get {
+            return due
+        }
+        set {
+            due = newValue
+        }
+    }
+    
+    var endDate: Date? {
+        get {
+            return due
+        }
+        set {
+            due = newValue
+        }
+    }
+    
+    var color: UIColor? {
+        get {
+            if lesson != nil {
+                return UIColor(lesson)
+            }
+            return UIColor(timetable)
+        }
+        set {
+            
+        }
+    }
+    
+}

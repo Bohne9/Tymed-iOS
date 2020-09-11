@@ -83,6 +83,7 @@
 		4F8E058A24DA798500748F47 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058924DA798500748F47 /* CustomTextField.swift */; };
 		4F907FF524EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F907FF424EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift */; };
 		4F907FF724EB018300DD53E4 /* HomeWeekDayCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F907FF624EB018300DD53E4 /* HomeWeekDayCellContent.swift */; };
+		4F9192E1250BF9500087691F /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9192E0250BF9500087691F /* CalendarEvent.swift */; };
 		4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */; };
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
@@ -235,6 +236,7 @@
 		4F8E058924DA798500748F47 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4F907FF424EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekDayCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F907FF624EB018300DD53E4 /* HomeWeekDayCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekDayCellContent.swift; sourceTree = "<group>"; };
+		4F9192E0250BF9500087691F /* CalendarEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvent.swift; sourceTree = "<group>"; };
 		4F9405E524607E6A0063E4DA /* LessonAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonAddViewController.swift; sourceTree = "<group>"; };
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 				4FB8F4CB24F192950015EC8E /* CalendarEntry.swift */,
 				4FB8F4C924F192790015EC8E /* CalendarDayEntry.swift */,
 				4FB8F4D124F1A4370015EC8E /* CaleanderWeekEntry.swift */,
+				4F9192E0250BF9500087691F /* CalendarEvent.swift */,
 			);
 			path = Calender;
 			sourceTree = "<group>";
@@ -989,6 +992,7 @@
 				4F8CDCCE24BF917300579E56 /* HomeCollectionViewHeader.swift in Sources */,
 				4F1A9F1824D89BBA00F99439 /* LessonAddView.swift in Sources */,
 				4FB8F4CE24F195CC0015EC8E /* CalendarService.swift in Sources */,
+				4F9192E1250BF9500087691F /* CalendarEvent.swift in Sources */,
 				4F7F77452456C2A000038729 /* ViewController.swift in Sources */,
 				4F0F872B246F28BC00992721 /* Lesson+CoreDataClass.swift in Sources */,
 				4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */,

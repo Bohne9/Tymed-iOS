@@ -9,7 +9,7 @@
 
 import Foundation
 import CoreData
-
+import UIKit
 
 extension Lesson: Identifiable {
 
@@ -109,4 +109,48 @@ extension Lesson {
     @objc(removeTasks:)
     @NSManaged public func removeFromTasks(_ values: NSSet)
 
+}
+
+
+extension Lesson: CalendarEvent {
+    
+    var title: String {
+        get {
+            return subject?.name ?? "-"
+        }
+        set {
+            subject?.name = newValue
+        }
+    }
+    
+    var startDate: Date? {
+        get {
+            return nextStartDate(startingFrom: anchorDate)
+        }
+        set {
+            
+        }
+    }
+    
+    var endDate: Date? {
+        get {
+            return nextEndDate(startingFrom: anchorDate)
+        }
+        set {
+            
+        }
+    }
+    
+    var color: UIColor? {
+        get {
+            return UIColor(self)
+        }
+        set {
+            
+        }
+    }
+    
+    
+    
+    
 }

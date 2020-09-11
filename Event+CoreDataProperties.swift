@@ -9,7 +9,7 @@
 
 import Foundation
 import CoreData
-
+import UIKit
 
 extension Event {
 
@@ -17,7 +17,7 @@ extension Event {
         return NSFetchRequest<Event>(entityName: "Event")
     }
 
-    @NSManaged public var title: String?
+    @NSManaged public var title: String
     @NSManaged public var start: Date?
     @NSManaged public var end: Date?
     @NSManaged public var createdAt: Date?
@@ -34,4 +34,39 @@ extension Event {
 
 extension Event : Identifiable {
 
+}
+
+
+extension Event: CalendarEvent {
+    
+    var startDate: Date? {
+        get {
+            return start
+        }
+        set {
+            start = newValue
+        }
+    }
+    
+    var endDate: Date? {
+        get {
+            return end
+        }
+        set {
+            end = newValue
+        }
+    }
+    
+    var color: UIColor? {
+        get {
+            return UIColor(self)
+        }
+        set {
+            
+        }
+    }
+    
+    
+    
+    
 }
