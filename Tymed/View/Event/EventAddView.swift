@@ -61,6 +61,8 @@ class EventModel: ObservableObject {
         
         event.notes = notes
         
+        event.timetable = timetable
+        
         TimetableService.shared.save()
         
         return event
@@ -163,6 +165,26 @@ struct EventAddViewContent: View {
                 }
             }
             
+            //MARK: Timetable
+            
+            Section {
+                HStack {
+                    
+                    NavigationLink(destination: AppTimetablePicker(timetable: $event.timetable)) {
+                        DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        Spacer()
+                        if event.timetable == TimetableService.shared.defaultTimetable() {
+                            Text("Default")
+                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                                .background(Color(.tertiarySystemGroupedBackground))
+                                .font(.system(size: 13, weight: .semibold))
+                                .cornerRadius(10)
+                        }
+                    }
+                    
+                }
+            }
+            
         }.listStyle(InsetGroupedListStyle())
         
     }
@@ -171,7 +193,10 @@ struct EventAddViewContent: View {
         return date.stringify(dateStyle: .long, timeStyle: .short)
     }
     
-    
+    //MARK: timetableTitle
+    private func timetableTitle() -> String? {
+        return event.timetable?.name
+    }
 }
 
 
