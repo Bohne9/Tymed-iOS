@@ -105,6 +105,8 @@ class TimetableService {
         
     }
     
+    //MARK: - Timetable
+    
     func timetable() -> Timetable {
         let timetable = Timetable(context: context)
         timetable.id = UUID()
@@ -174,7 +176,7 @@ class TimetableService {
         return timetable
     }
     
-    //MARK: Events
+    //MARK: - Events
     
     func fetchEvents() -> [Event]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Event")
@@ -204,8 +206,35 @@ class TimetableService {
         
         save()
     }
+       
+    func getEvents(withinDay date: Date) -> [Event] {
+        let events = fetchEvents()?.filter({ event in
+            guard let start = event.start, let end = event.end else {
+                return false
+            }
+            
+            let startOfDay = date.startOfDay
+            let endOfDay = date.endOfDay
+            
+            return startOfDay <= start && start <= endOfDay || startOfDay <= end && end <= endOfDay
+        })
+        
+        return events ?? []
+    }
     
-    //MARK: Subject fetching
+    func getEvents(within date: Date) -> [Event] {
+        let events = fetchEvents()?.filter({ event in
+            guard let start = event.start, let end = event.end else {
+                return false
+            }
+            
+            return start <= date && date <= end
+        })
+        
+        return events ?? []
+    }
+    
+    //MARK: - Subject
     func fetchSubjects() -> [Subject]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Subject")
         
@@ -314,7 +343,7 @@ class TimetableService {
         }
     }
     
-    //MARK: Lesson fetching
+    //MARK: - Lesson
     func fetchLessons() -> [Lesson]? {
         
         let req = NSFetchRequest<NSManagedObject>(entityName: "Lesson")
@@ -379,7 +408,7 @@ class TimetableService {
         save()
     }
     
-    //MARK: Task factory
+    //MARK: - Task
     /// Creates a new instance of Task and attaches an UUID
     func task() -> Task {
         let task = Task(context: context)
@@ -765,5 +794,35 @@ class TimetableService {
         comp.minute = start.minute
         
         return Calendar.current.nextDate(after: Date(), matching: comp, matchingPolicy: .strict)
+    }
+    
+    
+    
+    func calendarEvents(within date: Date) -> [CalendarEvent] {
+        
+        var lessons = CalendarEvent.lessonEvents(lessons: getLessons(within: date))
+        let events = CalendarEvent.eventEvents(events: getEvents(within: date))
+        
+        lessons.append(contentsOf: events)
+        
+        lessons.sort()
+        
+        return lessons
+    }
+    
+    func calendarEventsFor(day date: Date) -> [CalendarEvent] {
+        
+        guard let day = Day.from(date: date) else {
+            return []
+        }
+        
+        var lessons = CalendarEvent.lessonEvents(lessons: getLessons(within: day))
+        let events = CalendarEvent.eventEvents(events: getEvents(withinDay: date))
+        
+        lessons.append(contentsOf: events)
+        
+        lessons.sort()
+        
+        return lessons
     }
 }

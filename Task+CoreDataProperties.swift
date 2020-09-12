@@ -62,47 +62,11 @@ extension Task {
 }
 
 extension Task: Comparable {
-    
     public static func < (lhs: Task, rhs: Task) -> Bool {
         guard let d1 = lhs.due, let d2 = rhs.due else {
             return true
         }
         return d1 < d2
-    }
-    
-}
-
-
-extension Task: CalendarEvent {
-        
-    var startDate: Date? {
-        get {
-            return due
-        }
-        set {
-            due = newValue
-        }
-    }
-    
-    var endDate: Date? {
-        get {
-            return due
-        }
-        set {
-            due = newValue
-        }
-    }
-    
-    var color: UIColor? {
-        get {
-            if lesson != nil {
-                return UIColor(lesson)
-            }
-            return UIColor(timetable)
-        }
-        set {
-            
-        }
     }
     
 }
