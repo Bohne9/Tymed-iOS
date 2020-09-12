@@ -48,20 +48,32 @@ class CalendarEvent {
         return managedObject is Event
     }
     
-    private var asLesson: Lesson? {
+    var asLesson: Lesson? {
         return managedObject as? Lesson
     }
     
-    private var asTask: Task? {
+    var asTask: Task? {
         return managedObject as? Task
     }
     
-    private var asEvent: Event? {
+    var asEvent: Event? {
         return managedObject as? Event
     }
     
     init(managedObject: NSManagedObject) {
         self.managedObject = managedObject
+    }
+    
+    var id: UUID? {
+        if let lesson = asLesson { // If the CalendarEvent is a Lesson
+            return lesson.id
+        } else if let task = asTask { // If the CalendarEvent is a Task
+            return task.id
+        } else if let event = asEvent { // If the CalendarEvent is an Event
+            return event.id
+        }else {
+            return nil
+        }
     }
     
     var title: String {

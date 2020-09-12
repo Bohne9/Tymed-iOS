@@ -8,14 +8,22 @@
 
 import UIKit
 
-class HomeEventCollectionViewCell: HomeBaseCollectionViewCell {
+let homeEventCell = "homeLessonCell"
+class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
+    
     static func register(_ collectionView: UICollectionView) {
-        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        collectionView.register(HomeEventCollectionViewCell.self, forCellWithReuseIdentifier: homeEventCell)
     }
     
-    var event: Event? {
-        didSet {
-            reload()
+    var event: Event?  {
+        get {
+            return calendarEvent?.asEvent
+        }
+        set {
+            guard let event = newValue else {
+                return
+            }
+            calendarEvent = CalendarEvent(managedObject: event)
         }
     }
     
@@ -70,13 +78,8 @@ class HomeEventCollectionViewCell: HomeBaseCollectionViewCell {
         
 //        time.text = "\(vev.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
 
-        backgroundColor = UIColor(event)?.withAlphaComponent(0.6)
+        backgroundColor = (UIColor(event) ?? UIColor(named: "red")!).withAlphaComponent(0.6)
         
-    }
-    
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
 }
