@@ -114,6 +114,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             return result
         })
         
+        if let nextDay = nextDayEvents?.first?.startDate {
+            self.nextDay = Day.from(date: nextDay)
+        }
+        
         sectionIdentifiers = []
         
         loadTask()
