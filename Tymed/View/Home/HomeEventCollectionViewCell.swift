@@ -8,7 +8,7 @@
 
 import UIKit
 
-let homeEventCell = "homeLessonCell"
+let homeEventCell = "homeEventCell"
 class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
     
     static func register(_ collectionView: UICollectionView) {
@@ -55,14 +55,20 @@ class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
         time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         
         // Setup two constraints for different cells
-        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
+        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
         
-        time.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        time.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        time.constraintLeadingTo(anchor: name.trailingAnchor, constant: 20)
         
         time.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         
         time.textColor = .white
         name.textColor = .white
+        
+        time.textAlignment = .right
+        
+        // Allow multiline
+        time.numberOfLines = 0
         
     }
     
@@ -76,9 +82,9 @@ class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
         
         name.sizeToFit()
         
-//        time.text = "\(vev.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
+        time.text = "\(event.start?.stringify(dateStyle: .short, timeStyle: .short) ?? "-")-\n\(event.end?.stringify(dateStyle: .short, timeStyle: .short) ?? "-") "
 
-        backgroundColor = (UIColor(event) ?? UIColor(named: "red")!).withAlphaComponent(0.6)
+        backgroundColor = (UIColor(event) ?? UIColor(named: "red")!).withAlphaComponent(0.65)
         
     }
 

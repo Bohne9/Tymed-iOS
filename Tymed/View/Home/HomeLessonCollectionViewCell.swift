@@ -153,9 +153,4 @@ class HomeLessonCollectionViewCell: HomeCalendarEventCollectionViewCell {
         tasksLabel.text = "\(lesson.unarchivedTasks?.count ?? 0)"
     }
     
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
 }

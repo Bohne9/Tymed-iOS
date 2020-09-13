@@ -39,7 +39,7 @@ class EventModel: ObservableObject {
     public var lesson: Lesson?
     
     @Published
-    public var timetable: Timetable?
+    public var timetable: Timetable? = TimetableService.shared.defaultTimetable()
     
     func isValid() -> Bool {
         return !title.isEmpty

@@ -825,4 +825,15 @@ class TimetableService {
         
         return lessons
     }
+    
+    func getNextCalendarEvents(startingFrom date: Date) -> [CalendarEvent] {
+        for _ in 0..<7 {
+            let events = calendarEventsFor(day: date)
+            
+            if events.count != 0 {
+                return events
+            }
+        }
+        return []
+    }
 }

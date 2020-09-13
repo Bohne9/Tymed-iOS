@@ -126,6 +126,10 @@ extension Date {
         components.second = -1
         return Calendar.current.date(byAdding: components, to: startOfDay)!
     }
+    
+    var nextDay: Date {
+        return (self + (3600 * 24)).startOfDay
+    }
 }
 
 

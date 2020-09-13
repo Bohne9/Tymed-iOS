@@ -48,11 +48,11 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         super.setupUserInterface()
         
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         collectionView.register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
         collectionView.register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noTaskCell")
         
+        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         HomeEventCollectionViewCell.register(collectionView)
         
         
@@ -99,8 +99,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         dayEvents = TimetableService.shared.calendarEventsFor(day: Date())
         
-        var day = Day.current
-        
 //        for _ in 0..<6 {
 //            day = day.rotatingNext()
 //            nextDayLessons = TimetableService.shared.getLessons(within: day).sorted(by: { (l1, l2) in
@@ -112,8 +110,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
 //            }
 //        }
 //
-//        nextLessons = TimetableService.shared.getNextLessons()
-//
+        nextEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
+        
         sectionIdentifiers = []
         
         loadTask()
@@ -381,7 +379,7 @@ extension HomeDashCollectionView {
                 
                 return CGSize(width: collectionView.contentSize.width, height: height)
             }else if event.asEvent != nil {
-                return CGSize(width: collectionView.contentSize.width, height: 45)
+                return CGSize(width: collectionView.contentSize.width, height: 50)
             }
             
             return .zero
