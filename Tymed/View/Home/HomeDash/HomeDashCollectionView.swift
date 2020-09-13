@@ -99,18 +99,20 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         dayEvents = TimetableService.shared.calendarEventsFor(day: Date())
         
-//        for _ in 0..<6 {
-//            day = day.rotatingNext()
-//            nextDayLessons = TimetableService.shared.getLessons(within: day).sorted(by: { (l1, l2) in
-//                return l1.startTime < l2.startTime
-//            })
-//            nextDay = day
-//            if nextDayLessons?.count ?? 0 > 0 {
-//                break
-//            }
-//        }
-//
-        nextEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
+        nextDayEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
+        
+        nextEvents = nextDayEvents?.sorted().reduce([], { (result, event) -> [CalendarEvent] in
+            if result.isEmpty {
+                return [event]
+            }
+            
+            if result.first?.startDate == event.startDate {
+                var newRes = result
+                newRes.append(event)
+                return newRes
+            }
+            return result
+        })
         
         sectionIdentifiers = []
         
