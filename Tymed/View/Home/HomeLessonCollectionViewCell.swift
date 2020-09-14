@@ -67,10 +67,8 @@ class HomeLessonCollectionViewCell: HomeCalendarEventCollectionViewCell {
         
         // Setup two constraints for different cells
         timeTopConstraint = time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10)
-        timeBottomConstraint = time.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         
-        timeTopConstraint?.isActive = false
-        timeBottomConstraint?.isActive = false
+        timeTopConstraint?.isActive = true
         
         time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         

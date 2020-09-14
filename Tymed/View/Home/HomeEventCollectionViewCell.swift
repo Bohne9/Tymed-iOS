@@ -55,10 +55,10 @@ class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
         time.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         
         // Setup two constraints for different cells
-        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
+        time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         
         time.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        time.constraintLeadingTo(anchor: name.trailingAnchor, constant: 20)
+        time.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4).isActive = true
         
         time.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         
@@ -82,7 +82,14 @@ class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
         
         name.sizeToFit()
         
-        time.text = "\(event.start?.stringify(dateStyle: .short, timeStyle: .short) ?? "-")-\n\(event.end?.stringify(dateStyle: .short, timeStyle: .short) ?? "-") "
+        let startTime = "\(event.start?.stringifyTime(with: .short) ?? "")"
+        var endTime = "\(event.end?.stringifyTime(with: .short) ?? "")"
+        
+        if event.start?.startOfDay != event.end?.startOfDay {
+            endTime = "\(event.end?.stringify(dateStyle: .short, timeStyle: .short) ?? "-")"
+        }
+        
+        time.text = startTime + " - " + endTime
 
         backgroundColor = (UIColor(event) ?? UIColor(named: "red")!).withAlphaComponent(0.65)
         
