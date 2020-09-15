@@ -1,56 +1,64 @@
 //
-//  EventAddView.swift
+//  EventEditView.swift
 //  Tymed
 //
-//  Created by Jonah Schueller on 09.09.20.
+//  Created by Jonah Schueller on 15.09.20.
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
 import SwiftUI
 
-//MARK: EventAddView
-struct EventAddView: View {
+class EventEditViewWrapper: ViewWrapper<EventEditView> {
     
-    var event = EventModel()
+    var event: Event?
     
-    @Environment(\.presentationMode)
-    var presentaionMode
+    override func createContent() -> UIHostingController<EventEditView>? {
+        guard let event = event else {
+            return nil
+        }
+        
+        return UIHostingController(rootView: EventEditView(
+                                    event: event,
+                                    dismiss: {
+                                        self.homeDelegate?.reload()
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
+    }
+    
+}
+
+struct EventEditView: View {
+    
+    @ObservedObject
+    var event: Event
+    
+    var dismiss: () -> Void
     
     var body: some View {
         NavigationView {
-            EventAddViewContent(event: event)
-                .navigationTitle("New Event")
+            EventEditViewContent(event: event)
+                .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
-                    
+                    dismiss()
                 }, label: {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
                 }), trailing: Button(action: {
-                    addEvent()
+                    TimetableService.shared.save()
+                    dismiss()
                 }, label: {
-                    Text("Add")
+                    Text("Done")
                         .font(.system(size: 16, weight: .semibold))
                 }))
         }
     }
-    
-    func addEvent() {
-        
-        guard event.create() != nil else {
-            return
-        }
-        
-        presentaionMode.wrappedValue.dismiss()
-        
-    }
 }
 
-//MARK: EventAddViewContent
-struct EventAddViewContent: View {
+struct EventEditViewContent: View {
     
     @ObservedObject
-    var event: EventModel
+    var event: Event
     
     @State
     private var showStartDatePicker = false
@@ -59,14 +67,13 @@ struct EventAddViewContent: View {
     private var showEndDatePicker = false
     
     var body: some View {
-        
         List {
             
             Section {
                 
                 TextField("Title", text: $event.title)
                 
-                TextField("Description", text: $event.body)
+                TextField("Description", text: Binding($event.body, ""))
             }
             
             Section {
@@ -83,7 +90,7 @@ struct EventAddViewContent: View {
                     }
                 
                 if showStartDatePicker {
-                    DatePicker("", selection: $event.start)
+                    DatePicker("", selection: Binding($event.start, Date()))
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
@@ -99,7 +106,7 @@ struct EventAddViewContent: View {
                     }
                 
                 if showEndDatePicker {
-                    DatePicker("", selection: $event.end)
+                    DatePicker("", selection: Binding($event.end, Date()))
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
             }
@@ -125,23 +132,15 @@ struct EventAddViewContent: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-        
+            
     }
-    
-    func textFor(_ date: Date) -> String {
-        return date.stringify(dateStyle: .long, timeStyle: .short)
+
+    func textFor(_ date: Date?) -> String {
+        return date?.stringify(dateStyle: .long, timeStyle: .short)  ?? ""
     }
-    
+
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
         return event.timetable?.name
-    }
-}
-
-
-struct EventAddView_Previews: PreviewProvider {
-    static var previews: some View {
-        EventAddView()
-            .colorScheme(.dark)
     }
 }

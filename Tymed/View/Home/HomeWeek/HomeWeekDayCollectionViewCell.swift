@@ -116,16 +116,22 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
             for: indexPath) as? HomeWeekLessonCollectionViewCell
     }
     
-    //MARK: didSelectItem
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let event = self.event(indexPath) else {
+    private func presentDetail(_ indexPath: IndexPath) {
+        guard let calendarEvent = self.event(indexPath) else {
             return
         }
         
-        if let lesson = event.asLesson {
-            // Present a LessonEditView when a lesson cell is selected
+        if let lesson = calendarEvent.asLesson {
             homeDelegate?.presentLessonEditView(for: lesson)
+        }else if let event = calendarEvent.asEvent {
+            homeDelegate?.presentEventEditView(for: event)
         }
+        
+    }
+    
+    //MARK: didSelectItem
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presentDetail(indexPath)
     }
 
     //MARK: cellForItemAt

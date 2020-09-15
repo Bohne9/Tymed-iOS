@@ -83,6 +83,8 @@
 		4F8E058A24DA798500748F47 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058924DA798500748F47 /* CustomTextField.swift */; };
 		4F8EEB252510D79800F3D4B9 /* Supplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8EEB242510D79800F3D4B9 /* Supplier.swift */; };
 		4F8EEB272510D7AE00F3D4B9 /* HomeCalendarCellSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8EEB262510D7AE00F3D4B9 /* HomeCalendarCellSupplier.swift */; };
+		4F8EEB2925114CCF00F3D4B9 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8EEB2825114CCF00F3D4B9 /* EventEditView.swift */; };
+		4F8EEB2B25114CEF00F3D4B9 /* EventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8EEB2A25114CEF00F3D4B9 /* EventModel.swift */; };
 		4F907FF524EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F907FF424EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift */; };
 		4F907FF724EB018300DD53E4 /* HomeWeekDayCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F907FF624EB018300DD53E4 /* HomeWeekDayCellContent.swift */; };
 		4F9192E1250BF9500087691F /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9192E0250BF9500087691F /* CalendarEvent.swift */; };
@@ -239,6 +241,8 @@
 		4F8E058924DA798500748F47 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4F8EEB242510D79800F3D4B9 /* Supplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supplier.swift; sourceTree = "<group>"; };
 		4F8EEB262510D7AE00F3D4B9 /* HomeCalendarCellSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarCellSupplier.swift; sourceTree = "<group>"; };
+		4F8EEB2825114CCF00F3D4B9 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
+		4F8EEB2A25114CEF00F3D4B9 /* EventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModel.swift; sourceTree = "<group>"; };
 		4F907FF424EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekDayCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F907FF624EB018300DD53E4 /* HomeWeekDayCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWeekDayCellContent.swift; sourceTree = "<group>"; };
 		4F9192E0250BF9500087691F /* CalendarEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarEvent.swift; sourceTree = "<group>"; };
@@ -709,6 +713,8 @@
 			isa = PBXGroup;
 			children = (
 				4FD2715B250956EB0073696A /* EventAddView.swift */,
+				4F8EEB2825114CCF00F3D4B9 /* EventEditView.swift */,
+				4F8EEB2A25114CEF00F3D4B9 /* EventModel.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -968,6 +974,7 @@
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
+				4F8EEB2925114CCF00F3D4B9 /* EventEditView.swift in Sources */,
 				4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */,
 				4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */,
 				4FB8F4D624F5AD910015EC8E /* HomeViewSceneDelegate.swift in Sources */,
@@ -1019,6 +1026,7 @@
 				4FB8F4D224F1A4370015EC8E /* CaleanderWeekEntry.swift in Sources */,
 				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
+				4F8EEB2B25114CEF00F3D4B9 /* EventModel.swift in Sources */,
 				4F7F777A245766E400038729 /* HomeViewController.swift in Sources */,
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
 				4F9C26D024C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift in Sources */,

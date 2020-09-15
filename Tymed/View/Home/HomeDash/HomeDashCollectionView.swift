@@ -218,11 +218,17 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
     }
     
-    private func presentLessonDetail(_ indexPath: IndexPath) {
-        guard let lesson = self.event(for: indexPath)? .asLesson else {
+    private func presentDetail(_ indexPath: IndexPath) {
+        guard let calendarEvent = self.event(for: indexPath) else {
             return
         }
-        homeDelegate?.presentLessonEditView(for: lesson)
+        
+        if let lesson = calendarEvent.asLesson {
+            homeDelegate?.presentLessonEditView(for: lesson)
+        }else if let event = calendarEvent.asEvent {
+            homeDelegate?.presentEventEditView(for: event)
+        }
+        
     }
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
@@ -252,7 +258,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             break
         case currentSection, nextSection, daySection, weekSection, nextDaySection:
-            presentLessonDetail(indexPath)
+            presentDetail(indexPath)
             break
         default:
             break

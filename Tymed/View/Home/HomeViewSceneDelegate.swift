@@ -20,6 +20,8 @@ protocol HomeViewSceneDelegate {
     
     func presentLessonAddView()
     
+    func presentEventEditView(for event: Event)
+    
     func dismiss(_ animated: Bool)
     
     func reload()
@@ -61,6 +63,16 @@ extension HomeViewSceneDelegate {
         lessonAdd.homeDelegate = self
         
         present(lessonAdd, animated: true)
+    }
+    
+    func presentEventEditView(for event: Event) {
+        let eventEdit = EventEditViewWrapper()
+        
+        eventEdit.event = event
+        
+        eventEdit.homeDelegate = self
+        
+        present(eventEdit, animated: true)
     }
     
 }
