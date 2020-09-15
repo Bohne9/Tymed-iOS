@@ -29,6 +29,8 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         }
     }
     
+    var calendarCellSupplier = HomeCalendarCollectionViewCellSupplier()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -45,6 +47,8 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     
     //MARK: setupView
     private func setupView() {
+        calendarCellSupplier.collectionView = collectionView
+        
         backgroundColor = .systemGroupedBackground
         
         // Add the collectionView to the cell
@@ -60,6 +64,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     private func setupCollectionView() {
         // Register the HomeWeekLesson cell
         HomeWeekLessonCollectionViewCell.register(collectionView)
+        HomeEventCollectionViewCell.register(collectionView)
         
         // Set delegate + dataSource
         collectionView.delegate = self
@@ -79,7 +84,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         collectionView.backgroundColor = .systemGroupedBackground
     }
     
-    func lessons() -> [Lesson] {
+    func events() -> [CalendarEvent] {
         return entry?.entries ?? []
     }
     
@@ -87,13 +92,13 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     /// Returns the lesson for a given uuid
     /// - Parameter uuid: UUID of the lesson
     /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
-    private func lesson(for uuid: UUID) -> Lesson? {
-        return lessons().filter { return $0.id == uuid }.first
+    private func event(for uuid: UUID) -> CalendarEvent? {
+        return events().filter { return $0.id == uuid }.first
     }
     
     //MARK: lesson(_: IndexPath)
-    private func lesson(_ indexPath: IndexPath) -> Lesson? {
-        return lessons()[indexPath.row]
+    private func event(_ indexPath: IndexPath) -> CalendarEvent? {
+        return events()[indexPath.row]
     }
 
     //MARK: - DataSource
@@ -102,7 +107,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lessons().count
+        return events().count
     }
     
     private func dequeueLessonCell(for indexPath: IndexPath) -> HomeWeekLessonCollectionViewCell? {
@@ -113,30 +118,38 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     
     //MARK: didSelectItem
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let lesson = self.lesson(indexPath) else {
+        guard let event = self.event(indexPath) else {
             return
         }
-        // Present a LessonEditView when a lesson cell is selected
-        homeDelegate?.presentLessonEditView(for: lesson)
+        
+        if let lesson = event.asLesson {
+            // Present a LessonEditView when a lesson cell is selected
+            homeDelegate?.presentLessonEditView(for: lesson)
+        }
     }
 
     //MARK: cellForItemAt
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = dequeueLessonCell(for: indexPath) else {
-            return UICollectionViewCell()
+        
+        // Get event for the row
+        let event = self.event(indexPath)
+        
+        calendarCellSupplier.indexPath = indexPath
+        
+        if let cell = calendarCellSupplier.get(for: indexPath, event: event) {
+            
+            return cell
         }
-        // Get lesson for the row
-        let lesson = lessons()[indexPath.row]
-        
-        // Set cell lesson and reload UI of the cell
-        cell.lesson = lesson
-        cell.reload()
-        
-        return cell
+        return UICollectionViewCell()
     }
+    
     //MARK: duration(of: Lesson)
-    private func duration(of lesson: Lesson) -> Int {
-        return Int(lesson.end - lesson.start)
+    private func duration(of event: CalendarEvent) -> Int {
+        guard let start = event.startDate, let end = event.endDate else {
+            return 0
+        }
+        
+        return Int(end.timeIntervalSince(start))
     }
     
     //MARK: heightRelativeToDuration(of: Lesson)
@@ -144,20 +157,20 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     /// Minimum cell height is 25. The formula is: d * 0.75, where d is the duration of the lesson in minutes.
     /// - Parameter lesson: Lesson whichs height will be calculated
     /// - Returns: Height for a lesson cell relative to the duration of the lesson (min: 25)
-    private func heightRelativeToDuration(of lesson: Lesson) -> CGFloat {
+    private func heightRelativeToDuration(of event: CalendarEvent) -> CGFloat {
         
-        let duration = Double(self.duration(of: lesson)) * 0.75
+        let duration = Double(self.duration(of: event) / 60) * 0.75
         
         return CGFloat(max(25, duration))
     }
     
     //MARK: sizeForItemAt
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let lesson = self.lesson(indexPath) else {
+        guard let event = self.event(indexPath) else {
             return .zero
         }
         
-        let height = heightRelativeToDuration(of: lesson)
+        let height = heightRelativeToDuration(of: event)
         
         return CGSize(width: collectionView.frame.width - 40, height: height)
     }
@@ -165,7 +178,11 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
     //MARK: - ContextMenu/-Content
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         // Get the lesson for the context menu
-        guard let lesson = self.lesson(indexPath) else {
+        guard let event = self.event(indexPath) else {
+            return nil
+        }
+        
+        guard let lesson = event.asLesson else {
             return nil
         }
             
@@ -188,9 +205,14 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
             // Delete button for the context menu
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
                 // Get the lesson of the context menu
-                guard let lesson = self.lesson(indexPath) else {
+                guard let event = self.event(indexPath) else {
                     return
                 }
+                
+                guard let lesson = event.asLesson else {
+                    return
+                }
+                
                 // Remove the lesson
                 TimetableService.shared.deleteLesson(lesson)
                 
@@ -211,7 +233,11 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
         }
         
         animator.addCompletion {
-            guard let lesson = self.lesson(for: id) else {
+            guard let event = self.event(for: id) else {
+                return
+            }
+            
+            guard let lesson = event.asLesson else {
                 return
             }
             
@@ -225,7 +251,7 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell, UICollectionViewDeleg
 extension HomeWeekDayCollectionViewCell: UICollectionViewDragDelegate {
     
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard let item = lesson(indexPath) else {
+        guard let item = event(indexPath) else {
             return []
         }
         

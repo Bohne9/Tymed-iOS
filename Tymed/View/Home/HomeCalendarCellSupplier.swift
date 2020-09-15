@@ -16,7 +16,7 @@ class HomeCalendarCollectionViewCellSupplier: Supplier {
     typealias V = CalendarEvent
     
     var collectionView: UICollectionView?
-    private var indexPath: IndexPath?
+    var indexPath: IndexPath?
     
     private func dequeueCell(for identifier: String) -> HomeCalendarEventCollectionViewCell? {
         guard let index = indexPath else {
@@ -43,8 +43,8 @@ class HomeCalendarCollectionViewCellSupplier: Supplier {
         return cell
     }
     
-    func get(for indexPath: IndexPath, event: CalendarEvent?) -> HomeCalendarEventCollectionViewCell? {
-        self.indexPath = indexPath
+    func get(for index: IndexPath, event: CalendarEvent?) -> HomeCalendarEventCollectionViewCell? {
+        self.indexPath = index
         
         return get(event)
     }

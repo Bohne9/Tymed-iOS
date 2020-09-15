@@ -35,7 +35,7 @@ class CalendarWeekEntry: CalendarEntry {
         self.date = date.startOfWeek ?? Date()
         self.entries = CalendarService.shared.calendarWeekEntries(for: date)
             .filter({ (entry) -> Bool in
-            return entry.lessonCount > 0
+            return entry.eventCount > 0
         })
     }
     
