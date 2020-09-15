@@ -827,11 +827,14 @@ class TimetableService {
     }
     
     func getNextCalendarEvents(startingFrom date: Date) -> [CalendarEvent] {
+        var currentDate = date
         for _ in 0..<7 {
-            let events = calendarEventsFor(day: date)
+            let events = calendarEventsFor(day: currentDate)
             
             if events.count != 0 {
                 return events
+            }else {
+                currentDate = currentDate.nextDay
             }
         }
         return []
