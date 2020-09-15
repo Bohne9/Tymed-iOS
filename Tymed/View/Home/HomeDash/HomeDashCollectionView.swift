@@ -208,18 +208,9 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return UICollectionViewCell()
             }
             
-            if event.isLesson {
-                let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
-                
-                cell.lesson = event.asLesson
-                return cell
-            } else if event.isEvent {
-                let cell = dequeueCell(homeEventCell, indexPath) as! HomeEventCollectionViewCell
-                
-                cell.event = event.asEvent
+            if let cell = calendarCellSupplier.get(for: indexPath, event: event) {
                 return cell
             }
-            
             return UICollectionViewCell()
         default:
             return UICollectionViewCell()
