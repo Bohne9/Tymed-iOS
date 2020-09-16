@@ -146,3 +146,11 @@ extension CalendarEvent: Comparable {
     
     
 }
+
+extension CalendarEvent: Hashable {
+    
+    func hash(into hasher: inout Hasher) {
+        self.managedObject.hash(into: &hasher)
+    }
+    
+}

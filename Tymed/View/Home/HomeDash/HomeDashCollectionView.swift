@@ -90,6 +90,17 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         }
     }
     
+    private func allEvents() -> [CalendarEvent] {
+        var events = Set<CalendarEvent>()
+        
+        events = events.union(currentEvents ?? [])
+        events = events.union(dayEvents ?? [])
+        events = events.union(nextDayEvents ?? [])
+        events = events.union(nextEvents ?? [])
+        
+        return Array(events)
+    }
+    
     //MARK: fetchData()
     override internal func fetchData() {
         
@@ -118,6 +129,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             self.nextDay = Day.from(date: nextDay)
         }
         
+        events = allEvents()
+        
         sectionIdentifiers = []
         
         loadTask()
@@ -128,7 +141,6 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         appendSection(nextEvents, with: nextSection)
         appendSection(dayEvents, with: daySection)
         appendSection(nextDayEvents, with: nextDaySection)
-//        appendSection(lessons, with: weekSection)
         
     }
 
@@ -298,12 +310,25 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
     
+    
+    //MARK: ContextMenu
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
-        guard let lesson = self.event(for: indexPath)?.asLesson else {
+        guard let calendarEvent = self.event(for: indexPath) else {
             return nil
         }
         
+        if let lesson = calendarEvent.asLesson {
+            return contextConfiguration(for: lesson, at: indexPath)
+        }else if let event = calendarEvent.asEvent {
+            return contextConfiguration(for: event, at: indexPath)
+        }
+        
+        return nil
+    }
+    
+    //MARK: contextMenuForLesson
+    private func contextConfiguration(for lesson: Lesson, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
         guard let uuid = lesson.id else {
             return nil
         }
@@ -336,6 +361,36 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return config
     }
     
+    //MARK: contextMenuForEvent
+    private func contextConfiguration(for event: Event, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        guard let uuid = event.id else {
+            return nil
+        }
+        
+        let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
+            
+            // ViewController to give the user a preview of the eventEditView
+            let eventEdit = UIHostingController(
+                rootView: EventEditViewContent(event: event))
+            
+            return eventEdit
+        }) { (elements) -> UIMenu? in
+            
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                TimetableService.shared.deleteEvent(event)
+                
+                
+                self.homeDelegate?.presentEventEditView(for: event)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [delete])
+        }
+        
+        return config
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         
         guard let id = (configuration.identifier as? NSUUID) as UUID? else {
@@ -343,11 +398,16 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         }
         
         animator.addCompletion {
-            guard let lesson = self.event(for: id)?.asLesson else {
+            guard let calendarEvent = self.event(for: id) else {
                 return
             }
             
-            self.homeDelegate?.presentLessonEditView(for: lesson)
+            
+            if let lesson = calendarEvent.asLesson {
+                self.homeDelegate?.presentLessonEditView(for: lesson)
+            } else if let event = calendarEvent.asEvent {
+                self.homeDelegate?.presentEventEditView(for: event)
+            }
         }
         
     }
