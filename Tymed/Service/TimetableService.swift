@@ -442,6 +442,15 @@ class TimetableService {
         }
     }
     
+    //MARK: reset()
+    func reset() {
+        context.reset()
+    }
+    
+    func hasChanges() -> Bool {
+        return context.hasChanges
+    }
+    
     //MARK: dateFor(day: )
     /// Creates a Date containing the given Day type as .weekday
     /// - Parameter day: Day of week

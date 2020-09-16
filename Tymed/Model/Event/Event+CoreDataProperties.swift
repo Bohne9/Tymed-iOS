@@ -23,7 +23,8 @@ extension Event {
     @NSManaged public var createdAt: Date?
     @NSManaged public var body: String?
     @NSManaged public var notes: String?
-    @NSManaged public var notification: Date?
+    @NSManaged public var notificationID: UUID?
+    @NSManaged public var notificationDate: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var task: Task?
     @NSManaged public var subject: Subject?

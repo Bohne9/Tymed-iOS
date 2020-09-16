@@ -104,11 +104,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     //MARK: fetchData()
     override internal func fetchData() {
         
-//        lessons = TimetableService.shared.fetchLessons()
-        
-        currentEvents = TimetableService.shared.calendarEvents(within: Date())
-        
-        dayEvents = TimetableService.shared.calendarEventsFor(day: Date())
+//        lessons = TimetableService.shared.fetchLessons()ed.calendarEventsFor(day: Date())
         
         nextDayEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
         

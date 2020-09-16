@@ -181,8 +181,8 @@
 		4F2A7DC324AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonDetailSubjectTitleCell.swift; sourceTree = "<group>"; };
 		4F2A7DC524AFAD22002467E3 /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		4F2A7DC624AFAD22002467E3 /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
-		4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
-		4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Event+CoreDataClass.swift"; path = "Tymed/Model/Event/Event+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Event+CoreDataProperties.swift"; path = "Tymed/Model/Event/Event+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		4F2BBFBD24F4451400CE92DD /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		4F2ECB98247060EE00FC0148 /* HomeDashTaskOverviewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F2ECB9A2470636F00FC0148 /* HomeBaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -548,8 +548,7 @@
 				4F0F872A246F28BC00992721 /* Lesson+CoreDataProperties.swift */,
 				4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */,
 				4FB1C18924F983370001918C /* Timetable+CoreDataProperties.swift */,
-				4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */,
-				4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */,
+				4FE5E4C9251288CC00F57909 /* Event */,
 				4F9405EE2468067C0063E4DA /* Time.swift */,
 			);
 			path = Model;
@@ -714,7 +713,6 @@
 			children = (
 				4FD2715B250956EB0073696A /* EventAddView.swift */,
 				4F8EEB2825114CCF00F3D4B9 /* EventEditView.swift */,
-				4F8EEB2A25114CEF00F3D4B9 /* EventModel.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -726,6 +724,16 @@
 				4FD92C2924FA11DB00A51441 /* ProAccessBadge.swift */,
 			);
 			path = "Pro-Access";
+			sourceTree = "<group>";
+		};
+		4FE5E4C9251288CC00F57909 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				4F8EEB2A25114CEF00F3D4B9 /* EventModel.swift */,
+				4F2AA0DC25080F040056CC54 /* Event+CoreDataClass.swift */,
+				4F2AA0DD25080F040056CC54 /* Event+CoreDataProperties.swift */,
+			);
+			path = Event;
 			sourceTree = "<group>";
 		};
 		623734F54A543F75F5356A5E /* Frameworks */ = {

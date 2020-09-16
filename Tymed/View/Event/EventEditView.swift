@@ -40,11 +40,13 @@ struct EventEditView: View {
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
+                    TimetableService.shared.reset()
                     dismiss()
                 }, label: {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
                 }), trailing: Button(action: {
+                    NotificationService.current.scheduleEventNotification(for: event)
                     TimetableService.shared.save()
                     dismiss()
                 }, label: {
@@ -66,6 +68,10 @@ struct EventEditViewContent: View {
     @State
     private var showEndDatePicker = false
     
+    @State
+    private var showNotificationDatePicker = false
+
+    
     var body: some View {
         List {
             
@@ -73,7 +79,7 @@ struct EventEditViewContent: View {
                 
                 TextField("Title", text: $event.title)
                 
-                TextField("Description", text: Binding($event.body, ""))
+                TextField("Description", text: Binding($event.body, replacingNilWith: ""))
             }
             
             Section {
@@ -95,6 +101,7 @@ struct EventEditViewContent: View {
                 }
                 
                 DetailCellDescriptor("End date", image: "calendar", .systemOrange, value: textFor(event.end))
+                    .animation(.default)
                     .onTapGesture {
                         withAnimation {
                             showEndDatePicker.toggle()
@@ -108,6 +115,23 @@ struct EventEditViewContent: View {
                 if showEndDatePicker {
                     DatePicker("", selection: Binding($event.end, Date()))
                         .datePickerStyle(GraphicalDatePickerStyle())
+                        .animation(.default)
+                }
+                
+                HStack {
+                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
+                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
+                }.animation(.default)
+                .onTapGesture {
+                    withAnimation {
+                        showNotificationDatePicker.toggle()
+                    }
+                }
+    
+                if event.notificationDate != nil && showNotificationDatePicker {
+                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                        .animation(.easeIn)
                 }
             }
             
@@ -142,5 +166,9 @@ struct EventEditViewContent: View {
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
         return event.timetable?.name
+    }
+    
+    private func textForNotification() -> String? {
+        return event.notificationDate?.stringify(dateStyle: .medium, timeStyle: .short)
     }
 }

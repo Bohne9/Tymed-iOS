@@ -333,4 +333,23 @@ extension Binding {
         // Unsafe unwrap because *we* know it's non-nil now.
         self.init(source)!
     }
+    
+    init<T>(isNotNil source: Binding<T?>, defaultValue: T) where Value == Bool {
+        self.init(get: { source.wrappedValue != nil },
+                  set: { source.wrappedValue = $0 ? defaultValue : nil })
+    }
+    
+    init(_ source: Binding<Value?>, replacingNilWith nilValue: Value) where Value: Equatable {
+        self.init(
+            get: { source.wrappedValue ?? nilValue },
+            set: { newValue in
+                if newValue == nilValue {
+                    source.wrappedValue = nil
+                }
+                else {
+                    source.wrappedValue = newValue
+                }
+        })
+    }
+    
 }

@@ -11,7 +11,14 @@ import SwiftUI
 //MARK: EventAddView
 struct EventAddView: View {
     
-    var event = EventModel()
+    var event: Event = {
+        let event = TimetableService.shared.event()
+        
+        event.start = Date()
+        event.end = Date() + 3600
+        
+        return event
+    }()
     
     @Environment(\.presentationMode)
     var presentaionMode
@@ -22,7 +29,9 @@ struct EventAddView: View {
                 .navigationTitle("New Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
+                    TimetableService.shared.reset()
                     
+                    presentaionMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
@@ -37,9 +46,9 @@ struct EventAddView: View {
     
     func addEvent() {
         
-        guard event.create() != nil else {
-            return
-        }
+        NotificationService.current.scheduleEventNotification(for: event)
+        
+        TimetableService.shared.save()
         
         presentaionMode.wrappedValue.dismiss()
         
@@ -50,13 +59,16 @@ struct EventAddView: View {
 struct EventAddViewContent: View {
     
     @ObservedObject
-    var event: EventModel
+    var event: Event
     
     @State
     private var showStartDatePicker = false
     
     @State
     private var showEndDatePicker = false
+    
+    @State
+    private var showNotificationDatePicker = false
     
     var body: some View {
         
@@ -66,7 +78,7 @@ struct EventAddViewContent: View {
                 
                 TextField("Title", text: $event.title)
                 
-                TextField("Description", text: $event.body)
+                TextField("Description", text: Binding($event.body, replacingNilWith: ""))
             }
             
             Section {
@@ -83,7 +95,7 @@ struct EventAddViewContent: View {
                     }
                 
                 if showStartDatePicker {
-                    DatePicker("", selection: $event.start)
+                    DatePicker("", selection: Binding($event.start, Date()))
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
@@ -99,8 +111,25 @@ struct EventAddViewContent: View {
                     }
                 
                 if showEndDatePicker {
-                    DatePicker("", selection: $event.end)
+                    DatePicker("", selection: Binding($event.end, Date()))
                         .datePickerStyle(GraphicalDatePickerStyle())
+                }
+                
+                
+                HStack {
+                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
+                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
+                }.animation(.default)
+                .onTapGesture {
+                    withAnimation {
+                        showNotificationDatePicker.toggle()
+                    }
+                }
+    
+                if event.notificationDate != nil && showNotificationDatePicker {
+                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                        .animation(.easeIn)
                 }
             }
             
@@ -128,13 +157,17 @@ struct EventAddViewContent: View {
         
     }
     
-    func textFor(_ date: Date) -> String {
-        return date.stringify(dateStyle: .long, timeStyle: .short)
+    func textFor(_ date: Date?) -> String {
+        return date?.stringify(dateStyle: .medium, timeStyle: .short) ?? ""
     }
     
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
         return event.timetable?.name
+    }
+    
+    private func textForNotification() -> String? {
+        return event.notificationDate?.stringify(dateStyle: .medium, timeStyle: .short)
     }
 }
 

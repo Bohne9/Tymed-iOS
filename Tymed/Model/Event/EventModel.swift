@@ -9,7 +9,7 @@
 import SwiftUI
 
 //MARK: EventModel
-class EventModel: ObservableObject {
+public class EventModel: ObservableObject {
     
     @Published
     public var title: String = ""
@@ -27,7 +27,7 @@ class EventModel: ObservableObject {
     public var notes: String = ""
     
     @Published
-    public var notification: Date = Date()
+    public var notification: Date? = Date()
     
     @Published
     public var task: Task?

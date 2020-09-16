@@ -112,6 +112,7 @@ class NotificationService {
         
         case lesson = "lessonThread"
         case task = "taskThread"
+        case event  = "eventThread"
         case other = "otherThread"
         
         var identifier: String {
@@ -124,6 +125,7 @@ class NotificationService {
         
         case lesson = "lessonCategory"
         case task = "taskCategory"
+        case event = "eventCategory"
         case other = "otherCategory"
         
         var identifier: String {
@@ -181,6 +183,12 @@ class NotificationService {
         return notificationTrigger(at: date)
     }
     
+    private func notificationTrigger(for event: Event) -> UNCalendarNotificationTrigger? {
+        guard let date = event.notificationDate else { return nil }
+        
+        return notificationTrigger(at: date)
+    }
+    
     private func notificationTrigger(for task: Task, with offset: TimeInterval) -> UNCalendarNotificationTrigger? {
         guard var date = task.due else { return nil }
         
@@ -230,6 +238,13 @@ class NotificationService {
                                    , sound: .default, category: .lesson)
     }
     
+    private func notificationEventContent(for event: Event) -> UNMutableNotificationContent {
+        
+        let title = event.title
+        
+        return notificationContent(title, body: "nil", thread: .event, sound: .default, category: .event)
+    }
+    
     //MARK: notificationRequest(...)
     
     func notificationRequest(_ identifier: String, _ content: UNMutableNotificationContent, _ trigger: UNNotificationTrigger) -> UNNotificationRequest {
@@ -263,6 +278,16 @@ class NotificationService {
         return notificationRequest(identifier, content, trigger)
     }
     
+    func notificationEventRequest(for event: Event) -> UNNotificationRequest? {
+        guard let trigger = notificationTrigger(for: event) else { return nil }
+        
+        let content = notificationEventContent(for: event)
+        
+        let identifier = UUID()
+        
+        return notificationRequest(identifier.uuidString, content, trigger)
+    }
+    
     //MARK: scheduleNotification
     func scheduleNotification(_ request: UNNotificationRequest) {
         
@@ -289,7 +314,35 @@ class NotificationService {
         scheduleNotification(request)
     }
     
+    
+    /// Schedules an event notification for the given event at its notification date.
+    /// Calling this method will discard any notifications connected to the given event.
+    /// - Parameter event: Event for the notification
+    func scheduleEventNotification(for event: Event) {
+        // Remove all old notifications
+        if let id = event.notificationID?.uuidString {
+            removeNotification(with: id)
+        }
+        // Create a new request for the notificationDate
+        guard let request = notificationEventRequest(for: event) else {
+            return
+        }
+        
+        // Set the new identifier in the core data model & save it
+        event.notificationID = UUID(uuidString: request.identifier)
+        
+        TimetableService.shared.save()
+        
+        // Schedule the new notification
+        scheduleNotification(request)
+    }
+    
     //MARK: removeNotifications
+    
+    func removeNotification(with identifier: String) {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [identifier])
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
     
     func removePendingNotifications(of task: Task) {
         guard let identifier = task.id?.uuidString else {
