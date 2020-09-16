@@ -106,6 +106,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
 //        lessons = TimetableService.shared.fetchLessons()ed.calendarEventsFor(day: Date())
         
+        currentEvents = TimetableService.shared.calendarEvents(within: Date())
+        
         nextDayEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
         
         nextEvents = nextDayEvents?.sorted().reduce([], { (result, event) -> [CalendarEvent] in
