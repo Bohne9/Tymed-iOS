@@ -94,19 +94,18 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
  
     //MARK: scrollTo(day: )
     func scrollTo(date: Date, _ animated: Bool = false) {
-    
+        
         outer : for (section, week) in entries.enumerated() {
             
-            print("Week: \(String(describing: section)), Start: \(week.date.stringify(with: .medium)), End: \(week.date.endOfWeek!.stringify(with: .medium))")
             if date < week.endOfWeek ?? date {
                 for (index, day) in week.entries.enumerated() {
-                    print("\tDay: \(String(describing: index)), Start: \(day.startOfDay!.stringify(dateStyle: .medium, timeStyle: .medium)), End: \(day.endOfDay!.stringify(dateStyle: .medium, timeStyle: .medium))")
                     if date < day.endOfDay ?? date {
-                        print("---Hit----")
+                        
                         let indexPath = IndexPath(item: index, section: section)
-                        collectionView.scrollToItem(at: indexPath, at: .top
-                                                    , animated: animated)
+                        
+                        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
                         updateCurrentDay(indexPath: indexPath)
+                        
                         break outer
                     }
                 }

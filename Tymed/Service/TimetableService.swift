@@ -823,6 +823,10 @@ class TimetableService {
         
         lessons.sort()
         
+        lessons.forEach { (event) in
+            event.anchorDate = date.startOfDay
+        }
+        
         return lessons
     }
     
