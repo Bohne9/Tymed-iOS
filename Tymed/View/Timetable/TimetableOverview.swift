@@ -118,6 +118,7 @@ struct TimetableOverview: View {
         .sheet(isPresented: $showAddView, onDismiss: {
             showLessonAdd = false
             showTaskAdd = false
+            showEventAdd = false
             showTimetableAdd = false
         }, content: {
             if showLessonAdd {
@@ -166,7 +167,7 @@ struct TimetableOverviewCell: View {
     
     var body: some View {
         HStack {
-            Text(timetable.name ?? "")
+            Text(timetable.name)
                 .font(.system(size: 15, weight: .semibold))
             
             Spacer()
