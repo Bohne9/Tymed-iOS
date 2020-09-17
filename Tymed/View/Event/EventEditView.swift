@@ -41,7 +41,7 @@ struct EventEditView: View {
     
     var body: some View {
         NavigationView {
-            EventEditViewContent(event: event)
+            EventEditViewContent(event: event, presentationDelegate: presentationDelegate)
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
@@ -80,6 +80,11 @@ struct EventEditViewContent: View {
     @ObservedObject
     var event: Event
     
+    var presentationDelegate: ViewWrapperPresentationDelegate?
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
     @State
     private var showStartDatePicker = false
     
@@ -89,6 +94,9 @@ struct EventEditViewContent: View {
     @State
     private var showNotificationDatePicker = false
 
+    //MARK: Delete state
+    @State var showDeleteAction = false
+    
     
     var body: some View {
         List {
@@ -173,6 +181,25 @@ struct EventEditViewContent: View {
                 }
             }
             
+            //MARK: Delete
+            Section {
+                DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showDeleteAction.toggle()
+                    }.actionSheet(isPresented: $showDeleteAction) {
+                        ActionSheet(
+                            title: Text(""),
+                            message: nil,
+                            buttons: [
+                                .destructive(Text("Delete"), action: {
+                                    deleteEvent()
+                                }),
+                                .cancel()
+                            ])
+                    }
+            }
+            
         }.listStyle(InsetGroupedListStyle())
             
     }
@@ -188,5 +215,14 @@ struct EventEditViewContent: View {
     
     private func textForNotification() -> String? {
         return event.notificationDate?.stringify(dateStyle: .medium, timeStyle: .short)
+    }
+    
+    //MARK: deleteEvent
+    private func deleteEvent() {
+        TimetableService.shared.deleteEvent(event)
+        
+        presentationDelegate?.done()
+        
+        presentationMode.wrappedValue.dismiss()
     }
 }
