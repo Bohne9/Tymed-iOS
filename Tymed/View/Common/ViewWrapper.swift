@@ -9,6 +9,17 @@
 import UIKit
 import SwiftUI
 
+
+class ViewWrapperPresentationHandler: ObservableObject {
+
+    @Published
+    var shouldDismiss = true
+    
+    @Published
+    var showDiscardWarning = false
+    
+}
+
 protocol ViewWrapperPresentationDelegate {
     
     func dismiss()
@@ -17,6 +28,7 @@ protocol ViewWrapperPresentationDelegate {
     
     func done()
     
+    func shouldDismiss() -> Bool
 }
 
 class ViewWrapper<T: View>: UIViewController {
@@ -26,6 +38,8 @@ class ViewWrapper<T: View>: UIViewController {
     var hostingConroller: UIHostingController<T>?
     
     var presentationDelegate: ViewWrapperPresentationDelegate?
+    
+    var presentationHandler = ViewWrapperPresentationHandler()
     
     internal func createContent() -> UIHostingController<T>? {
         return nil
@@ -76,5 +90,8 @@ extension ViewWrapper: ViewWrapperPresentationDelegate {
         dismiss()
     }
     
+    func shouldDismiss() -> Bool {
+        return !TimetableService.shared.hasChanges()
+    }
     
 }

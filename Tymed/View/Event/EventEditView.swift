@@ -12,14 +12,19 @@ class EventEditViewWrapper: ViewWrapper<EventEditView> {
     
     var event: Event?
     
+    var eventEditView: EventEditView?
+    
     override func createContent() -> UIHostingController<EventEditView>? {
         guard let event = event else {
             return nil
         }
         
-        return UIHostingController(rootView: EventEditView(
-                                    event: event,
-                                    presentationDelegate: presentationDelegate))
+        eventEditView = EventEditView(
+            event: event,
+            presentationDelegate: presentationDelegate,
+            presentationHandler: presentationHandler)
+     
+        return UIHostingController(rootView: eventEditView!)
     }
     
 }
@@ -31,8 +36,8 @@ struct EventEditView: View {
     
     var presentationDelegate: ViewWrapperPresentationDelegate?
     
-    @State
-    var showDiscardWarning = false
+    @ObservedObject
+    var presentationHandler: ViewWrapperPresentationHandler
     
     var body: some View {
         NavigationView {
@@ -40,11 +45,7 @@ struct EventEditView: View {
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
-                    if TimetableService.shared.hasChanges() {
-                        showDiscardWarning.toggle()
-                    }else {
-                        presentationDelegate?.cancel()
-                    }
+                    cancel()
                 }, label: {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
@@ -55,7 +56,7 @@ struct EventEditView: View {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
                 }))
-        }.actionSheet(isPresented: $showDiscardWarning, content: {
+        }.actionSheet(isPresented: $presentationHandler.showDiscardWarning, content: {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
                     presentationDelegate?.cancel()
@@ -63,6 +64,14 @@ struct EventEditView: View {
                 .cancel()
             ])
         })
+    }
+    
+    func cancel() {
+        if TimetableService.shared.hasChanges() {
+            presentationHandler.showDiscardWarning.toggle()
+        }else {
+            presentationDelegate?.cancel()
+        }
     }
 }
 
