@@ -9,32 +9,27 @@
 import Foundation
 
 class CalendarDayEntry: CalendarEntry {
-    typealias Entry = Lesson
+    typealias Entry = CalendarEvent
     
     var date: Date
     
-    var entries: [Lesson]
+    var entries: [CalendarEvent]
     
-    var lessonCount: Int {
+    var eventCount: Int {
         return entries.count
     }
     
     var startOfDay: Date? {
-        return entries.first?.nextStartDate(startingFrom: date)
+        return entries.first?.startDate
     }
     
     var endOfDay: Date? {
-        return entries.last?.nextEndDate(startingFrom: date)
+        return entries.last?.endDate
     }
     
-    init(for date: Date, entries: [Lesson]) {
+    init(for date: Date, entries: [CalendarEvent]) {
         self.date = date.startOfDay
-        self.entries = entries.sorted(by: { (lhs, rhs) -> Bool in
-            if lhs.startTime != rhs.endTime {
-                return lhs.startTime < rhs.endTime
-            }
-            return lhs.endTime < rhs.endTime
-        })
+        self.entries = entries.sorted()
     }
     
     

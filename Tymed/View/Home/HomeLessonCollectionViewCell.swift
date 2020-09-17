@@ -9,16 +9,21 @@
 import UIKit
 
 let homeLessonCell = "homeLessonCell"
-class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
+class HomeLessonCollectionViewCell: HomeCalendarEventCollectionViewCell {
     
     static func register(_ collectionView: UICollectionView) {
         collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
     }
     
     var lesson: Lesson? {
-        didSet {
-            reload()
-            configurator.configure(self)
+        get {
+            return calendarEvent?.asLesson
+        }
+        set {
+            guard let lesson = newValue else {
+                return
+            }
+            calendarEvent = CalendarEvent(managedObject: lesson)
         }
     }
     
@@ -36,13 +41,6 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
     // Layout constraint for anchoring the time label to the top of the cell
     var timeTopConstraint: NSLayoutConstraint?
     var timeBottomConstraint: NSLayoutConstraint?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupUserInterface()
-        
-    }
     
     internal override func setupUserInterface() {
         super.setupUserInterface()
@@ -69,10 +67,8 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         
         // Setup two constraints for different cells
         timeTopConstraint = time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10)
-        timeBottomConstraint = time.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         
-        timeTopConstraint?.isActive = false
-        timeBottomConstraint?.isActive = false
+        timeTopConstraint?.isActive = true
         
         time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
@@ -155,9 +151,4 @@ class HomeLessonCollectionViewCell: HomeBaseCollectionViewCell {
         tasksLabel.text = "\(lesson.unarchivedTasks?.count ?? 0)"
     }
     
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
 }

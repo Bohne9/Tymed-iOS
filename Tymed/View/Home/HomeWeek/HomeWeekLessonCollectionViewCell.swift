@@ -9,17 +9,23 @@
 
 import UIKit
 
-class HomeWeekLessonCollectionViewCell: HomeBaseCollectionViewCell {
+class HomeWeekLessonCollectionViewCell: HomeCalendarEventCollectionViewCell {
 
-    static let identifier = "homeWeekLessonCollectionViewCell"
+    static let identifier = "homeLessonCell"
     
     static func register(_ collectionView: UICollectionView) {
         collectionView.register(HomeWeekLessonCollectionViewCell.self, forCellWithReuseIdentifier: identifier)
     }
     
     var lesson: Lesson? {
-        didSet {
-            reload()
+        get {
+            return calendarEvent?.asLesson
+        }
+        set {
+            guard let lesson = newValue else {
+                return
+            }
+            calendarEvent = CalendarEvent(managedObject: lesson)
         }
     }
     

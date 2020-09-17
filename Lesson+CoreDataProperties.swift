@@ -9,7 +9,7 @@
 
 import Foundation
 import CoreData
-
+import UIKit
 
 extension Lesson: Identifiable {
 
@@ -110,3 +110,4 @@ extension Lesson {
     @NSManaged public func removeFromTasks(_ values: NSSet)
 
 }
+

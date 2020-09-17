@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 //MARK: String
 extension String {
@@ -125,6 +126,10 @@ extension Date {
         components.day = 1
         components.second = -1
         return Calendar.current.date(byAdding: components, to: startOfDay)!
+    }
+    
+    var nextDay: Date {
+        return (self + (3600 * 24)).startOfDay
     }
 }
 
@@ -283,6 +288,16 @@ extension UIColor {
         self.init(lesson?.subject)
     }
     
+    convenience init? (_ timetable: Timetable) {
+        self.init(named: timetable.color)
+    }
+    
+    convenience init? (_ event: Event) {
+        guard let timetable = event.timetable else {
+            return nil
+        }
+        self.init(timetable)
+    }
 }
 
 
@@ -305,4 +320,36 @@ extension TimeInterval {
         return hour(value) * 24
     }
 
+}
+
+
+//MARK: Binding
+extension Binding {
+    init(_ source: Binding<Value?>, _ defaultValue: Value) {
+        // Ensure a non-nil value in `source`.
+        if source.wrappedValue == nil {
+            source.wrappedValue = defaultValue
+        }
+        // Unsafe unwrap because *we* know it's non-nil now.
+        self.init(source)!
+    }
+    
+    init<T>(isNotNil source: Binding<T?>, defaultValue: T) where Value == Bool {
+        self.init(get: { source.wrappedValue != nil },
+                  set: { source.wrappedValue = $0 ? defaultValue : nil })
+    }
+    
+    init(_ source: Binding<Value?>, replacingNilWith nilValue: Value) where Value: Equatable {
+        self.init(
+            get: { source.wrappedValue ?? nilValue },
+            set: { newValue in
+                if newValue == nilValue {
+                    source.wrappedValue = nil
+                }
+                else {
+                    source.wrappedValue = newValue
+                }
+        })
+    }
+    
 }

@@ -19,6 +19,8 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
 
     var sectionIdentifiers: [String] = []
     
+    internal var calendarCellSupplier = HomeCalendarCollectionViewCellSupplier()
+    
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
         
@@ -31,6 +33,8 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        calendarCellSupplier.collectionView = collectionView
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -180,9 +184,22 @@ extension HomeBaseCollectionView: UICollectionViewDelegateFlowLayout {
 extension HomeBaseCollectionView: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        
+        print(presentationController.presentedViewController is ViewWrapper<EventEditView>)
+        
         reload()
     }
     
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        
+        if let presentedViewController = presentationController.presentedViewController as? EventEditViewWrapper {
+            presentedViewController.presentationHandler.showDiscardWarning = TimetableService.shared.hasChanges()
+            
+            return !TimetableService.shared.hasChanges()
+        }
+        
+        return true
+    }
     
 }
 

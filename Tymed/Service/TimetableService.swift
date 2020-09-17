@@ -105,11 +105,14 @@ class TimetableService {
         
     }
     
+    //MARK: - Timetable
+    
     func timetable() -> Timetable {
         let timetable = Timetable(context: context)
         timetable.id = UUID()
         timetable.isDefault = false
         timetable.name = ""
+        timetable.color = "red"
         
         return timetable
     }
@@ -173,9 +176,66 @@ class TimetableService {
         return timetable
     }
     
-    //MARK: Subject fetching
-    func fetchSubjects() -> [Subject]? {
+    //MARK: - Events
     
+    func fetchEvents() -> [Event]? {
+        let req = NSFetchRequest<NSManagedObject>(entityName: "Event")
+        
+        do {
+            
+            let res = try context.fetch(req) as! [Event]
+            
+            return res
+            
+        } catch {
+            return nil
+        }
+    }
+    
+    func event() -> Event {
+        let event = Event(context: context)
+        
+        event.id = UUID()
+        event.createdAt = Date()
+        
+        return event
+    }
+    
+    func deleteEvent(_ event: Event) {
+        context.delete(event)
+        
+        save()
+    }
+       
+    func getEvents(withinDay date: Date) -> [Event] {
+        let events = fetchEvents()?.filter({ event in
+            guard let start = event.start, let end = event.end else {
+                return false
+            }
+            
+            let startOfDay = date.startOfDay
+            let endOfDay = date.endOfDay
+            
+            return startOfDay <= start && start <= endOfDay || startOfDay <= end && end <= endOfDay
+        })
+        
+        return events ?? []
+    }
+    
+    func getEvents(within date: Date) -> [Event] {
+        let events = fetchEvents()?.filter({ event in
+            guard let start = event.start, let end = event.end else {
+                return false
+            }
+            
+            return start <= date && date <= end
+        })
+        
+        return events ?? []
+    }
+    
+    //MARK: - Subject
+    func fetchSubjects() -> [Subject]? {
         let req = NSFetchRequest<NSManagedObject>(entityName: "Subject")
         
         do {
@@ -283,7 +343,7 @@ class TimetableService {
         }
     }
     
-    //MARK: Lesson fetching
+    //MARK: - Lesson
     func fetchLessons() -> [Lesson]? {
         
         let req = NSFetchRequest<NSManagedObject>(entityName: "Lesson")
@@ -348,7 +408,7 @@ class TimetableService {
         save()
     }
     
-    //MARK: Task factory
+    //MARK: - Task
     /// Creates a new instance of Task and attaches an UUID
     func task() -> Task {
         let task = Task(context: context)
@@ -380,6 +440,19 @@ class TimetableService {
         } catch {
             print(error)
         }
+    }
+    
+    //MARK: reset()
+    func reset() {
+        context.reset()
+    }
+    
+    func rollback() {
+        context.rollback()
+    }
+    
+    func hasChanges() -> Bool {
+        return context.hasChanges
     }
     
     //MARK: dateFor(day: )
@@ -734,5 +807,53 @@ class TimetableService {
         comp.minute = start.minute
         
         return Calendar.current.nextDate(after: Date(), matching: comp, matchingPolicy: .strict)
+    }
+    
+    
+    
+    func calendarEvents(within date: Date) -> [CalendarEvent] {
+        
+        var lessons = CalendarEvent.lessonEvents(lessons: getLessons(within: date))
+        let events = CalendarEvent.eventEvents(events: getEvents(within: date))
+        
+        lessons.append(contentsOf: events)
+        
+        lessons.sort()
+        
+        return lessons
+    }
+    
+    func calendarEventsFor(day date: Date) -> [CalendarEvent] {
+        
+        guard let day = Day.from(date: date) else {
+            return []
+        }
+        
+        var lessons = CalendarEvent.lessonEvents(lessons: getLessons(within: day))
+        let events = CalendarEvent.eventEvents(events: getEvents(withinDay: date))
+        
+        lessons.append(contentsOf: events)
+        
+        lessons.sort()
+        
+        lessons.forEach { (event) in
+            event.anchorDate = date.startOfDay
+        }
+        
+        return lessons
+    }
+    
+    func getNextCalendarEvents(startingFrom date: Date) -> [CalendarEvent] {
+        var currentDate = date
+        for _ in 0..<7 {
+            let events = calendarEventsFor(day: currentDate)
+            
+            if events.count != 0 {
+                return events
+            }else {
+                currentDate = currentDate.nextDay
+            }
+        }
+        return []
     }
 }

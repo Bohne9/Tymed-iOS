@@ -133,6 +133,13 @@ struct TimetableDetail: View {
                 }
             }
             
+            //MARK: Color
+            Section {
+                NavigationLink(destination: AppColorPickerView(color: $timetable.color)) {
+                    DetailCellDescriptor("Color", image: "paintbrush.fill", UIColor(timetable) ?? .clear, value: timetable.color.capitalized)
+                }
+            }
+            
             //MARK: Delete
             Section {
                 DetailCellDescriptor("Delete", image: "trash", .systemRed)

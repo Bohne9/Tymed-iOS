@@ -14,7 +14,7 @@ private let nowReuseIdentifier = "homeNowCell"
 private let taskSelectionCell = "taskSelection"
 
 private let tasksSection = "tasksSection"
-private let nowSection = "nowSection"
+private let currentSection = "currentSection"
 private let nextSection = "nextSection"
 private let daySection = "daySection"
 private let nextDaySection = "nextDaySection"
@@ -25,19 +25,19 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     var cellColor: UIColor = .red
     
     var subjects: [Subject]?
-    var lessons: [Lesson]?
+    var events: [CalendarEvent]?
     
     private var taskSelection: HomeDashTaskSelectorCellType = .next
     
     //MARK: Section lesson arrays
-    var nowLessons: [Lesson]?
+    var currentEvents: [CalendarEvent]?
     
-    var nextLessons: [Lesson]?
+    var nextEvents: [CalendarEvent]?
     
-    var dayLessons: [Lesson]?
+    var dayEvents: [CalendarEvent]?
     
     var nextDay: Day?
-    var nextDayLessons: [Lesson]?
+    var nextDayEvents: [CalendarEvent]?
     
     var tasks: [Task]?
     
@@ -48,10 +48,12 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         super.setupUserInterface()
         
         collectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "homeHeader")
-        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
         collectionView.register(UINib(nibName: "HomeDashTaskOverviewCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: homeDashTaskOverviewCollectionViewCell)
         collectionView.register(HomeDashTaskSelectorCollectionViewCell.self, forCellWithReuseIdentifier: taskSelectionCell)
         collectionView.register(HomeDashTaskOverviewNoTasksCollectionViewCell.self, forCellWithReuseIdentifier: "noTaskCell")
+        
+        collectionView.register(HomeLessonCollectionViewCell.self, forCellWithReuseIdentifier: homeLessonCell)
+        HomeEventCollectionViewCell.register(collectionView)
         
         
     }
@@ -59,65 +61,73 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     /// Returns the lesson for a given uuid
     /// - Parameter uuid: UUID of the lesson
     /// - Returns: Lesson with the given uuid. Nil if lesson does not exist in lessons list.
-    private func lesson(for uuid: UUID) -> Lesson? {
-        return lessons?.filter { return $0.id == uuid }.first
+    private func event(for uuid: UUID) -> CalendarEvent? {
+        return events?.filter { return $0.id == uuid }.first
     }
     
-    private func lesson(for indexPath: IndexPath) -> Lesson? {
+    private func event(for indexPath: IndexPath) -> CalendarEvent? {
         let identifier = section(for: indexPath)
         
         switch identifier {
-        case nowSection:
-            return nowLessons?[indexPath.row]
+        case currentSection:
+            return currentEvents?[indexPath.row]
         case nextSection:
-            return nextLessons?[indexPath.row]
+            return nextEvents?[indexPath.row]
         case daySection:
-            return dayLessons?[indexPath.row]
+            return dayEvents?[indexPath.row]
         case weekSection:
-            return lessons?[indexPath.row]
+            return events?[indexPath.row]
         case nextDaySection:
-            return nextDayLessons?[indexPath.row]
+            return nextDayEvents?[indexPath.row]
         default:
             return nil
         }
     }
     
-    private func appendSection(_ lessons: [Lesson]?, with identifier: String) {
-        if (lessons?.count ?? 0) > 0 {
+    private func appendSection(_ events: [CalendarEvent]?, with identifier: String) {
+        if (events?.count ?? 0) > 0 {
             addSection(id: identifier)
         }
+    }
+    
+    private func allEvents() -> [CalendarEvent] {
+        var events = Set<CalendarEvent>()
+        
+        events = events.union(currentEvents ?? [])
+        events = events.union(dayEvents ?? [])
+        events = events.union(nextDayEvents ?? [])
+        events = events.union(nextEvents ?? [])
+        
+        return Array(events)
     }
     
     //MARK: fetchData()
     override internal func fetchData() {
         
-        lessons = TimetableService.shared.fetchLessons()
+//        lessons = TimetableService.shared.fetchLessons()ed.calendarEventsFor(day: Date())
         
-        nowLessons = TimetableService.shared.getLessons(within: Date()).sorted(by: { (l1, l2) in
-            return l1.startTime < l2.startTime
-        })
+        currentEvents = TimetableService.shared.calendarEvents(within: Date())
         
-        dayLessons = TimetableService.shared.getLessons(within: .current).sorted(by: { (l1, l2) in
-            return l1.startTime < l2.startTime
-        }).filter({ (lesson) -> Bool in
-            Time(from: Date()) < lesson.endTime // Only include the lessons with are in the future
-        })
+        nextDayEvents = TimetableService.shared.getNextCalendarEvents(startingFrom: Date().nextDay)
         
-        
-        var day = Day.current
-        
-        for _ in 0..<6 {
-            day = day.rotatingNext()
-            nextDayLessons = TimetableService.shared.getLessons(within: day).sorted(by: { (l1, l2) in
-                return l1.startTime < l2.startTime
-            })
-            nextDay = day
-            if nextDayLessons?.count ?? 0 > 0 {
-                break
+        nextEvents = nextDayEvents?.sorted().reduce([], { (result, event) -> [CalendarEvent] in
+            if result.isEmpty {
+                return [event]
             }
+            
+            if result.first?.startDate == event.startDate {
+                var newRes = result
+                newRes.append(event)
+                return newRes
+            }
+            return result
+        })
+        
+        if let nextDay = nextDayEvents?.first?.startDate {
+            self.nextDay = Day.from(date: nextDay)
         }
         
-        nextLessons = TimetableService.shared.getNextLessons()
+        events = allEvents()
         
         sectionIdentifiers = []
         
@@ -125,11 +135,10 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         
         addSection(id: tasksSection)
         
-        appendSection(nowLessons, with: nowSection)
-        appendSection(nextLessons, with: nextSection)
-        appendSection(dayLessons, with: daySection)
-        appendSection(nextDayLessons, with: nextDaySection)
-//        appendSection(lessons, with: weekSection)
+        appendSection(currentEvents, with: currentSection)
+        appendSection(nextEvents, with: nextSection)
+        appendSection(dayEvents, with: daySection)
+        appendSection(nextDayEvents, with: nextDaySection)
         
     }
 
@@ -152,17 +161,16 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         switch identifier {
         case tasksSection:
             return 5
-        case nowSection:
-            return nowLessons?.count ?? 0
+        case currentSection:
+            return currentEvents?.count ?? 0
         case nextSection:
-            return nextLessons?.count ?? 0
+            return nextEvents?.count ?? 0
         case daySection:
-            return dayLessons?.count ?? 0
+            return dayEvents?.count ?? 0
         case weekSection:
-            return lessons?.count ?? 0
+            return events?.count ?? 0
         case nextDaySection:
-            let count = nextDayLessons?.count ?? 0
-            return count
+            return nextDayEvents?.count ?? 0
         default:
             return 0
             
@@ -205,23 +213,32 @@ class HomeDashCollectionView: HomeBaseCollectionView {
                 return cell
             }
             
-        case nowSection, nextSection, daySection, weekSection, nextDaySection:
-            let cell = dequeueCell(homeLessonCell, indexPath) as! HomeLessonCollectionViewCell
+        case currentSection, nextSection, daySection, weekSection, nextDaySection:
+            guard let event = event(for: indexPath) else {
+                return UICollectionViewCell()
+            }
             
-            cell.lesson = lesson(for: indexPath)
-            
-            return cell
+            if let cell = calendarCellSupplier.get(for: indexPath, event: event) {
+                return cell
+            }
+            return UICollectionViewCell()
         default:
             return UICollectionViewCell()
         }
         
     }
     
-    private func presentLessonDetail(_ indexPath: IndexPath) {
-        guard let lesson = self.lesson(for: indexPath) else {
+    private func presentDetail(_ indexPath: IndexPath) {
+        guard let calendarEvent = self.event(for: indexPath) else {
             return
         }
-        homeDelegate?.presentLessonEditView(for: lesson)
+        
+        if let lesson = calendarEvent.asLesson {
+            homeDelegate?.presentLessonEditView(for: lesson)
+        }else if let event = calendarEvent.asEvent {
+            homeDelegate?.presentEventEditView(for: event)
+        }
+        
     }
     
     private func selectorType(for index: Int) -> HomeDashTaskSelectorCellType {
@@ -250,8 +267,8 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             }
             
             break
-        case nowSection, nextSection, daySection, weekSection, nextDaySection:
-            presentLessonDetail(indexPath)
+        case currentSection, nextSection, daySection, weekSection, nextDaySection:
+            presentDetail(indexPath)
             break
         default:
             break
@@ -262,7 +279,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
     private func headerTitle(for section: String) -> String {
         switch section {
         case tasksSection:      return "Tasks"
-        case nowSection:        return "Now"
+        case currentSection:    return "Now"
         case nextSection:       return "Next"
         case daySection:        return "Today"
         case nextDaySection:    return "\(nextDay?.string() ?? "")"
@@ -291,12 +308,25 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return CGSize(width: collectionView.frame.width, height: 40)
     }
     
+    
+    //MARK: ContextMenu
     override func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         
-        guard let lesson = self.lesson(for: indexPath) else {
+        guard let calendarEvent = self.event(for: indexPath) else {
             return nil
         }
         
+        if let lesson = calendarEvent.asLesson {
+            return contextConfiguration(for: lesson, at: indexPath)
+        }else if let event = calendarEvent.asEvent {
+            return contextConfiguration(for: event, at: indexPath)
+        }
+        
+        return nil
+    }
+    
+    //MARK: contextMenuForLesson
+    private func contextConfiguration(for lesson: Lesson, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
         guard let uuid = lesson.id else {
             return nil
         }
@@ -312,7 +342,7 @@ class HomeDashCollectionView: HomeBaseCollectionView {
             
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
                 
-                guard let lesson = self.lesson(for: indexPath) else {
+                guard let lesson = self.event(for: indexPath)?.asLesson else {
                     return
                 }
                 
@@ -329,6 +359,36 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         return config
     }
     
+    //MARK: contextMenuForEvent
+    private func contextConfiguration(for event: Event, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        guard let uuid = event.id else {
+            return nil
+        }
+        
+        let config = UIContextMenuConfiguration(identifier: uuid as NSUUID, previewProvider: { () -> UIViewController? in
+            
+            // ViewController to give the user a preview of the eventEditView
+            let eventEdit = UIHostingController(
+                rootView: EventEditViewContent(event: event))
+            
+            return eventEdit
+        }) { (elements) -> UIMenu? in
+            
+            let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash")) { (action) in
+                
+                TimetableService.shared.deleteEvent(event)
+                
+                
+                self.homeDelegate?.presentEventEditView(for: event)
+                
+            }
+            
+            return UIMenu(title: "", image: nil, children: [delete])
+        }
+        
+        return config
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {
         
         guard let id = (configuration.identifier as? NSUUID) as UUID? else {
@@ -336,11 +396,16 @@ class HomeDashCollectionView: HomeBaseCollectionView {
         }
         
         animator.addCompletion {
-            guard let lesson = self.lesson(for: id) else {
+            guard let calendarEvent = self.event(for: id) else {
                 return
             }
             
-            self.homeDelegate?.presentLessonEditView(for: lesson)
+            
+            if let lesson = calendarEvent.asLesson {
+                self.homeDelegate?.presentLessonEditView(for: lesson)
+            } else if let event = calendarEvent.asEvent {
+                self.homeDelegate?.presentEventEditView(for: event)
+            }
         }
         
     }
@@ -364,11 +429,21 @@ extension HomeDashCollectionView {
             }
             // Task Overview cell
             return CGSize(width: collectionView.contentSize.width, height: 20 + CGFloat((tasks?.count ?? 0) * 60))
-        case nowSection, nextSection, daySection, weekSection, nextDaySection:
-            // Lesson cell
-            let height = HomeLessonCellConfigurator.height(for: lesson(for: indexPath))
+        case currentSection, nextSection, daySection, weekSection, nextDaySection:
+            guard let event = self.event(for: indexPath) else {
+                return .zero
+            }
+            
+            if let lesson = event.asLesson {
+                // Lesson cell
+                let height = HomeLessonCellConfigurator.height(for: lesson)
                 
-            return CGSize(width: collectionView.contentSize.width, height: height)
+                return CGSize(width: collectionView.contentSize.width, height: height)
+            }else if event.asEvent != nil {
+                return CGSize(width: collectionView.contentSize.width, height: 50)
+            }
+            
+            return .zero
         default:
             return CGSize.zero
         }

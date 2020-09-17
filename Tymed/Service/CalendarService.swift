@@ -16,16 +16,12 @@ class CalendarService: Service {
     
     private var calendar = Calendar(identifier: .gregorian)
     
-    //MARK: lessonsForDay
+    //MARK: eventsForDay
     /// Returns a list of lessons that match the weekday of the date.
     /// - Parameter date: Date
     /// - Returns: Returns a list of lessons that match the given weekday of the date.
-    func lessonsForDay(date: Date) -> [Lesson] {
-        guard let day = Day.from(date: date) else {
-            return []
-        }
-        
-        return TimetableService.shared.getLessons(within: day)
+    func eventsForDay(date: Date) -> [CalendarEvent] {
+        return TimetableService.shared.calendarEventsFor(day: date)
     }
     
     //MARK: calendarDayEntry
@@ -33,7 +29,7 @@ class CalendarService: Service {
     /// - Parameter date: Date for the CalendarDayEntry
     /// - Returns: A CalendarDayEntry for the date.
     func calendarDayEntry(for date: Date) -> CalendarDayEntry {
-        return CalendarDayEntry(for: date, entries: lessonsForDay(date: date))
+        return CalendarDayEntry(for: date, entries: eventsForDay(date: date))
     }
     
     //MARK: calendarWeekEntries
