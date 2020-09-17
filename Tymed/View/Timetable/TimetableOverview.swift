@@ -38,22 +38,9 @@ struct TimetableOverview: View {
             Section {
                 ForEach(timetables, id: \.self) { (timetable: Timetable) in
                     NavigationLink(destination: TimetableDetail(timetable: timetable)) {
-                        HStack {
-                            Text(timetable.name)
-                                .font(.system(size: 15, weight: .semibold))
-                            
-                            Spacer()
-                            
-                            if timetable.isDefault {
-                                Text("Default")
-                                    .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-                                    .background(Color(.tertiarySystemGroupedBackground))
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .cornerRadius(10)
-                            }
-                        }
-                            .frame(height: 45)
-                    }
+                        TimetableOverviewCell(timetable: timetable)
+                            .frame(height: 55)
+                    }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
                 }
             }
             
@@ -167,6 +154,10 @@ struct TimetableOverviewCell: View {
     
     var body: some View {
         HStack {
+            Rectangle()
+                .foregroundColor(Color(UIColor(timetable)!))
+                .frame(width: 12.5, height: 55)
+            
             Text(timetable.name)
                 .font(.system(size: 15, weight: .semibold))
             
@@ -179,7 +170,7 @@ struct TimetableOverviewCell: View {
                     .font(.system(size: 13, weight: .semibold))
                     .cornerRadius(10)
             }
-        }
+        }.listRowInsets(.none)
     }
     
 }

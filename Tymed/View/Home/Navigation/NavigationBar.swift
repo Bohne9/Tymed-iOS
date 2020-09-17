@@ -108,7 +108,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         todaybtn.constraintCenterYToSuperview()
         todaybtn.constraint(width: 40, height: 40)
         
-        let image = UIImage(systemName: "chevron.left")?
+        let image = UIImage(systemName: "arrow.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
         
         backBtn.setImage(image, for: .normal)
