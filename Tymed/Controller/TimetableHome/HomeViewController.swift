@@ -19,7 +19,8 @@ protocol HomeViewControllerDelegate {
 
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NavigationBarDelegate {
 
-    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
+//    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
+    var homeView = HomeDashViewWrapper()
     
     var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
     
@@ -55,10 +56,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.backgroundColor = .systemGroupedBackground
         view.backgroundColor = .systemGroupedBackground
         
-        dashCollectionView.taskOverviewDelegate = self
+//        dashCollectionView.taskOverviewDelegate = self
         tasksCollectionView.taskOverviewDelegate = self
         
-        dashCollectionView.homeViewControllerDelegate = self
+//        dashCollectionView.homeViewControllerDelegate = self
         tasksCollectionView.homeViewControllerDelegate = self
         weekCollectionView.homeViewControllerDelegate = self
     }
@@ -93,7 +94,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func reload() {
-        dashCollectionView.reloadData()
+//        dashCollectionView.reloadData()
         tasksCollectionView.reloadData()
         weekCollectionView.reloadData()
     }
@@ -115,8 +116,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return 3
     }
 
-    private func baseCellFor(index: Int) -> HomeBaseCollectionView {
-        return [dashCollectionView, tasksCollectionView, weekCollectionView][index]
+    private func baseCellFor(index: Int) -> UIViewController {
+        return [homeView, tasksCollectionView, weekCollectionView][index]
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -147,9 +148,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     //MARK: ScrollViewDelegate
     
-    private func sceneBaseCollectionView(for index: Int) -> HomeBaseCollectionView {
+    private func sceneBaseCollectionView(for index: Int) -> UIViewController {
         if index == 0 {
-            return dashCollectionView
+            return homeView
         }else if index == 1 {
             return tasksCollectionView
         }else {

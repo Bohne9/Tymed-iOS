@@ -123,6 +123,18 @@ class CalendarEvent {
             return nil
         }
     }
+    
+    var timetable: Timetable? {
+        if let lesson = asLesson { // If the CalendarEvent is a Lesson
+            return lesson.subject?.timetable
+        } else if let task = asTask { // If the CalendarEvent is a Task
+            return task.timetable
+        } else if let event = asEvent { // If the CalendarEvent is an Event
+            return event.timetable
+        }else {
+            return nil
+        }
+    }
 }
 
 

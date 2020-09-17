@@ -298,6 +298,16 @@ extension UIColor {
         }
         self.init(timetable)
     }
+    
+    convenience init? (_ calendarEvent: CalendarEvent) {
+        if let lesson = calendarEvent.asLesson {
+            self.init(lesson)
+        } else if let event = calendarEvent.asEvent {
+            self.init(event)
+        }else {
+            return nil
+        }
+    }
 }
 
 

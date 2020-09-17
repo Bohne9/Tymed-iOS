@@ -72,7 +72,7 @@ class ViewController: UITabBarController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        homeVC.dashCollectionView.reload()
+//        homeVC.dashCollectionView.reload()
         
     }
     
