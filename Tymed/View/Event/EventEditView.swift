@@ -19,10 +19,7 @@ class EventEditViewWrapper: ViewWrapper<EventEditView> {
         
         return UIHostingController(rootView: EventEditView(
                                     event: event,
-                                    dismiss: {
-                                        self.homeDelegate?.reload()
-                                        self.dismiss(animated: true, completion: nil)
-                                    }))
+                                    presentationDelegate: presentationDelegate))
     }
     
 }
@@ -32,7 +29,10 @@ struct EventEditView: View {
     @ObservedObject
     var event: Event
     
-    var dismiss: () -> Void
+    var presentationDelegate: ViewWrapperPresentationDelegate?
+    
+    @State
+    var showDiscardWarning = false
     
     var body: some View {
         NavigationView {
@@ -40,20 +40,29 @@ struct EventEditView: View {
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
-                    TimetableService.shared.reset()
-                    dismiss()
+                    if TimetableService.shared.hasChanges() {
+                        showDiscardWarning.toggle()
+                    }else {
+                        presentationDelegate?.cancel()
+                    }
                 }, label: {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
                 }), trailing: Button(action: {
                     NotificationService.current.scheduleEventNotification(for: event)
-                    TimetableService.shared.save()
-                    dismiss()
+                    presentationDelegate?.done()
                 }, label: {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
                 }))
-        }
+        }.actionSheet(isPresented: $showDiscardWarning, content: {
+            ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
+                .destructive(Text("Discard changes"), action: {
+                    presentationDelegate?.cancel()
+                }),
+                .cancel()
+            ])
+        })
     }
 }
 

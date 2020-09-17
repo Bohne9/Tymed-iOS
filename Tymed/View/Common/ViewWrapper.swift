@@ -9,11 +9,23 @@
 import UIKit
 import SwiftUI
 
+protocol ViewWrapperPresentationDelegate {
+    
+    func dismiss()
+    
+    func cancel()
+    
+    func done()
+    
+}
+
 class ViewWrapper<T: View>: UIViewController {
     
     var homeDelegate: HomeViewSceneDelegate?
     
     var hostingConroller: UIHostingController<T>?
+    
+    var presentationDelegate: ViewWrapperPresentationDelegate?
     
     internal func createContent() -> UIHostingController<T>? {
         return nil
@@ -21,6 +33,8 @@ class ViewWrapper<T: View>: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presentationDelegate = self
         
         guard let contentView = createContent() else {
             return
@@ -38,5 +52,29 @@ class ViewWrapper<T: View>: UIViewController {
         contentView.view.translatesAutoresizingMaskIntoConstraints = false
         contentView.view.constraintToSuperview()
     }
+    
+}
+
+
+extension ViewWrapper: ViewWrapperPresentationDelegate {
+    
+    /// Dismisses the view controller
+    func dismiss() {
+        homeDelegate?.dismiss(true)
+    }
+    
+    /// Resets the core data model and dismisses the view controller
+    func cancel() {
+        TimetableService.shared.rollback()
+        dismiss()
+    }
+    
+    /// Saves the core data model and dismisses the view controller
+    func done() {
+        TimetableService.shared.save()
+        homeDelegate?.reload()
+        dismiss()
+    }
+    
     
 }

@@ -57,7 +57,7 @@ class HomeEventCollectionViewCell: HomeCalendarEventCollectionViewCell {
         // Setup two constraints for different cells
         time.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10).isActive = true
         
-        time.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        time.heightAnchor.constraint(equalToConstant: 20).isActive = true
         time.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4).isActive = true
         
         time.font = UIFont.systemFont(ofSize: 13, weight: .semibold)

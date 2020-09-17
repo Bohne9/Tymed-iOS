@@ -447,6 +447,10 @@ class TimetableService {
         context.reset()
     }
     
+    func rollback() {
+        context.rollback()
+    }
+    
     func hasChanges() -> Bool {
         return context.hasChanges
     }

@@ -29,7 +29,7 @@ struct EventAddView: View {
                 .navigationTitle("New Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
-                    TimetableService.shared.reset()
+                    TimetableService.shared.rollback()
                     
                     presentaionMode.wrappedValue.dismiss()
                 }, label: {

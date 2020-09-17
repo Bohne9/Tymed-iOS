@@ -184,6 +184,9 @@ extension HomeBaseCollectionView: UICollectionViewDelegateFlowLayout {
 extension HomeBaseCollectionView: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        
+        print(presentationController.presentedViewController is ViewWrapper<EventEditView>)
+        
         reload()
     }
     
