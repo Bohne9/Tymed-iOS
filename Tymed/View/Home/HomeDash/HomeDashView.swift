@@ -147,7 +147,7 @@ struct HomeDashCalendarCell: View {
     
     var body: some View {
         ZStack {
-            HomeDashCalendarGrid(startHour: startHour(), endHour: startHour() + numberOfHours())
+            HomeDashCalendarGrid(date: event.date,startHour: startHour(), endHour: startHour() + numberOfHours())
                 .frame(height: CGFloat(numberOfHours()) * heightForHour + 20)
                 .padding(.vertical, 10)
             
@@ -185,6 +185,8 @@ struct HomeDashCalendarGrid: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    var date: Date
+    
     var startHour: Int
     var endHour: Int
     
@@ -197,12 +199,14 @@ struct HomeDashCalendarGrid: View {
                             by: 1).map { $0 },
                          id: \.self) { hour in
                     HStack(spacing: 0) {
-                        Text(textForTime(hour))
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.secondaryLabel))
-                            .padding(.trailing, 5)
-                            .frame(width: 45)
-                        
+                        if !labelIsHidden(hour) {
+                            Text(textForTime(hour))
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundColor(Color(.secondaryLabel))
+                                .padding(.trailing, 5)
+                                .frame(width: 45)
+                        }
+                            
                         VStack {
                             Divider()
                         }
@@ -211,8 +215,36 @@ struct HomeDashCalendarGrid: View {
                     .offset(x: 0, y: offset(for: hour) - 6)
                     
                 }
+                
+                if Time.now.hour >= startHour && Time.now.hour <= endHour && Calendar.current.isDateInToday(date) {
+                    HStack(spacing: 0) {
+                        Text(Time.now.string() ?? "")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.systemRed))
+                            .padding(.trailing, 5)
+                            .frame(width: 45)
+                            
+                        
+                        VStack {
+                            Divider()
+                                .accentColor(Color(.systemRed))
+                                .foregroundColor(Color(.systemRed))
+                                .background(Color(.systemRed))
+                        }
+                    }
+                    .frame(height: 12)
+                    .offset(x: 0, y: offsetFor(time: Time.now) - 6)
+                }
+                
+                
             }
         }
+    }
+    
+    private func labelIsHidden(_ hour: Int) -> Bool {
+        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: self.date)
+            
+        return abs(date?.timeIntervalSince(Date()) ?? 0) <= 10
     }
     
     private func textForTime(_ hour: Int) -> String {
@@ -223,6 +255,13 @@ struct HomeDashCalendarGrid: View {
     
     private func offset(for hour: Int) -> CGFloat {
         return CGFloat((hour - startHour)) * heightForHour
+    }
+    
+    private func offsetFor(time: Time) -> CGFloat {
+        let seconds = time.timeInterval
+        let start = Time(hour: startHour, minute: 0).timeInterval
+        
+        return CGFloat(seconds - start) / 60.0 * heightForHour
     }
     
 }
@@ -297,13 +336,13 @@ struct HomeDashCalendarEvent: View {
     var body: some View {
         HStack(spacing: 15) {
             Rectangle()
-                .foregroundColor(Color(UIColor(event)!))
+                .foregroundColor(Color(UIColor(event) ?? .clear))
                 .frame(width: 10, height: heightForHour)
             
             VStack(alignment: .leading) {
                 Text(event.timetable?.name.uppercased() ?? "")
                     .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color(UIColor(event)!))
+                    .foregroundColor(Color(UIColor(event) ?? .clear))
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
                 Text(timeString())

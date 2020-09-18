@@ -26,6 +26,9 @@ class HomeViewModel: ObservableObject {
     @Published
     var nextCalendarDay: CalendarDayEntry?
     
+    @Published
+    var currentDate = Date()
+    
     private var anchorDate: Date
     
     init(anchor: Date = Date()) {
@@ -38,6 +41,24 @@ class HomeViewModel: ObservableObject {
         if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
             nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
         }
+        
+        scheduleTimeUpdater()
+    }
+    
+    func scheduleTimeUpdater() {
+        
+        var zeroSeconds = DateComponents()
+        zeroSeconds.second = 0
+        guard let nextMinute = Calendar(identifier: .gregorian).nextDate(after: Date(), matching: zeroSeconds, matchingPolicy: .nextTime, direction: .forward) else {
+          // This should not happen since there should always be a next minute
+          return
+        }
+
+        let timer = Timer(fire: nextMinute.advanced(by: 0.1), interval: 60, repeats: true) { _ in
+          // This runs at every turn of a minute
+            self.objectWillChange.send()
+        }
+        RunLoop.current.add(timer, forMode: .default)
     }
     
     func reload() {
