@@ -335,9 +335,14 @@ struct HomeDashCalendarEvent: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            Rectangle()
-                .foregroundColor(Color(UIColor(event) ?? .clear))
-                .frame(width: 10, height: heightForHour)
+            VStack {
+                Spacer()
+                Rectangle()
+                    .foregroundColor(Color(.clear))
+                    .frame(width: 10)
+                Spacer()
+            }
+            .background(Color(UIColor(event) ?? .clear))
             
             VStack(alignment: .leading) {
                 Text(event.timetable?.name.uppercased() ?? "")
@@ -366,7 +371,7 @@ struct HomeDashCalendarEvent: View {
                         showEditView.toggle()
                 })
             }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationHandler: ViewWrapperPresentationHandler())
+                EventEditView(event: event, presentationDelegate: homeViewModel, presentationHandler: ViewWrapperPresentationHandler())
             }else {
                 Text("Ups! Something went wrong :(")
             }

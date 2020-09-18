@@ -39,6 +39,9 @@ struct EventEditView: View {
     @ObservedObject
     var presentationHandler: ViewWrapperPresentationHandler
     
+    @Environment(\.presentationMode)
+    var presentationMode
+    
     var body: some View {
         NavigationView {
             EventEditViewContent(event: event, presentationDelegate: presentationDelegate)
@@ -52,6 +55,7 @@ struct EventEditView: View {
                 }), trailing: Button(action: {
                     NotificationService.current.scheduleEventNotification(for: event)
                     presentationDelegate?.done()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
@@ -60,6 +64,7 @@ struct EventEditView: View {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
                     presentationDelegate?.cancel()
+                    presentationMode.wrappedValue.dismiss()
                 }),
                 .cancel()
             ])

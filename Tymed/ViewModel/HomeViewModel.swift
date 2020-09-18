@@ -74,3 +74,24 @@ class HomeViewModel: ObservableObject {
     }
     
 }
+
+
+extension HomeViewModel: ViewWrapperPresentationDelegate {
+    
+    func dismiss() {
+        objectWillChange.send()
+    }
+    
+    func cancel() {
+        objectWillChange.send()
+    }
+    
+    func done() {
+        objectWillChange.send()
+    }
+    
+    func shouldDismiss() -> Bool {
+        return true
+    }
+    
+}
