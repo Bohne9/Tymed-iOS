@@ -65,7 +65,9 @@ class CalendarService: Service {
         // For each day in the week
         for _ in 0..<7 {
             // Append a CalendarDayEntry for the current day to the list
-            entries.append(calendarDayEntry(for: date))
+            let entry = calendarDayEntry(for: date)
+            entry.expandToEntireDay()
+            entries.append(entry)
             
             // Get the date of the next day
             if let next = nextDay(after: date) {

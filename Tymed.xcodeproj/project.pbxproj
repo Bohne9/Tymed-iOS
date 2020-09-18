@@ -100,6 +100,8 @@
 		4F95F98D250D501E00AABF1F /* HomeCalendarEventCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F95F98C250D501E00AABF1F /* HomeCalendarEventCollectionViewCell.swift */; };
 		4F98635C24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98635B24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift */; };
 		4F98635E24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F98635D24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift */; };
+		4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */; };
+		4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */; };
 		4F99D203249FEAA700A8DFAB /* BaseCollectionViewCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */; };
 		4F99D20A249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99D209249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift */; };
 		4F9BB488248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F9BB487248D5BDF00758C95 /* HomeDashTaskOverviewCollectionViewCell.xib */; };
@@ -260,6 +262,8 @@
 		4F95F98C250D501E00AABF1F /* HomeCalendarEventCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarEventCollectionViewCell.swift; sourceTree = "<group>"; };
 		4F98635B24CCAC6A00F2FB19 /* HomeDashTaskOverviewCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskOverviewCollectionViewHeader.swift; sourceTree = "<group>"; };
 		4F98635D24CF51D900F2FB19 /* TaskArchiveTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskArchiveTableViewCell.swift; sourceTree = "<group>"; };
+		4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarView.swift; sourceTree = "<group>"; };
+		4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarViewWrapper.swift; sourceTree = "<group>"; };
 		4F99D202249FEAA600A8DFAB /* BaseCollectionViewCellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewCellConfigurator.swift; sourceTree = "<group>"; };
 		4F99D209249FEE0B00A8DFAB /* HomeLessonCellConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLessonCellConfigurator.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
@@ -612,6 +616,15 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		4F99A0E52514E80A006ADB05 /* HomeCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */,
+				4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */,
+			);
+			path = HomeCalendar;
+			sourceTree = "<group>";
+		};
 		4F99D201249FEA7F00A8DFAB /* CellConfiguartor */ = {
 			isa = PBXGroup;
 			children = (
@@ -635,6 +648,7 @@
 				4F12659124B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift */,
 				4F12659524B781F3000488B8 /* HomeDashTaskOverviewNoTasksCollectionViewCell.swift */,
 				4FC8210524C4D2CA00694811 /* HomeDashTaskSelectorCellType.swift */,
+				4F99A0E52514E80A006ADB05 /* HomeCalendar */,
 				4F99D206249FECBE00A8DFAB /* HomeDash */,
 				4F99D207249FECEA00A8DFAB /* HomeTask */,
 				4F99D208249FECFF00A8DFAB /* HomeWeek */,
@@ -1055,6 +1069,7 @@
 				4F9405E624607E6A0063E4DA /* LessonAddViewController.swift in Sources */,
 				4F9C26D024C8C6B100142CEE /* TimetableDetailDeleteTableViewCell.swift in Sources */,
 				4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */,
+				4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */,
 				4F5B4E9624C62A570098F4A7 /* TimetableDetailTitleTableViewCell.swift in Sources */,
 				4F12659224B50765000488B8 /* HomeDashTaskSelectorCollectionViewCell.swift in Sources */,
 				4F12658824AFB910000488B8 /* LessonDetailTaskOverviewSeeAllCell.swift in Sources */,
@@ -1067,6 +1082,7 @@
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */,
 				4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */,
+				4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */,
 				4F907FF524EAF94B00DD53E4 /* HomeWeekDayCollectionViewCell.swift in Sources */,
 				4FB8F4CA24F192790015EC8E /* CalendarDayEntry.swift in Sources */,
 				4FB8F4D824F6E4A40015EC8E /* ViewWrapper.swift in Sources */,

@@ -19,6 +19,8 @@ protocol HomeViewControllerDelegate {
 
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NavigationBarDelegate {
 
+    let homeViewModel = HomeViewModel()
+    
 //    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
     var homeView = HomeDashViewWrapper()
     
@@ -36,6 +38,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        homeView.homeViewModel = homeViewModel
+        weekCollectionView.homeViewModel = homeViewModel
         
         //MARK: NavBar setup
         
@@ -55,6 +60,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .systemGroupedBackground
         view.backgroundColor = .systemGroupedBackground
+        
+        collectionView.delegate = self
         
 //        dashCollectionView.taskOverviewDelegate = self
         tasksCollectionView.taskOverviewDelegate = self
@@ -96,7 +103,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     func reload() {
 //        dashCollectionView.reloadData()
         print("Reloading home scene")
-        homeView.homeViewModel.reload()
+        homeViewModel.reload()
         tasksCollectionView.reloadData()
         weekCollectionView.reloadData()
     }
@@ -110,12 +117,12 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 3
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
 
     private func baseCellFor(index: Int) -> UIViewController {
@@ -126,7 +133,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
-        let baseCell = baseCellFor(index: indexPath.row)
+        let baseCell = baseCellFor(index: indexPath.section)
         
         addChild(baseCell)
         
@@ -147,7 +154,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return collectionView.frame.size
     }
     
-    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+//        return
+//    }
+//
     //MARK: ScrollViewDelegate
     
     private func sceneBaseCollectionView(for index: Int) -> UIViewController {
@@ -171,9 +181,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func scrollToSection(_ section: Int) {
-        
-        collectionView.scrollToItem(at: IndexPath(row: section, section: 0), at: .left, animated: true)
-        
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .left, animated: true)
     }
     
     func presentTaskAdd() -> TaskAddViewWrapper {

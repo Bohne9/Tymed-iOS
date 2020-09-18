@@ -15,6 +15,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     
     var entries: [CalendarWeekEntry] = []
     
+    var homeViewModel: HomeViewModel?
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
@@ -25,6 +26,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         // Remove scroll indicator
         collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
         
         // Enable paging
         collectionView.isPagingEnabled = true
@@ -37,6 +39,8 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
+            
+            layout.scrollDirection = .horizontal
         }
         
     }
@@ -66,6 +70,7 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         if let cell = collectionView.visibleCells.first {
             updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
         }
+        
     }
     
     private func fetchPreviousWeek() {
@@ -97,13 +102,13 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
         
         outer : for (section, week) in entries.enumerated() {
             
-            if date < week.endOfWeek ?? date {
+            if week.startOfWeek ?? date <= date && date <= week.endOfWeek ?? date {
                 for (index, day) in week.entries.enumerated() {
-                    if date < day.endOfDay ?? date {
+                    if day.startOfDay ?? date <= date && date < day.endOfDay ?? date {
                         
                         let indexPath = IndexPath(item: index, section: section)
                         
-                        collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
+                        collectionView.scrollToItem(at: indexPath, at: .left, animated: animated)
                         updateCurrentDay(indexPath: indexPath)
                         
                         break outer
@@ -135,12 +140,16 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
             return UICollectionViewCell()
         }
         
-        cell.homeDelegate = homeDelegate
-        
         if let entry = calendarDayEntry(for: indexPath) {
             cell.entry = entry
+//            entry.expandToEntireDay()
         }
         
+        cell.homeDelegate = homeDelegate
+        cell.homeViewModel = homeViewModel
+        
+        cell.viewController = self
+        cell.setupView()
         cell.reload()
         
         return cell

@@ -21,19 +21,23 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         return entries.count
     }
     
-    var startOfDay: Date? {
-        return entries.first?.startDate
-    }
+    private(set) var startOfDay: Date?
     
-    var endOfDay: Date? {
-        return entries.last?.endDate
-    }
+    private(set) var endOfDay: Date?
     
     init(for date: Date, entries: [CalendarEvent]) {
         self.date = date.startOfDay
         self.entries = entries.sorted()
+        
+        startOfDay = entries.first?.startDate
+        endOfDay = entries.last?.endDate
     }
     
+    func expandToEntireDay() {
+        startOfDay = date.startOfDay
+        endOfDay = date.endOfDay
+        objectWillChange.send()
+    }
     
 }
 
