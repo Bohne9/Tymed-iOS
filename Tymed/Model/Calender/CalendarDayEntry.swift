@@ -28,7 +28,7 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
     init(for date: Date, entries: [CalendarEvent]) {
         self.date = date.startOfDay
         self.entries = entries.sorted()
-        
+         
         startOfDay = entries.first?.startDate
         endOfDay = entries.last?.endDate
     }
