@@ -32,7 +32,7 @@ struct HomeDashView: View {
             
             Section {
                 VStack(alignment: .leading) {
-                    Text(Date().stringify(with: .long, relativeFormatting: false).uppercased())
+                    Text(Date().stringify(with: .full, relativeFormatting: false).uppercased())
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(Color(.systemBlue))
                     
@@ -58,12 +58,23 @@ struct HomeDashView: View {
             }
             
             Section(header:
-                        Text("Today")
+                        Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(Color(.label))) {
-                HomeDashCalendarCell(event: CalendarDayEntry(for: Date(), entries: homeViewModel.events))
+                HomeDashCalendarCell(event: homeViewModel.upcomingCalendarDay)
                     .environmentObject(homeViewModel)
             }
+            
+            if let nextCalendarDay = homeViewModel.nextCalendarDay {
+                Section(header:
+                            Text("\(nextCalendarDay.date.stringify(with: .medium))")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color(.label))) {
+                    HomeDashCalendarCell(event: nextCalendarDay)
+                        .environmentObject(homeViewModel)
+                }
+            }
+            
             
         }.listStyle(InsetGroupedListStyle())
     }
@@ -186,7 +197,7 @@ struct HomeDashCalendarGrid: View {
                             by: 1).map { $0 },
                          id: \.self) { hour in
                     HStack(spacing: 0) {
-                        Text("\(hour % 12) \(hour > 12 ? "pm" : "am")")
+                        Text(textForTime(hour))
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(Color(.secondaryLabel))
                             .padding(.trailing, 5)
@@ -202,6 +213,12 @@ struct HomeDashCalendarGrid: View {
                 }
             }
         }
+    }
+    
+    private func textForTime(_ hour: Int) -> String {
+        let time = Time(hour: hour, minute: 0)
+        
+        return time.string() ?? ""
     }
     
     private func offset(for hour: Int) -> CGFloat {

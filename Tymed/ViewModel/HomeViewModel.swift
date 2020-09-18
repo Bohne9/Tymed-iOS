@@ -10,26 +10,44 @@ import SwiftUI
 
 class HomeViewModel: ObservableObject {
     
+    private var timetableService = TimetableService.shared
+    private var calendarService = CalendarService.shared
+    
     @Published
     var tasks: [Task] = []
     
+    var events: [CalendarEvent] {
+        upcomingCalendarDay.entries
+    }
+    
     @Published
-    var events: [CalendarEvent] = []
+    var upcomingCalendarDay: CalendarDayEntry
+    
+    @Published
+    var nextCalendarDay: CalendarDayEntry?
     
     private var anchorDate: Date
     
     init(anchor: Date = Date()) {
         anchorDate = anchor
         
-        tasks = TimetableService.shared.getTasks(after: anchorDate).sorted()
+        tasks = timetableService.getTasks(after: anchorDate).sorted()
         
-        events = TimetableService.shared.getNextCalendarEvents(startingFrom: anchorDate)
+        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        
+        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
+            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
+        }
     }
     
     func reload() {
-        tasks = TimetableService.shared.getTasks(after: anchorDate).sorted()
+        tasks = timetableService.getTasks(after: anchorDate).sorted()
         
-        events = TimetableService.shared.getNextCalendarEvents(startingFrom: anchorDate)
+        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        
+        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
+            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
+        }
         
         objectWillChange.send()
     }
