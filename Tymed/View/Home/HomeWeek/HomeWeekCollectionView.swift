@@ -96,6 +96,15 @@ class HomeWeekCollectionView: HomeBaseCollectionView {
     private func calendarDayEntry(for indexPath: IndexPath) -> CalendarDayEntry? {
         return entries[indexPath.section].calendarDayEntry(for: indexPath.row)
     }
+    
+    func currentDay() -> Date? {
+    
+        if let cell = collectionView.visibleCells.first as? HomeWeekDayCollectionViewCell {
+            return cell.entry?.date
+        }
+    
+        return nil
+    }
  
     //MARK: scrollTo(day: )
     func scrollTo(date: Date, _ animated: Bool = false) {

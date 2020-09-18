@@ -91,6 +91,14 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         weekCollectionView.scrollTo(date: Date(), true)
     }
     
+    func calendarScrollTo(date: Date) {
+        weekCollectionView.scrollTo(date: date, true)
+    }
+    
+    func currentDay() -> Date? {
+        return weekCollectionView.currentDay()
+    }
+    
     func scrollToPage(page: Int) {
         collectionView.setContentOffset(CGPoint(x: CGFloat(page) * collectionView.frame.width, y: collectionView.contentInset.top), animated: true)
         print(collectionView.contentOffset)

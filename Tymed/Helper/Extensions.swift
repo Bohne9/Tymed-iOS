@@ -131,6 +131,10 @@ extension Date {
     var nextDay: Date {
         return (self + (3600 * 24)).startOfDay
     }
+    
+    var prevDay: Date {
+        return (self - (3600 * 24)).startOfDay
+    }
 }
 
 
