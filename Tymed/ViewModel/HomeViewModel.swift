@@ -30,6 +30,8 @@ class HomeViewModel: ObservableObject {
         tasks = TimetableService.shared.getTasks(after: anchorDate).sorted()
         
         events = TimetableService.shared.getNextCalendarEvents(startingFrom: anchorDate)
+        
+        objectWillChange.send()
     }
     
 }

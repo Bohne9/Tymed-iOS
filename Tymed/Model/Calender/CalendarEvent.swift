@@ -8,11 +8,12 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 
 /// A protocol that defines an general event in a calendar
 /// See also: Lesson, Task, Event
-class CalendarEvent {
+class CalendarEvent: ObservableObject {
     
     static func lessonEvents(lessons: [Lesson]) -> [CalendarEvent] {
         return lessons.map { (lesson) in
@@ -32,8 +33,10 @@ class CalendarEvent {
         }
     }
     
+    @Published
     var managedObject: NSManagedObject
     
+    @Published
     var anchorDate = Date()
     
     var isLesson: Bool {

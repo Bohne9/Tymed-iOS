@@ -12,10 +12,11 @@ fileprivate var heightForHour: CGFloat = 80
 
 class HomeDashViewWrapper: ViewWrapper<HomeDashView> {
     
+    let homeViewModel = HomeViewModel()
     
     override func createContent() -> UIHostingController<HomeDashView>? {
         
-        return UIHostingController(rootView: HomeDashView())
+        return UIHostingController(rootView: HomeDashView(homeViewModel: homeViewModel))
     }
     
 }
@@ -24,7 +25,7 @@ class HomeDashViewWrapper: ViewWrapper<HomeDashView> {
 struct HomeDashView: View {
     
     @ObservedObject
-    var homeViewModel = HomeViewModel()
+    var homeViewModel: HomeViewModel
     
     var body: some View {
         List {
@@ -36,20 +37,22 @@ struct HomeDashView: View {
                         .foregroundColor(Color(.systemBlue))
                     
                     Text("Good morning Jonah 🙋‍♂️,\nyou got a busy day before.\nYour day starts at 8 am with Math. You'll be done at 7 pm. \n\nHave a great day! 👍")
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: 14, weight: .regular))
                         .padding(.top, 5)
                 }
                 .padding(.vertical, 10)
             }
             
-            Section(header:
-                        Text("Tasks")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color(.label))) {
-                ForEach(homeViewModel.tasks, id: \.self) { task in
-                    Section {
-                        HomeDashTaskCell(task: task)
-                            .frame(height: 45)
+            if homeViewModel.tasks.count > 0 {
+                Section(header:
+                            Text("Tasks")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color(.label))) {
+                    ForEach(homeViewModel.tasks, id: \.self) { task in
+                        Section {
+                            HomeDashTaskCell(task: task)
+                                .frame(height: 45)
+                        }
                     }
                 }
             }
@@ -59,6 +62,7 @@ struct HomeDashView: View {
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(Color(.label))) {
                 HomeDashCalendarCell(event: CalendarDayEntry(for: Date(), entries: homeViewModel.events))
+                    .environmentObject(homeViewModel)
             }
             
         }.listStyle(InsetGroupedListStyle())
@@ -68,6 +72,9 @@ struct HomeDashView: View {
 
 //MARK: HomeDashTaskCell
 struct HomeDashTaskCell: View {
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
     
     @ObservedObject
     var task: Task
@@ -121,8 +128,11 @@ struct HomeDashTaskCell: View {
 //MARK: HomeDashCalendarCell
 struct HomeDashCalendarCell: View {
     
-    @State
+    @ObservedObject
     var event: CalendarDayEntry
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
     
     var body: some View {
         ZStack {
@@ -160,6 +170,9 @@ struct HomeDashCalendarCell: View {
 
 //MARK: HomeDashCalendarGrid
 struct HomeDashCalendarGrid: View {
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
     
     var startHour: Int
     var endHour: Int
@@ -200,8 +213,11 @@ struct HomeDashCalendarGrid: View {
 //MARK: HomeDashCalendarContent
 struct HomeDashCalendarContent: View {
     
-    @State
+    @ObservedObject
     var events: CalendarDayEntry
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
     
     var body: some View {
         
@@ -252,7 +268,10 @@ struct HomeDashCalendarContent: View {
 //MARK: HomeDashCalendarEvent
 struct HomeDashCalendarEvent: View {
     
-    @State
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
+    
+    @ObservedObject
     var event: CalendarEvent
     
     @State
@@ -284,7 +303,12 @@ struct HomeDashCalendarEvent: View {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView, content: {
             if let lesson = event.asLesson {
-                LessonEditView(lesson: lesson, dismiss: { showEditView.toggle() })
+                LessonEditView(
+                    lesson: lesson,
+                    dismiss: {
+                        homeViewModel.reload()
+                        showEditView.toggle()
+                })
             }else if let event = self.event.asEvent {
                 EventEditView(event: event, presentationHandler: ViewWrapperPresentationHandler())
             }else {
@@ -312,6 +336,6 @@ struct HomeDashCalendarEvent: View {
 
 struct HomeDashView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeDashView().colorScheme(.dark)
+        HomeDashView(homeViewModel: HomeViewModel()).colorScheme(.dark)
     }
 }

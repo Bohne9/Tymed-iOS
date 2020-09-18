@@ -95,6 +95,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func reload() {
 //        dashCollectionView.reloadData()
+        print("Reloading home scene")
+        homeView.homeViewModel.reload()
         tasksCollectionView.reloadData()
         weekCollectionView.reloadData()
     }

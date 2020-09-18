@@ -6,13 +6,15 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
-class CalendarDayEntry: CalendarEntry {
+class CalendarDayEntry: ObservableObject, CalendarEntry {
     typealias Entry = CalendarEvent
     
+    @Published
     var date: Date
     
+    @Published
     var entries: [CalendarEvent]
     
     var eventCount: Int {
