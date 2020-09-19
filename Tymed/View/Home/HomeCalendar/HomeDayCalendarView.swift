@@ -181,12 +181,10 @@ struct HomeDashCalendarContent: View {
     
     private func offset(for event: CalendarEvent) -> CGFloat {
         guard let startOfDay = events.startOfDay else {
-            print("OFFSET 0")
             return 0
         }
         
         guard let startOfEvent = event.startDate else {
-            print("OFFSET 1")
             return 0
         }
         
@@ -200,8 +198,6 @@ struct HomeDashCalendarContent: View {
         }
         
         let difference = startOfEvent.timeIntervalSince(start)
-        
-        print("diff \(difference)")
         
         return CGFloat(difference) / 3600.0 * heightForHour
     }

@@ -17,6 +17,8 @@ class ViewController: UITabBarController {
     
     let profileVC = ProfileCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
+    private var selectedTab = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -101,6 +103,15 @@ class ViewController: UITabBarController {
         let nav = UINavigationController(rootViewController: view)
         
         return nav
+    }
+    
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        
+        if item.tag == 0 && selectedTab == 0 {
+            homeVC.scrollToPage(page: 0)
+        }
+        
+        selectedTab = item.tag
     }
 
 }

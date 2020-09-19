@@ -24,7 +24,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
 //    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
     var homeView = HomeDashViewWrapper()
     
-    var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
+//    var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
+    var taskView = HomeTaskViewWrapper()
     
     var weekCollectionView: HomeWeekCollectionView = HomeWeekCollectionView()
     
@@ -40,6 +41,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         super.viewDidLoad()
         
         homeView.homeViewModel = homeViewModel
+        taskView.homeViewModel = homeViewModel
         weekCollectionView.homeViewModel = homeViewModel
         
         //MARK: NavBar setup
@@ -64,10 +66,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.delegate = self
         
 //        dashCollectionView.taskOverviewDelegate = self
-        tasksCollectionView.taskOverviewDelegate = self
+//        tasksCollectionView.taskOverviewDelegate = self
         
 //        dashCollectionView.homeViewControllerDelegate = self
-        tasksCollectionView.homeViewControllerDelegate = self
+//        tasksCollectionView.homeViewControllerDelegate = self
         weekCollectionView.homeViewControllerDelegate = self
     }
     
@@ -113,7 +115,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
 //        dashCollectionView.reloadData()
         print("Reloading home scene")
         homeViewModel.reload()
-        tasksCollectionView.reloadData()
+//        tasksCollectionView.reloadData()
         weekCollectionView.reloadData()
     }
     
@@ -135,7 +137,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
 
     private func baseCellFor(index: Int) -> UIViewController {
-        return [homeView, tasksCollectionView, weekCollectionView][index]
+        return [homeView, taskView, weekCollectionView][index]
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -173,7 +175,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         if index == 0 {
             return homeView
         }else if index == 1 {
-            return tasksCollectionView
+            return taskView
         }else {
             return weekCollectionView
         }

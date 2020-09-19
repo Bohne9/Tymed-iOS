@@ -20,6 +20,10 @@ class HomeViewModel: ObservableObject {
         upcomingCalendarDay.entries
     }
     
+    var timetables: [Timetable] {
+        return timetableService.fetchTimetables() ?? []
+    }
+    
     @Published
     var upcomingCalendarDay: CalendarDayEntry
     
@@ -34,7 +38,7 @@ class HomeViewModel: ObservableObject {
     init(anchor: Date = Date()) {
         anchorDate = anchor
         
-        tasks = timetableService.getTasks(after: anchorDate).sorted()
+        tasks = timetableService.getTasks(after: anchorDate.prevDay).sorted()
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
         
@@ -72,6 +76,12 @@ class HomeViewModel: ObservableObject {
         objectWillChange.send()
     }
     
+    
+    func tasks(for timetable: Timetable) -> [Task] {
+        return tasks.filter { task in
+            return task.timetable == timetable
+        }
+    }
 }
 
 
