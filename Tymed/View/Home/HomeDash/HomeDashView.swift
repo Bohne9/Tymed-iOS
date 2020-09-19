@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-fileprivate var heightForHour: CGFloat = 80
+fileprivate var heightForHour: CGFloat = 60
 
 class HomeDashViewWrapper: ViewWrapper<HomeDashView> {
     

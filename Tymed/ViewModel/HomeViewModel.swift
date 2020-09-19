@@ -55,8 +55,7 @@ class HomeViewModel: ObservableObject {
         }
 
         let timer = Timer(fire: nextMinute.advanced(by: 0.1), interval: 60, repeats: true) { _ in
-          // This runs at every turn of a minute
-            self.objectWillChange.send()
+            self.currentDate = Date()
         }
         RunLoop.current.add(timer, forMode: .default)
     }
@@ -76,22 +75,27 @@ class HomeViewModel: ObservableObject {
 }
 
 
-extension HomeViewModel: ViewWrapperPresentationDelegate {
+extension HomeViewModel: DetailViewPresentationDelegate {
     
+    /// Dismisses the view controller
     func dismiss() {
         objectWillChange.send()
     }
     
+    /// Resets the core data model and dismisses the view controller
     func cancel() {
-        objectWillChange.send()
+        TimetableService.shared.rollback()
+        dismiss()
     }
     
+    /// Saves the core data model and dismisses the view controller
     func done() {
-        objectWillChange.send()
+        TimetableService.shared.save()
+        dismiss()
     }
     
     func shouldDismiss() -> Bool {
-        return true
+        return !TimetableService.shared.hasChanges()
     }
     
 }

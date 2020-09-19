@@ -34,7 +34,7 @@ struct EventEditView: View {
     @ObservedObject
     var event: Event
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    var presentationDelegate: DetailViewPresentationDelegate?
     
     @ObservedObject
     var presentationHandler: ViewWrapperPresentationHandler
@@ -76,6 +76,7 @@ struct EventEditView: View {
             presentationHandler.showDiscardWarning.toggle()
         }else {
             presentationDelegate?.cancel()
+            presentationMode.wrappedValue.dismiss()
         }
     }
 }
@@ -85,7 +86,7 @@ struct EventEditViewContent: View {
     @ObservedObject
     var event: Event
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    var presentationDelegate: DetailViewPresentationDelegate?
     
     @Environment(\.presentationMode)
     var presentationMode

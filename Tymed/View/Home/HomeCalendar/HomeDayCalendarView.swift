@@ -67,7 +67,7 @@ struct HomeDashCalendarGrid: View {
     var endHour: Int
     
     var body: some View {
-        ZStack {
+        Group {
             GeometryReader { geometry in
                 ForEach (stride(
                             from: startHour,
@@ -122,6 +122,13 @@ struct HomeDashCalendarGrid: View {
     private func textForTime(_ hour: Int) -> String {
         let time = Time(hour: hour, minute: 0)
         
+        if Calendar.current.isDateInToday(date) {
+            let diff = abs(Time.now.timeInterval - time.timeInterval)
+            if diff < 10 {
+                return ""
+            }
+        }
+        
         return time.string() ?? ""
     }
     
@@ -149,7 +156,7 @@ struct HomeDashCalendarContent: View {
     
     var body: some View {
         
-        ZStack {
+        Group {
             GeometryReader { geometry in
                 ForEach(events.entries, id: \.self) { event in
                     HomeDashCalendarEvent(event: event)
@@ -255,6 +262,9 @@ struct HomeDashCalendarEvent: View {
                 Text("Ups! Something went wrong :(")
             }
         })
+//        .contextMenu {
+//
+//        }.previewContext(Text("Hallo"))
     }
     
     private func timetableColor() -> UIColor {

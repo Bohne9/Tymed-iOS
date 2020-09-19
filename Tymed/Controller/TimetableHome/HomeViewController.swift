@@ -78,9 +78,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         flowLayout.scrollDirection = .horizontal
-           
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 0
+        
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 6)
+        flowLayout.minimumLineSpacing = 20
+        flowLayout.minimumInteritemSpacing = 20
     }
     
     func scrollToPage(bar: NavigationBar, page: Int) {

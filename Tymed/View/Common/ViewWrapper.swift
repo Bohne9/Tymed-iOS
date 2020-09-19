@@ -20,7 +20,7 @@ class ViewWrapperPresentationHandler: ObservableObject {
     
 }
 
-protocol ViewWrapperPresentationDelegate {
+protocol DetailViewPresentationDelegate {
     
     func dismiss()
     
@@ -37,7 +37,7 @@ class ViewWrapper<T: View>: UIViewController {
     
     var hostingConroller: UIHostingController<T>?
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    var presentationDelegate: DetailViewPresentationDelegate?
     
     var presentationHandler = ViewWrapperPresentationHandler()
     
@@ -70,7 +70,7 @@ class ViewWrapper<T: View>: UIViewController {
 }
 
 
-extension ViewWrapper: ViewWrapperPresentationDelegate {
+extension ViewWrapper: DetailViewPresentationDelegate {
     
     /// Dismisses the view controller
     func dismiss() {
