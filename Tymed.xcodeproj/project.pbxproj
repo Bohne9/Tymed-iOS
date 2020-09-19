@@ -60,6 +60,7 @@
 		4F6F6F0124DD1DF2006EC4BE /* LessonPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F6F0024DD1DF2006EC4BE /* LessonPickerView.swift */; };
 		4F70014C2478548A001BDF21 /* TaskAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F70014B2478548A001BDF21 /* TaskAddViewController.swift */; };
 		4F730A12251634A5001F117D /* HomeTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F730A11251634A5001F117D /* HomeTaskCell.swift */; };
+		4F730A1425167CF7001F117D /* DayDebriefViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F730A1325167CF6001F117D /* DayDebriefViewModel.swift */; };
 		4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */; };
 		4F7F77412456C2A000038729 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77402456C2A000038729 /* AppDelegate.swift */; };
 		4F7F77432456C2A000038729 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77422456C2A000038729 /* SceneDelegate.swift */; };
@@ -218,6 +219,7 @@
 		4F6F6F0024DD1DF2006EC4BE /* LessonPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPickerView.swift; sourceTree = "<group>"; };
 		4F70014B2478548A001BDF21 /* TaskAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskAddViewController.swift; sourceTree = "<group>"; };
 		4F730A11251634A5001F117D /* HomeTaskCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskCell.swift; sourceTree = "<group>"; };
+		4F730A1325167CF6001F117D /* DayDebriefViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDebriefViewModel.swift; sourceTree = "<group>"; };
 		4F78BD7824A3B030004E570D /* HomeBaseCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBaseCollectionView.swift; sourceTree = "<group>"; };
 		4F7F773D2456C2A000038729 /* Tymed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tymed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F7F77402456C2A000038729 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -702,6 +704,7 @@
 			isa = PBXGroup;
 			children = (
 				4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */,
+				4F730A1325167CF6001F117D /* DayDebriefViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1046,6 +1049,7 @@
 				4FD92C2A24FA11DB00A51441 /* ProAccessBadge.swift in Sources */,
 				4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */,
 				4F1FCFE02493FF14003693A6 /* TaskDeleteTableViewCell.swift in Sources */,
+				4F730A1425167CF7001F117D /* DayDebriefViewModel.swift in Sources */,
 				4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */,
 				4F2A7DC424AE61DE002467E3 /* LessonDetailSubjectTitleCell.swift in Sources */,
 				4FD92C2824FA080D00A51441 /* ProAccesPreview.swift in Sources */,

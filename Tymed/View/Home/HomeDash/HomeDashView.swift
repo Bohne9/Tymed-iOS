@@ -40,7 +40,7 @@ struct HomeDashView: View {
                         .foregroundColor(Color(.systemBlue))
                     
                     Text("Good morning Jonah 🙋‍♂️,\nyou got a busy day before.\nYour day starts at 8 am with Math. You'll be done at 7 pm. \n\nHave a great day! 👍")
-                        .font(.system(size: 14, weight: .regular))
+                        .font(.system(size: 14, weight: .semibold))
                         .padding(.top, 5)
                 }
                 .padding(.vertical, 10)
