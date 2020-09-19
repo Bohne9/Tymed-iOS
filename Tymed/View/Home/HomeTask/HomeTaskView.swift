@@ -64,10 +64,17 @@ struct HomeTaskView: View {
                             .foregroundColor(Color(.secondaryLabel))
                     }
                 }
-                
+            }
+            
+            ForEach(homeViewModel.tasks, id: \.self) { task in
+                Section {
+                    HomeTaskCell(task: task)
+                        .frame(height: 45)
+                }
             }
             
         }.listStyle(InsetGroupedListStyle())
+        .environmentObject(homeViewModel)
     }
     
     
