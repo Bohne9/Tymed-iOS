@@ -51,12 +51,30 @@ struct HomeDashView: View {
                             Text("Tasks")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundColor(Color(.label))) {
-                    ForEach(homeViewModel.tasks, id: \.self) { task in
+                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
                         Section {
                             HomeTaskCell(task: task)
                                 .frame(height: 45)
                         }
                     }
+                    if homeViewModel.tasks.count > 3 {
+                        HStack {
+                            Text("See all tasks")
+                            Spacer()
+                            
+                            Image(systemName: "arrow.right")
+                        }.font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(.systemBlue))
+                    }
+                }
+            }
+            
+            if !Calendar.current.isDateInToday(homeViewModel.upcomingCalendarDay.date) {
+                Section(header: Text("Today")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(Color(.label))) {
+                    Text("Seems like you got a day off! 👍")
+                        .font(.system(size: 14, weight: .semibold))
                 }
             }
             

@@ -81,7 +81,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         flowLayout.scrollDirection = .horizontal
         
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 6)
+//        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 6)
         flowLayout.minimumLineSpacing = 20
         flowLayout.minimumInteritemSpacing = 20
     }

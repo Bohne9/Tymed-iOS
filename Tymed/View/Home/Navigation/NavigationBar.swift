@@ -45,14 +45,14 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         isTranslucent = false
         isUserInteractionEnabled = true
         
-        backgroundColor = .systemGroupedBackground
+//        backgroundColor = .systemGroupedBackground
         
         addSubview(topBar)
         
-        barTintColor = .systemGroupedBackground
+//        barTintColor = .systemGroupedBackground
         
         topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .systemGroupedBackground
+        topBar.backgroundColor = .systemBackground
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         topBar.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.95).isActive = true
@@ -61,7 +61,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         
         setupWeekScene()
         
-        shadowImage = UIImage()
+//        shadowImage = UIImage()
     }
     
     private func setupWeekScene() {
