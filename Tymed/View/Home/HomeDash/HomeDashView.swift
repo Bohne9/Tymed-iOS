@@ -36,7 +36,7 @@ struct HomeDashView: View {
             Section {
                 VStack(alignment: .leading) {
                     Text(Date().stringify(with: .full, relativeFormatting: false).uppercased())
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(Color(.systemBlue))
                     
                     Text(homeViewModel.dayDebrief?.debrief ?? "")

@@ -227,14 +227,18 @@ struct HomeDashCalendarEvent: View {
             .background(Color(UIColor(event) ?? .clear))
             
             VStack(alignment: .leading) {
-                Text(event.timetable?.name.uppercased() ?? "")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color(UIColor(event) ?? .clear))
+                if eventDuration() > 30 {
+                    Text(event.timetable?.name.uppercased() ?? "")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(Color(UIColor(event) ?? .clear))
+                }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
-                Text(timeString())
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Color(.secondaryLabel))
+                if eventDuration() > 15 {
+                    Text(timeString())
+                        .font(.system(size: 12, weight: .regular))
+                        .foregroundColor(Color(.secondaryLabel))
+                }
                 Spacer()
             }.padding(.top, 5)
             
@@ -276,6 +280,15 @@ struct HomeDashCalendarEvent: View {
             return ""
         }
         return "\(start.stringifyTime(with: .short)) - \(end.stringifyTime(with: .short))"
+    }
+    
+    private func eventDuration() -> TimeInterval {
+        guard let start = event.startDate,
+              let end = event.endDate else {
+            return 0
+        }
+        
+        return start.distance(to: end) / 60
     }
     
 }
