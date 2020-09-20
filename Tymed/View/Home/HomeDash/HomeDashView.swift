@@ -83,7 +83,7 @@ struct HomeDashView: View {
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundColor(Color(.label))) {
                 HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
-                    .environmentObject(homeViewModel)
+                    
             }
             
             if let nextCalendarDay = homeViewModel.nextCalendarDay {
@@ -92,12 +92,10 @@ struct HomeDashView: View {
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundColor(Color(.label))) {
                     HomeDashCalendarView(event: nextCalendarDay)
-                        .environmentObject(homeViewModel)
                 }
             }
-            
-            
         }.listStyle(InsetGroupedListStyle())
+        .environmentObject(homeViewModel)
     }
 }
 

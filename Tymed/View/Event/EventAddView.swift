@@ -11,11 +11,14 @@ import SwiftUI
 //MARK: EventAddView
 struct EventAddView: View {
     
+    @ObservedObject
     var event: Event = {
         let event = TimetableService.shared.event()
         
         event.start = Date()
         event.end = Date() + 3600
+        
+        event.timetable = TimetableService.shared.defaultTimetable()
         
         return event
     }()
@@ -40,7 +43,7 @@ struct EventAddView: View {
                 }, label: {
                     Text("Add")
                         .font(.system(size: 16, weight: .semibold))
-                }))
+                }).disabled(!event.isValid))
         }
     }
     
@@ -70,6 +73,9 @@ struct EventAddViewContent: View {
     @State
     private var showNotificationDatePicker = false
     
+    @State
+    private var duration: TimeInterval = 3600
+    
     var body: some View {
         
         List {
@@ -77,6 +83,7 @@ struct EventAddViewContent: View {
             Section {
                 
                 TextField("Title", text: $event.title)
+                    .font(.system(size: 16, weight: .semibold))
                 
                 TextField("Description", text: Binding($event.body, replacingNilWith: ""))
             }
@@ -110,8 +117,8 @@ struct EventAddViewContent: View {
                         }
                     }
                 
-                if showEndDatePicker {
-                    DatePicker("", selection: Binding($event.end, Date()))
+                if showEndDatePicker, let start = event.start {
+                    DatePicker("", selection: Binding($event.end, Date()), in: start...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
@@ -154,6 +161,17 @@ struct EventAddViewContent: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
+        .onChange(of: event.end) { value in
+            if let start = event.start,
+               let end = event.end {
+                duration = end.timeIntervalSince(start)
+            }
+        }.onChange(of: event.start) { value in
+            guard let start = event.start else {
+                return
+            }
+            event.end = start + duration
+        }
         
     }
     

@@ -59,7 +59,7 @@ struct EventEditView: View {
                 }, label: {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
-                }))
+                }).disabled(!event.isValid))
         }.actionSheet(isPresented: $presentationHandler.showDiscardWarning, content: {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
@@ -103,6 +103,8 @@ struct EventEditViewContent: View {
     //MARK: Delete state
     @State var showDeleteAction = false
     
+    @State
+    private var duration: TimeInterval = 3600
     
     var body: some View {
         List {
@@ -144,8 +146,8 @@ struct EventEditViewContent: View {
                         }
                     }
                 
-                if showEndDatePicker {
-                    DatePicker("", selection: Binding($event.end, Date()))
+                if showEndDatePicker, let start = event.start {
+                    DatePicker("", selection: Binding($event.end, Date()), in: start...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.default)
                 }
@@ -207,7 +209,22 @@ struct EventEditViewContent: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-            
+        .onChange(of: event.end) { value in
+            if let start = event.start,
+               let end = event.end {
+                duration = end.timeIntervalSince(start)
+            }
+        }.onChange(of: event.start) { value in
+            guard let start = event.start else {
+                return
+            }
+            event.end = start + duration
+        }.onAppear {
+            if let start = event.start,
+               let end = event.end {
+                duration = end.timeIntervalSince(start)
+            }
+        }
     }
 
     func textFor(_ date: Date?) -> String {

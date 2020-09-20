@@ -57,6 +57,10 @@ struct HomeTaskCell: View {
             TaskEditView(task: task, dismiss: { })
         })
         .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
+        .onChange(of: task.completed) { value in
+            task.completionDate = value ? Date() : nil
+            TimetableService.shared.save()
+        }
     }
     
     private func textFor(date: Date) -> String {
