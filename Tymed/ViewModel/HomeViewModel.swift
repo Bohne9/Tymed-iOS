@@ -14,6 +14,9 @@ class HomeViewModel: ObservableObject {
     private var calendarService = CalendarService.shared
     
     @Published
+    var dayDebrief: DayDebriefViewModel?
+    
+    @Published
     var tasks: [Task] = []
     
     var events: [CalendarEvent] {
@@ -47,6 +50,8 @@ class HomeViewModel: ObservableObject {
         }
         
         scheduleTimeUpdater()
+        
+        dayDebrief = DayDebriefViewModel(self)
     }
     
     func scheduleTimeUpdater() {
@@ -106,6 +111,30 @@ extension HomeViewModel: DetailViewPresentationDelegate {
     
     func shouldDismiss() -> Bool {
         return !TimetableService.shared.hasChanges()
+    }
+    
+}
+
+extension HomeViewModel: DayDebriefDelegate {
+    
+    func replacement(for placeholder: Placeholders) -> String {
+        
+        switch placeholder {
+        case .name:
+            return ""
+        case .totalEvents:
+            let count = numberOfEventsToday()
+            let ev = count == 1 ? "event" : "events"
+            
+            return "\(count) \(ev)"
+        default:
+            return "-"
+        }
+        
+    }
+    
+    func numberOfEventsToday() -> Int {
+        return Calendar.current.isDateInToday(upcomingCalendarDay.date) ? upcomingCalendarDay.eventCount : 0
     }
     
 }

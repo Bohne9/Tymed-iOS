@@ -8,12 +8,36 @@
 
 import SwiftUI
 
-class DayDebriefViewModel: ObservableObject {
+protocol DayDebriefDelegate {
+    
+    func numberOfEventsToday() -> Int
+    
+    func replacement(for placeholder: Placeholders) -> String
+    
+    func replace(placerholder: Placeholders, in string: String) -> String
+    
+}
 
-    internal enum Placeholders: String, CaseIterable {
-        case name = "%name"
-        case gender = "%gender"
-        case totalEvents = "%totalEvents"
+extension DayDebriefDelegate {
+    
+    func replace(placerholder: Placeholders, in string: String) -> String {
+        return string.replacingOccurrences(of: placerholder.rawValue, with: replacement(for: placerholder))
+    }
+    
+}
+
+enum Placeholders: String, CaseIterable {
+    case name = "name"
+    case gender = "gender"
+    case totalEvents = "totalEvents"
+}
+
+class DayDebriefViewModel: ObservableObject {
+    
+    var delegate: DayDebriefDelegate
+    
+    init(_ delegate: DayDebriefDelegate) {
+        self.delegate = delegate
     }
     
     //MARK: Greetings
@@ -51,8 +75,7 @@ class DayDebriefViewModel: ObservableObject {
     
     //MARK: Relaxed Day
     private let relaxedDay = [
-        "today is a relaxed day. You only got \(Placeholders.totalEvents) today.",
-        "a lot of work today!"
+        "today is a relaxed day. You only got \(Placeholders.totalEvents) today."
     ]
 
     //MARK: Off Day
@@ -73,9 +96,31 @@ class DayDebriefViewModel: ObservableObject {
     
 //    "Good morning Jonah 🙋‍♂️,\nyou got a busy day before.\nYour day starts at 8 am with Math. You'll be done at 7 pm. \n\nHave a great day! 👍"
     
-    @Published
-    var debrief: String = ""
+    var debrief: String {
+        let debrief = generateDebrief()
+        return replacePlaceholders(debrief)
+    }
     
+    private func generateDebrief() -> String {
+        let now = Date()
+        let greeting = self.greeting(for: now)
+        
+        let daySummary = self.daySummary(for: now)
+        
+        let adoption = self.adoption(for: now)
+        
+        return greeting + daySummary + adoption
+    }
+    
+    private func replacePlaceholders(_ string: String) -> String {
+        var value = string
+        
+        Placeholders.allCases.forEach { (placerholder) in
+            value = delegate.replace(placerholder: placerholder, in: value)
+        }
+        
+        return value
+    }
     
     
     private func greeting(for date: Date) -> String {
@@ -88,6 +133,21 @@ class DayDebriefViewModel: ObservableObject {
         }else {
             return eveningGreetings.randomElement() ?? ""
         }
+    }
+    
+    private func daySummary(for date: Date) -> String {
+        let eventCount = delegate.numberOfEventsToday()
+        
+        if eventCount == 0 {
+            return offDay.randomElement() ?? ""
+        }else if eventCount < 3 {
+            return relaxedDay.randomElement() ?? ""
+        }else if eventCount < 6 {
+            return normalDay.randomElement() ?? ""
+        }else {
+            return busyDay.randomElement() ?? ""
+        }
+        
     }
     
     private func adoption(for date: Date) -> String {
