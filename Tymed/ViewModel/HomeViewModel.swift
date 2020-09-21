@@ -92,7 +92,7 @@ class HomeViewModel: ObservableObject {
 
 extension HomeViewModel: DetailViewPresentationDelegate {
     
-    /// Dismisses the view controller
+    /// Dismisses the view
     func dismiss() {
         objectWillChange.send()
     }
@@ -106,7 +106,8 @@ extension HomeViewModel: DetailViewPresentationDelegate {
     /// Saves the core data model and dismisses the view controller
     func done() {
         TimetableService.shared.save()
-        dismiss()
+//        dismiss()
+        reload()
     }
     
     func shouldDismiss() -> Bool {

@@ -118,7 +118,7 @@ struct EventAddViewContent: View {
                     }
                 
                 if showEndDatePicker, let start = event.start {
-                    DatePicker("", selection: Binding($event.end, Date()), in: start...)
+                    DatePicker("", selection: Binding($event.end, Date()), in: (start + 60)...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
