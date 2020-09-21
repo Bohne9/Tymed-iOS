@@ -13,10 +13,6 @@ class ViewController: UITabBarController {
 
     let homeVC = HomeViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
-    let addVC = TimetableOverviewViewController()
-    
-    let profileVC = ProfileCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
-    
     private var selectedTab = 0
     
     override func viewDidLoad() {
@@ -67,8 +63,6 @@ class ViewController: UITabBarController {
     
     func reload() {
         homeVC.reload()
-        addVC.reload()
-        profileVC.reload()
     }
     
     override func viewDidAppear(_ animated: Bool) {

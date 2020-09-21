@@ -214,13 +214,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
 }
 
-extension HomeViewController: TaskOverviewTableviewCellDelegate {
-
-    func onChange(_ cell: TaskOverviewTableViewCell) {
-        reload()
-    }
-    
-}
 
 
 extension HomeViewController: HomeViewControllerDelegate {

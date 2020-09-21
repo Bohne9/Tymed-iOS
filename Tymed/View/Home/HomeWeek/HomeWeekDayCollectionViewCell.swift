@@ -30,7 +30,6 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell  {
         }
     }
     
-    var calendarCellSupplier = HomeCalendarCollectionViewCellSupplier()
     
     private var calendarDayEntry = CalendarDayEntry(for: Date(), entries: [])
     var homeCalendarView = HomeDayCalendarViewWrapper()
