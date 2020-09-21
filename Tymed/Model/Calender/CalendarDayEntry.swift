@@ -35,7 +35,7 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         endOfDay = lastEventEnding()
     }
     
-    private func firstEventBegin() -> Date? {
+    func firstEventBegin() -> Date? {
         return entries.sorted { (lhs, rhs) -> Bool in
             guard let lhsStart = lhs.startDate,
                   let rhsStart = rhs.startDate else {
@@ -46,7 +46,7 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         }.first?.startDate
     }
     
-    private func lastEventEnding() -> Date? {
+    func lastEventEnding() -> Date? {
         return entries.sorted { (lhs, rhs) -> Bool in
             guard let lhsEnd = lhs.endDate,
                   let rhsEnd = rhs.endDate else {

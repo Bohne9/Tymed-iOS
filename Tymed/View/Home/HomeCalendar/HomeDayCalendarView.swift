@@ -34,26 +34,6 @@ struct HomeDayCalendarView: View {
         .padding(.vertical, 10)
     }
     
-    private func numberOfHours() -> Int {
-        guard let start = event.startOfDay,
-              let end = event.endOfDay else {
-            return 0
-        }
-        
-        let startHour = Calendar.current.dateComponents([.hour], from: start).hour ?? 0
-        let endHour = Calendar.current.dateComponents([.hour], from: end).hour ?? 0
-        
-        return (endHour - startHour + 1)
-    }
-    
-    private func startHour() -> Int {
-        guard let start = event.startOfDay else {
-            return 0
-        }
-        
-        return Calendar.current.dateComponents([.hour], from: start).hour ?? 0
-    }
-    
 }
 
 //MARK: HomeDashCalendarGrid
@@ -71,8 +51,8 @@ struct HomeDashCalendarGrid: View {
     var endHour: Int
     
     var body: some View {
-        Group {
-            GeometryReader { geometry in
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
                 ForEach (stride(
                             from: startHour,
                             through: endHour,
@@ -84,35 +64,34 @@ struct HomeDashCalendarGrid: View {
                             .foregroundColor(Color(.secondaryLabel))
                             .padding(.trailing, 5)
                             .frame(width: 45)
-                            
-                        VStack {
-                            Divider()
-                        }
-                    }
-                    .frame(height: 12)
-                    .offset(x: 0, y: offset(for: hour) - 6)
-                    
-                }
-                
-                if Time.now.hour >= startHour && Time.now.hour <= endHour && Calendar.current.isDateInToday(date) {
-                    HStack(spacing: 0) {
-                        Text(Time.now.string() ?? "")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.systemBlue))
-                            .padding(.trailing, 5)
-                            .frame(width: 45)
-                            
                         
                         VStack {
                             Divider()
-                                .background(Color(.systemBlue))
                         }
                     }
+                    .id(hour)
                     .frame(height: 12)
-                    .offset(x: 0, y: offsetFor(time: Time.now) - 6)
+                    .padding(.bottom, hour != endHour ? heightForHour - 12 : 0)
+                    
                 }
-                
-                
+            }
+            
+            if Time.now.hour >= startHour && Time.now.hour <= endHour && Calendar.current.isDateInToday(date) {
+                HStack(spacing: 0) {
+                    Text(Time.now.string() ?? "")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(Color(.systemBlue))
+                        .padding(.trailing, 5)
+                        .frame(width: 45)
+                    
+                    
+                    VStack {
+                        Divider()
+                            .background(Color(.systemBlue))
+                    }
+                }
+                .frame(height: 12)
+                .offset(x: 0, y: offsetFor(time: Time.now))
             }
         }
     }

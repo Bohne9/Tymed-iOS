@@ -33,9 +33,28 @@ struct HomeDayCalendarViewStandalone: View {
     @ObservedObject
     var homeViewModel: HomeViewModel
     
+    @State
+    private var firstAppear = true
+    
     var body: some View {
         ScrollView {
-            HomeDayCalendarView(event: event).environmentObject(homeViewModel)
+            ScrollViewReader { value in
+                HomeDayCalendarView(event: event).environmentObject(homeViewModel)
+                    .onAppear {
+                        if firstAppear {
+                            firstAppear = false
+                            
+                            if Calendar.current.isDateInToday(event.date) {
+                                let now = Time.now.hour
+
+                                value.scrollTo(now)
+                            } else if let start = event.firstEventBegin() {
+                                let hour = Time(from: start).hour
+                                value.scrollTo(hour)
+                            }
+                        }
+                    }
+            }
         }.padding(.horizontal, 5)
     }
     

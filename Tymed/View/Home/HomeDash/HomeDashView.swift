@@ -36,7 +36,7 @@ struct HomeDashView: View {
             Section {
                 VStack(alignment: .leading) {
                     Text(Date().stringify(with: .full, relativeFormatting: false).uppercased())
-                        .font(.system(size: 13, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(Color(.systemBlue))
                     
                     Text(homeViewModel.dayDebrief?.debrief ?? "")
@@ -113,15 +113,15 @@ struct HomeDashCalendarView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
-                .frame(height: CGFloat(numberOfHours()) * heightForHour + 20)
-                .padding(.vertical, 10)
+                .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                .padding(.vertical, 20)
             
             HomeDashCalendarContent(events: event)
-                .frame(height: CGFloat(numberOfHours()) * heightForHour + 20)
-                .padding(.vertical, 10)
-        }
+                .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                .padding(.vertical, 20)
+        }.frame(height: CGFloat(numberOfHours()) * heightForHour + 40)
     }
     
     private func numberOfHours() -> Int {
