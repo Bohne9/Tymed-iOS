@@ -137,6 +137,14 @@ extension Date {
     }
 }
 
+//MARK: Calendar
+extension Calendar {
+
+    func isDateBetween(date: Date, left: Date, right: Date) -> Bool {
+        return left < date && date < right
+    }
+
+}
 
 
 //MARK: UIView

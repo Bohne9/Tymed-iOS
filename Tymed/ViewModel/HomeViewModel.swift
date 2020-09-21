@@ -49,15 +49,6 @@ class HomeViewModel: ObservableObject {
             nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
         }
         
-        print("Upcoming:")
-        upcomingCalendarDay.entries.forEach { (event) in
-            upcomingCalendarDay.entries.forEach { (event2) in
-                if event.id != event2.id {
-                    print("1: \(event.title), 2: \(event2.title), <: \(event < event2)")
-                }
-            }
-        }
-        
         scheduleTimeUpdater()
         
         dayDebrief = DayDebriefViewModel(self)

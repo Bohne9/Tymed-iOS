@@ -163,9 +163,11 @@ struct HomeDashCalendarContent: View {
         Group {
             GeometryReader { geometry in
                 ForEach(events.entries, id: \.self) { event in
+                    let width = self.width(for: event, maxWidth: geometry.size.width - 60)
+                    
                     HomeDashCalendarEvent(event: event)
-                        .frame(width: width(for: event, maxWidth: geometry.size.width - 55), height: height(for: event))
-                        .offset(x: 60, y: offset(for: event))
+                        .frame(width: width, height: height(for: event))
+                        .offset(x: offsetX(for: event, width: width, environment: events.entries), y: offsetY(for: event))
                 }
             }
         }
@@ -178,7 +180,7 @@ struct HomeDashCalendarContent: View {
             return maxWidth
         }
         
-        return maxWidth / CGFloat(collisions)
+        return maxWidth / CGFloat(collisions + 1)
     }
     
     private func height(for event: CalendarEvent) -> CGFloat {
@@ -192,7 +194,11 @@ struct HomeDashCalendarContent: View {
         return heightForHour * duration
     }
     
-    private func offset(for event: CalendarEvent) -> CGFloat {
+    private func offsetX(for event: CalendarEvent, width: CGFloat, environment: [CalendarEvent]) -> CGFloat {
+        return 60 + CGFloat(event.collisionRank(in: environment)) * width
+    }
+    
+    private func offsetY(for event: CalendarEvent) -> CGFloat {
         guard let startOfDay = events.startOfDay else {
             return 0
         }
@@ -260,7 +266,7 @@ struct HomeDashCalendarEvent: View {
             Spacer()
         }.background(Color(UIColor.tertiarySystemGroupedBackground.withAlphaComponent(0.75)))
         .cornerRadius(6)
-        .padding(.trailing)
+//        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView, content: {

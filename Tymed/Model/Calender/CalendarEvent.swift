@@ -139,10 +139,42 @@ class CalendarEvent: ObservableObject {
         }
     }
     
+    func collisionRank(in events: [CalendarEvent]) -> Int {
+        var rank = 0
+        
+        for event in events {
+            if collides(with: event) {
+                rank += 1
+            }else if event.id == id {
+                break
+            }
+        }
+        
+        return rank
+    }
+    
+    func collides(with event: CalendarEvent) -> Bool {
+        guard let startDate = self.startDate,
+              let endDate = self.endDate else {
+            return false
+        }
+        
+        guard event.id != id,
+              let start = event.startDate,
+              let end = event.endDate else {
+            return false
+        }
+        
+        return Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+            Calendar.current.isDateBetween(date: endDate, left: start, right: end)
+    }
     
     func collisionCount(within events: [CalendarEvent]) -> Int {
         guard let startDate = self.startDate,
               let endDate = self.endDate else {
+            print("COLLISION ERROR")
             return 0
         }
         
@@ -155,14 +187,17 @@ class CalendarEvent: ObservableObject {
                 return
             }
             
-            if (start < startDate && startDate < end) ||
-                (start < endDate && endDate < end) {
-                count += 1
+            if  Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+                Calendar.current.isDateBetween(date: endDate, left: start, right: end) {
+                    count += 1
             }
         }
         
         return count
     }
+    
 }
 
 
