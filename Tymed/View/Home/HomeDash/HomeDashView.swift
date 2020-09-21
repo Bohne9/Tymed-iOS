@@ -110,7 +110,8 @@ struct HomeDashCalendarView: View {
     
     var body: some View {
         ZStack {
-            HomeDashCalendarGrid(date: event.date,startHour: startHour(), endHour: startHour() + numberOfHours())
+            HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
+                .environmentObject(TimetableService.shared)
                 .frame(height: CGFloat(numberOfHours()) * heightForHour + 20)
                 .padding(.vertical, 10)
             

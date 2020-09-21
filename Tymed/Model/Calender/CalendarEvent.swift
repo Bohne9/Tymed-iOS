@@ -138,6 +138,31 @@ class CalendarEvent: ObservableObject {
             return nil
         }
     }
+    
+    
+    func collisionCount(within events: [CalendarEvent]) -> Int {
+        guard let startDate = self.startDate,
+              let endDate = self.endDate else {
+            return 0
+        }
+        
+        var count = 0
+        
+        events.forEach { event in
+            guard event.id != id,
+                  let start = event.startDate,
+                  let end = event.endDate else {
+                return
+            }
+            
+            if (start < startDate && startDate < end) ||
+                (start < endDate && endDate < end) {
+                count += 1
+            }
+        }
+        
+        return count
+    }
 }
 
 

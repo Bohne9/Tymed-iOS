@@ -95,7 +95,7 @@ enum Day: Int, CaseIterable {
 }
 
 //MARK: TimetableService
-class TimetableService {
+class TimetableService: ObservableObject {
     
     static let shared = TimetableService()
     
@@ -437,6 +437,7 @@ class TimetableService {
     func save() {
         do {
             try context.save()
+            objectWillChange.send()
         } catch {
             print(error)
         }
@@ -445,10 +446,12 @@ class TimetableService {
     //MARK: reset()
     func reset() {
         context.reset()
+        objectWillChange.send()
     }
     
     func rollback() {
         context.rollback()
+        objectWillChange.send()
     }
     
     func hasChanges() -> Bool {

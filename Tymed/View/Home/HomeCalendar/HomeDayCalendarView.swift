@@ -23,6 +23,7 @@ struct HomeDayCalendarView: View {
         ZStack(alignment: .center) {
             
             HomeDashCalendarGrid(date: event.date, startHour: 0, endHour: 24)
+                .environmentObject(TimetableService.shared)
                 .frame(height: 24 * heightForHour)
                 .padding(.vertical, 10)
             
@@ -57,6 +58,9 @@ struct HomeDayCalendarView: View {
 
 //MARK: HomeDashCalendarGrid
 struct HomeDashCalendarGrid: View {
+    
+    @EnvironmentObject
+    var timetableService: TimetableService
     
     @EnvironmentObject
     var homeViewModel: HomeViewModel
@@ -160,12 +164,21 @@ struct HomeDashCalendarContent: View {
             GeometryReader { geometry in
                 ForEach(events.entries, id: \.self) { event in
                     HomeDashCalendarEvent(event: event)
-                        .frame(height: height(for: event))
-                        .frame(width: geometry.size.width - 55)
+                        .frame(width: width(for: event, maxWidth: geometry.size.width - 55), height: height(for: event))
                         .offset(x: 60, y: offset(for: event))
                 }
             }
         }
+    }
+    
+    private func width(for event: CalendarEvent, maxWidth: CGFloat) -> CGFloat {
+        let collisions = event.collisionCount(within: events.entries)
+        
+        if collisions == 0 {
+            return maxWidth
+        }
+        
+        return maxWidth / CGFloat(collisions)
     }
     
     private func height(for event: CalendarEvent) -> CGFloat {
@@ -227,23 +240,25 @@ struct HomeDashCalendarEvent: View {
             .background(Color(UIColor(event) ?? .clear))
             
             VStack(alignment: .leading) {
-                if eventDuration() > 30 {
+                if eventDuration() > 45 {
                     Text(event.timetable?.name.uppercased() ?? "")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color(UIColor(event) ?? .clear))
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
-                if eventDuration() > 15 {
+                    .minimumScaleFactor(0.75)
+                if eventDuration() > 20 {
                     Text(timeString())
                         .font(.system(size: 12, weight: .regular))
                         .foregroundColor(Color(.secondaryLabel))
+                        .minimumScaleFactor(0.75)
                 }
                 Spacer()
             }.padding(.top, 5)
             
             Spacer()
-        }.background(Color(.tertiarySystemGroupedBackground))
+        }.background(Color(UIColor.tertiarySystemGroupedBackground.withAlphaComponent(0.75)))
         .cornerRadius(6)
         .padding(.trailing)
         .onTapGesture {
