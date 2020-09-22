@@ -105,6 +105,9 @@ struct TaskEditContent: View {
     
     @State private var presentNotificationPicker = false
     
+    //MARK: Timetable
+    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
+    
     @State var notificationOffset: NotificationOffset?
     
     //MARK: Lesson state
@@ -240,6 +243,25 @@ struct TaskEditContent: View {
                 }.frame(height: 45)
             }
             
+            //MARK: Calendar
+            
+            Section {
+                HStack {
+                    
+                    NavigationLink(destination: AppTimetablePicker(timetable: $timetable)) {
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        Spacer()
+                        if timetable == TimetableService.shared.defaultTimetable() {
+                            Text("Default")
+                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
+                                .background(Color(.tertiarySystemGroupedBackground))
+                                .font(.system(size: 13, weight: .semibold))
+                                .cornerRadius(10)
+                        }
+                    }
+                    
+                }
+            }
             
             //MARK: Delete
             Section {
@@ -284,6 +306,11 @@ struct TaskEditContent: View {
             loadTaskValues()
         }.onChange(of: task.completed) { completed in
             completionDate = completed ? Date() : nil
+        }.onChange(of: timetable) { (value) in
+            if let timetable = value {
+                task.timetable = timetable
+                TimetableService.shared.save()
+            }
         }
     }
     
@@ -296,6 +323,7 @@ struct TaskEditContent: View {
         hasDueDate = task.due != nil
         lesson = task.lesson
         hasLessonAttached = lesson != nil
+        timetable = task.timetable
         isArchived = task.archived
         isCompleted = task.completed
         completionDate = task.completionDate
@@ -313,6 +341,11 @@ struct TaskEditContent: View {
             }
         }
         
+    }
+    
+    //MARK: timetableTitle
+    private func timetableTitle() -> String? {
+        return timetable?.name
     }
     
     //MARK: titleForLessonCell

@@ -47,7 +47,7 @@ struct TimetableOverview: View {
             //MARK: Add timetable
             Section {
                 HStack {
-                    DetailCellDescriptor("Add timetable", image: "plus", .systemBlue)
+                    DetailCellDescriptor("Add calendar", image: "plus", .systemBlue)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .semibold))
@@ -71,11 +71,11 @@ struct TimetableOverview: View {
                             }, label: {
                                 Image(systemName: "multiply")
                                     .foregroundColor(.white)
-                            })
+                            }).contentShape(Rectangle())
                         }.font(.system(size: 15, weight: .semibold))
                         Spacer()
                         HStack {
-                            Text("You can add multiple timetables!")
+                            Text("You can add multiple calendars!")
                                 .font(.system(size: 14, weight: .regular))
                                 .lineLimit(-1)
                                 Spacer()
@@ -120,26 +120,26 @@ struct TimetableOverview: View {
         })
         .actionSheet(isPresented: $showAddActionSheet, content: {
             ActionSheet(title: Text("What would you like to add?"), message: Text(""), buttons: [
-                .default(Text("Lesson"), action: {
-                    showLessonAdd = true
+                .default(Text("Event"), action: {
+                    showEventAdd = true
                     showAddView.toggle()
                 }),
                 .default(Text("Task"), action: {
                     showTaskAdd = true
                     showAddView.toggle()
                 }),
-                .default(Text("Event"), action: {
-                    showEventAdd = true
+                .default(Text("Lesson"), action: {
+                    showLessonAdd = true
                     showAddView.toggle()
                 }),
-                .default(Text("Timetable"), action: {
+                .default(Text("Calendar"), action: {
                     showTimetableAdd = true
                     showAddView.toggle()
                 }),
                 .cancel()
             ])
         })
-        .navigationTitle("Timetable")
+        .navigationTitle("Calendars")
     }
 }
 

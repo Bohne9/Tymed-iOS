@@ -32,7 +32,7 @@ struct TimetableDetail: View {
             //MARK: Name
             Section(header: Text("Name").font(.system(size: 12, weight: .semibold))) {
                 
-                TextField("Timetable name", text: $timetable.name)
+                TextField("Calendar name", text: $timetable.name)
                 
             }
             
@@ -127,7 +127,7 @@ struct TimetableDetail: View {
             //MARK: Default
             Section {
                 HStack {
-                    DetailCellDescriptor("Default timetable", image: "circle.fill", .systemGreen)
+                    DetailCellDescriptor("Default calendar", image: "circle.fill", .systemGreen)
                         .font(.system(size: 15, weight: .semibold))
                     Toggle("", isOn: $timetable.isDefault).labelsHidden()
                 }
@@ -150,7 +150,7 @@ struct TimetableDetail: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Timetable")
+        .navigationTitle("Calendar")
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: timetable.isDefault) { (value) in
             TimetableService.shared.setDefaultTimetable(timetable)

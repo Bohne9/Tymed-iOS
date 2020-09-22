@@ -223,13 +223,13 @@ struct LessonEditContentView: View {
             }
             
             
-            //MARK: Timetable
+            //MARK: Calendar
             
             Section {
                 HStack {
                     
                     NavigationLink(destination: AppTimetablePicker(timetable: $timetable)) {
-                        DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
                         Spacer()
                         if timetable == TimetableService.shared.defaultTimetable() {
                             Text("Default")

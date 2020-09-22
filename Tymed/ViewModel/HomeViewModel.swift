@@ -70,6 +70,8 @@ class HomeViewModel: ObservableObject {
     }
     
     func reload() {
+        anchorDate = Date()
+        
         tasks = timetableService.getTasks(after: anchorDate).sorted()
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)

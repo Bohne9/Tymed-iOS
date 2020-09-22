@@ -53,10 +53,7 @@ struct HomeDashCalendarGrid: View {
     var body: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
-                ForEach (stride(
-                            from: startHour,
-                            through: endHour,
-                            by: 1).map { $0 },
+                ForEach (startHour...endHour,
                          id: \.self) { hour in
                     HStack(spacing: 0) {
                         Text(textForTime(hour))
@@ -64,12 +61,12 @@ struct HomeDashCalendarGrid: View {
                             .foregroundColor(Color(.secondaryLabel))
                             .padding(.trailing, 5)
                             .frame(width: 45)
+                            .id(hour)
                         
                         VStack {
                             Divider()
                         }
                     }
-                    .id(hour)
                     .frame(height: 12)
                     .padding(.bottom, hour != endHour ? heightForHour - 12 : 0)
                     

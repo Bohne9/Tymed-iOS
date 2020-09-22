@@ -169,13 +169,13 @@ struct EventEditViewContent: View {
                 }
             }
             
-            //MARK: Timetable
+            //MARK: Calendar
             
             Section {
                 HStack {
                     
                     NavigationLink(destination: AppTimetablePicker(timetable: $event.timetable)) {
-                        DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
                         Spacer()
                         if event.timetable == TimetableService.shared.defaultTimetable() {
                             Text("Default")

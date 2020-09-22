@@ -44,7 +44,7 @@ struct AppTimetablePicker: View {
                 }
             }
         }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Timetable")
+        .navigationTitle("Calendar")
     }
     
     private func timetables() -> [Timetable?] {

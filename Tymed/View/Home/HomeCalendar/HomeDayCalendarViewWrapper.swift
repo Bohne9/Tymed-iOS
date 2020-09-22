@@ -42,14 +42,15 @@ struct HomeDayCalendarViewStandalone: View {
                 HomeDayCalendarView(event: event).environmentObject(homeViewModel)
                     .onAppear {
                         if firstAppear {
-                            firstAppear = false
+//                            firstAppear = false
                             
                             if Calendar.current.isDateInToday(event.date) {
                                 let now = Time.now.hour
 
                                 value.scrollTo(now)
                             } else if let start = event.firstEventBegin() {
-                                let hour = Time(from: start).hour
+                                let hour = Calendar.current.dateComponents([.hour], from: start).hour ?? 0
+                                
                                 value.scrollTo(hour)
                             }
                         }
