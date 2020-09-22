@@ -33,11 +33,13 @@ struct HomeTaskView: View {
     
     var body: some View {
         
+        //MARK: HomeTaskViewContent
         if !homeViewModel.tasks.isEmpty {
             HomeTaskViewContent(homeViewModel: homeViewModel)
         }else {
             List {
                 
+                //MARK: No tasks image
                 Section {
                     
                     VStack(spacing: 20) {
@@ -47,7 +49,6 @@ struct HomeTaskView: View {
                         Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .rotationEffect(.degrees(-30))
                             .padding(.horizontal, 30)
 
                         Button(action: {
@@ -56,7 +57,7 @@ struct HomeTaskView: View {
                             HStack {
                                 Spacer()
                                 Image(systemName: "plus")
-                                Text("Add your first task")
+                                Text("Add a task")
                                 Spacer()
                             }.font(.system(size: 17.5, weight: .semibold))
                             .padding()
@@ -70,6 +71,46 @@ struct HomeTaskView: View {
                     .background(Color(.systemGroupedBackground))
                 }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 
+                //MARK: Recently archived
+                if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
+                    
+                    if let tasks = BackgroundRoutineService.standard.archivedTasksOfSession {
+                        Section (header: HStack {
+                            Text("Recently archived")
+                            Spacer()
+//                            Button("Put back") {
+//                                tasks.forEach { $0.archived = false }
+//                                TimetableService.shared.save()
+//                                BackgroundRoutineService.standard.archivedTasksOfSession = []
+//                                homeViewModel.reload()
+//                            }.foregroundColor(Color(.systemBlue))
+                        }.font(.system(size: 14, weight: .semibold))) {
+                            VStack {
+                                ForEach(tasks, id: \.self) { task in
+                                    HomeTaskCell(task: task)
+                                        .environmentObject(homeViewModel)
+                                        .frame(height: 45)
+                                }
+                            }.listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
+                        }
+                    }
+                    
+                    Section {
+                        HStack {
+                            Image(systemName: "info.circle")
+                                .foregroundColor(Color(.systemBlue))
+                                .font(.system(size: 18, weight: .semibold))
+                            Text("Learn more about automatic task archiving")
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(Color(.secondaryLabel))
+                        }.font(.system(size: 14, weight: .semibold))
+                    }
+                    
+                }
+                
             }.listStyle(InsetGroupedListStyle())
             .sheet(isPresented: $showTaskAdd, content: {
                 TaskAddView {
@@ -82,7 +123,7 @@ struct HomeTaskView: View {
     
 }
 
-
+//MARK: HomeTaskViewContent
 struct HomeTaskViewContent: View {
     
     @ObservedObject

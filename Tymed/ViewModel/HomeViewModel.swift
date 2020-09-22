@@ -41,17 +41,25 @@ class HomeViewModel: ObservableObject {
     init(anchor: Date = Date()) {
         anchorDate = anchor
         
-        tasks = timetableService.getTasks(after: anchorDate.prevDay).sorted()
-        
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
         
         if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
             nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
         }
         
+        tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
+        
         scheduleTimeUpdater()
         
         dayDebrief = DayDebriefViewModel(self)
+    }
+    
+    private func taskThresholdDate() -> Date {
+        guard let offset = SettingsService.shared.taskAutoArchivingDelay else {
+            return anchorDate
+        }
+        
+        return anchorDate - offset.timeinterval
     }
     
     func scheduleTimeUpdater() {
@@ -72,7 +80,7 @@ class HomeViewModel: ObservableObject {
     func reload() {
         anchorDate = Date()
         
-        tasks = timetableService.getTasks(after: anchorDate).sorted()
+        tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
         

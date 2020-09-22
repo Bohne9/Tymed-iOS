@@ -735,7 +735,7 @@ class TimetableService: ObservableObject {
 
     //MARK: getTasks(date: )
     private func getTasks(date: Date, dateOperation: String) -> [Task] {
-        return getTasks(NSPredicate(format: "due \(dateOperation) %@", date as NSDate))
+        return getTasks(NSPredicate(format: "due \(dateOperation) %@  and archived == false", date as NSDate))
     }
 
     func getTasks(before date: Date) -> [Task] {
