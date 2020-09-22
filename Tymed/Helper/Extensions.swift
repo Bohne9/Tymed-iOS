@@ -348,12 +348,18 @@ extension TimeInterval {
 //MARK: Binding
 extension Binding {
     init(_ source: Binding<Value?>, _ defaultValue: Value) {
-        // Ensure a non-nil value in `source`.
-        if source.wrappedValue == nil {
-            source.wrappedValue = defaultValue
-        }
-        // Unsafe unwrap because *we* know it's non-nil now.
-        self.init(source)!
+        self.init(get: {
+            // ensure the source doesn't contain nil
+            if source.wrappedValue == nil {
+                // try to assign--this may not initially work, since it seems
+                // SwiftUI needs to wire things up inside Bindings before they
+                // become properly 'writable'.
+                source.wrappedValue = defaultValue
+            }
+            return source.wrappedValue ?? defaultValue
+        }, set: {
+            source.wrappedValue = $0
+        })
     }
     
     init<T>(isNotNil source: Binding<T?>, defaultValue: T) where Value == Bool {
