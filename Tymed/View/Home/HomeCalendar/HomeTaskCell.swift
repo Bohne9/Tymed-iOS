@@ -23,7 +23,7 @@ struct HomeTaskCell: View {
     var body: some View {
         HStack(spacing: 15) {
             Rectangle()
-                .foregroundColor(Color(UIColor(task.timetable)!))
+                .foregroundColor(Color(UIColor(task.timetable) ?? .clear))
                 .frame(width: 10, height: 55)
             
             Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
@@ -54,7 +54,7 @@ struct HomeTaskCell: View {
         .onTapGesture {
             showTaskDetail.toggle()
         }.sheet(isPresented: $showTaskDetail, content: {
-            TaskEditView(task: task, dismiss: { })
+            TaskEditView(task: task, dismiss: { homeViewModel.reload() })
         })
         .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
         .onChange(of: task.completed) { value in

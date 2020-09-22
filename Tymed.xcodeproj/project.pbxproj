@@ -75,6 +75,7 @@
 		4FB8F4D424F50DAF0015EC8E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */; };
 		4FB8F4D624F5AD910015EC8E /* HomeViewSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D524F5AD910015EC8E /* HomeViewSceneDelegate.swift */; };
 		4FB8F4D824F6E4A40015EC8E /* ViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */; };
+		4FC23FE1251A4A520008AE3A /* ImageSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */; };
 		4FC4F7762515F7680059E155 /* HomeTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC4F7752515F7680059E155 /* HomeTaskView.swift */; };
 		4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC7CDB4247310D8004F5642 /* DynamicTableViewController.swift */; };
 		4FD11E4824D6CA86008D9772 /* TaskAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD11E4724D6CA86008D9772 /* TaskAddView.swift */; };
@@ -185,6 +186,7 @@
 		4FB8F4D324F50DAF0015EC8E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		4FB8F4D524F5AD910015EC8E /* HomeViewSceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewSceneDelegate.swift; sourceTree = "<group>"; };
 		4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewWrapper.swift; sourceTree = "<group>"; };
+		4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSupplier.swift; sourceTree = "<group>"; };
 		4FC4F7752515F7680059E155 /* HomeTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTaskView.swift; sourceTree = "<group>"; };
 		4FC7CDB4247310D8004F5642 /* DynamicTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTableViewController.swift; sourceTree = "<group>"; };
 		4FC8210724C61F7A00694811 /* Tymed-Timetables.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Tymed-Timetables.xcdatamodel"; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				4F9405E82463F3A00063E4DA /* Extensions.swift */,
 				4F9405EA2465B7EE0063E4DA /* Label.swift */,
 				4F8EEB242510D79800F3D4B9 /* Supplier.swift */,
+				4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -841,6 +844,7 @@
 				4F6F6F0124DD1DF2006EC4BE /* LessonPickerView.swift in Sources */,
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,
 				4F2BBFBE24F4451400CE92DD /* ProfileView.swift in Sources */,
+				4FC23FE1251A4A520008AE3A /* ImageSupplier.swift in Sources */,
 				4F38C4AD24E69E970082517E /* SubjectEditView.swift in Sources */,
 				4FB8F4CC24F192950015EC8E /* CalendarEntry.swift in Sources */,
 				4F78BD7924A3B030004E570D /* HomeBaseCollectionView.swift in Sources */,

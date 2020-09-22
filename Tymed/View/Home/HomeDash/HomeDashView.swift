@@ -54,6 +54,7 @@ struct HomeDashView: View {
                     ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
                         Section {
                             HomeTaskCell(task: task)
+                                .environmentObject(homeViewModel)
                                 .frame(height: 45)
                         }
                     }

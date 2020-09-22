@@ -28,6 +28,66 @@ struct HomeTaskView: View {
     @ObservedObject
     var homeViewModel: HomeViewModel
     
+    @State
+    private var showTaskAdd = false
+    
+    var body: some View {
+        
+        if !homeViewModel.tasks.isEmpty {
+            HomeTaskViewContent(homeViewModel: homeViewModel)
+        }else {
+            List {
+                
+                Section {
+                    
+                    VStack(spacing: 20) {
+                        
+                        Spacer()
+                        
+                        Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .rotationEffect(.degrees(-30))
+                            .padding(.horizontal, 30)
+
+                        Button(action: {
+                            showTaskAdd.toggle()
+                        }, label: {
+                            HStack {
+                                Spacer()
+                                Image(systemName: "plus")
+                                Text("Add your first task")
+                                Spacer()
+                            }.font(.system(size: 17.5, weight: .semibold))
+                            .padding()
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .cornerRadius(12)
+                        })
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 30)
+                    .background(Color(.systemGroupedBackground))
+                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                
+            }.listStyle(InsetGroupedListStyle())
+            .sheet(isPresented: $showTaskAdd, content: {
+                TaskAddView {
+                    homeViewModel.reload()
+                }
+            })
+        }
+        
+    }
+    
+}
+
+
+struct HomeTaskViewContent: View {
+    
+    @ObservedObject
+    var homeViewModel: HomeViewModel
+    
     var body: some View {
         List {
             
@@ -94,8 +154,11 @@ struct HomeTaskView: View {
 
 
 
+
 struct HomeTaskView_Previews: PreviewProvider {
     static var previews: some View {
         HomeTaskView(homeViewModel: HomeViewModel())
+            .colorScheme(.dark)
     }
 }
+ 
