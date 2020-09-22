@@ -20,17 +20,23 @@ struct HomeDayCalendarView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        ZStack(alignment: .center) {
+        ZStack(alignment: .top) {
             
             HomeDashCalendarGrid(date: event.date, startHour: 0, endHour: 24)
                 .environmentObject(TimetableService.shared)
                 .frame(height: 24 * heightForHour)
-                .padding(.vertical, 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+                .padding(.bottom, 10)
             
             HomeDashCalendarContent(events: event)
                 .frame(height: 24 * heightForHour)
+                .padding(.bottom, 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+            
+            HomeAllDayEvents(events: event)
                 .padding(.vertical, 10)
-        }.frame(height: 24 * heightForHour + 20)
+                .frame(height: CGFloat(event.allDayEntries.count * 20))
+        }.frame(height: 24 * heightForHour + 20 + CGFloat(event.allDayEntries.count * 20))
         .padding(.vertical, 10)
     }
     
@@ -73,7 +79,7 @@ struct HomeDashCalendarGrid: View {
                 }
             }
             
-            if Time.now.hour >= startHour && Time.now.hour <= endHour && Calendar.current.isDateInToday(date) {
+            if Calendar.current.isDateInToday(date) {
                 HStack(spacing: 0) {
                     Text(Time.now.string() ?? "")
                         .font(.system(size: 12, weight: .semibold))
@@ -94,6 +100,10 @@ struct HomeDashCalendarGrid: View {
     }
     
     private func labelIsHidden(_ hour: Int) -> Bool {
+        if hour < startHour || hour > endHour {
+            return false
+        }
+        
         let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: self.date)
             
         return abs(date?.timeIntervalSince(Date()) ?? 0) <= 10
@@ -104,7 +114,7 @@ struct HomeDashCalendarGrid: View {
         
         if Calendar.current.isDateInToday(date) {
             let diff = abs(Time.now.timeInterval - time.timeInterval)
-            if diff < 10 {
+            if diff < 10  {
                 return ""
             }
         }
@@ -290,3 +300,80 @@ struct HomeDashCalendarEvent: View {
     
 }
 
+
+//MARK: HomeAllDayEvents
+struct HomeAllDayEvents: View {
+    
+    
+    @ObservedObject
+    var events: CalendarDayEntry
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
+    
+    
+    var body: some View {
+        VStack(spacing: 2) {
+            ForEach(events.allDayEntries, id: \.self) { event in
+                HomeAllDayEventsRow(event: event)
+            }
+            
+        }
+    }
+    
+}
+
+
+struct HomeAllDayEventsRow: View {
+    
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
+    
+    @ObservedObject
+    var event: CalendarEvent
+    
+    @State
+    private var showEditView = false
+    
+    var body: some View {
+        HStack {
+            VStack {
+                Spacer()
+                Rectangle()
+                    .foregroundColor(Color(.clear))
+                    .frame(width: 4)
+                Spacer()
+            }
+            .background(Color(UIColor(event) ?? .clear))
+            
+            Text(event.title)
+                .font(.system(size: 10, weight: .semibold))
+            
+            Spacer()
+            
+            Text("All day")
+                .font(.system(size: 10, weight: .regular))
+                .padding(.trailing, 10)
+        }.frame(height: 20)
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(2.5)
+        .onTapGesture {
+            showEditView.toggle()
+        }.sheet(isPresented: $showEditView, content: {
+            if let lesson = event.asLesson {
+                LessonEditView(
+                    lesson: lesson,
+                    dismiss: {
+                        homeViewModel.reload()
+                        showEditView.toggle()
+                })
+            }else if let event = self.event.asEvent {
+                EventEditView(event: event, presentationDelegate: homeViewModel, presentationHandler: ViewWrapperPresentationHandler())
+            }else {
+                Text("Ups! Something went wrong :(")
+            }
+        })
+    }
+    
+    
+}

@@ -50,6 +50,7 @@ struct EventAddView: View {
     func addEvent() {
         
         NotificationService.current.scheduleEventNotification(for: event)
+
         
         TimetableService.shared.save()
         
@@ -137,6 +138,11 @@ struct EventAddViewContent: View {
                     DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.easeIn)
+                }
+                
+                HStack {
+                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
+                    Toggle("", isOn: $event.allDay)
                 }
             }
             

@@ -127,6 +127,13 @@ class CalendarEvent: ObservableObject {
         }
     }
     
+    var allDay: Bool {
+        if let event = asEvent {
+            return event.allDay
+        }
+        return false
+    }
+    
     var timetable: Timetable? {
         if let lesson = asLesson { // If the CalendarEvent is a Lesson
             return lesson.subject?.timetable

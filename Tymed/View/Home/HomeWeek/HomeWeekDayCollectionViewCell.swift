@@ -26,7 +26,9 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell  {
         didSet {
             calendarDayEntry.date = entry?.date ?? Date()
             calendarDayEntry.expandToEntireDay()
-            calendarDayEntry.entries = entry?.entries ?? []
+            if let entry = self.entry {
+                calendarDayEntry.setEntries(entry.entries + entry.allDayEntries)
+            }
         }
     }
     

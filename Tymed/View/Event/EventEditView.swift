@@ -167,6 +167,11 @@ struct EventEditViewContent: View {
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.easeIn)
                 }
+                
+                HStack {
+                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
+                    Toggle("", isOn: $event.allDay)
+                }
             }
             
             //MARK: Calendar

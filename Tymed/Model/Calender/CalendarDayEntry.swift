@@ -15,7 +15,10 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
     var date: Date
     
     @Published
-    var entries: [CalendarEvent]
+    var entries: [CalendarEvent] = []
+    
+    @Published
+    var allDayEntries: [CalendarEvent] = []
     
     var eventCount: Int {
         return entries.count
@@ -27,10 +30,9 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
     
     init(for date: Date, entries: [CalendarEvent]) {
         self.date = date.startOfDay
-        self.entries = entries.sorted(by: { (lhs, rhs) -> Bool in
-            return lhs < rhs
-        })
-         
+                
+        setEntries(entries)
+        
         startOfDay = firstEventBegin()
         endOfDay = lastEventEnding()
     }
@@ -55,6 +57,18 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
             
             return lhsEnd < rhsEnd
         }.last?.endDate
+    }
+    
+    func setEntries(_ entries: [CalendarEvent]) {
+        let allEntries = entries.sorted(by: { (lhs, rhs) -> Bool in
+            return lhs < rhs
+        })
+        
+        self.allDayEntries = allEntries
+            .filter { $0.allDay }
+        
+        self.entries = allEntries
+            .filter { !$0.allDay }
     }
     
     func expandToEntireDay() {
