@@ -21,10 +21,8 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
 
     let homeViewModel = HomeViewModel()
     
-//    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
     var homeView = HomeDashViewWrapper()
     
-//    var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
     var taskView = HomeTaskViewWrapper()
     
     var weekCollectionView: HomeWeekCollectionView = HomeWeekCollectionView()
@@ -65,12 +63,17 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         collectionView.delegate = self
         
-//        dashCollectionView.taskOverviewDelegate = self
-//        tasksCollectionView.taskOverviewDelegate = self
-        
-//        dashCollectionView.homeViewControllerDelegate = self
-//        tasksCollectionView.homeViewControllerDelegate = self
         weekCollectionView.homeViewControllerDelegate = self
+        
+        showAppSetupView()
+    }
+    
+    func showAppSetupView() {
+        
+        if !SettingsService.shared.didRunAppSetup {
+            present(AppStartSetupWrapper(), animated: true, completion: nil)
+        }
+        
     }
     
     func setupFlowLayout() {
@@ -81,7 +84,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         
         flowLayout.scrollDirection = .horizontal
         
-//        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 6)
         flowLayout.minimumLineSpacing = 20
         flowLayout.minimumInteritemSpacing = 20
     }
@@ -112,10 +114,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func reload() {
-//        dashCollectionView.reloadData()
-        print("Reloading home scene")
         homeViewModel.reload()
-//        tasksCollectionView.reloadData()
         weekCollectionView.reloadData()
     }
     
@@ -165,10 +164,6 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return collectionView.frame.size
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return
-//    }
-//
     //MARK: ScrollViewDelegate
     
     private func sceneBaseCollectionView(for index: Int) -> UIViewController {

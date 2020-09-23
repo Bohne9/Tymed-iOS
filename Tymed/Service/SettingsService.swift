@@ -15,6 +15,8 @@ class SettingsService {
     enum SettingsServiceKeys: String {
         case taskAutoArchiveDelay = "taskAutoArchiveDelay"
         case notificationOffset = "notificationOffset"
+        case username = "username"
+        case appSetup = "appSetup"
         
     }
     
@@ -118,6 +120,23 @@ class SettingsService {
         }
     }
     
+    var didRunAppSetup: Bool {
+        get {
+            return bool(.appSetup) ?? false
+        }
+        set {
+            set(newValue, key: .appSetup)
+        }
+    }
+    var username: String {
+        get {
+            string(.username) ?? ""
+        }
+        set {
+            set(newValue, key: .username)
+        }
+    }
+    
     //MARK: UserDefault Getter
     func string(_ key: SettingsServiceKeys) -> String? {
         return defaults.string(forKey: key.rawValue)
@@ -125,6 +144,10 @@ class SettingsService {
     
     func integer(_ key: SettingsServiceKeys) -> Int? {
         return defaults.integer(forKey: key.rawValue)
+    }
+    
+    func bool(_ key: SettingsServiceKeys) -> Bool? {
+        return defaults.bool(forKey: key.rawValue)
     }
     
     func timeInterval(_ key: SettingsServiceKeys) -> TimeInterval? {

@@ -1,11 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "Tasks_Light.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -16,7 +11,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "Tasks_Light-1.png",
+      "filename" : "Tasks_Light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

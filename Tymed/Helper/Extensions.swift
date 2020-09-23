@@ -351,9 +351,6 @@ extension Binding {
         self.init(get: {
             // ensure the source doesn't contain nil
             if source.wrappedValue == nil {
-                // try to assign--this may not initially work, since it seems
-                // SwiftUI needs to wire things up inside Bindings before they
-                // become properly 'writable'.
                 source.wrappedValue = defaultValue
             }
             return source.wrappedValue ?? defaultValue
