@@ -17,6 +17,8 @@ class AppStartSetupWrapper: ViewWrapper<AppStartSetup> {
 
 struct AppStartSetup: View {
     
+    private let presetTitles = ["School", "University", "Productivity", "Other"]
+    
     @State
     var name = ""
     
@@ -35,37 +37,52 @@ struct AppStartSetup: View {
                 .background(Color(.secondarySystemGroupedBackground))
                 .cornerRadius(12)
                 .padding()
-                .font(.system(size: 16, weight: .semibold))
+                
+                HStack {
+                    Text("Select a preset:")
+                    Spacer()
+                }.padding(.horizontal)
                 
                 GeometryReader { proxy in
-                    TabView {
+                    
+                    VStack {
                         
-                        ForEach(0...2, id: \.self) { value in
+                        TabView {
                             
-                            VStack {
+                            ForEach(0...3, id: \.self) { value in
                                 
-                                Spacer()
-                                
-                                HStack {
-                                    Spacer()
-                                    Text("Student")
+                                VStack {
                                     
                                     Spacer()
+                                    
+                                    HStack {
+                                        Spacer()
+                                        Text(presetTitles[value])
+                                        
+                                        Spacer()
+                                    }
+                                    
+                                    Spacer()
+                                    
                                 }
-                                
-                                Spacer()
-                                
+                                .background(Color(.secondarySystemGroupedBackground))
+                                .cornerRadius(12)
+                                .padding(.horizontal)
                             }
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .cornerRadius(12)
-                            .padding()
+                        }
+                        .frame(width: proxy.size.width, height: proxy.size.height * 0.75)
+                        .tabViewStyle(PageTabViewStyle())
+                        
+                        HStack {
+                            HStack {
+                                Text("You can changes the preset later.")
+                                    .font(.system(size: 12, weight: .regular))
+                                Spacer()
+                            }.padding(.horizontal)
                         }
                     }
-//                    .padding()
-                    .frame(width: proxy.size.width, height: proxy.size.height * 0.6)
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                }
                 
+                }
                 Spacer()
                 
                 Button(action: {
@@ -85,6 +102,7 @@ struct AppStartSetup: View {
                 })
                 
             }.navigationTitle("Welcome")
+            .font(.system(size: 16, weight: .semibold))
         }
     }
 }
