@@ -24,15 +24,23 @@ struct AppStartSetup: View {
         NavigationView {
             VStack {
                 
-                Text("Let's get to know each other")
-                Text("What is your name:")
-                
-                TextField("Name", text: $name)
+                VStack(alignment: .leading) {
+                    
+                    Text("Let's get to know each other")
+                    Text("What is your name:")
+                    
+                    TextField("Name", text: $name)
+                    
+                }.padding()
+                .background(Color(.secondarySystemGroupedBackground))
+                .cornerRadius(12)
+                .padding()
+                .font(.system(size: 16, weight: .semibold))
                 
                 GeometryReader { proxy in
                     TabView {
                         
-                        ForEach(0...3, id: \.self) { value in
+                        ForEach(0...2, id: \.self) { value in
                             
                             VStack {
                                 
@@ -47,14 +55,34 @@ struct AppStartSetup: View {
                                 
                                 Spacer()
                                 
-                            }.padding()
+                            }
                             .background(Color(.secondarySystemGroupedBackground))
                             .cornerRadius(12)
+                            .padding()
                         }
                     }
-                    .frame(width: proxy.size.width, height: proxy.size.height * 0.4)
-                    .tabViewStyle(PageTabViewStyle())
+//                    .padding()
+                    .frame(width: proxy.size.width, height: proxy.size.height * 0.6)
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
+                
+                Spacer()
+                
+                Button(action: {
+                    
+                }, label: {
+                    HStack {
+                        Spacer()
+                        Text("Continue")
+                            .font(.system(size: 18, weight: .semibold))
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(.systemBlue))
+                    .foregroundColor(Color(.label))
+                    .cornerRadius(12)
+                    .padding()
+                })
                 
             }.navigationTitle("Welcome")
         }
@@ -64,5 +92,6 @@ struct AppStartSetup: View {
 struct AppStartSetup_Previews: PreviewProvider {
     static var previews: some View {
         AppStartSetup()
+            .colorScheme(.dark)
     }
 }
