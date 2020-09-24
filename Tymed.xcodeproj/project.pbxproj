@@ -61,6 +61,7 @@
 		4F9405EF2468067C0063E4DA /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
 		4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */; };
 		4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */; };
+		4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA03663251CC555009C8F83 /* RadioButton.swift */; };
 		4FAB1F412513B0E6007D5167 /* HomeDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB1F402513B0E6007D5167 /* HomeDashView.swift */; };
 		4FAB1F442513B5F9007D5167 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */; };
 		4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */; };
@@ -173,6 +174,7 @@
 		4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarView.swift; sourceTree = "<group>"; };
 		4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarViewWrapper.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
+		4FA03663251CC555009C8F83 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		4FAB1F402513B0E6007D5167 /* HomeDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashView.swift; sourceTree = "<group>"; };
 		4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
@@ -420,6 +422,7 @@
 				4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */,
 				4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */,
 				4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */,
+				4FA03663251CC555009C8F83 /* RadioButton.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -792,6 +795,7 @@
 			files = (
 				4F38C4B124E69F020082517E /* Subject+CoreDataProperties.swift in Sources */,
 				4F2A7DC724AFAD22002467E3 /* Task+CoreDataClass.swift in Sources */,
+				4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */,
 				4FFA61F024D00D7600C9F290 /* BackgroundRoutineService.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
