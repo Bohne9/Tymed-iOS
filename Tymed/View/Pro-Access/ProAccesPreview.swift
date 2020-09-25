@@ -62,7 +62,7 @@ struct ProAccesPreview: View {
                 
                 Spacer()
                 
-                Text("7 days free trail, then $0.99 per month.")
+                Text("7 days free trial, then $0.99 per month.")
                 Text("Cancel anytime.")
                     .padding(.bottom, 5)
                 
