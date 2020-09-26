@@ -115,11 +115,11 @@ struct HomeDashCalendarGrid: View {
         if Calendar.current.isDateInToday(date) {
             let diff = abs(Time.now.timeInterval - time.timeInterval)
             if diff < 10  {
-                return "x"
+                return ""
             }
         }
         
-        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date())
+        let date = Calendar.current.date(bySettingHour: hour % 24, minute: 0, second: 0, of: Date())
         
         let formatter = DateFormatter()
         formatter.timeStyle = .short

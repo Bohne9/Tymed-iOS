@@ -71,7 +71,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     func showAppSetupView() {
         
         if !SettingsService.shared.didRunAppSetup {
-            present(AppStartSetupWrapper(), animated: true, completion: nil)
+            let appStart = AppStartSetupWrapper()
+            appStart.presentationDelegate = self
+            
+            present(appStart, animated: true, completion: nil)
         }
         
     }
@@ -209,12 +212,35 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
 }
 
-
-
 extension HomeViewController: HomeViewControllerDelegate {
     
     func reloadHomeView() {
         reload()
     }
+    
+}
+
+extension HomeViewController: DetailViewPresentationDelegate {
+    func dismiss() {
+        print("dismiss")
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func cancel() {
+        TimetableService.shared.rollback()
+        homeViewModel.reload()
+        dismiss()
+    }
+    
+    func done() {
+        TimetableService.shared.save()
+        homeViewModel.reload()
+        dismiss()
+    }
+    
+    func shouldDismiss() -> Bool {
+        return true
+    }
+    
     
 }

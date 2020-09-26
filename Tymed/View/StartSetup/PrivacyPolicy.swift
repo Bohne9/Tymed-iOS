@@ -13,6 +13,9 @@ struct PrivacyPolicy: View {
     @ObservedObject
     var setupModel: AppSetupModel
     
+    @State
+    var presentationDelegate: DetailViewPresentationDelegate
+    
     @Environment(\.presentationMode)
     var presentationMode
     
@@ -85,7 +88,9 @@ struct PrivacyPolicy: View {
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(Color(.systemBlue))
                         .onTapGesture(perform: {
-                            scrollView.scrollTo("contiueBtn")
+                            withAnimation {                            
+                                scrollView.scrollTo("contiueBtn")
+                            }
                         })
                         .padding(.bottom, 50)
                     
@@ -94,13 +99,14 @@ struct PrivacyPolicy: View {
                     Button(action: {
                         
                         setupModel.setup()
-                        presentationMode.wrappedValue.dismiss()
+                        presentationDelegate.done()
                         
                     }, label: {
                         HStack {
                             Spacer()
                             Text("Continue")
                                 .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(.white))
                             Spacer()
                         }
                         .padding()

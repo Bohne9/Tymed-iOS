@@ -11,7 +11,11 @@ import SwiftUI
 class AppStartSetupWrapper: ViewWrapper<AppStartSetup> {
     
     override func createContent() -> UIHostingController<AppStartSetup>? {
-        return UIHostingController(rootView: AppStartSetup())
+        guard let delegate = presentationDelegate else {
+            return nil
+        }
+        
+        return UIHostingController(rootView: AppStartSetup(presentationDelegate: delegate))
     }
 }
 
@@ -20,6 +24,12 @@ struct AppStartSetup: View {
     private let presetTitles = ["School", "University", "Productivity", "Other"]
     
     private let presetImage = ["Tymed-School"]
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @State
+    var presentationDelegate: DetailViewPresentationDelegate
     
     @ObservedObject
     var setupModel = AppSetupModel()
@@ -126,12 +136,13 @@ struct AppStartSetup: View {
                 Spacer()
                 
                 NavigationLink(
-                    destination: PrivacyPolicy(setupModel: setupModel),
+                    destination: PrivacyPolicy(setupModel: setupModel, presentationDelegate: presentationDelegate),
                     label: {
                         HStack {
                             Spacer()
                             Text("Continue")
                                 .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(Color(.white))
                             Spacer()
                         }
                         .padding()
@@ -183,12 +194,5 @@ struct AppStartSetup: View {
         }
         
         setupModel.preset = presetTitles[value]
-    }
-}
-
-struct AppStartSetup_Previews: PreviewProvider {
-    static var previews: some View {
-        AppStartSetup()
-            .colorScheme(.dark)
     }
 }

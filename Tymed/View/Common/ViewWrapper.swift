@@ -37,7 +37,9 @@ class ViewWrapper<T: View>: UIViewController {
     
     var hostingConroller: UIHostingController<T>?
     
-    var presentationDelegate: DetailViewPresentationDelegate?
+    lazy var presentationDelegate: DetailViewPresentationDelegate? = {
+        return self
+    }()
     
     var presentationHandler = ViewWrapperPresentationHandler()
     
@@ -48,7 +50,6 @@ class ViewWrapper<T: View>: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presentationDelegate = self
         
         guard let contentView = createContent() else {
             return
