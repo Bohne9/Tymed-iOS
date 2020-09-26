@@ -53,6 +53,13 @@ class BackgroundRoutineService {
     
     
     
+    func appStartSetupRoutine() {
+        
+//        let calendars = []
+        
+        
+    }
+    
     //MARK: Background Tasks
     
 

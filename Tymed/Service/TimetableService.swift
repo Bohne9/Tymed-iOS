@@ -413,6 +413,9 @@ class TimetableService: ObservableObject {
     func task() -> Task {
         let task = Task(context: context)
         task.id = UUID()
+        task.archived = false
+        task.completed = false
+        task.priority = 0
         
         return task
     }
@@ -427,6 +430,7 @@ class TimetableService: ObservableObject {
         task.due = due
         task.lesson = lesson
         task.priority = Int32(priority)
+        task.archived = false
         
         save()
         

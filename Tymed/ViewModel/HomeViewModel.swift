@@ -132,7 +132,8 @@ extension HomeViewModel: DayDebriefDelegate {
         
         switch placeholder {
         case .name:
-            return ""
+            let name = SettingsService.shared.username
+            return name.isEmpty ? name : " \(name)"
         case .totalEvents:
             let count = numberOfEventsToday()
             let ev = count == 1 ? "event" : "events"

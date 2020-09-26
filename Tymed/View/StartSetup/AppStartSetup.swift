@@ -19,9 +19,10 @@ struct AppStartSetup: View {
     
     private let presetTitles = ["School", "University", "Productivity", "Other"]
     
-    private let presetValues = [State(initialValue: true), State(initialValue: false), State(initialValue: false), State(initialValue: false)]
-    
     private let presetImage = ["Tymed-School"]
+    
+    @ObservedObject
+    var setupModel = AppSetupModel()
     
     @State
     private var preset = "School"
@@ -51,7 +52,7 @@ struct AppStartSetup: View {
                     Text("Let's get to know each other")
                     Text("What is your name:")
                     
-                    TextField("Name", text: $name)
+                    TextField("Name", text: $setupModel.name)
                     
                 }.padding()
                 .background(Color(.secondarySystemGroupedBackground))
@@ -61,7 +62,7 @@ struct AppStartSetup: View {
                 HStack {
                     Text("Select a preset:")
                     Spacer()
-                    Text(preset)
+                    Text(setupModel.preset)
                         .foregroundColor(.blue)
                 }.padding(.horizontal)
                 
@@ -124,24 +125,26 @@ struct AppStartSetup: View {
                 }
                 Spacer()
                 
-                Button(action: {
-                    
-                }, label: {
-                    HStack {
-                        Spacer()
-                        Text("Continue")
-                            .font(.system(size: 18, weight: .semibold))
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color(.systemBlue))
-                    .foregroundColor(Color(.label))
-                    .cornerRadius(12)
-                    .padding()
-                })
+                NavigationLink(
+                    destination: PrivacyPolicy(setupModel: setupModel),
+                    label: {
+                        HStack {
+                            Spacer()
+                            Text("Continue")
+                                .font(.system(size: 18, weight: .semibold))
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.systemBlue))
+                        .foregroundColor(Color(.label))
+                        .cornerRadius(12)
+                        .padding()
+                    })
+                
                 
             }.navigationTitle("Welcome")
             .font(.system(size: 16, weight: .semibold))
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
@@ -179,7 +182,7 @@ struct AppStartSetup: View {
             break
         }
         
-        preset = presetTitles[value]
+        setupModel.preset = presetTitles[value]
     }
 }
 

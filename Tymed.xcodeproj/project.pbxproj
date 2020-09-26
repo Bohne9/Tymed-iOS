@@ -62,6 +62,9 @@
 		4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */; };
 		4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */; };
 		4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA03663251CC555009C8F83 /* RadioButton.swift */; };
+		4FA04A8A251F2C64004236CF /* AppStartupPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA04A89251F2C64004236CF /* AppStartupPreset.swift */; };
+		4FA04A8C251F3E22004236CF /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA04A8B251F3E22004236CF /* PrivacyPolicy.swift */; };
+		4FA04A8E251F463A004236CF /* AppSetupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA04A8D251F463A004236CF /* AppSetupModel.swift */; };
 		4FAB1F412513B0E6007D5167 /* HomeDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB1F402513B0E6007D5167 /* HomeDashView.swift */; };
 		4FAB1F442513B5F9007D5167 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */; };
 		4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */; };
@@ -175,6 +178,9 @@
 		4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarViewWrapper.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
 		4FA03663251CC555009C8F83 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
+		4FA04A89251F2C64004236CF /* AppStartupPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupPreset.swift; sourceTree = "<group>"; };
+		4FA04A8B251F3E22004236CF /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
+		4FA04A8D251F463A004236CF /* AppSetupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupModel.swift; sourceTree = "<group>"; };
 		4FAB1F402513B0E6007D5167 /* HomeDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashView.swift; sourceTree = "<group>"; };
 		4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		4FB1C18824F983370001918C /* Timetable+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timetable+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
@@ -497,11 +503,21 @@
 			path = HomeWeek;
 			sourceTree = "<group>";
 		};
+		4FA04A88251F2C47004236CF /* BackgroundService */ = {
+			isa = PBXGroup;
+			children = (
+				4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */,
+				4FA04A89251F2C64004236CF /* AppStartupPreset.swift */,
+			);
+			path = BackgroundService;
+			sourceTree = "<group>";
+		};
 		4FAB1F422513B5DF007D5167 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				4FAB1F432513B5F9007D5167 /* HomeViewModel.swift */,
 				4F730A1325167CF6001F117D /* DayDebriefViewModel.swift */,
+				4FA04A8D251F463A004236CF /* AppSetupModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -523,8 +539,8 @@
 				4FB8F4CF24F195DC0015EC8E /* Service.swift */,
 				4F405E83245D72FC00E1E704 /* TimetableService.swift */,
 				4F12658924B0669C000488B8 /* NotificationService.swift */,
+				4FA04A88251F2C47004236CF /* BackgroundService */,
 				4FFA61ED24D007E100C9F290 /* SettingsService.swift */,
-				4FFA61EF24D00D7600C9F290 /* BackgroundRoutineService.swift */,
 				4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */,
 			);
 			path = Service;
@@ -534,6 +550,7 @@
 			isa = PBXGroup;
 			children = (
 				4FC43418251B546000D8EC0A /* AppStartSetup.swift */,
+				4FA04A8B251F3E22004236CF /* PrivacyPolicy.swift */,
 			);
 			path = StartSetup;
 			sourceTree = "<group>";
@@ -806,6 +823,7 @@
 				4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */,
 				4FB8F4D624F5AD910015EC8E /* HomeViewSceneDelegate.swift in Sources */,
 				4FC4F7762515F7680059E155 /* HomeTaskView.swift in Sources */,
+				4FA04A8E251F463A004236CF /* AppSetupModel.swift in Sources */,
 				4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */,
 				4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* HomeWeekCollectionView.swift in Sources */,
@@ -815,6 +833,7 @@
 				4FD2715C250956EB0073696A /* EventAddView.swift in Sources */,
 				4F405E87245DB86E00E1E704 /* TimetableOverviewViewController.swift in Sources */,
 				4FB1C18A24F983370001918C /* Timetable+CoreDataClass.swift in Sources */,
+				4FA04A8A251F2C64004236CF /* AppStartupPreset.swift in Sources */,
 				4FB1C18B24F983370001918C /* Timetable+CoreDataProperties.swift in Sources */,
 				4FD92C2A24FA11DB00A51441 /* ProAccessBadge.swift in Sources */,
 				4F8E058624DA786200748F47 /* AppColorPicker.swift in Sources */,
@@ -832,6 +851,7 @@
 				4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */,
 				4F38C4B024E69F020082517E /* Subject+CoreDataClass.swift in Sources */,
 				4FB8F4D224F1A4370015EC8E /* CaleanderWeekEntry.swift in Sources */,
+				4FA04A8C251F3E22004236CF /* PrivacyPolicy.swift in Sources */,
 				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
 				4F8EEB2B25114CEF00F3D4B9 /* EventModel.swift in Sources */,

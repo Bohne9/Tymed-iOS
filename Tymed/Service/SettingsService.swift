@@ -17,6 +17,7 @@ class SettingsService {
         case notificationOffset = "notificationOffset"
         case username = "username"
         case appSetup = "appSetup"
+        case email = "email"
         
     }
     
@@ -134,6 +135,15 @@ class SettingsService {
         }
         set {
             set(newValue, key: .username)
+        }
+    }
+    
+    var email: String {
+        get {
+            string(.email) ?? ""
+        }
+        set {
+            set(newValue, key: .email)
         }
     }
     
