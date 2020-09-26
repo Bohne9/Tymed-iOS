@@ -54,8 +54,11 @@ extension Date {
         
         let formatter = DateFormatter()
         
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.doesRelativeDateFormatting = relativeFormatting
         formatter.dateFormat = format
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
         
         return formatter.string(from: self)
     }

@@ -62,11 +62,11 @@ struct HomeDashCalendarGrid: View {
                 ForEach (startHour...endHour,
                          id: \.self) { hour in
                     HStack(spacing: 0) {
-                        Text(textForTime(hour))
+                        Text(textForHour(hour))
                             .font(.system(size: 12, weight: .semibold))
                             .foregroundColor(Color(.secondaryLabel))
                             .padding(.trailing, 5)
-                            .frame(width: 45)
+                            .frame(minWidth: 45)
                             .id(hour)
                         
                         VStack {
@@ -81,11 +81,11 @@ struct HomeDashCalendarGrid: View {
             
             if Calendar.current.isDateInToday(date) {
                 HStack(spacing: 0) {
-                    Text(Time.now.string() ?? "")
+                    Text(Date().stringifyTime(with: .short))
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color(.systemBlue))
                         .padding(.trailing, 5)
-                        .frame(width: 45)
+                        .frame(minWidth: 45)
                     
                     
                     VStack {
@@ -109,17 +109,25 @@ struct HomeDashCalendarGrid: View {
         return abs(date?.timeIntervalSince(Date()) ?? 0) <= 10
     }
     
-    private func textForTime(_ hour: Int) -> String {
+    private func textForHour(_ hour: Int) -> String {
         let time = Time(hour: hour, minute: 0)
         
         if Calendar.current.isDateInToday(date) {
             let diff = abs(Time.now.timeInterval - time.timeInterval)
             if diff < 10  {
-                return ""
+                return "x"
             }
         }
         
-        return time.string() ?? ""
+        let date = Calendar.current.date(bySettingHour: hour, minute: 0, second: 0, of: Date())
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+//        formatter.dateFormat = "h a"
+//        formatter.amSymbol = "AM"
+//        formatter.pmSymbol = "PM"
+
+        return formatter.string(from: date ?? Date())
     }
     
     private func offset(for hour: Int) -> CGFloat {
