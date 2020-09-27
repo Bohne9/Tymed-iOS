@@ -13,9 +13,7 @@ class ViewController: UITabBarController {
 
     let homeVC = HomeViewController(collectionViewLayout: UICollectionViewFlowLayout())
     
-    let addVC = TimetableOverviewViewController()
-    
-    let profileVC = ProfileCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+    private var selectedTab = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,14 +63,12 @@ class ViewController: UITabBarController {
     
     func reload() {
         homeVC.reload()
-        addVC.reload()
-        profileVC.reload()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        homeVC.dashCollectionView.reload()
+//        homeVC.dashCollectionView.reload()
         
     }
     
@@ -101,6 +97,15 @@ class ViewController: UITabBarController {
         let nav = UINavigationController(rootViewController: view)
         
         return nav
+    }
+    
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        
+        if item.tag == 0 && selectedTab == 0 {
+            homeVC.scrollToPage(page: 0)
+        }
+        
+        selectedTab = item.tag
     }
 
 }

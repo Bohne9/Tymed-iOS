@@ -6,32 +6,76 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
-class CalendarDayEntry: CalendarEntry {
+class CalendarDayEntry: ObservableObject, CalendarEntry {
     typealias Entry = CalendarEvent
     
+    @Published
     var date: Date
     
-    var entries: [CalendarEvent]
+    @Published
+    var entries: [CalendarEvent] = []
+    
+    @Published
+    var allDayEntries: [CalendarEvent] = []
     
     var eventCount: Int {
         return entries.count
     }
     
-    var startOfDay: Date? {
-        return entries.first?.startDate
-    }
+    private(set) var startOfDay: Date?
     
-    var endOfDay: Date? {
-        return entries.last?.endDate
-    }
+    private(set) var endOfDay: Date?
     
     init(for date: Date, entries: [CalendarEvent]) {
         self.date = date.startOfDay
-        self.entries = entries.sorted()
+                
+        setEntries(entries)
+        
+        startOfDay = firstEventBegin()
+        endOfDay = lastEventEnding()
     }
     
+    func firstEventBegin() -> Date? {
+        return entries.sorted { (lhs, rhs) -> Bool in
+            guard let lhsStart = lhs.startDate,
+                  let rhsStart = rhs.startDate else {
+                return false
+            }
+            
+            return lhsStart < rhsStart
+        }.first?.startDate
+    }
+    
+    func lastEventEnding() -> Date? {
+        return entries.sorted { (lhs, rhs) -> Bool in
+            guard let lhsEnd = lhs.endDate,
+                  let rhsEnd = rhs.endDate else {
+                return false
+            }
+            
+            return lhsEnd < rhsEnd
+        }.last?.endDate
+    }
+    
+    func setEntries(_ entries: [CalendarEvent]) {
+        let allEntries = entries.sorted(by: { (lhs, rhs) -> Bool in
+            return lhs < rhs
+        })
+        
+        self.allDayEntries = allEntries
+            .filter { $0.allDay }
+        
+        self.entries = allEntries
+            .filter { !$0.allDay }
+    }
+    
+    func expandToEntireDay() {
+        startOfDay = date.startOfDay
+        endOfDay = date.endOfDay
+        objectWillChange.send()
+    }
     
 }
 

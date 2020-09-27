@@ -8,11 +8,12 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 
 /// A protocol that defines an general event in a calendar
 /// See also: Lesson, Task, Event
-class CalendarEvent {
+class CalendarEvent: ObservableObject {
     
     static func lessonEvents(lessons: [Lesson]) -> [CalendarEvent] {
         return lessons.map { (lesson) in
@@ -32,8 +33,10 @@ class CalendarEvent {
         }
     }
     
+    @Published
     var managedObject: NSManagedObject
     
+    @Published
     var anchorDate = Date()
     
     var isLesson: Bool {
@@ -123,6 +126,85 @@ class CalendarEvent {
             return nil
         }
     }
+    
+    var allDay: Bool {
+        if let event = asEvent {
+            return event.allDay
+        }
+        return false
+    }
+    
+    var timetable: Timetable? {
+        if let lesson = asLesson { // If the CalendarEvent is a Lesson
+            return lesson.subject?.timetable
+        } else if let task = asTask { // If the CalendarEvent is a Task
+            return task.timetable
+        } else if let event = asEvent { // If the CalendarEvent is an Event
+            return event.timetable
+        }else {
+            return nil
+        }
+    }
+    
+    func collisionRank(in events: [CalendarEvent]) -> Int {
+        var rank = 0
+        
+        for event in events {
+            if collides(with: event) {
+                rank += 1
+            }else if event.id == id {
+                break
+            }
+        }
+        
+        return rank
+    }
+    
+    func collides(with event: CalendarEvent) -> Bool {
+        guard let startDate = self.startDate,
+              let endDate = self.endDate else {
+            return false
+        }
+        
+        guard event.id != id,
+              let start = event.startDate,
+              let end = event.endDate else {
+            return false
+        }
+        
+        return Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+            Calendar.current.isDateBetween(date: endDate, left: start, right: end)
+    }
+    
+    func collisionCount(within events: [CalendarEvent]) -> Int {
+        guard let startDate = self.startDate,
+              let endDate = self.endDate else {
+            print("COLLISION ERROR")
+            return 0
+        }
+        
+        var count = 0
+        
+        events.forEach { event in
+            guard event.id != id,
+                  let start = event.startDate,
+                  let end = event.endDate else {
+                return
+            }
+            
+            if  Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+                Calendar.current.isDateBetween(date: endDate, left: start, right: end) {
+                    count += 1
+            }
+        }
+        
+        return count
+    }
+    
 }
 
 

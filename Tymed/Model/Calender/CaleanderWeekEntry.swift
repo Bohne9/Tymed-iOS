@@ -34,9 +34,9 @@ class CalendarWeekEntry: CalendarEntry {
     init(date: Date) {
         self.date = date.startOfWeek ?? Date()
         self.entries = CalendarService.shared.calendarWeekEntries(for: date)
-            .filter({ (entry) -> Bool in
-            return entry.eventCount > 0
-        })
+//            .filter({ (entry) -> Bool in
+//            return entry.eventCount > 0
+//        })
     }
     
     func calendarDayEntry(for day: Day) -> CalendarDayEntry? {

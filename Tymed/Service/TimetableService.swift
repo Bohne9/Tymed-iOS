@@ -95,7 +95,7 @@ enum Day: Int, CaseIterable {
 }
 
 //MARK: TimetableService
-class TimetableService {
+class TimetableService: ObservableObject {
     
     static let shared = TimetableService()
     
@@ -413,6 +413,9 @@ class TimetableService {
     func task() -> Task {
         let task = Task(context: context)
         task.id = UUID()
+        task.archived = false
+        task.completed = false
+        task.priority = 0
         
         return task
     }
@@ -427,6 +430,7 @@ class TimetableService {
         task.due = due
         task.lesson = lesson
         task.priority = Int32(priority)
+        task.archived = false
         
         save()
         
@@ -437,6 +441,7 @@ class TimetableService {
     func save() {
         do {
             try context.save()
+            objectWillChange.send()
         } catch {
             print(error)
         }
@@ -445,10 +450,12 @@ class TimetableService {
     //MARK: reset()
     func reset() {
         context.reset()
+        objectWillChange.send()
     }
     
     func rollback() {
         context.rollback()
+        objectWillChange.send()
     }
     
     func hasChanges() -> Bool {
@@ -732,7 +739,7 @@ class TimetableService {
 
     //MARK: getTasks(date: )
     private func getTasks(date: Date, dateOperation: String) -> [Task] {
-        return getTasks(NSPredicate(format: "due \(dateOperation) %@", date as NSDate))
+        return getTasks(NSPredicate(format: "due \(dateOperation) %@  and archived == false", date as NSDate))
     }
 
     func getTasks(before date: Date) -> [Task] {
@@ -843,17 +850,17 @@ class TimetableService {
         return lessons
     }
     
-    func getNextCalendarEvents(startingFrom date: Date) -> [CalendarEvent] {
-        var currentDate = date
-        for _ in 0..<7 {
-            let events = calendarEventsFor(day: currentDate)
-            
-            if events.count != 0 {
-                return events
-            }else {
-                currentDate = currentDate.nextDay
-            }
-        }
-        return []
-    }
+//    func getNextCalendarEvents(startingFrom date: Date) -> [CalendarEvent] {
+//        var currentDate = date
+//        for _ in 0..<7 {
+//            let events = calendarEventsFor(day: currentDate)
+//            
+//            if events.count != 0 {
+//                return events
+//            }else {
+//                currentDate = currentDate.nextDay
+//            }
+//        }
+//        return []
+//    }
 }

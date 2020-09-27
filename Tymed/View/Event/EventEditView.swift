@@ -34,14 +34,20 @@ struct EventEditView: View {
     @ObservedObject
     var event: Event
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    @State
+    var presentationDelegate: DetailViewPresentationDelegate?
     
     @ObservedObject
     var presentationHandler: ViewWrapperPresentationHandler
     
+    @Environment(\.presentationMode)
+    var presentationMode
+    
     var body: some View {
         NavigationView {
-            EventEditViewContent(event: event, presentationDelegate: presentationDelegate)
+            EventEditViewContent(event: event, presentationDelegate: presentationDelegate) {
+                presentationMode.wrappedValue.dismiss()
+            }
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
@@ -52,14 +58,16 @@ struct EventEditView: View {
                 }), trailing: Button(action: {
                     NotificationService.current.scheduleEventNotification(for: event)
                     presentationDelegate?.done()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
-                }))
+                }).disabled(!event.isValid))
         }.actionSheet(isPresented: $presentationHandler.showDiscardWarning, content: {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
                     presentationDelegate?.cancel()
+                    presentationMode.wrappedValue.dismiss()
                 }),
                 .cancel()
             ])
@@ -71,6 +79,7 @@ struct EventEditView: View {
             presentationHandler.showDiscardWarning.toggle()
         }else {
             presentationDelegate?.cancel()
+            presentationMode.wrappedValue.dismiss()
         }
     }
 }
@@ -80,7 +89,8 @@ struct EventEditViewContent: View {
     @ObservedObject
     var event: Event
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    @State
+    var presentationDelegate: DetailViewPresentationDelegate?
     
     @Environment(\.presentationMode)
     var presentationMode
@@ -97,6 +107,10 @@ struct EventEditViewContent: View {
     //MARK: Delete state
     @State var showDeleteAction = false
     
+    @State
+    private var duration: TimeInterval = 3600
+    
+    var dismiss: () -> Void
     
     var body: some View {
         List {
@@ -138,8 +152,8 @@ struct EventEditViewContent: View {
                         }
                     }
                 
-                if showEndDatePicker {
-                    DatePicker("", selection: Binding($event.end, Date()))
+                if showEndDatePicker, let start = event.start {
+                    DatePicker("", selection: Binding($event.end, Date()), in: (start + 60)...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.default)
                 }
@@ -159,15 +173,20 @@ struct EventEditViewContent: View {
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.easeIn)
                 }
+                
+                HStack {
+                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
+                    Toggle("", isOn: $event.allDay)
+                }
             }
             
-            //MARK: Timetable
+            //MARK: Calendar
             
             Section {
                 HStack {
                     
                     NavigationLink(destination: AppTimetablePicker(timetable: $event.timetable)) {
-                        DetailCellDescriptor("Timetable", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
                         Spacer()
                         if event.timetable == TimetableService.shared.defaultTimetable() {
                             Text("Default")
@@ -201,7 +220,22 @@ struct EventEditViewContent: View {
             }
             
         }.listStyle(InsetGroupedListStyle())
-            
+        .onChange(of: event.end) { value in
+            if let start = event.start,
+               let end = event.end {
+                duration = end.timeIntervalSince(start)
+            }
+        }.onChange(of: event.start) { value in
+            guard let start = event.start else {
+                return
+            }
+            event.end = start + duration
+        }.onAppear {
+            if let start = event.start,
+               let end = event.end {
+                duration = end.timeIntervalSince(start)
+            }
+        }
     }
 
     func textFor(_ date: Date?) -> String {
@@ -219,10 +253,11 @@ struct EventEditViewContent: View {
     
     //MARK: deleteEvent
     private func deleteEvent() {
+        showDeleteAction = false
+        dismiss()
         TimetableService.shared.deleteEvent(event)
         
         presentationDelegate?.done()
         
-        presentationMode.wrappedValue.dismiss()
     }
 }

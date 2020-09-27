@@ -24,6 +24,7 @@ extension Event {
     @NSManaged public var body: String?
     @NSManaged public var notes: String?
     @NSManaged public var notificationID: UUID?
+    @NSManaged public var allDay: Bool
     @NSManaged public var notificationDate: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var task: Task?
@@ -31,6 +32,14 @@ extension Event {
     @NSManaged public var lesson: Lesson?
     @NSManaged public var timetable: Timetable?
 
+    
+    var isValid: Bool {
+        return !title.isEmpty &&
+                start != nil &&
+                end != nil &&
+                id != nil &&
+                timetable != nil
+    }
 }
 
 extension Event : Identifiable {

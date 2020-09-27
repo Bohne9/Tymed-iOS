@@ -38,29 +38,16 @@ struct TimetableOverview: View {
             Section {
                 ForEach(timetables, id: \.self) { (timetable: Timetable) in
                     NavigationLink(destination: TimetableDetail(timetable: timetable)) {
-                        HStack {
-                            Text(timetable.name)
-                                .font(.system(size: 15, weight: .semibold))
-                            
-                            Spacer()
-                            
-                            if timetable.isDefault {
-                                Text("Default")
-                                    .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-                                    .background(Color(.tertiarySystemGroupedBackground))
-                                    .font(.system(size: 13, weight: .semibold))
-                                    .cornerRadius(10)
-                            }
-                        }
-                            .frame(height: 45)
-                    }
+                        TimetableOverviewCell(timetable: timetable)
+                            .frame(height: 55)
+                    }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
                 }
             }
             
             //MARK: Add timetable
             Section {
                 HStack {
-                    DetailCellDescriptor("Add timetable", image: "plus", .systemBlue)
+                    DetailCellDescriptor("Add calendar", image: "plus", .systemBlue)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .semibold))
@@ -84,11 +71,11 @@ struct TimetableOverview: View {
                             }, label: {
                                 Image(systemName: "multiply")
                                     .foregroundColor(.white)
-                            })
+                            }).contentShape(Rectangle())
                         }.font(.system(size: 15, weight: .semibold))
                         Spacer()
                         HStack {
-                            Text("You can add multiple timetables!")
+                            Text("You can add multiple calendars!")
                                 .font(.system(size: 14, weight: .regular))
                                 .lineLimit(-1)
                                 Spacer()
@@ -133,26 +120,27 @@ struct TimetableOverview: View {
         })
         .actionSheet(isPresented: $showAddActionSheet, content: {
             ActionSheet(title: Text("What would you like to add?"), message: Text(""), buttons: [
-                .default(Text("Lesson"), action: {
-                    showLessonAdd = true
+                .default(Text("Event"), action: {
+                    showEventAdd = true
                     showAddView.toggle()
                 }),
                 .default(Text("Task"), action: {
                     showTaskAdd = true
                     showAddView.toggle()
                 }),
-                .default(Text("Event"), action: {
-                    showEventAdd = true
+                .default(Text("Lesson"), action: {
+                    showLessonAdd = true
                     showAddView.toggle()
                 }),
-                .default(Text("Timetable"), action: {
+                .default(Text("Calendar"), action: {
                     showTimetableAdd = true
                     showAddView.toggle()
                 }),
                 .cancel()
             ])
         })
-        .navigationTitle("Timetable")
+        .navigationTitle("Calendars")
+        .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
@@ -167,6 +155,10 @@ struct TimetableOverviewCell: View {
     
     var body: some View {
         HStack {
+            Rectangle()
+                .foregroundColor(Color(UIColor(timetable) ?? .clear))
+                .frame(width: 12.5, height: 55)
+            
             Text(timetable.name)
                 .font(.system(size: 15, weight: .semibold))
             
@@ -179,7 +171,7 @@ struct TimetableOverviewCell: View {
                     .font(.system(size: 13, weight: .semibold))
                     .cornerRadius(10)
             }
-        }
+        }.listRowInsets(.none)
     }
     
 }

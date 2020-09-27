@@ -13,6 +13,10 @@ protocol NavigationBarDelegate {
     func scrollToPage(bar: NavigationBar, page: Int)
     
     func scrollToToday(bar: NavigationBar)
+    
+    func calendarScrollTo(date: Date)
+    
+    func currentDay() -> Date?
 }
 
 class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInteractionDelegate {
@@ -25,6 +29,8 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     // Views for Week scene
     let dateLabel = UILabel()
     let titleLabel = UILabel()
+    let prevBtn = UIButton()
+    let nextBtn = UIButton()
     let backBtn = UIButton()
     var todaybtn = UIButton()
     var stack: UIStackView!
@@ -39,14 +45,14 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         isTranslucent = false
         isUserInteractionEnabled = true
         
-        backgroundColor = .systemGroupedBackground
+//        backgroundColor = .systemGroupedBackground
         
         addSubview(topBar)
         
-        barTintColor = .systemGroupedBackground
+//        barTintColor = .systemGroupedBackground
         
         topBar.translatesAutoresizingMaskIntoConstraints = false
-        topBar.backgroundColor = .systemGroupedBackground
+        topBar.backgroundColor = .systemBackground
         
         topBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         topBar.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.95).isActive = true
@@ -55,7 +61,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         
         setupWeekScene()
         
-        shadowImage = UIImage()
+//        shadowImage = UIImage()
     }
     
     private func setupWeekScene() {
@@ -73,7 +79,39 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         stack.constraintCenterXToSuperview()
         stack.constraintCenterYToSuperview()
         stack.constraintHeightToSuperview()
-        stack.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5).isActive = true
+        stack.widthAnchor.constraint(greaterThanOrEqualToConstant: 100).isActive = true
+        
+        // Setup prev button
+        addSubview(prevBtn)
+        prevBtn.alpha = 0
+        prevBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        prevBtn.constraintTrailingTo(anchor: stack.leadingAnchor)
+        prevBtn.constraintCenterYToSuperview()
+        prevBtn.constraint(width: 40, height: 40)
+        
+        prevBtn.addTarget(self, action: #selector(onTapPrevButton), for: .touchUpInside)
+        
+        // Setup prev button
+        addSubview(nextBtn)
+        nextBtn.alpha = 0
+        nextBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        nextBtn.constraintLeadingTo(anchor: stack.trailingAnchor)
+        nextBtn.constraintCenterYToSuperview()
+        nextBtn.constraint(width: 40, height: 40)
+        
+        nextBtn.addTarget(self, action: #selector(onTapNextButton), for: .touchUpInside)
+        
+        let prevIcon = UIImage(systemName: "chevron.left")?
+            .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
+    
+        prevBtn.setImage(prevIcon, for: .normal)
+        
+        let nextIcon = UIImage(systemName: "chevron.right")?
+            .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
+    
+        nextBtn.setImage(nextIcon, for: .normal)
         
         chevronIndicator.constraint(width: 30, height: 13)
         chevronIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +146,7 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         todaybtn.constraintCenterYToSuperview()
         todaybtn.constraint(width: 40, height: 40)
         
-        let image = UIImage(systemName: "chevron.left")?
+        let image = UIImage(systemName: "arrow.left")?
             .withConfiguration(UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .semibold)))
         
         backBtn.setImage(image, for: .normal)
@@ -141,6 +179,8 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
         self.backBtn.alpha = alpha
         self.todaybtn.alpha = alpha
         self.chevronIndicator.alpha = alpha
+        self.prevBtn.alpha = alpha
+        self.nextBtn.alpha = alpha
     }
     
     func updateNavigationBar(_ page: Int) {
@@ -173,6 +213,26 @@ class NavigationBar: UINavigationBar, UINavigationBarDelegate, UIContextMenuInte
     
     @objc func onTapTodayButton() {
         navigationBarDelegate?.scrollToToday(bar: self)
+    }
+    
+    @objc func onTapPrevButton() {
+        guard let current = navigationBarDelegate?.currentDay() else {
+            return
+        }
+        
+        let next = current.prevDay
+        
+        navigationBarDelegate?.calendarScrollTo(date: next)
+    }
+    
+    @objc func onTapNextButton() {
+        guard let current = navigationBarDelegate?.currentDay() else {
+            return
+        }
+        
+        let next = current.nextDay
+        
+        navigationBarDelegate?.calendarScrollTo(date: next)
     }
     
     required init?(coder: NSCoder) {

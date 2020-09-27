@@ -124,12 +124,7 @@ class TimetableOverviewViewController: UIViewController {
     }
 
     @objc func showTimetableAdd() {
-        let timetableAdd = TimetableAddViewController(style: .insetGrouped)
-        let nav = UINavigationController(rootViewController: timetableAdd)
-                
-        timetableAdd.timetableBaseDelegate = self
         
-        present(nav, animated: true, completion: nil)
     }
     
     /*

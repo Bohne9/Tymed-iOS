@@ -20,7 +20,7 @@ class ViewWrapperPresentationHandler: ObservableObject {
     
 }
 
-protocol ViewWrapperPresentationDelegate {
+protocol DetailViewPresentationDelegate {
     
     func dismiss()
     
@@ -37,7 +37,9 @@ class ViewWrapper<T: View>: UIViewController {
     
     var hostingConroller: UIHostingController<T>?
     
-    var presentationDelegate: ViewWrapperPresentationDelegate?
+    lazy var presentationDelegate: DetailViewPresentationDelegate? = {
+        return self
+    }()
     
     var presentationHandler = ViewWrapperPresentationHandler()
     
@@ -48,7 +50,6 @@ class ViewWrapper<T: View>: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presentationDelegate = self
         
         guard let contentView = createContent() else {
             return
@@ -70,7 +71,7 @@ class ViewWrapper<T: View>: UIViewController {
 }
 
 
-extension ViewWrapper: ViewWrapperPresentationDelegate {
+extension ViewWrapper: DetailViewPresentationDelegate {
     
     /// Dismisses the view controller
     func dismiss() {

@@ -18,8 +18,7 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
     var homeDelegate: HomeViewSceneDelegate?
 
     var sectionIdentifiers: [String] = []
-    
-    internal var calendarCellSupplier = HomeCalendarCollectionViewCellSupplier()
+
     
     init() {
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -33,8 +32,6 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        calendarCellSupplier.collectionView = collectionView
         
         collectionView.delegate = self
         collectionView.dataSource = self

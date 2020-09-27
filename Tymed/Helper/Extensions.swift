@@ -54,8 +54,11 @@ extension Date {
         
         let formatter = DateFormatter()
         
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.doesRelativeDateFormatting = relativeFormatting
         formatter.dateFormat = format
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
         
         return formatter.string(from: self)
     }
@@ -131,8 +134,20 @@ extension Date {
     var nextDay: Date {
         return (self + (3600 * 24)).startOfDay
     }
+    
+    var prevDay: Date {
+        return (self - (3600 * 24)).startOfDay
+    }
 }
 
+//MARK: Calendar
+extension Calendar {
+
+    func isDateBetween(date: Date, left: Date, right: Date) -> Bool {
+        return left < date && date < right
+    }
+
+}
 
 
 //MARK: UIView
@@ -298,6 +313,16 @@ extension UIColor {
         }
         self.init(timetable)
     }
+    
+    convenience init? (_ calendarEvent: CalendarEvent) {
+        if let lesson = calendarEvent.asLesson {
+            self.init(lesson)
+        } else if let event = calendarEvent.asEvent {
+            self.init(event)
+        }else {
+            return nil
+        }
+    }
 }
 
 
@@ -326,12 +351,15 @@ extension TimeInterval {
 //MARK: Binding
 extension Binding {
     init(_ source: Binding<Value?>, _ defaultValue: Value) {
-        // Ensure a non-nil value in `source`.
-        if source.wrappedValue == nil {
-            source.wrappedValue = defaultValue
-        }
-        // Unsafe unwrap because *we* know it's non-nil now.
-        self.init(source)!
+        self.init(get: {
+            // ensure the source doesn't contain nil
+            if source.wrappedValue == nil {
+                source.wrappedValue = defaultValue
+            }
+            return source.wrappedValue ?? defaultValue
+        }, set: {
+            source.wrappedValue = $0
+        })
     }
     
     init<T>(isNotNil source: Binding<T?>, defaultValue: T) where Value == Bool {

@@ -19,9 +19,11 @@ protocol HomeViewControllerDelegate {
 
 class HomeViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, NavigationBarDelegate {
 
-    var dashCollectionView: HomeDashCollectionView = HomeDashCollectionView()
+    let homeViewModel = HomeViewModel()
     
-    var tasksCollectionView: HomeTaskCollectionView = HomeTaskCollectionView()
+    var homeView = HomeDashViewWrapper()
+    
+    var taskView = HomeTaskViewWrapper()
     
     var weekCollectionView: HomeWeekCollectionView = HomeWeekCollectionView()
     
@@ -35,6 +37,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        homeView.homeViewModel = homeViewModel
+        taskView.homeViewModel = homeViewModel
+        weekCollectionView.homeViewModel = homeViewModel
         
         //MARK: NavBar setup
         
@@ -55,12 +61,22 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         collectionView.backgroundColor = .systemGroupedBackground
         view.backgroundColor = .systemGroupedBackground
         
-        dashCollectionView.taskOverviewDelegate = self
-        tasksCollectionView.taskOverviewDelegate = self
+        collectionView.delegate = self
         
-        dashCollectionView.homeViewControllerDelegate = self
-        tasksCollectionView.homeViewControllerDelegate = self
         weekCollectionView.homeViewControllerDelegate = self
+        
+        showAppSetupView()
+    }
+    
+    func showAppSetupView() {
+        
+        if !SettingsService.shared.didRunAppSetup {
+            let appStart = AppStartSetupWrapper()
+            appStart.presentationDelegate = self
+            
+            present(appStart, animated: true, completion: nil)
+        }
+        
     }
     
     func setupFlowLayout() {
@@ -70,9 +86,9 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         
         flowLayout.scrollDirection = .horizontal
-           
-        flowLayout.minimumLineSpacing = 0
-        flowLayout.minimumInteritemSpacing = 0
+        
+        flowLayout.minimumLineSpacing = 20
+        flowLayout.minimumInteritemSpacing = 20
     }
     
     func scrollToPage(bar: NavigationBar, page: Int) {
@@ -81,6 +97,14 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     func scrollToToday(bar: NavigationBar) {
         weekCollectionView.scrollTo(date: Date(), true)
+    }
+    
+    func calendarScrollTo(date: Date) {
+        weekCollectionView.scrollTo(date: date, true)
+    }
+    
+    func currentDay() -> Date? {
+        return weekCollectionView.currentDay()
     }
     
     func scrollToPage(page: Int) {
@@ -93,8 +117,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func reload() {
-        dashCollectionView.reloadData()
-        tasksCollectionView.reloadData()
+        homeViewModel.reload()
         weekCollectionView.reloadData()
     }
     
@@ -107,23 +130,23 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 3
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
 
-    private func baseCellFor(index: Int) -> HomeBaseCollectionView {
-        return [dashCollectionView, tasksCollectionView, weekCollectionView][index]
+    private func baseCellFor(index: Int) -> UIViewController {
+        return [homeView, taskView, weekCollectionView][index]
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
-        let baseCell = baseCellFor(index: indexPath.row)
+        let baseCell = baseCellFor(index: indexPath.section)
         
         addChild(baseCell)
         
@@ -144,14 +167,13 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return collectionView.frame.size
     }
     
-    
     //MARK: ScrollViewDelegate
     
-    private func sceneBaseCollectionView(for index: Int) -> HomeBaseCollectionView {
+    private func sceneBaseCollectionView(for index: Int) -> UIViewController {
         if index == 0 {
-            return dashCollectionView
+            return homeView
         }else if index == 1 {
-            return tasksCollectionView
+            return taskView
         }else {
             return weekCollectionView
         }
@@ -168,9 +190,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func scrollToSection(_ section: Int) {
-        
-        collectionView.scrollToItem(at: IndexPath(row: section, section: 0), at: .left, animated: true)
-        
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: section), at: .left, animated: true)
     }
     
     func presentTaskAdd() -> TaskAddViewWrapper {
@@ -192,19 +212,35 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
 }
 
-extension HomeViewController: TaskOverviewTableviewCellDelegate {
-
-    func onChange(_ cell: TaskOverviewTableViewCell) {
-        reload()
-    }
-    
-}
-
-
 extension HomeViewController: HomeViewControllerDelegate {
     
     func reloadHomeView() {
         reload()
     }
+    
+}
+
+extension HomeViewController: DetailViewPresentationDelegate {
+    func dismiss() {
+        print("dismiss")
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func cancel() {
+        TimetableService.shared.rollback()
+        homeViewModel.reload()
+        dismiss()
+    }
+    
+    func done() {
+        TimetableService.shared.save()
+        homeViewModel.reload()
+        dismiss()
+    }
+    
+    func shouldDismiss() -> Bool {
+        return true
+    }
+    
     
 }

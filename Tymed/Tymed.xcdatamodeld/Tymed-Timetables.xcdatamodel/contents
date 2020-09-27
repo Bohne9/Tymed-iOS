@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17189" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Event" representedClassName="Event" syncable="YES">
+        <attribute name="allDay" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="body" optional="YES" attributeType="String"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -53,7 +54,7 @@
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="timetable" inverseEntity="Task"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-90" positionY="45" width="128" height="238"/>
+        <element name="Event" positionX="-90" positionY="45" width="128" height="253"/>
         <element name="Lesson" positionX="160.44921875" positionY="194.484375" width="128" height="148"/>
         <element name="Subject" positionX="-184.15234375" positionY="44.109375" width="128" height="133"/>
         <element name="Task" positionX="-290.4921875" positionY="306.515625" width="128" height="193"/>

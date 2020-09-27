@@ -32,6 +32,22 @@ class CalendarService: Service {
         return CalendarDayEntry(for: date, entries: eventsForDay(date: date))
     }
     
+    func getNextCalendarDayEntry(startingFrom date: Date) -> CalendarDayEntry {
+        var events = [CalendarEvent]()
+        var currentDate = date
+        
+        for _ in 0..<7 {
+            events = TimetableService.shared.calendarEventsFor(day: currentDate)
+            
+            if events.count != 0 {
+                return CalendarDayEntry(for: currentDate, entries: events)
+            }else {
+                currentDate = currentDate.nextDay
+            }
+        }
+        return CalendarDayEntry(for: currentDate, entries: events)
+    }
+    
     //MARK: calendarWeekEntries
     /// Returns a list of CalendarEntries for a given week.
     /// - Parameter week: Date within the requested date. The date does not necessarily has to be the start of the week.
@@ -49,7 +65,9 @@ class CalendarService: Service {
         // For each day in the week
         for _ in 0..<7 {
             // Append a CalendarDayEntry for the current day to the list
-            entries.append(calendarDayEntry(for: date))
+            let entry = calendarDayEntry(for: date)
+            entry.expandToEntireDay()
+            entries.append(entry)
             
             // Get the date of the next day
             if let next = nextDay(after: date) {

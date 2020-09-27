@@ -13,6 +13,9 @@ class BackgroundRoutineService {
     
     static let standard = BackgroundRoutineService()
     
+    /// A list of tasks that have been archived at the start of the session
+    var archivedTasksOfSession: [Task]?
+    
     internal init () { }
     
     func appLaunchRoutine() {
@@ -28,6 +31,8 @@ class BackgroundRoutineService {
             return
         }
         
+        archivedTasksOfSession = []
+        
         let tasks = TimetableService.shared.getAllTasks()
         
         for task in tasks {
@@ -38,6 +43,7 @@ class BackgroundRoutineService {
             let now = Date()
             
             if (due.addingTimeInterval(taskArchivingDelay.timeinterval) < now) {
+                archivedTasksOfSession?.append(task)
                 NotificationService.current.removeDeliveredNotifications(of: task)
                 task.archived = true
             }
@@ -46,6 +52,13 @@ class BackgroundRoutineService {
     }
     
     
+    
+    func appStartSetupRoutine() {
+        
+//        let calendars = []
+        
+        
+    }
     
     //MARK: Background Tasks
     
