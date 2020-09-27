@@ -403,6 +403,7 @@
 		4F7F778C2458A16A00038729 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4F981E722520867900A9FCF5 /* App */,
 				4F99D205249FECA500A8DFAB /* Home */,
 				4F8E057E24D9EB2300748F47 /* Common */,
 				4F1A9F1324D72FE900F99439 /* Task */,
@@ -451,6 +452,13 @@
 				4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		4F981E722520867900A9FCF5 /* App */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		4F99A0E52514E80A006ADB05 /* HomeCalendar */ = {

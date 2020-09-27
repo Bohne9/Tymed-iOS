@@ -34,6 +34,7 @@ struct EventEditView: View {
     @ObservedObject
     var event: Event
     
+    @State
     var presentationDelegate: DetailViewPresentationDelegate?
     
     @ObservedObject
@@ -44,7 +45,9 @@ struct EventEditView: View {
     
     var body: some View {
         NavigationView {
-            EventEditViewContent(event: event, presentationDelegate: presentationDelegate)
+            EventEditViewContent(event: event, presentationDelegate: presentationDelegate) {
+                presentationMode.wrappedValue.dismiss()
+            }
                 .navigationTitle("Event")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarItems(leading: Button(action: {
@@ -86,6 +89,7 @@ struct EventEditViewContent: View {
     @ObservedObject
     var event: Event
     
+    @State
     var presentationDelegate: DetailViewPresentationDelegate?
     
     @Environment(\.presentationMode)
@@ -105,6 +109,8 @@ struct EventEditViewContent: View {
     
     @State
     private var duration: TimeInterval = 3600
+    
+    var dismiss: () -> Void
     
     var body: some View {
         List {
@@ -247,10 +253,11 @@ struct EventEditViewContent: View {
     
     //MARK: deleteEvent
     private func deleteEvent() {
+        showDeleteAction = false
+        dismiss()
         TimetableService.shared.deleteEvent(event)
         
         presentationDelegate?.done()
         
-        presentationMode.wrappedValue.dismiss()
     }
 }

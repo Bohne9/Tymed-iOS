@@ -55,7 +55,7 @@ class AppStartupPreset {
     static let university: AppStartupPreset = {
         let calendars: [TimetableModel] = [
             (name: "University", color: "blue", default: true),
-            (name: "Work", color: "yellow", default: false),
+            (name: "Work", color: "orange", default: false),
             (name: "Private", color: "red", default: false),
         ]
         

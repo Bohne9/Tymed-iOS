@@ -140,6 +140,7 @@ struct TimetableOverview: View {
             ])
         })
         .navigationTitle("Calendars")
+        .navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 
@@ -155,7 +156,7 @@ struct TimetableOverviewCell: View {
     var body: some View {
         HStack {
             Rectangle()
-                .foregroundColor(Color(UIColor(timetable)!))
+                .foregroundColor(Color(UIColor(timetable) ?? .clear))
                 .frame(width: 12.5, height: 55)
             
             Text(timetable.name)

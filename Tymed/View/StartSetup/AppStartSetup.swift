@@ -156,7 +156,7 @@ struct AppStartSetup: View {
             }.navigationTitle("Welcome")
             .font(.system(size: 16, weight: .semibold))
             .navigationBarTitleDisplayMode(.inline)
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     
     private func presetBinding(for value: Int) -> Binding<Bool> {
