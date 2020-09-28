@@ -18,7 +18,7 @@ class SettingsService {
         case username = "username"
         case appSetup = "appSetup"
         case email = "email"
-        
+        case profilePicture = "profilePicture"
     }
     
     //MARK: TaskAutoArchiveDefault
@@ -131,10 +131,19 @@ class SettingsService {
     }
     var username: String {
         get {
-            string(.username) ?? ""
+            string(.username) ?? "user"
         }
         set {
             set(newValue, key: .username)
+        }
+    }
+    
+    var profilePicture: String? {
+        get {
+            string(.profilePicture)
+        }
+        set {
+            set(newValue, key: .profilePicture)
         }
     }
     

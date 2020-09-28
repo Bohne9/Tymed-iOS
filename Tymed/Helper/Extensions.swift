@@ -284,9 +284,22 @@ extension UIView {
     
 }
 
+extension Color {
+    
+    static let appColor = Color(.appColor)
+    static let appColorLight = Color(.appColorLight)
+    
+    init(_ event: CalendarEvent) {
+        self.init(event.color ?? .appColor)
+    }
+    
+}
+
 //MARK: UIColor
 extension UIColor {
     
+    static let appColorLight = UIColor(named: "app-color-light")!
+    static let appColor = UIColor(named: "app-color")!
     static let appGreen = UIColor(named: "green")!
     static let appBlue = UIColor(named: "blue")!
     static let appRed = UIColor(named: "red")!

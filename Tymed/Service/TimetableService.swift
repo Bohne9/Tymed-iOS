@@ -99,10 +99,26 @@ class TimetableService: ObservableObject {
     
     static let shared = TimetableService()
     
-    private let context = AppDelegate.persistentContainer
+    private let context = PersistanceService.shared.persistentContainer.viewContext
     
     internal init() {
         
+//        let timetable = self.timetable()
+//        timetable.name = "Personal"
+//        timetable.isDefault = true
+//        timetable.color = "red"
+//        
+//        let event = self.event()
+//        
+//        event.title = "Next event"
+//        event.createdAt = Date()
+//        event.start = Date() + 7200
+//        event.end = event.start! + 3600
+//        
+//        event.timetable = timetable
+//        event.allDay = false
+//        
+//        save()
     }
     
     //MARK: - Timetable

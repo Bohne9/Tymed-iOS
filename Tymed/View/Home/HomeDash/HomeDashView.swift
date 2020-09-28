@@ -31,72 +31,57 @@ struct HomeDashView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        List {
+        VStack {
             
-            Section {
-                VStack(alignment: .leading) {
-                    Text(Date().stringify(with: .full, relativeFormatting: false).uppercased())
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(.systemBlue))
-                    
-                    Text(homeViewModel.dayDebrief?.debrief ?? "")
-                        .font(.system(size: 14, weight: .semibold))
-                        .padding(.top, 5)
-                }
-                .padding(.vertical, 10)
-            }
+            HomeDashHeaderView()
             
-            if homeViewModel.tasks.count > 0 {
-                Section(header:
-                            Text("Tasks")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(Color(.label))) {
-                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
-                        Section {
-                            HomeTaskCell(task: task)
-                                .environmentObject(homeViewModel)
-                                .frame(height: 45)
-                        }
-                    }
-                    if homeViewModel.tasks.count > 3 {
-                        HStack {
-                            Text("See all tasks")
-                            Spacer()
-                            
-                            Image(systemName: "arrow.right")
-                        }.font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(Color(.systemBlue))
-                    }
-                }
-            }
+            HomeDashOverviewView()
             
-            if !Calendar.current.isDateInToday(homeViewModel.upcomingCalendarDay.date) {
-                Section(header: Text("Today")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(Color(.label))) {
-                    Text("Seems like you got a day off! 👍")
-                        .font(.system(size: 14, weight: .semibold))
-                }
-            }
+//            if homeViewModel.tasks.count > 0 {
+//                Section(header:
+//                            Text("Tasks")
+//                            .font(.system(size: 13, weight: .semibold))
+//                            .foregroundColor(Color(.label))) {
+//                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
+//                        Section {
+//                            HomeTaskCell(task: task)
+//                                .environmentObject(homeViewModel)
+//                                .frame(height: 45)
+//                        }
+//                    }
+//                    if homeViewModel.tasks.count > 3 {
+//                        HStack {
+//                            Text("See all tasks")
+//                            Spacer()
+//
+//                            Image(systemName: "arrow.right")
+//                        }.font(.system(size: 15, weight: .semibold))
+//                        .foregroundColor(Color(.systemBlue))
+//                    }
+//                }
+//            }
+//
+//
+//            Section(header:
+//                        Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
+//                        .font(.system(size: 13, weight: .semibold))
+//                        .foregroundColor(Color(.label))) {
+//                HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
+//
+//            }
+//
+//            if let nextCalendarDay = homeViewModel.nextCalendarDay {
+//                Section(header:
+//                            Text("\(nextCalendarDay.date.stringify(with: .medium))")
+//                            .font(.system(size: 13, weight: .semibold))
+//                            .foregroundColor(Color(.label))) {
+//                    HomeDashCalendarView(event: nextCalendarDay)
+//                        .environmentObject(TimetableService.shared)
+//                }
+//            }
             
-            Section(header:
-                        Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(Color(.label))) {
-                HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
-                    
-            }
-            
-            if let nextCalendarDay = homeViewModel.nextCalendarDay {
-                Section(header:
-                            Text("\(nextCalendarDay.date.stringify(with: .medium))")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(Color(.label))) {
-                    HomeDashCalendarView(event: nextCalendarDay)
-                        .environmentObject(TimetableService.shared)
-                }
-            }
-        }.listStyle(InsetGroupedListStyle())
+            Spacer()
+        }
         .environmentObject(homeViewModel)
     }
 }

@@ -205,6 +205,15 @@ class CalendarEvent: ObservableObject {
         return count
     }
     
+    
+    func isNow() -> Bool {
+        let now = Date()
+        guard let start = self.startDate,
+              let end   = self.endDate else {
+            return false
+        }
+        return start <= now && now <= end
+    }
 }
 
 
