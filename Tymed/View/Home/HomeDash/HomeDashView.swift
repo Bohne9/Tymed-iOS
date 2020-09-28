@@ -65,22 +65,27 @@ struct HomeDashView: View {
 //
 //
 //            Section(header:
-//                        Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
-//                        .font(.system(size: 13, weight: .semibold))
-//                        .foregroundColor(Color(.label))) {
-//                HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
+            VStack(alignment: .leading) {
+                Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color(.label))
+                    .padding(.leading, 5)
+                HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
+            }.padding()
 //
 //            }
 //
-//            if let nextCalendarDay = homeViewModel.nextCalendarDay {
-//                Section(header:
-//                            Text("\(nextCalendarDay.date.stringify(with: .medium))")
-//                            .font(.system(size: 13, weight: .semibold))
-//                            .foregroundColor(Color(.label))) {
-//                    HomeDashCalendarView(event: nextCalendarDay)
-//                        .environmentObject(TimetableService.shared)
-//                }
-//            }
+            if let nextCalendarDay = homeViewModel.nextCalendarDay,
+                homeViewModel.nextCalendarDay?.entries.count ?? 0 > 0 {
+                VStack(alignment: .leading) {
+                    Text("\(nextCalendarDay.date.stringify(with: .medium))")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(.label))
+                        .padding(.leading, 5)
+                    HomeDashCalendarView(event: nextCalendarDay)
+                        .environmentObject(TimetableService.shared)
+                }.padding()
+            }
             
             Spacer()
         }
@@ -113,6 +118,9 @@ struct HomeDashCalendarView: View {
                 .frame(height: CGFloat(numberOfHours()) * heightForHour)
                 .padding(.vertical, 20)
         }.frame(height: CGFloat(numberOfHours()) * heightForHour + 40)
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
     }
     
     private func numberOfHours() -> Int {

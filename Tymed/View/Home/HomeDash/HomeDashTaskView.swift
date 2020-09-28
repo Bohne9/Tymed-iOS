@@ -19,13 +19,14 @@ struct HomeDashTaskView: View {
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundColor(Color(.label))
             
-            GeometryReader { geometry in
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: geometry.size.width / 2 - 10))]) {
+//            GeometryReader { geometry in
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
                     ForEach(homeViewModel.timetables, id: \.self) { timetable in
                         HomeDashTaskTimetableView(timetable: timetable)
                     }
-                }.frame(width: geometry.size.width)
-            }
+                }
+//                .frame(width: geometry.size.width)
+//            }
         }.padding()
     }
 }
