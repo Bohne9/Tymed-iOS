@@ -16,7 +16,7 @@ enum TimetableBadgeViewSize {
     internal var fontSize: CGFloat {
         switch self {
         case .small:
-            return 8
+            return 9
         case .normal:
             return 12
         case .large:
@@ -43,24 +43,28 @@ struct TimetableBadgeView: View {
     
     var size = TimetableBadgeViewSize.normal
     
+    var color = UIColor.appColor
+    
     var body: some View {
         HStack {
             if size != .small {
-                RoundedRectangle(cornerRadius: (size == .normal ? 5.0 : 8.0) / 2)
-                    .frame(width: size == .normal ? 5.0 : 8.0, height: size == .normal ? 10 : 14)
-                    .foregroundColor(Color(UIColor(timetable) ?? .appColor))
+                RoundedRectangle(cornerRadius: (size == .normal ? 4.0 : 8.0) / 2)
+                    .frame(width: size == .normal ? 4.0 : 8.0, height: size == .normal ? 14 : 18)
+                    .foregroundColor(Color(UIColor(timetable) ?? color))
             }else {
-                Spacer()
+//                Spacer()
             }
                 
             Text(timetable.name)
                 .font(.system(size: size.fontSize, weight: size.fontWeight))
                 .foregroundColor(.white)
             
-            Spacer()
+//            Spacer()
         }
-        .padding(5)
-        .background(Color.appColor)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Color(color))
         .cornerRadius(size.fontSize + 4)
+//        .padding(5)
     }
 }

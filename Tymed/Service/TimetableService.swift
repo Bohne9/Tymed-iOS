@@ -104,9 +104,9 @@ class TimetableService: ObservableObject {
     internal init() {
         
 //        let timetable = self.timetable()
-//        timetable.name = "Personal"
-//        timetable.isDefault = true
-//        timetable.color = "red"
+//        timetable.name = "University"
+//        timetable.isDefault = false
+//        timetable.color = "orange"
 //        
 //        let event = self.event()
 //        

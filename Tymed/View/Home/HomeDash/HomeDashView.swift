@@ -37,6 +37,8 @@ struct HomeDashView: View {
             
             HomeDashOverviewView()
             
+            HomeDashTaskView()
+            
 //            if homeViewModel.tasks.count > 0 {
 //                Section(header:
 //                            Text("Tasks")
@@ -83,6 +85,9 @@ struct HomeDashView: View {
             Spacer()
         }
         .environmentObject(homeViewModel)
+        .onAppear {
+            homeViewModel.reload()
+        }
     }
 }
 

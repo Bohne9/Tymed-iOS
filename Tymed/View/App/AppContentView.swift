@@ -16,7 +16,7 @@ struct AppContentView: App {
                 
                 HomeView()
                     .tabItem {
-                        Label("Home", systemImage: "house")
+                        Label("Home", systemImage: "house.fill")
                             .font(.caption)
                     }
                 
@@ -28,7 +28,7 @@ struct AppContentView: App {
                 
                 ProfileView()
                     .tabItem {
-                        Label("Profile", systemImage: "person")
+                        Label("Profile", systemImage: "person.fill")
                             .font(.system(size: 14, weight: .semibold))
                     }
             }

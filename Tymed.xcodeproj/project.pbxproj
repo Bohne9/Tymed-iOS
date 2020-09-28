@@ -59,6 +59,7 @@
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
 		4F9405EF2468067C0063E4DA /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
+		4F9458CF25226C19006F326B /* HomeDashTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9458CE25226C19006F326B /* HomeDashTaskView.swift */; };
 		4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */; };
 		4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */; };
 		4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA03663251CC555009C8F83 /* RadioButton.swift */; };
@@ -181,6 +182,7 @@
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		4F9405EE2468067C0063E4DA /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		4F9458CE25226C19006F326B /* HomeDashTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskView.swift; sourceTree = "<group>"; };
 		4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarView.swift; sourceTree = "<group>"; };
 		4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarViewWrapper.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
@@ -502,6 +504,7 @@
 				4FAB1F402513B0E6007D5167 /* HomeDashView.swift */,
 				4FC1B2332522352800B3D8C9 /* HomeDashHeaderView.swift */,
 				4FC1B235252237D800B3D8C9 /* HomeDashOverviewView.swift */,
+				4F9458CE25226C19006F326B /* HomeDashTaskView.swift */,
 			);
 			path = HomeDash;
 			sourceTree = "<group>";
@@ -855,6 +858,7 @@
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FC1B22D25222D9200B3D8C9 /* AppContentView.swift in Sources */,
+				4F9458CF25226C19006F326B /* HomeDashTaskView.swift in Sources */,
 				4F8EEB2925114CCF00F3D4B9 /* EventEditView.swift in Sources */,
 				4FC43419251B546000D8EC0A /* AppStartSetup.swift in Sources */,
 				4FAB1F442513B5F9007D5167 /* HomeViewModel.swift in Sources */,
