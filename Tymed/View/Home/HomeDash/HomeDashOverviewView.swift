@@ -13,27 +13,47 @@ struct HomeDashOverviewView: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    @State
+    private var showEventAdd = false
     
     var body: some View {
-//        GeometryReader { geometry in
-            HStack(alignment: .top) {
-                if let event = homeViewModel.nextCalendarEvent {
-                    HomeDashOverviewTaskView()
-//                        .frame(maxWidth: geometry.size.width / 2)
+        HStack(alignment: .top) {
+            HomeDashOverviewTaskView()
+            
+            if let event = homeViewModel.nextCalendarEvent {
+                
+                Spacer(minLength: 15)
+                
+                VStack(alignment: .leading) {
+                    Text("Up Next".uppercased())
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(.label))
                     
-                    Spacer(minLength: 15)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Up Next".uppercased())
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(Color(.label))
-                        
-                        HomeDashOverviewEventView(event: event)
-                    }
-//                    .frame(maxWidth: geometry.size.width / 2)
+                    HomeDashOverviewEventView(event: event)
                 }
-            }.padding(.horizontal)
-//        }
+            }else {
+                VStack(alignment: .leading) {
+                    
+                    HStack {
+                       
+                        Label("Add event", systemImage: "plus")
+                            .foregroundColor(Color(.white))
+                            .lineLimit(2)
+                            .font(.system(size: 14, weight: .semibold))
+                        
+                        Spacer()
+                    }
+                }
+                .padding(10)
+                .background(Color.appColorLight)
+                .cornerRadius(8)
+                .onTapGesture {
+                    showEventAdd.toggle()
+                }.sheet(isPresented: $showEventAdd) {
+                    EventAddView()
+                }
+            }
+        }.padding(.horizontal)
     }
 }
 
@@ -69,8 +89,14 @@ struct HomeDashOverviewTaskView: View {
 
 struct HomeDashOverviewEventView: View {
     
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
+    
     @ObservedObject
     var event: CalendarEvent
+    
+    @State
+    private var showEventDetail = false
     
     var body: some View {
         
@@ -104,7 +130,15 @@ struct HomeDashOverviewEventView: View {
         .padding(10)
         .background(Color.appColorLight)
         .cornerRadius(8)
-        
+        .onTapGesture {
+            showEventDetail.toggle()
+        }.sheet(isPresented: $showEventDetail) {
+            if let event = event.asEvent {
+                EventEditView(event: event, presentationDelegate: homeViewModel)
+            }else if let lesson = event.asLesson {
+                
+            }
+        }
     }
     
     

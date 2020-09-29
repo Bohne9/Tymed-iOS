@@ -272,7 +272,7 @@ struct HomeDashCalendarEvent: View {
                         showEditView.toggle()
                 })
             }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel, presentationHandler: ViewWrapperPresentationHandler())
+                EventEditView(event: event, presentationDelegate: homeViewModel)
             }else {
                 Text("Ups! Something went wrong :(")
             }
@@ -376,7 +376,7 @@ struct HomeAllDayEventsRow: View {
                         showEditView.toggle()
                 })
             }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel, presentationHandler: ViewWrapperPresentationHandler())
+                EventEditView(event: event, presentationDelegate: homeViewModel)
             }else {
                 Text("Ups! Something went wrong :(")
             }

@@ -21,8 +21,7 @@ class EventEditViewWrapper: ViewWrapper<EventEditView> {
         
         eventEditView = EventEditView(
             event: event,
-            presentationDelegate: presentationDelegate,
-            presentationHandler: presentationHandler)
+            presentationDelegate: presentationDelegate)
      
         return UIHostingController(rootView: eventEditView!)
     }
@@ -37,8 +36,8 @@ struct EventEditView: View {
     @State
     var presentationDelegate: DetailViewPresentationDelegate?
     
-    @ObservedObject
-    var presentationHandler: ViewWrapperPresentationHandler
+    @State
+    var showDiscardWarning = false
     
     @Environment(\.presentationMode)
     var presentationMode
@@ -63,7 +62,7 @@ struct EventEditView: View {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
                 }).disabled(!event.isValid))
-        }.actionSheet(isPresented: $presentationHandler.showDiscardWarning, content: {
+        }.actionSheet(isPresented: $showDiscardWarning, content: {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
                     presentationDelegate?.cancel()
@@ -76,7 +75,7 @@ struct EventEditView: View {
     
     func cancel() {
         if TimetableService.shared.hasChanges() {
-            presentationHandler.showDiscardWarning.toggle()
+            showDiscardWarning.toggle()
         }else {
             presentationDelegate?.cancel()
             presentationMode.wrappedValue.dismiss()
