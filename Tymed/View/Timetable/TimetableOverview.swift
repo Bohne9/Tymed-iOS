@@ -33,114 +33,118 @@ struct TimetableOverview: View {
     @State private var showTips = true
     
     var body: some View {
-        List {
-            //MARK: Timetable list
-            Section {
-                ForEach(timetables, id: \.self) { (timetable: Timetable) in
-                    NavigationLink(destination: TimetableDetail(timetable: timetable)) {
-                        TimetableOverviewCell(timetable: timetable)
-                            .frame(height: 55)
-                    }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
-                }
-            }
-            
-            //MARK: Add timetable
-            Section {
-                HStack {
-                    DetailCellDescriptor("Add calendar", image: "plus", .systemBlue)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(.tertiaryLabel))
-                }.onTapGesture {
-                    showTimetableAdd = true
-                    showAddView.toggle()
-                }
-            }
-            if showTips {
+        NavigationView {
+            List {
+                //MARK: Timetable list
                 Section {
-                    VStack {
-                        HStack {
-                            Image(systemName: "lightbulb.fill")
-                            Text("Tips")
-                            Spacer()
-                            Button(action: {
-                                withAnimation {
-                                    showTips = false
-                                }
-                            }, label: {
-                                Image(systemName: "multiply")
-                                    .foregroundColor(.white)
-                            }).contentShape(Rectangle())
-                        }.font(.system(size: 15, weight: .semibold))
-                        Spacer()
-                        HStack {
-                            Text("You can add multiple calendars!")
-                                .font(.system(size: 14, weight: .regular))
-                                .lineLimit(-1)
-                                Spacer()
-                        }
+                    ForEach(timetables, id: \.self) { (timetable: Timetable) in
+                        NavigationLink(destination: TimetableDetail(timetable: timetable)) {
+                            TimetableOverviewCell(timetable: timetable)
+                                .frame(height: 55)
+                        }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20))
                     }
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(height: 70)
-                    .background(Color(UIColor(named: "orange")!))
                 }
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .transition(AnyTransition.scale)
-            }
-            
-            Section {
-                ProAccessBadge()
-            }
-            
-        }.listStyle(InsetGroupedListStyle())
-        .transition(.scale)
-        .font(.system(size: 16, weight: .semibold))
-        .navigationBarItems(trailing: Button {
-            showAddActionSheet = true
-        } label: {
-            Image(systemName: "plus")
-        })
-        .sheet(isPresented: $showAddView, onDismiss: {
-            showLessonAdd = false
-            showTaskAdd = false
-            showEventAdd = false
-            showTimetableAdd = false
-        }, content: {
-            if showLessonAdd {
-                LessonAddView(dismiss: { })
-            }else if showTaskAdd {
-                TaskAddView(dismiss: { })
-            }else if showEventAdd {
-                EventAddView()
-            }else {            
-                TimetableAddView()
-            }
-        })
-        .actionSheet(isPresented: $showAddActionSheet, content: {
-            ActionSheet(title: Text("What would you like to add?"), message: Text(""), buttons: [
-                .default(Text("Event"), action: {
-                    showEventAdd = true
-                    showAddView.toggle()
-                }),
-                .default(Text("Task"), action: {
-                    showTaskAdd = true
-                    showAddView.toggle()
-                }),
-                .default(Text("Lesson"), action: {
-                    showLessonAdd = true
-                    showAddView.toggle()
-                }),
-                .default(Text("Calendar"), action: {
-                    showTimetableAdd = true
-                    showAddView.toggle()
-                }),
-                .cancel()
-            ])
-        })
-        .navigationTitle("Calendars")
-        .navigationViewStyle(DoubleColumnNavigationViewStyle())
+                
+                //MARK: Add timetable
+                Section {
+                    HStack {
+                        DetailCellDescriptor("Add calendar", image: "plus", .systemBlue)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(.tertiaryLabel))
+                    }.onTapGesture {
+                        showTimetableAdd = true
+                        showAddView.toggle()
+                    }
+                }
+                if showTips {
+                    Section {
+                        VStack {
+                            HStack {
+                                Image(systemName: "lightbulb.fill")
+                                Text("Tips")
+                                Spacer()
+                                Button(action: {
+                                    withAnimation {
+                                        showTips = false
+                                    }
+                                }, label: {
+                                    Image(systemName: "multiply")
+                                        .foregroundColor(.white)
+                                }).contentShape(Rectangle())
+                            }.font(.system(size: 15, weight: .semibold))
+                            Spacer()
+                            HStack {
+                                Text("You can add multiple calendars!")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .lineLimit(-1)
+                                Spacer()
+                            }
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(height: 70)
+                        .background(Color(UIColor(named: "orange")!))
+                    }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .transition(AnyTransition.scale)
+                }
+                
+                Section {
+                    ProAccessBadge()
+                }
+                
+            }.listStyle(InsetGroupedListStyle())
+            .transition(.scale)
+            .font(.system(size: 16, weight: .semibold))
+            .navigationBarItems(trailing: Button {
+                showAddActionSheet = true
+            } label: {
+                Image(systemName: "plus")
+            })
+            .sheet(isPresented: $showAddView, onDismiss: {
+                showLessonAdd = false
+                showTaskAdd = false
+                showEventAdd = false
+                showTimetableAdd = false
+            }, content: {
+                if showLessonAdd {
+                    LessonAddView(dismiss: { })
+                }else if showTaskAdd {
+                    TaskAddView(dismiss: { })
+                }else if showEventAdd {
+                    EventAddView()
+                }else {
+                    TimetableAddView()
+                }
+            })
+            .actionSheet(isPresented: $showAddActionSheet, content: {
+                ActionSheet(title: Text("What would you like to add?"), message: Text(""), buttons: [
+                    .default(Text("Event"), action: {
+                        showEventAdd = true
+                        showAddView.toggle()
+                    }),
+                    .default(Text("Task"), action: {
+                        showTaskAdd = true
+                        showAddView.toggle()
+                    }),
+                    .default(Text("Lesson"), action: {
+                        showLessonAdd = true
+                        showAddView.toggle()
+                    }),
+                    .default(Text("Calendar"), action: {
+                        showTimetableAdd = true
+                        showAddView.toggle()
+                    }),
+                    .cancel()
+                ])
+            })
+            .navigationTitle("Calendars")
+            .navigationBarHidden(true)
+            .navigationViewStyle(DoubleColumnNavigationViewStyle())
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 

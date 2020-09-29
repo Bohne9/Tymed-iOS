@@ -16,12 +16,14 @@ struct HomeView: View {
     var body: some View {
         TabView {
             
-            ForEach(0..<2) { index in
+            ForEach(0..<3) { index in
                 
                 if index == 0 {
                     HomeDashView(homeViewModel: homeViewModel)
                 }else if index == 1 {
                     HomeTaskView(homeViewModel: homeViewModel)
+                }else if index == 2 {
+                    TimetableOverview()
                 }
                 
             }

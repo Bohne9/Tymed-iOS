@@ -31,7 +31,7 @@ struct AppContentView: App {
                         Label("Profile", systemImage: "person.fill")
                             .font(.system(size: 14, weight: .semibold))
                     }
-            }
+            }.environment(\.managedObjectContext, PersistanceService.shared.persistentContainer.viewContext)
         }
     }
 }
