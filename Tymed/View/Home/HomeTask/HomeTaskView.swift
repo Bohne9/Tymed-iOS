@@ -38,6 +38,11 @@ struct HomeTaskView: View {
             HomeTaskViewContent(homeViewModel: homeViewModel)
         }else {
             List {
+                Text("Tasks".uppercased())
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color(.label))
+                
+                HomeDashTaskView()
                 
                 //MARK: No tasks image
                 Section {
@@ -112,6 +117,7 @@ struct HomeTaskView: View {
                 }
                 
             }.listStyle(InsetGroupedListStyle())
+            .environmentObject(homeViewModel)
             .sheet(isPresented: $showTaskAdd, content: {
                 TaskAddView {
                     homeViewModel.reload()
@@ -131,41 +137,12 @@ struct HomeTaskViewContent: View {
     
     var body: some View {
         List {
+            Text("Tasks".uppercased())
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(Color(.label))
             
-            Section {
-                // Combine the timetables with the percentage of their completed tasks
-                // Filter any timetables without any tasks (where the value is -1)
-                ForEach(homeViewModel.timetables.map { ($0, taskCompletePercentage(for: $0)) }.filter { $0.1 != -1 }, id: \.0.self) { timetable, value in
-                    
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                        
-                            Text(timetable.name)
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color(.label))
-                            
-                                GeometryReader { geometry in
-                                    ZStack(alignment: .leading) {
-                                        Rectangle()
-                                            .frame(width: geometry.size.width * 0.9 + 7.5, height: 7.5)
-                                            .cornerRadius(3.75)
-                                            .foregroundColor(Color(.tertiaryLabel))
-
-                                        Rectangle()
-                                            .frame(width: geometry.size.width * 0.9 * value + 7.5, height: 7.5)
-                                            .cornerRadius(3.75)
-                                            .foregroundColor(Color(UIColor(timetable) ?? .clear))
-                                    }.frame(width: geometry.size.width * 0.9 + 7.5, height: 7.5)
-                                }
-                            
-                        }
-                        
-                        Text("\(String(format: "%.1f", value * 100))%")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.secondaryLabel))
-                    }
-                }
-            }
+            HomeDashTaskView()
+            
             
             ForEach(homeViewModel.tasks, id: \.self) { task in
                 Section {

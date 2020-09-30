@@ -1,12 +1,13 @@
 //
-//  HomeDashTaskVie.swift
+//  HomeTaskTimetableOverviewView.swift
 //  Tymed
 //
-//  Created by Jonah Schueller on 28.09.20.
+//  Created by Jonah Schueller on 30.09.20.
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
 import SwiftUI
+
 
 struct HomeDashTaskView: View {
     
@@ -14,17 +15,11 @@ struct HomeDashTaskView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Tasks".uppercased())
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(Color(.label))
-            
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-                    ForEach(homeViewModel.timetables, id: \.self) { timetable in
-                        HomeDashTaskTimetableView(timetable: timetable)
-                    }
-                }
-        }.padding()
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
+            ForEach(homeViewModel.timetables, id: \.self) { timetable in
+                HomeDashTaskTimetableView(timetable: timetable)
+            }
+        }
     }
 }
 

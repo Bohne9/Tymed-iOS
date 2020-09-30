@@ -37,7 +37,13 @@ struct HomeDashView: View {
             
             HomeDashOverviewView()
             
-            HomeDashTaskView()
+            VStack(alignment: .leading) {
+                Text("Tasks".uppercased())
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(Color(.label))
+                
+                HomeDashTaskView()
+            }.padding()
             
 //            if homeViewModel.tasks.count > 0 {
 //                Section(header:
