@@ -62,6 +62,9 @@ class HomeWeekDayCollectionViewCell: UICollectionViewCell  {
         homeCalendarView.view.translatesAutoresizingMaskIntoConstraints = false
         homeCalendarView.view.constraintToSuperview()
         
+        print("Entry \(entry?.date) - \(entry?.entries.count)")
+        print(homeCalendarView.view.frame)
+        
         viewController?.addChild(homeCalendarView)
 
         backgroundColor = .systemGroupedBackground

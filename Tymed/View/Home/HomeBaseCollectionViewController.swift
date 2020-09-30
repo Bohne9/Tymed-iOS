@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate {
+class HomeBaseCollectionViewController: UICollectionViewController, HomeViewSceneDelegate {
 
 //    var homeDelegate: HomeCollectionViewDelegate?
 //    var taskDelegate: HomeTaskDetailDelegate?
@@ -51,7 +51,7 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
         
         collectionView.layoutIfNeeded()
         
-        collectionView.contentSize = collectionView.frame.size
+//        collectionView.contentSize = collectionView.frame.size
 
         collectionView.showsVerticalScrollIndicator = false
         
@@ -140,7 +140,7 @@ class HomeBaseCollectionView: UICollectionViewController, HomeViewSceneDelegate 
 
 }
 
-extension HomeBaseCollectionView {
+extension HomeBaseCollectionViewController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sectionIdentifiers.count
@@ -170,7 +170,7 @@ extension HomeBaseCollectionView {
     
 }
 
-extension HomeBaseCollectionView: UICollectionViewDelegateFlowLayout {
+extension HomeBaseCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
          return CGSize(width: collectionView.frame.width - 2 * 20, height: 80)
@@ -178,7 +178,7 @@ extension HomeBaseCollectionView: UICollectionViewDelegateFlowLayout {
     
 }
 
-extension HomeBaseCollectionView: UIAdaptivePresentationControllerDelegate {
+extension HomeBaseCollectionViewController: UIAdaptivePresentationControllerDelegate {
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         

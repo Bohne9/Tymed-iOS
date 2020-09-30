@@ -8,14 +8,14 @@
 
 import UIKit
 //MARK: HomeWeekCollectionView
-class HomeWeekCollectionView: HomeBaseCollectionView {
+class HomeWeekCollectionView: HomeBaseCollectionViewController {
     
     /// Indicates that the scene will be showed for the first time
     private var firstAppear = true
     
     var entries: [CalendarWeekEntry] = []
     
-    var homeViewModel: HomeViewModel?
+    var homeViewModel: HomeViewModel? = HomeViewModel()
     
     //MARK: setupUI()
     override internal func setupUserInterface() {
