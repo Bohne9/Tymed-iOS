@@ -38,9 +38,12 @@ struct HomeTaskView: View {
             HomeTaskViewContent(homeViewModel: homeViewModel)
         }else {
             List {
-                Text("Tasks".uppercased())
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(.label))
+                Section {
+                    Text("Tasks".uppercased())
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(.label))
+                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .background(Color(.systemBackground))
                 
                 HomeDashTaskView()
                 
@@ -137,9 +140,17 @@ struct HomeTaskViewContent: View {
     
     var body: some View {
         List {
-            Text("Tasks".uppercased())
-                .font(.system(size: 15, weight: .semibold))
+            Section {
+                HStack {
+                    Text("Tasks")
+                    
+                    Spacer()
+                }.font(.system(size: 20, weight: .semibold))
+                .padding(.top, 20)
                 .foregroundColor(Color(.label))
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .background(Color(.systemBackground))
+            }.background(Color(.systemBackground))
             
             HomeDashTaskView()
             

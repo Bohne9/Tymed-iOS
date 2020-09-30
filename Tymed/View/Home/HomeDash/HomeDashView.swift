@@ -38,7 +38,7 @@ struct HomeDashView: View {
             HomeDashOverviewView()
             
             VStack(alignment: .leading) {
-                Text("Tasks".uppercased())
+                Text("Tasks")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.label))
                 

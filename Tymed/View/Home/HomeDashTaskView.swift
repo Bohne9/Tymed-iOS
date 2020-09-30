@@ -31,7 +31,7 @@ struct HomeDashTaskTimetableView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            TimetableBadgeView(timetable: timetable, size: .normal, color: .appColorLight)
+            TimetableBadgeView(timetable: timetable, size: .normal)
             
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {

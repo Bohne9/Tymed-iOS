@@ -123,12 +123,12 @@ struct HomeDashOverviewEventView: View {
                 Spacer()
                 
                 if let timetable = event.timetable {
-                    TimetableBadgeView(timetable: timetable, size: .small)
+                    TimetableBadgeView(timetable: timetable, size: .small, color: .appColorLight)
                 }
             }
         }
         .padding(10)
-        .background(Color.appColorLight)
+        .background(Color.appColor)
         .cornerRadius(8)
         .onTapGesture {
             showEventDetail.toggle()
