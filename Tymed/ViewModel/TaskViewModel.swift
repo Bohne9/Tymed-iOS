@@ -47,6 +47,10 @@ class TaskViewModel: ObservableObject {
     @Published
     var recentlyArchived: [Task] = []
  
+    var hasTasks: Bool {
+        return !tasks.isEmpty
+    }
+    
     init() {
         reload()
     }
@@ -84,7 +88,7 @@ class TaskViewModel: ObservableObject {
                   let endOfWeek = now.endOfWeek else {
                 return false
             }
-            return dueDate >= now && dueDate < endOfWeek
+            return dueDate >= now.endOfDay && dueDate < endOfWeek
         }
         
         laterTasks = tasks.filter { task in

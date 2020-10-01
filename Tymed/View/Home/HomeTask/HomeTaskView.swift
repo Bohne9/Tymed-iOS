@@ -27,6 +27,9 @@ struct HomeTaskView: View {
     
     @ObservedObject
     var homeViewModel: HomeViewModel
+
+    @StateObject
+    var taskViewModel = TaskViewModel()
     
     @State
     private var showTaskAdd = false
@@ -34,12 +37,25 @@ struct HomeTaskView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
 
-            Text("Tasks")
-                .font(.system(size: 24, weight: .semibold))
+            HStack {
+                Text("Tasks")
+                    .font(.system(size: 24, weight: .semibold))
+
+                Spacer()
+                
+                Button {
+                    showTaskAdd.toggle()
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 25, weight: .semibold))
+                }
+
+            }
+            
             
             //MARK: HomeTaskViewContent
-            if !homeViewModel.tasks.isEmpty {
-                HomeTaskViewContent(homeViewModel: homeViewModel)
+            if taskViewModel.hasTasks {
+                HomeTaskViewContent(taskViewModel: taskViewModel)
             }else {
                 
                 HomeDashTaskView()
@@ -102,7 +118,7 @@ struct HomeTaskView: View {
             Spacer()
         }.padding()
         .environmentObject(homeViewModel)
-        .sheet(isPresented: $showTaskAdd, content: {
+        .sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
             TaskAddView {
                 homeViewModel.reload()
             }
@@ -115,7 +131,7 @@ struct HomeTaskView: View {
 struct HomeTaskViewContent: View {
     
     @ObservedObject
-    var homeViewModel: HomeViewModel
+    var taskViewModel: TaskViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -132,39 +148,72 @@ struct HomeTaskViewContent: View {
                 }
             }.font(.system(size: 16, weight: .semibold))
             
-            HStack {
-                Text("Overdue")
-                
-                Spacer()
-                
-                Button("Reschedule") {
-                    
-                }
-            }.font(.system(size: 16, weight: .semibold))
-            
-            
-            ForEach(homeViewModel.tasks, id: \.self) { task in
+            ForEach(taskViewModel.overdueTasks, id: \.self) { task in
                 HomeTaskCell(task: task)
             }
+            
+            if !taskViewModel.unlimitedTasks.isEmpty {
+                HomeTaskViewSection(header: "Unlimited", tasks: taskViewModel.unlimitedTasks)
+            }
+            
+            if !taskViewModel.todayTasks.isEmpty {
+                HomeTaskViewSection(header: "Today", tasks: taskViewModel.todayTasks)
+            }
+            
+            if !taskViewModel.weekTasks.isEmpty {
+                HomeTaskViewSection(header: "Week", tasks: taskViewModel.weekTasks)
+            }
+            
+            if !taskViewModel.laterTasks.isEmpty {
+                HomeTaskViewSection(header: "Later", tasks: taskViewModel.laterTasks)
+            }
+            
+            if !taskViewModel.recentlyArchived.isEmpty {
+                // Recently archived header
+                HStack {
+                    Text("Recently Archived")
+                    
+                    Spacer()
+                    
+                    Button("Unarchive & reschedule") {
+                        
+                    }.font(.system(size: 14, weight: .semibold))
+                }.font(.system(size: 16, weight: .semibold))
+                
+                ForEach(taskViewModel.recentlyArchived, id: \.self) { task in
+                    HomeTaskCell(task: task)
+                }
+            }
+            
         }
-    }
-    
-    
-    func taskCompletePercentage(for timetable: Timetable) -> CGFloat {
-        let tasks = homeViewModel.tasks(for: timetable)
-        
-        if tasks.count == 0 {
-            return -1
-        }
-        
-        let complete = CGFloat(tasks.filter { $0.completed }.count)
-        
-        return complete / CGFloat(tasks.count)
     }
     
 }
 
-
+struct HomeTaskViewSection: View {
+    
+    var header: String
+    
+    var tasks: [Task]
+    
+    var body: some View {
+        
+        VStack {
+            HStack {
+                Text(header)
+                
+                Spacer()
+                
+            }.font(.system(size: 16, weight: .semibold))
+            
+            ForEach(tasks, id: \.self) { task in
+                HomeTaskCell(task: task)
+            }
+        }
+        
+    }
+    
+}
 
 
 struct HomeTaskView_Previews: PreviewProvider {

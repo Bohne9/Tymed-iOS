@@ -36,7 +36,7 @@ class BackgroundRoutineService {
         let tasks = TimetableService.shared.getAllTasks()
         
         for task in tasks {
-            guard let due = task.due else {
+            guard let due = task.due ?? task.completionDate else {
                 continue
             }
             

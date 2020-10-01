@@ -45,7 +45,7 @@ struct HomeTaskCell: View {
                 if let date = task.due {
                     Text(textFor(date: date))
                         .font(.system(size: 13, weight: .medium))
-                        .foregroundColor(Color(.secondaryLabel))
+                        .foregroundColor(Color(colorFor(due: date)))
                 }
             }
             
@@ -70,4 +70,12 @@ struct HomeTaskCell: View {
         return "\(date.stringify(dateStyle: .short, timeStyle: .short))"
     }
     
+    private func colorFor(due date: Date) -> UIColor {
+        if date < Date(){
+            return .systemRed
+        }else if date.timeIntervalSinceNow < 3600 {
+            return .systemOrange
+        }
+        return .secondaryLabel
+    }
 }
