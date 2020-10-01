@@ -78,9 +78,6 @@ struct HomeTaskView: View {
                         VStack {
                             ForEach(tasks, id: \.self) { task in
                                 HomeTaskCell(task: task)
-                                    .frame(height: 55)
-                                    .background(Color(.secondarySystemBackground))
-                                    .cornerRadius(12)
                             }
                         }
                     }
@@ -148,9 +145,6 @@ struct HomeTaskViewContent: View {
             
             ForEach(homeViewModel.tasks, id: \.self) { task in
                 HomeTaskCell(task: task)
-                    .frame(height: 55)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(12)
             }
         }
     }

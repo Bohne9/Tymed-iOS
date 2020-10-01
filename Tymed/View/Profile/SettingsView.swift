@@ -23,6 +23,12 @@ struct SettingsView: View {
     var body: some View {
         List {
             
+            Section(header: Text("App Icon")) {
+                NavigationLink(destination: AppIconPicker()) {
+                    Text("App Icon")
+                }
+            }
+            
             Section(header: Text("Notifications")) {
                 HStack {
                     DetailCellDescriptor("Send lesson reminders", image: "paperplane.fill", .systemGreen)
@@ -126,7 +132,7 @@ struct SettingsView: View {
     }
 }
 
-
+//MARK: AutoArchiveDelayTaskPickerView
 struct AutoArchiveDelayTaskPickerView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -187,6 +193,52 @@ struct AutoArchiveDelayTaskPickerView: View {
 
 }
 
+struct AppIconPicker: View {
+    
+    @State
+    var currentIcon = UIApplication.shared.alternateIconName
+    
+    private var appIcons = ["Light", "Dark"]
+    
+    var body: some View {
+        
+        List {
+            
+            ForEach(appIcons, id: \.self) { icon in
+                HStack {
+                    Image("AppLogo_\(icon)")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.trailing)
+                    Text(icon)
+                        .font(.system(size: 15, weight: .semibold))
+                    Spacer()
+                    
+                    if "AppIcon_\(icon)" == currentIcon {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(Color(.systemBlue))
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    currentIcon = "AppIcon_\(icon)"
+                    UIApplication.shared.setAlternateIconName(currentIcon) { error in
+                        if let error = error {
+                            print(error.localizedDescription)
+                        } else {
+                            print("Success!")
+                        }
+                    }
+                    currentIcon = UIApplication.shared.alternateIconName
+                }
+            }
+            
+        }
+        
+    }
+    
+}
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -51,6 +51,9 @@ struct HomeTaskCell: View {
             
             Spacer()
         }.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 10))
+        .frame(height: 55)
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
         .contentShape(RoundedRectangle(cornerRadius: 12))
         .onTapGesture {
             showTaskDetail.toggle()

@@ -105,7 +105,7 @@ struct ProfileView: View {
                     HStack {
                         Spacer()
                         //                    HStack(alignment: .center) {
-                        Image(uiImage: #imageLiteral(resourceName: "logo"))
+                        Image("AppLogo_Dark")
                             .resizable()
                             .frame(width: 60, height:  60)
                         
