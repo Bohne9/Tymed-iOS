@@ -44,6 +44,8 @@ class HomeViewModel: ObservableObject {
     init(anchor: Date = Date()) {
         anchorDate = anchor
         
+        tasks = timetableService.getTasks(after: anchorDate).sorted()
+        
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
         
         nextCalendarEvent = upcomingCalendarDay.entries.first
@@ -52,11 +54,11 @@ class HomeViewModel: ObservableObject {
             nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
         }
         
-        tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
-        
         scheduleTimeUpdater()
         
         dayDebrief = DayDebriefViewModel(self)
+        
+        objectWillChange.send()
     }
     
     private func taskThresholdDate() -> Date {

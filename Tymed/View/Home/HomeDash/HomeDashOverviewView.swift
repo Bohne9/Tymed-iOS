@@ -45,7 +45,7 @@ struct HomeDashOverviewView: View {
                     }
                 }
                 .padding(10)
-                .background(Color.appColorLight)
+                .background(Color.appColor)
                 .cornerRadius(8)
                 .onTapGesture {
                     showEventAdd.toggle()
@@ -53,7 +53,7 @@ struct HomeDashOverviewView: View {
                     EventAddView()
                 }
             }
-        }.padding(.horizontal)
+        }
     }
 }
 

@@ -22,9 +22,9 @@ struct HomeTaskCell: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            Rectangle()
+            RoundedRectangle(cornerRadius: 5, style: .circular)
                 .foregroundColor(Color(UIColor(task.timetable) ?? .clear))
-                .frame(width: 10, height: 55)
+                .frame(width: 8, height: 40)
             
             Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: 22.5, weight: .semibold))
@@ -50,13 +50,13 @@ struct HomeTaskCell: View {
             }
             
             Spacer()
-        }.contentShape(RoundedRectangle(cornerRadius: 12))
+        }.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 10))
+        .contentShape(RoundedRectangle(cornerRadius: 12))
         .onTapGesture {
             showTaskDetail.toggle()
         }.sheet(isPresented: $showTaskDetail, content: {
             TaskEditView(task: task, dismiss: { homeViewModel.reload() })
         })
-        .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
         .onChange(of: task.completed) { value in
             task.completionDate = value ? Date() : nil
             TimetableService.shared.save()

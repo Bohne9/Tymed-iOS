@@ -141,7 +141,6 @@ struct TimetableOverview: View {
                 ])
             })
             .navigationTitle("Calendars")
-            .navigationBarHidden(true)
             .navigationViewStyle(DoubleColumnNavigationViewStyle())
             .navigationBarTitleDisplayMode(.inline)
         }

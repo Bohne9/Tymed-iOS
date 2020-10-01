@@ -45,6 +45,7 @@
 		4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F77752456CA6400038729 /* NavigationBar.swift */; };
 		4F7F777824575AB100038729 /* HomeTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F777724575AB100038729 /* HomeTopBar.swift */; };
 		4F7F777A245766E400038729 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7F7779245766E400038729 /* HomeViewController.swift */; };
+		4F89BC0D2525DC90005A5854 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F89BC0C2525DC90005A5854 /* TaskViewModel.swift */; };
 		4F8E058024D9EB3E00748F47 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */; };
 		4F8E058224DA769600748F47 /* LessonEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058124DA769600748F47 /* LessonEditView.swift */; };
 		4F8E058424DA77F900748F47 /* DetailCellDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */; };
@@ -170,6 +171,7 @@
 		4F7F77752456CA6400038729 /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		4F7F777724575AB100038729 /* HomeTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTopBar.swift; sourceTree = "<group>"; };
 		4F7F7779245766E400038729 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4F89BC0C2525DC90005A5854 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		4F8E057F24D9EB3E00748F47 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		4F8E058124DA769600748F47 /* LessonEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonEditView.swift; sourceTree = "<group>"; };
 		4F8E058324DA77F900748F47 /* DetailCellDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCellDescriptor.swift; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				4F730A1325167CF6001F117D /* DayDebriefViewModel.swift */,
 				4FA04A8D251F463A004236CF /* AppSetupModel.swift */,
 				4FBF0F48252342B900CE789C /* CalendarViewModel.swift */,
+				4F89BC0C2525DC90005A5854 /* TaskViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -866,6 +869,7 @@
 				4FC1B22D25222D9200B3D8C9 /* AppContentView.swift in Sources */,
 				4FBF0F49252342B900CE789C /* CalendarViewModel.swift in Sources */,
 				4F8EEB2925114CCF00F3D4B9 /* EventEditView.swift in Sources */,
+				4F89BC0D2525DC90005A5854 /* TaskViewModel.swift in Sources */,
 				4FC43419251B546000D8EC0A /* AppStartSetup.swift in Sources */,
 				4FAB1F442513B5F9007D5167 /* HomeViewModel.swift in Sources */,
 				4FC7CDB5247310D8004F5642 /* DynamicTableViewController.swift in Sources */,

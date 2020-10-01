@@ -31,7 +31,7 @@ struct HomeDashView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 15) {
             
             HomeDashHeaderView()
             
@@ -43,7 +43,7 @@ struct HomeDashView: View {
                     .foregroundColor(Color(.label))
                 
                 HomeDashTaskView()
-            }.padding()
+            }
             
 //            if homeViewModel.tasks.count > 0 {
 //                Section(header:
@@ -77,7 +77,7 @@ struct HomeDashView: View {
                     .foregroundColor(Color(.label))
                     .padding(.leading, 5)
                 HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
-            }.padding()
+            }
 //
 //            }
 //
@@ -95,6 +95,7 @@ struct HomeDashView: View {
             
             Spacer()
         }
+        .padding()
         .environmentObject(homeViewModel)
         .onAppear {
             homeViewModel.reload()

@@ -707,6 +707,7 @@ class TimetableService: ObservableObject {
         }
     }
     
+    /// Returns all tasks that aren't archived at the moment
     func getAllTasks() -> [Task] {
         let predicate = NSPredicate(format: "archived == false")
         return getTasks(predicate)

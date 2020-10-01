@@ -32,102 +32,84 @@ struct HomeTaskView: View {
     private var showTaskAdd = false
     
     var body: some View {
-        
-        //MARK: HomeTaskViewContent
-        if !homeViewModel.tasks.isEmpty {
-            HomeTaskViewContent(homeViewModel: homeViewModel)
-        }else {
-            List {
-                Section {
-                    Text("Tasks".uppercased())
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(Color(.label))
-                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .background(Color(.systemBackground))
+        VStack(alignment: .leading, spacing: 15) {
+
+            Text("Tasks")
+                .font(.system(size: 24, weight: .semibold))
+            
+            //MARK: HomeTaskViewContent
+            if !homeViewModel.tasks.isEmpty {
+                HomeTaskViewContent(homeViewModel: homeViewModel)
+            }else {
                 
                 HomeDashTaskView()
                 
                 //MARK: No tasks image
-                Section {
+                VStack(spacing: 20) {
                     
-                    VStack(spacing: 20) {
-                        
-                        Spacer()
-                        
-                        Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(.horizontal, 30)
-
-                        Button(action: {
-                            showTaskAdd.toggle()
-                        }, label: {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "plus")
-                                Text("Add a task")
-                                Spacer()
-                            }.font(.system(size: 17.5, weight: .semibold))
+                    Spacer()
+                    
+                    Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.horizontal, 50)
+                    
+                    Button(action: {
+                        showTaskAdd.toggle()
+                    }, label: {
+                        Label("Add a task", systemImage: "plus")
+                            .font(.system(size: 17.5, weight: .semibold))
                             .padding()
                             .background(Color(.secondarySystemGroupedBackground))
                             .cornerRadius(12)
-                        })
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 30)
-                    .background(Color(.systemGroupedBackground))
-                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                
-                //MARK: Recently archived
-                if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
+                    })
                     
-                    if let tasks = BackgroundRoutineService.standard.archivedTasksOfSession {
-                        Section (header: HStack {
-                            Text("Recently archived")
-                            Spacer()
-//                            Button("Put back") {
-//                                tasks.forEach { $0.archived = false }
-//                                TimetableService.shared.save()
-//                                BackgroundRoutineService.standard.archivedTasksOfSession = []
-//                                homeViewModel.reload()
-//                            }.foregroundColor(Color(.systemBlue))
-                        }.font(.system(size: 14, weight: .semibold))) {
-                            VStack {
-                                ForEach(tasks, id: \.self) { task in
-                                    HomeTaskCell(task: task)
-                                        .environmentObject(homeViewModel)
-                                        .frame(height: 45)
-                                }
-                            }.listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
+                    Spacer()
+                }.padding(.horizontal, 30)
+            }
+            //MARK: Recently archived
+            if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
+                
+                if let tasks = BackgroundRoutineService.standard.archivedTasksOfSession {
+                    Section (header: HStack {
+                        Text("Recently archived")
+                        Spacer()
+                    }.font(.system(size: 14, weight: .semibold))) {
+                        VStack {
+                            ForEach(tasks, id: \.self) { task in
+                                HomeTaskCell(task: task)
+                                    .frame(height: 55)
+                                    .background(Color(.secondarySystemBackground))
+                                    .cornerRadius(12)
+                            }
                         }
                     }
-                    
-                    Section {
-                        HStack {
-                            Image(systemName: "info.circle")
-                                .foregroundColor(Color(.systemBlue))
-                                .font(.system(size: 18, weight: .semibold))
-                            Text("Learn more about automatic task archiving")
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(Color(.secondaryLabel))
-                        }.font(.system(size: 14, weight: .semibold))
-                    }
-                    
                 }
                 
-            }.listStyle(InsetGroupedListStyle())
-            .environmentObject(homeViewModel)
-            .sheet(isPresented: $showTaskAdd, content: {
-                TaskAddView {
-                    homeViewModel.reload()
+                Section {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(Color(.systemBlue))
+                            .font(.system(size: 18, weight: .semibold))
+                        Text("Learn more about automatic task archiving")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(Color(.secondaryLabel))
+                    }.font(.system(size: 14, weight: .semibold))
                 }
-            })
-        }
-        
+                
+            }
+            
+            Spacer()
+        }.padding()
+        .environmentObject(homeViewModel)
+        .sheet(isPresented: $showTaskAdd, content: {
+            TaskAddView {
+                homeViewModel.reload()
+            }
+        })
     }
     
 }
@@ -139,31 +121,38 @@ struct HomeTaskViewContent: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        List {
-            Section {
-                HStack {
-                    Text("Tasks")
-                    
-                    Spacer()
-                }.font(.system(size: 20, weight: .semibold))
-                .padding(.top, 20)
-                .foregroundColor(Color(.label))
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                .background(Color(.systemBackground))
-            }.background(Color(.systemBackground))
-            
+        VStack(alignment: .leading, spacing: 15) {
             HomeDashTaskView()
+            
+            // Overdue header
+            HStack {
+                Text("Overdue")
+                
+                Spacer()
+                
+                Button("Reschedule") {
+                    
+                }
+            }.font(.system(size: 16, weight: .semibold))
+            
+            HStack {
+                Text("Overdue")
+                
+                Spacer()
+                
+                Button("Reschedule") {
+                    
+                }
+            }.font(.system(size: 16, weight: .semibold))
             
             
             ForEach(homeViewModel.tasks, id: \.self) { task in
-                Section {
-                    HomeTaskCell(task: task)
-                        .frame(height: 45)
-                }
+                HomeTaskCell(task: task)
+                    .frame(height: 55)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
             }
-            
-        }.listStyle(InsetGroupedListStyle())
-        .environmentObject(homeViewModel)
+        }
     }
     
     

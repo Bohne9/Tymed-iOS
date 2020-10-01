@@ -33,7 +33,7 @@ struct HomeDashHeaderView: View {
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 25, weight: .semibold))
-                        .foregroundColor(.appColorLight)
+                        .foregroundColor(.appColor)
                 }.sheet(isPresented: $showTaskAddView) {
                     TaskAddView {
                         
@@ -55,7 +55,7 @@ struct HomeDashHeaderView: View {
             }
             
             
-        }.padding()
+        }
     }
 }
 
