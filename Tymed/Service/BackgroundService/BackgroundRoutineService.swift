@@ -16,7 +16,9 @@ class BackgroundRoutineService {
     /// A list of tasks that have been archived at the start of the session
     var archivedTasksOfSession: [Task]?
     
-    internal init () { }
+    internal init () {
+        appLaunchRoutine()
+    }
     
     func appLaunchRoutine() {
         

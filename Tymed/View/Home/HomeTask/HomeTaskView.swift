@@ -48,7 +48,11 @@ struct HomeTaskView: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 25, weight: .semibold))
-                }
+                }.sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
+                    TaskAddView {
+                        homeViewModel.reload()
+                    }
+                })
 
             }
             
@@ -58,7 +62,7 @@ struct HomeTaskView: View {
                 HomeTaskViewContent(taskViewModel: taskViewModel)
             }else {
                 
-                HomeDashTaskView()
+                HomeDashTaskView(taskViewModel: taskViewModel)
                 
                 //MARK: No tasks image
                 VStack(spacing: 20) {
@@ -73,16 +77,25 @@ struct HomeTaskView: View {
                     Button(action: {
                         showTaskAdd.toggle()
                     }, label: {
-                        Label("Add a task", systemImage: "plus")
-                            .font(.system(size: 17.5, weight: .semibold))
-                            .padding()
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .cornerRadius(12)
+                        HStack {
+                            Spacer()
+                            Label("Add a task", systemImage: "plus")
+                                .font(.system(size: 17.5, weight: .semibold))
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .cornerRadius(12)
+                    }).sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
+                        TaskAddView {
+                            homeViewModel.reload()
+                        }
                     })
                     
                     Spacer()
                 }.padding(.horizontal, 30)
             }
+            /*
             //MARK: Recently archived
             if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
                 
@@ -114,15 +127,14 @@ struct HomeTaskView: View {
                 }
                 
             }
-            
+            */
             Spacer()
         }.padding()
+        .onAppear {
+            taskViewModel.reload()
+            homeViewModel.reload()
+        }
         .environmentObject(homeViewModel)
-        .sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
-            TaskAddView {
-                homeViewModel.reload()
-            }
-        })
     }
     
 }
@@ -135,21 +147,23 @@ struct HomeTaskViewContent: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            HomeDashTaskView()
+            HomeDashTaskView(taskViewModel: taskViewModel)
             
-            // Overdue header
-            HStack {
-                Text("Overdue")
-                
-                Spacer()
-                
-                Button("Reschedule") {
+            if !taskViewModel.overdueTasks.isEmpty {
+                // Overdue header
+                HStack {
+                    Text("Overdue")
                     
+                    Spacer()
+                    
+                    Button("Reschedule") {
+                        
+                    }
+                }.font(.system(size: 16, weight: .semibold))
+                
+                ForEach(taskViewModel.overdueTasks, id: \.self) { task in
+                    HomeTaskCell(task: task)
                 }
-            }.font(.system(size: 16, weight: .semibold))
-            
-            ForEach(taskViewModel.overdueTasks, id: \.self) { task in
-                HomeTaskCell(task: task)
             }
             
             if !taskViewModel.unlimitedTasks.isEmpty {
@@ -185,7 +199,7 @@ struct HomeTaskViewContent: View {
                 }
             }
             
-        }
+        }.environmentObject(taskViewModel)
     }
     
 }
@@ -198,7 +212,7 @@ struct HomeTaskViewSection: View {
     
     var body: some View {
         
-        VStack {
+        Group {
             HStack {
                 Text(header)
                 

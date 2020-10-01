@@ -42,7 +42,7 @@ struct HomeDashView: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.label))
                 
-                HomeDashTaskView()
+                HomeDashTaskView(taskViewModel: TaskViewModel())
             }
             
 //            if homeViewModel.tasks.count > 0 {

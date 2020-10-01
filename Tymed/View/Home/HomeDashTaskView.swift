@@ -14,12 +14,15 @@ struct HomeDashTaskView: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    @StateObject
+    var taskViewModel: TaskViewModel
+    
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
             ForEach(homeViewModel.timetables, id: \.self) { timetable in
                 HomeDashTaskTimetableView(timetable: timetable)
             }
-        }
+        }.environmentObject(taskViewModel)
     }
 }
 
@@ -27,6 +30,9 @@ struct HomeDashTaskTimetableView: View {
     
     @ObservedObject
     var timetable: Timetable
+    
+    @EnvironmentObject
+    var taskViewModel: TaskViewModel
     
     var body: some View {
         
@@ -62,16 +68,11 @@ struct HomeDashTaskTimetableView: View {
     }
     
     private func remainingTasksCount() -> Int {
-        return (timetable.tasks?.allObjects as? [Task])?.filter { !$0.completed }.count ?? 0
+        return taskViewModel.remainingTasks(for: timetable).count
     }
     
     private func doneTasksCount() -> Int {
-        return (timetable.tasks?.allObjects as? [Task])?.filter { $0.completed }.count ?? 0
+        return taskViewModel.completedTasks(for: timetable).count
     }
 }
 
-struct HomeDashTaskView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeDashTaskView()
-    }
-}

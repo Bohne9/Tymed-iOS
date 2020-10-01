@@ -14,6 +14,9 @@ struct HomeTaskCell: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    @EnvironmentObject
+    var taskViewModel: TaskViewModel
+    
     @ObservedObject
     var task: Task
     
@@ -34,6 +37,7 @@ struct HomeTaskCell: View {
                     withAnimation {
                         task.completed.toggle()
                         TimetableService.shared.save()
+                        taskViewModel.reload()
                         homeViewModel.reload()
                     }
                 }
@@ -50,6 +54,21 @@ struct HomeTaskCell: View {
             }
             
             Spacer()
+            
+            if task.archived {
+                Image(systemName: "tray.and.arrow.up.fill")
+                    .font(.system(size: 17.5, weight: .semibold))
+                    .foregroundColor(Color(.systemBlue))
+                    .padding(.trailing)
+                    .onTapGesture {
+                        withAnimation {
+                            task.archived = false
+                            TimetableService.shared.save()
+                            homeViewModel.reload()
+                            taskViewModel.reload()
+                        }
+                    }
+            }
         }.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 10))
         .frame(height: 55)
         .background(Color(.secondarySystemBackground))
@@ -57,10 +76,12 @@ struct HomeTaskCell: View {
         .contentShape(RoundedRectangle(cornerRadius: 12))
         .onTapGesture {
             showTaskDetail.toggle()
-        }.sheet(isPresented: $showTaskDetail, content: {
+        }.sheet(isPresented: $showTaskDetail, onDismiss: {
+            taskViewModel.reload()
+            homeViewModel.reload()
+        }, content: {
             TaskEditView(task: task, dismiss: { homeViewModel.reload() })
-        })
-        .onChange(of: task.completed) { value in
+        }).onChange(of: task.completed) { value in
             task.completionDate = value ? Date() : nil
             TimetableService.shared.save()
         }
@@ -71,6 +92,10 @@ struct HomeTaskCell: View {
     }
     
     private func colorFor(due date: Date) -> UIColor {
+        if task.completed {
+            return .secondaryLabel
+        }
+        
         if date < Date(){
             return .systemRed
         }else if date.timeIntervalSinceNow < 3600 {

@@ -146,6 +146,7 @@ struct AutoArchiveDelayTaskPickerView: View {
                 
                 Text("The app can automatically archive tasks with an expired due date. You can select how much time has to pass after the due date expires until the task is automatically archived.")
                     .font(.system(size: 14, weight: .semibold))
+                    .padding(.vertical)
                 
             }
             
@@ -164,7 +165,6 @@ struct AutoArchiveDelayTaskPickerView: View {
             .frame(height: 45)
             .onTapGesture {
                 autoArchiveDelay = nil
-                presentationMode.wrappedValue.dismiss()
             }
             
             ForEach(SettingsService.TaskAutoArchiveDelay.allCases, id: \.delay) { delay in
@@ -183,7 +183,6 @@ struct AutoArchiveDelayTaskPickerView: View {
                 .frame(height: 45)
                 .onTapGesture {
                     autoArchiveDelay = delay
-                    presentationMode.wrappedValue.dismiss()
                 }
             }
             
@@ -206,9 +205,10 @@ struct AppIconPicker: View {
             
             ForEach(appIcons, id: \.self) { icon in
                 HStack {
-                    Image("AppLogo_\(icon)")
+                    Image("AppLogo-\(icon)")
                         .resizable()
                         .frame(width: 50, height: 50)
+                        .cornerRadius(12)
                         .aspectRatio(contentMode: .fit)
                         .padding(.trailing)
                     Text(icon)
@@ -218,7 +218,7 @@ struct AppIconPicker: View {
                     if "AppIcon_\(icon)" == currentIcon {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(Color(.systemBlue))
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.system(size: 20, weight: .semibold))
                     }
                 }.contentShape(Rectangle())
                 .onTapGesture {
@@ -231,10 +231,11 @@ struct AppIconPicker: View {
                         }
                     }
                     currentIcon = UIApplication.shared.alternateIconName
-                }
+                }.padding(.vertical)
             }
             
-        }
+        }.navigationTitle("App Icon")
+        .listStyle(InsetGroupedListStyle())
         
     }
     
