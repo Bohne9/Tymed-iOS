@@ -105,9 +105,10 @@ struct ProfileView: View {
                     HStack {
                         Spacer()
                         //                    HStack(alignment: .center) {
-                        Image("AppLogo_Dark")
+                        Image("AppLogo-Dark")
                             .resizable()
                             .frame(width: 60, height:  60)
+                            .cornerRadius(12)
                         
                         Text("Tymed")
                             .font(.system(size: 13, weight: .semibold))

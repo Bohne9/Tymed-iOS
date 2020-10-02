@@ -70,7 +70,8 @@ class TaskViewModel: ObservableObject {
         let now = Date()
         
         overdueTasks = tasks.filter { task in
-            guard let dueDate = task.due else {
+            guard let dueDate = task.due,
+                  task.completed else {
                 return false
             }
             return dueDate < now

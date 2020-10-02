@@ -43,8 +43,23 @@ struct HomeTaskCell: View {
                 }
             
             VStack(alignment: .leading, spacing: 5) {
-                Text(task.title)
-                    .font(.system(size: 15, weight: .semibold))
+                HStack {
+                    if task.completed {
+                        Text(task.title)
+                            .font(.system(size: 15, weight: .semibold))
+                            .strikethrough()
+                            .foregroundColor(Color(.secondaryLabel))
+                    }else {
+                        Text(task.title)
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+
+                    if task.archived {
+                        Image(systemName: "tray.full.fill")
+                            .foregroundColor(Color(task.completed ? .tertiaryLabel : .secondaryLabel))
+                    }
+                }
+                
                 
                 if let date = task.due {
                     Text(textFor(date: date))
@@ -93,7 +108,7 @@ struct HomeTaskCell: View {
     
     private func colorFor(due date: Date) -> UIColor {
         if task.completed {
-            return .secondaryLabel
+            return .tertiaryLabel
         }
         
         if date < Date(){

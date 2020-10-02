@@ -105,7 +105,7 @@ struct HomeDashOverviewEventView: View {
             HStack {
                
                 RoundedRectangle(cornerRadius: 2)
-                    .foregroundColor(Color(UIColor.cyan.withAlphaComponent(0.5)))
+                    .foregroundColor(Color(UIColor(event) ?? .appColor))
                     .frame(width: 4, height: 12)
                 
                 Text(event.title)

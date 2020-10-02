@@ -153,13 +153,18 @@ struct HomeTaskViewContent: View {
                 // Overdue header
                 HStack {
                     Text("Overdue")
+                        .font(.system(size: 16, weight: .semibold))
                     
                     Spacer()
                     
                     Button("Reschedule") {
-                        
-                    }
-                }.font(.system(size: 16, weight: .semibold))
+                        taskViewModel.overdueTasks.forEach { (task) in
+                            task.due = Date() + 3600 * 2
+                        }
+                        TimetableService.shared.save()
+                        taskViewModel.reload()
+                    }.font(.system(size: 14, weight: .semibold))
+                }
                 
                 ForEach(taskViewModel.overdueTasks, id: \.self) { task in
                     HomeTaskCell(task: task)
@@ -190,7 +195,12 @@ struct HomeTaskViewContent: View {
                     Spacer()
                     
                     Button("Unarchive & reschedule") {
-                        
+                        taskViewModel.overdueTasks.forEach { (task) in
+                            task.archived = false
+                            task.due = Date() + 3600 * 2
+                        }
+                        TimetableService.shared.save()
+                        taskViewModel.reload()
                     }.font(.system(size: 14, weight: .semibold))
                 }.font(.system(size: 16, weight: .semibold))
                 
@@ -199,11 +209,14 @@ struct HomeTaskViewContent: View {
                 }
             }
             
+            HomeTaskViewHelp()
+            
         }.environmentObject(taskViewModel)
     }
     
 }
 
+//MARK: HomeTaskViewSection
 struct HomeTaskViewSection: View {
     
     var header: String
@@ -212,7 +225,7 @@ struct HomeTaskViewSection: View {
     
     var body: some View {
         
-        Group {
+        VStack {
             HStack {
                 Text(header)
                 
@@ -225,6 +238,49 @@ struct HomeTaskViewSection: View {
             }
         }
         
+    }
+    
+}
+
+struct HomeTaskViewHelp: View {
+    
+    @State
+    private var showHelpView = false
+    
+    var body: some View {
+        
+        HStack(alignment: .top) {
+            Image(systemName: "info.circle.fill")
+                .foregroundColor(Color(.systemBlue))
+                .font(.system(size: 15, weight: .semibold))
+                .padding(.top, 2.5)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("Need help?")
+                    .font(.system(size: 14, weight: .semibold))
+                
+                Text("Learn about the icons and more.")
+                    .foregroundColor(Color(.secondaryLabel))
+                    .font(.system(size: 12, weight: .regular))
+            }
+            Spacer()
+            
+            VStack {
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(.secondaryLabel))
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+            }
+        }.padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .frame(height: 45)
+        .padding(.vertical)
+        .onTapGesture {
+            showHelpView.toggle()
+        }.sheet(isPresented: $showHelpView) {
+            Text("Help")
+        }
     }
     
 }

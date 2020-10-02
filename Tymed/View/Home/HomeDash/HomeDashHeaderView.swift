@@ -35,9 +35,7 @@ struct HomeDashHeaderView: View {
                         .font(.system(size: 25, weight: .semibold))
                         .foregroundColor(.appColor)
                 }.sheet(isPresented: $showTaskAddView) {
-                    TaskAddView {
-                        
-                    }
+                    EventAddView()
                 }.padding(.trailing)
 
                 
