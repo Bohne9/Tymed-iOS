@@ -29,6 +29,9 @@ struct HomeView: View {
             }
             
         }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        .onTapGesture(count: 1, perform: {
+            EventService.shared.oneYearFromNow()
+        })
     }
 }
 
