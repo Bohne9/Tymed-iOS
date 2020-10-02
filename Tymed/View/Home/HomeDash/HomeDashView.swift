@@ -31,74 +31,76 @@ struct HomeDashView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 15) {
-            
-            HomeDashHeaderView()
-            
-            HomeDashOverviewView()
-            
-            VStack(alignment: .leading) {
-                Text("Tasks")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(.label))
+        ScrollView {
+            VStack(alignment: .leading, spacing: 15) {
                 
-                HomeDashTaskView(taskViewModel: TaskViewModel())
-            }
-            
-//            if homeViewModel.tasks.count > 0 {
-//                Section(header:
-//                            Text("Tasks")
-//                            .font(.system(size: 13, weight: .semibold))
-//                            .foregroundColor(Color(.label))) {
-//                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
-//                        Section {
-//                            HomeTaskCell(task: task)
-//                                .environmentObject(homeViewModel)
-//                                .frame(height: 45)
-//                        }
-//                    }
-//                    if homeViewModel.tasks.count > 3 {
-//                        HStack {
-//                            Text("See all tasks")
-//                            Spacer()
-//
-//                            Image(systemName: "arrow.right")
-//                        }.font(.system(size: 15, weight: .semibold))
-//                        .foregroundColor(Color(.systemBlue))
-//                    }
-//                }
-//            }
-//
-//
-//            Section(header:
-            VStack(alignment: .leading) {
-                Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(Color(.label))
-                    .padding(.leading, 5)
-                HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
-            }
-//
-//            }
-//
-            if let nextCalendarDay = homeViewModel.nextCalendarDay,
-                homeViewModel.nextCalendarDay?.entries.count ?? 0 > 0 {
+                HomeDashHeaderView()
+                
+                HomeDashOverviewView()
+                
                 VStack(alignment: .leading) {
-                    Text("\(nextCalendarDay.date.stringify(with: .medium))")
+                    Text("Tasks")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(Color(.label))
+                    
+                    HomeDashTaskView(taskViewModel: TaskViewModel())
+                }
+                
+    //            if homeViewModel.tasks.count > 0 {
+    //                Section(header:
+    //                            Text("Tasks")
+    //                            .font(.system(size: 13, weight: .semibold))
+    //                            .foregroundColor(Color(.label))) {
+    //                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
+    //                        Section {
+    //                            HomeTaskCell(task: task)
+    //                                .environmentObject(homeViewModel)
+    //                                .frame(height: 45)
+    //                        }
+    //                    }
+    //                    if homeViewModel.tasks.count > 3 {
+    //                        HStack {
+    //                            Text("See all tasks")
+    //                            Spacer()
+    //
+    //                            Image(systemName: "arrow.right")
+    //                        }.font(.system(size: 15, weight: .semibold))
+    //                        .foregroundColor(Color(.systemBlue))
+    //                    }
+    //                }
+    //            }
+    //
+    //
+    //            Section(header:
+                VStack(alignment: .leading) {
+                    Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(Color(.label))
                         .padding(.leading, 5)
-                    HomeDashCalendarView(event: nextCalendarDay)
-                        .environmentObject(TimetableService.shared)
-                }.padding()
+                    HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
+                }
+    //
+    //            }
+    //
+                if let nextCalendarDay = homeViewModel.nextCalendarDay,
+                    homeViewModel.nextCalendarDay?.entries.count ?? 0 > 0 {
+                    VStack(alignment: .leading) {
+                        Text("\(nextCalendarDay.date.stringify(with: .medium))")
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(Color(.label))
+                            .padding(.leading, 5)
+                        HomeDashCalendarView(event: nextCalendarDay)
+                            .environmentObject(TimetableService.shared)
+                    }
+                }
+                
+//                Spacer()
             }
-            
-            Spacer()
-        }
-        .padding()
-        .environmentObject(homeViewModel)
-        .onAppear {
-            homeViewModel.reload()
+            .padding()
+            .environmentObject(homeViewModel)
+            .onAppear {
+                homeViewModel.reload()
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ struct HomeTaskCell: View {
             
             Image(systemName: task.completed ? "checkmark.circle.fill" : "circle")
                 .font(.system(size: 22.5, weight: .semibold))
-                .foregroundColor(Color(task.completed ? .systemGreen : .secondaryLabel))
+                .foregroundColor(Color(task.completed ? .secondaryLabel : .systemBlue))
                 .frame(width: 25, height: 25)
                 .onTapGesture {
                     withAnimation {
@@ -57,6 +57,7 @@ struct HomeTaskCell: View {
                     if task.archived {
                         Image(systemName: "tray.full.fill")
                             .foregroundColor(Color(task.completed ? .tertiaryLabel : .secondaryLabel))
+                            .font(.system(size: 13, weight: .semibold))
                     }
                 }
                 
@@ -77,7 +78,7 @@ struct HomeTaskCell: View {
                     .padding(.trailing)
                     .onTapGesture {
                         withAnimation {
-                            task.archived = false
+                            task.unarchive()
                             TimetableService.shared.save()
                             homeViewModel.reload()
                             taskViewModel.reload()

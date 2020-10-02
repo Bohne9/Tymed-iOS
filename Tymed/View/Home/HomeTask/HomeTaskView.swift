@@ -196,7 +196,7 @@ struct HomeTaskViewContent: View {
                     
                     Button("Unarchive & reschedule") {
                         taskViewModel.overdueTasks.forEach { (task) in
-                            task.archived = false
+                            task.unarchive()
                             task.due = Date() + 3600 * 2
                         }
                         TimetableService.shared.save()
@@ -210,6 +210,26 @@ struct HomeTaskViewContent: View {
             }
             
             HomeTaskViewHelp()
+            
+            if !taskViewModel.archivedTasks.isEmpty {
+                HStack {
+                    Image(systemName: "tray.full.fill")
+                        .foregroundColor(Color(.systemBlue))
+                        .font(.system(size: 16, weight: .semibold))
+                    Text("Archive")
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(Color(.secondaryLabel))
+                        .font(.system(size: 12, weight: .semibold))
+                    
+                }.padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+                .frame(height: 40)
+                .padding(.vertical)
+            }
             
         }.environmentObject(taskViewModel)
     }
@@ -242,6 +262,7 @@ struct HomeTaskViewSection: View {
     
 }
 
+//MARK: HomeTaskViewHelp
 struct HomeTaskViewHelp: View {
     
     @State

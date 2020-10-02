@@ -46,6 +46,10 @@ class TaskViewModel: ObservableObject {
     /// Contains all tasks that were archived via the automatics archive process at the start cycle of the app.
     @Published
     var recentlyArchived: [Task] = []
+    
+    /// Contains all tasks that are archived.
+    @Published
+    var archivedTasks: [Task] = []
  
     var hasTasks: Bool {
         return !tasks.isEmpty
@@ -66,6 +70,8 @@ class TaskViewModel: ObservableObject {
         
         // Filter the tasks again just in case the user unarchived a task.
         recentlyArchived = BackgroundRoutineService.standard.archivedTasksOfSession?.filter { $0.archived } ?? []
+        
+        archivedTasks = timetable.getArchivedTasks()
         
         let now = Date()
         

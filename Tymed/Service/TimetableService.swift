@@ -6,6 +6,7 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
+import EventKit
 import Foundation
 import CoreData
 
@@ -429,7 +430,7 @@ class TimetableService: ObservableObject {
     func task() -> Task {
         let task = Task(context: context)
         task.id = UUID()
-        task.archived = false
+        task.unarchive()
         task.completed = false
         task.priority = 0
         
@@ -446,7 +447,7 @@ class TimetableService: ObservableObject {
         task.due = due
         task.lesson = lesson
         task.priority = Int32(priority)
-        task.archived = false
+        task.unarchive()
         
         save()
         

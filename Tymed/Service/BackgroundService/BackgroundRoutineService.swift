@@ -47,7 +47,7 @@ class BackgroundRoutineService {
             if (due.addingTimeInterval(taskArchivingDelay.timeinterval) < now) {
                 archivedTasksOfSession?.append(task)
                 NotificationService.current.removeDeliveredNotifications(of: task)
-                task.archived = true
+                task.archive()
             }
         }
         TimetableService.shared.save()

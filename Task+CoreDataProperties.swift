@@ -17,14 +17,15 @@ extension Task {
         return NSFetchRequest<Task>(entityName: "Task")
     }
 
-    @NSManaged public var completed: Bool
     @NSManaged public var due: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var priority: Int32
     @NSManaged public var text: String?
     @NSManaged public var title: String
     @NSManaged public var completionDate: Date?
+    @NSManaged public var completed: Bool
     @NSManaged public var lesson: Lesson?
+    @NSManaged public var archiveTimestamp: Date?
     @NSManaged public var archived: Bool
     @NSManaged public var timetable: Timetable
 
@@ -59,6 +60,27 @@ extension Task {
             }
         }
     }
+    
+    func archive() {
+        archived = true
+        archiveTimestamp = Date()
+    }
+    
+    func unarchive() {
+        archived = false
+        archiveTimestamp = nil
+    }
+    
+    func complete() {
+        completed = true
+        completionDate = Date()
+    }
+    
+    func uncomplete() {
+        completed = false
+        completionDate = nil
+    }
+    
 }
 
 extension Task: Comparable {

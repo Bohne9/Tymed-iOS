@@ -81,7 +81,7 @@ struct HomeDashOverviewTaskView: View {
                     .foregroundColor(Color(.secondaryLabel))
                 
             }
-        }
+        }.lineLimit(2)
         
     }
     
