@@ -23,6 +23,12 @@ struct SettingsView: View {
     var body: some View {
         List {
             
+            Section(header: Text("App Icon")) {
+                NavigationLink(destination: AppIconPicker()) {
+                    Text("App Icon")
+                }
+            }
+            
             Section(header: Text("Notifications")) {
                 HStack {
                     DetailCellDescriptor("Send lesson reminders", image: "paperplane.fill", .systemGreen)
@@ -126,7 +132,7 @@ struct SettingsView: View {
     }
 }
 
-
+//MARK: AutoArchiveDelayTaskPickerView
 struct AutoArchiveDelayTaskPickerView: View {
     @Environment(\.presentationMode) var presentationMode
     
@@ -140,6 +146,7 @@ struct AutoArchiveDelayTaskPickerView: View {
                 
                 Text("The app can automatically archive tasks with an expired due date. You can select how much time has to pass after the due date expires until the task is automatically archived.")
                     .font(.system(size: 14, weight: .semibold))
+                    .padding(.vertical)
                 
             }
             
@@ -158,7 +165,6 @@ struct AutoArchiveDelayTaskPickerView: View {
             .frame(height: 45)
             .onTapGesture {
                 autoArchiveDelay = nil
-                presentationMode.wrappedValue.dismiss()
             }
             
             ForEach(SettingsService.TaskAutoArchiveDelay.allCases, id: \.delay) { delay in
@@ -177,7 +183,6 @@ struct AutoArchiveDelayTaskPickerView: View {
                 .frame(height: 45)
                 .onTapGesture {
                     autoArchiveDelay = delay
-                    presentationMode.wrappedValue.dismiss()
                 }
             }
             
@@ -187,6 +192,54 @@ struct AutoArchiveDelayTaskPickerView: View {
 
 }
 
+struct AppIconPicker: View {
+    
+    @State
+    var currentIcon = UIApplication.shared.alternateIconName
+    
+    private var appIcons = ["Light", "Dark"]
+    
+    var body: some View {
+        
+        List {
+            
+            ForEach(appIcons, id: \.self) { icon in
+                HStack {
+                    Image("AppLogo-\(icon)")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(12)
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.trailing)
+                    Text(icon)
+                        .font(.system(size: 15, weight: .semibold))
+                    Spacer()
+                    
+                    if "AppIcon_\(icon)" == currentIcon {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(Color(.systemBlue))
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    currentIcon = "AppIcon_\(icon)"
+                    UIApplication.shared.setAlternateIconName(currentIcon) { error in
+                        if let error = error {
+                            print(error.localizedDescription)
+                        } else {
+                            print("Success!")
+                        }
+                    }
+                    currentIcon = UIApplication.shared.alternateIconName
+                }.padding(.vertical)
+            }
+            
+        }.navigationTitle("App Icon")
+        .listStyle(InsetGroupedListStyle())
+        
+    }
+    
+}
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {

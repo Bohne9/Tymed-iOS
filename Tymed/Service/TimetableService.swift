@@ -6,6 +6,7 @@
 //  Copyright © 2020 Jonah Schueller. All rights reserved.
 //
 
+import EventKit
 import Foundation
 import CoreData
 
@@ -99,10 +100,26 @@ class TimetableService: ObservableObject {
     
     static let shared = TimetableService()
     
-    private let context = AppDelegate.persistentContainer
+    private let context = PersistanceService.shared.persistentContainer.viewContext
     
     internal init() {
         
+//        let timetable = self.timetable()
+//        timetable.name = "University"
+//        timetable.isDefault = false
+//        timetable.color = "orange"
+//        
+//        let event = self.event()
+//        
+//        event.title = "Next event"
+//        event.createdAt = Date()
+//        event.start = Date() + 7200
+//        event.end = event.start! + 3600
+//        
+//        event.timetable = timetable
+//        event.allDay = false
+//        
+//        save()
     }
     
     //MARK: - Timetable
@@ -413,7 +430,7 @@ class TimetableService: ObservableObject {
     func task() -> Task {
         let task = Task(context: context)
         task.id = UUID()
-        task.archived = false
+        task.unarchive()
         task.completed = false
         task.priority = 0
         
@@ -430,7 +447,7 @@ class TimetableService: ObservableObject {
         task.due = due
         task.lesson = lesson
         task.priority = Int32(priority)
-        task.archived = false
+        task.unarchive()
         
         save()
         
@@ -691,6 +708,7 @@ class TimetableService: ObservableObject {
         }
     }
     
+    /// Returns all tasks that aren't archived at the moment
     func getAllTasks() -> [Task] {
         let predicate = NSPredicate(format: "archived == false")
         return getTasks(predicate)

@@ -27,98 +27,114 @@ struct HomeTaskView: View {
     
     @ObservedObject
     var homeViewModel: HomeViewModel
+
+    @StateObject
+    var taskViewModel = TaskViewModel()
     
     @State
     private var showTaskAdd = false
     
     var body: some View {
-        
-        //MARK: HomeTaskViewContent
-        if !homeViewModel.tasks.isEmpty {
-            HomeTaskViewContent(homeViewModel: homeViewModel)
-        }else {
-            List {
+        VStack(alignment: .leading, spacing: 15) {
+
+            HStack {
+                Text("Tasks")
+                    .font(.system(size: 24, weight: .semibold))
+
+                Spacer()
+                
+                Button {
+                    showTaskAdd.toggle()
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 25, weight: .semibold))
+                }.sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
+                    TaskAddView {
+                        homeViewModel.reload()
+                    }
+                })
+
+            }
+            
+            
+            //MARK: HomeTaskViewContent
+            if taskViewModel.hasTasks {
+                HomeTaskViewContent(taskViewModel: taskViewModel)
+            }else {
+                
+                HomeDashTaskView(taskViewModel: taskViewModel)
                 
                 //MARK: No tasks image
-                Section {
+                VStack(spacing: 20) {
                     
-                    VStack(spacing: 20) {
-                        
-                        Spacer()
-                        
-                        Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(.horizontal, 30)
-
-                        Button(action: {
-                            showTaskAdd.toggle()
-                        }, label: {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "plus")
-                                Text("Add a task")
-                                Spacer()
-                            }.font(.system(size: 17.5, weight: .semibold))
-                            .padding()
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .cornerRadius(12)
-                        })
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 30)
-                    .background(Color(.systemGroupedBackground))
-                }.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                
-                //MARK: Recently archived
-                if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
+                    Spacer()
                     
-                    if let tasks = BackgroundRoutineService.standard.archivedTasksOfSession {
-                        Section (header: HStack {
-                            Text("Recently archived")
+                    Image(ImageSupplier.shared.get(for: .homeEmptyTasks))
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.horizontal, 50)
+                    
+                    Button(action: {
+                        showTaskAdd.toggle()
+                    }, label: {
+                        HStack {
                             Spacer()
-//                            Button("Put back") {
-//                                tasks.forEach { $0.archived = false }
-//                                TimetableService.shared.save()
-//                                BackgroundRoutineService.standard.archivedTasksOfSession = []
-//                                homeViewModel.reload()
-//                            }.foregroundColor(Color(.systemBlue))
-                        }.font(.system(size: 14, weight: .semibold))) {
-                            VStack {
-                                ForEach(tasks, id: \.self) { task in
-                                    HomeTaskCell(task: task)
-                                        .environmentObject(homeViewModel)
-                                        .frame(height: 45)
-                                }
-                            }.listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 20))
+                            Label("Add a task", systemImage: "plus")
+                                .font(.system(size: 17.5, weight: .semibold))
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color(.secondarySystemGroupedBackground))
+                        .cornerRadius(12)
+                    }).sheet(isPresented: $showTaskAdd, onDismiss: taskViewModel.reload, content: {
+                        TaskAddView {
+                            homeViewModel.reload()
+                        }
+                    })
+                    
+                    Spacer()
+                }.padding(.horizontal, 30)
+            }
+            /*
+            //MARK: Recently archived
+            if BackgroundRoutineService.standard.archivedTasksOfSession?.count ?? 0 > 0 {
+                
+                if let tasks = BackgroundRoutineService.standard.archivedTasksOfSession {
+                    Section (header: HStack {
+                        Text("Recently archived")
+                        Spacer()
+                    }.font(.system(size: 14, weight: .semibold))) {
+                        VStack {
+                            ForEach(tasks, id: \.self) { task in
+                                HomeTaskCell(task: task)
+                            }
                         }
                     }
-                    
-                    Section {
-                        HStack {
-                            Image(systemName: "info.circle")
-                                .foregroundColor(Color(.systemBlue))
-                                .font(.system(size: 18, weight: .semibold))
-                            Text("Learn more about automatic task archiving")
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(Color(.secondaryLabel))
-                        }.font(.system(size: 14, weight: .semibold))
-                    }
-                    
                 }
                 
-            }.listStyle(InsetGroupedListStyle())
-            .sheet(isPresented: $showTaskAdd, content: {
-                TaskAddView {
-                    homeViewModel.reload()
+                Section {
+                    HStack {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(Color(.systemBlue))
+                            .font(.system(size: 18, weight: .semibold))
+                        Text("Learn more about automatic task archiving")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(Color(.secondaryLabel))
+                    }.font(.system(size: 14, weight: .semibold))
                 }
-            })
+                
+            }
+            */
+            Spacer()
+        }.padding()
+        .onAppear {
+            taskViewModel.reload()
+            homeViewModel.reload()
         }
-        
+        .environmentObject(homeViewModel)
     }
     
 }
@@ -127,73 +143,168 @@ struct HomeTaskView: View {
 struct HomeTaskViewContent: View {
     
     @ObservedObject
-    var homeViewModel: HomeViewModel
+    var taskViewModel: TaskViewModel
     
     var body: some View {
-        List {
+        VStack(alignment: .leading, spacing: 15) {
+            HomeDashTaskView(taskViewModel: taskViewModel)
             
-            Section {
-                // Combine the timetables with the percentage of their completed tasks
-                // Filter any timetables without any tasks (where the value is -1)
-                ForEach(homeViewModel.timetables.map { ($0, taskCompletePercentage(for: $0)) }.filter { $0.1 != -1 }, id: \.0.self) { timetable, value in
+            if !taskViewModel.overdueTasks.isEmpty {
+                // Overdue header
+                HStack {
+                    Text("Overdue")
+                        .font(.system(size: 16, weight: .semibold))
                     
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                        
-                            Text(timetable.name)
-                                .font(.system(size: 12, weight: .semibold))
-                                .foregroundColor(Color(.label))
-                            
-                                GeometryReader { geometry in
-                                    ZStack(alignment: .leading) {
-                                        Rectangle()
-                                            .frame(width: geometry.size.width * 0.9 + 7.5, height: 7.5)
-                                            .cornerRadius(3.75)
-                                            .foregroundColor(Color(.tertiaryLabel))
-
-                                        Rectangle()
-                                            .frame(width: geometry.size.width * 0.9 * value + 7.5, height: 7.5)
-                                            .cornerRadius(3.75)
-                                            .foregroundColor(Color(UIColor(timetable) ?? .clear))
-                                    }.frame(width: geometry.size.width * 0.9 + 7.5, height: 7.5)
-                                }
-                            
+                    Spacer()
+                    
+                    Button("Reschedule") {
+                        taskViewModel.overdueTasks.forEach { (task) in
+                            task.due = Date() + 3600 * 2
                         }
-                        
-                        Text("\(String(format: "%.1f", value * 100))%")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(Color(.secondaryLabel))
-                    }
+                        TimetableService.shared.save()
+                        taskViewModel.reload()
+                    }.font(.system(size: 14, weight: .semibold))
                 }
-            }
-            
-            ForEach(homeViewModel.tasks, id: \.self) { task in
-                Section {
+                
+                ForEach(taskViewModel.overdueTasks, id: \.self) { task in
                     HomeTaskCell(task: task)
-                        .frame(height: 45)
                 }
             }
             
-        }.listStyle(InsetGroupedListStyle())
-        .environmentObject(homeViewModel)
-    }
-    
-    
-    func taskCompletePercentage(for timetable: Timetable) -> CGFloat {
-        let tasks = homeViewModel.tasks(for: timetable)
-        
-        if tasks.count == 0 {
-            return -1
-        }
-        
-        let complete = CGFloat(tasks.filter { $0.completed }.count)
-        
-        return complete / CGFloat(tasks.count)
+            if !taskViewModel.unlimitedTasks.isEmpty {
+                HomeTaskViewSection(header: "Unlimited", tasks: taskViewModel.unlimitedTasks)
+            }
+            
+            if !taskViewModel.todayTasks.isEmpty {
+                HomeTaskViewSection(header: "Today", tasks: taskViewModel.todayTasks)
+            }
+            
+            if !taskViewModel.weekTasks.isEmpty {
+                HomeTaskViewSection(header: "Week", tasks: taskViewModel.weekTasks)
+            }
+            
+            if !taskViewModel.laterTasks.isEmpty {
+                HomeTaskViewSection(header: "Later", tasks: taskViewModel.laterTasks)
+            }
+            
+            if !taskViewModel.recentlyArchived.isEmpty {
+                // Recently archived header
+                HStack {
+                    Text("Recently Archived")
+                    
+                    Spacer()
+                    
+                    Button("Unarchive & reschedule") {
+                        taskViewModel.overdueTasks.forEach { (task) in
+                            task.unarchive()
+                            task.due = Date() + 3600 * 2
+                        }
+                        TimetableService.shared.save()
+                        taskViewModel.reload()
+                    }.font(.system(size: 14, weight: .semibold))
+                }.font(.system(size: 16, weight: .semibold))
+                
+                ForEach(taskViewModel.recentlyArchived, id: \.self) { task in
+                    HomeTaskCell(task: task)
+                }
+            }
+            
+            HomeTaskViewHelp()
+            
+            if !taskViewModel.archivedTasks.isEmpty {
+                HStack {
+                    Image(systemName: "tray.full.fill")
+                        .foregroundColor(Color(.systemBlue))
+                        .font(.system(size: 16, weight: .semibold))
+                    Text("Archive")
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(Color(.secondaryLabel))
+                        .font(.system(size: 12, weight: .semibold))
+                    
+                }.padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+                .frame(height: 40)
+                .padding(.vertical)
+            }
+            
+        }.environmentObject(taskViewModel)
     }
     
 }
 
+//MARK: HomeTaskViewSection
+struct HomeTaskViewSection: View {
+    
+    var header: String
+    
+    var tasks: [Task]
+    
+    var body: some View {
+        
+        VStack {
+            HStack {
+                Text(header)
+                
+                Spacer()
+                
+            }.font(.system(size: 16, weight: .semibold))
+            
+            ForEach(tasks, id: \.self) { task in
+                HomeTaskCell(task: task)
+            }
+        }
+        
+    }
+    
+}
 
+//MARK: HomeTaskViewHelp
+struct HomeTaskViewHelp: View {
+    
+    @State
+    private var showHelpView = false
+    
+    var body: some View {
+        
+        HStack(alignment: .top) {
+            Image(systemName: "info.circle.fill")
+                .foregroundColor(Color(.systemBlue))
+                .font(.system(size: 15, weight: .semibold))
+                .padding(.top, 2.5)
+            VStack(alignment: .leading, spacing: 5) {
+                Text("Need help?")
+                    .font(.system(size: 14, weight: .semibold))
+                
+                Text("Learn about the icons and more.")
+                    .foregroundColor(Color(.secondaryLabel))
+                    .font(.system(size: 12, weight: .regular))
+            }
+            Spacer()
+            
+            VStack {
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(Color(.secondaryLabel))
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+            }
+        }.padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(12)
+        .frame(height: 45)
+        .padding(.vertical)
+        .onTapGesture {
+            showHelpView.toggle()
+        }.sheet(isPresented: $showHelpView) {
+            Text("Help")
+        }
+    }
+    
+}
 
 
 struct HomeTaskView_Previews: PreviewProvider {

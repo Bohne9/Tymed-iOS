@@ -16,7 +16,9 @@ class BackgroundRoutineService {
     /// A list of tasks that have been archived at the start of the session
     var archivedTasksOfSession: [Task]?
     
-    internal init () { }
+    internal init () {
+        appLaunchRoutine()
+    }
     
     func appLaunchRoutine() {
         
@@ -36,7 +38,7 @@ class BackgroundRoutineService {
         let tasks = TimetableService.shared.getAllTasks()
         
         for task in tasks {
-            guard let due = task.due else {
+            guard let due = task.due ?? task.completionDate else {
                 continue
             }
             
@@ -45,7 +47,7 @@ class BackgroundRoutineService {
             if (due.addingTimeInterval(taskArchivingDelay.timeinterval) < now) {
                 archivedTasksOfSession?.append(task)
                 NotificationService.current.removeDeliveredNotifications(of: task)
-                task.archived = true
+                task.archive()
             }
         }
         TimetableService.shared.save()

@@ -21,104 +21,108 @@ struct ProfileView: View {
     private var showProAccessPreview = false
     
     var body: some View {
-        List {
+        NavigationView {
             
-            // Me
-            /*
-            Section {
+            List {
                 
-                HStack(alignment: .top) {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 60, height: 60, alignment: .center)
-
-                    VStack() {
-                        TextField("Username", text: $username)
-                            .font(.system(size: 20, weight: .semibold))
-                        
-                        TextField("Email", text: $email)
-                            .font(.system(size: 16, weight: .semibold))
-                        
-                        Spacer()
+                // Me
+                /*
+                 Section {
+                 
+                 HStack(alignment: .top) {
+                 Image(systemName: "person.circle.fill")
+                 .resizable()
+                 .frame(width: 60, height: 60, alignment: .center)
+                 
+                 VStack() {
+                 TextField("Username", text: $username)
+                 .font(.system(size: 20, weight: .semibold))
+                 
+                 TextField("Email", text: $email)
+                 .font(.system(size: 16, weight: .semibold))
+                 
+                 Spacer()
+                 }
+                 Spacer()
+                 }.padding(.vertical, 10)
+                 } */
+                
+                
+                
+                Section {
+                    ProAccessBadge()
+                }
+                
+                Section {
+                    NavigationLink (destination: Text("Tell your friends")) {
+                        DetailCellDescriptor("Tell your friends", image: "heart.fill", .systemPink)
                     }
-                    Spacer()
-                }.padding(.vertical, 10)
-            } */
-            
-            
-            
-            Section {
-                ProAccessBadge()
-            }
-            
-            Section {
-                NavigationLink (destination: Text("Tell your friends")) {
-                    DetailCellDescriptor("Tell your friends", image: "heart.fill", .systemPink)
+                    
+                    NavigationLink (destination: FeedbackView()) {
+                        DetailCellDescriptor("Feedback", image: "bubble.left.fill", .systemPurple)
+                    }
+                    
+                    NavigationLink (destination: Text("Tips & Help")) {
+                        DetailCellDescriptor("Tips & Help", image: "lightbulb.fill", .systemOrange)
+                    }
                 }
                 
-                NavigationLink (destination: FeedbackView()) {
-                    DetailCellDescriptor("Feedback", image: "bubble.left.fill", .systemPurple)
+                Section {
+                    NavigationLink(
+                        destination: SettingsView(),
+                        label: {
+                            DetailCellDescriptor("Settings", image: "gear", .systemGray)
+                        })
                 }
                 
-                NavigationLink (destination: Text("Tips & Help")) {
-                    DetailCellDescriptor("Tips & Help", image: "lightbulb.fill", .systemOrange)
+                Section {
+                    NavigationLink(
+                        destination: Text("Privacy Policy"),
+                        label: {
+                            DetailCellDescriptor("Privacy Policy", image: "hand.raised.fill", .systemBlue)
+                        })
+                    
+                    NavigationLink(
+                        destination: Text("Licence"),
+                        label: {
+                            DetailCellDescriptor("Licence", image: "doc.text.fill", .systemRed)
+                        })
+                    
+                    NavigationLink(
+                        destination: Text("Terms & Conditions"),
+                        label: {
+                            DetailCellDescriptor("Terms & Conditions", image: "checkmark.circle.fill", .systemGreen)
+                        })
+                    
+                    NavigationLink(
+                        destination: Text("About"),
+                        label: {
+                            DetailCellDescriptor("About", image: "person.fill", .systemOrange)
+                        })
                 }
-            }
-            
-            Section {
-                NavigationLink(
-                    destination: SettingsView(),
-                    label: {
-                        DetailCellDescriptor("Settings", image: "gear", .systemGray)
-                    })
-            }
-            
-            Section {
-                NavigationLink(
-                    destination: Text("Privacy Policy"),
-                    label: {
-                        DetailCellDescriptor("Privacy Policy", image: "hand.raised.fill", .systemBlue)
-                    })
                 
-                NavigationLink(
-                    destination: Text("Licence"),
-                    label: {
-                        DetailCellDescriptor("Licence", image: "doc.text.fill", .systemRed)
-                    })
-                
-                NavigationLink(
-                    destination: Text("Terms & Conditions"),
-                    label: {
-                        DetailCellDescriptor("Terms & Conditions", image: "checkmark.circle.fill", .systemGreen)
-                    })
-                
-                NavigationLink(
-                    destination: Text("About"),
-                    label: {
-                        DetailCellDescriptor("About", image: "person.fill", .systemOrange)
-                    })
-            }
-            
-            Section {
-                HStack {
-                    Spacer()
-//                    HStack(alignment: .center) {
-                        Image(uiImage: #imageLiteral(resourceName: "logo"))
+                Section {
+                    HStack {
+                        Spacer()
+                        //                    HStack(alignment: .center) {
+                        Image("AppLogo-Dark")
                             .resizable()
                             .frame(width: 60, height:  60)
-                            
+                            .cornerRadius(12)
+                        
                         Text("Tymed")
                             .font(.system(size: 13, weight: .semibold))
-//                    }
-                    Spacer()
+                        //                    }
+                        Spacer()
+                    }
+                    .padding(4)
+                    .background(Color(.systemGroupedBackground))
                 }
-                .padding(4)
-                .background(Color(.systemGroupedBackground))
-            }
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-            
-        }.listStyle(InsetGroupedListStyle())
-        .navigationTitle("Profile")
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                
+            }.listStyle(InsetGroupedListStyle())
+            .navigationTitle("Profile")
+        }
     }
 }
 

@@ -278,7 +278,7 @@ struct TaskAddView: View {
         task.lesson = hasLessonAttached ? lesson : nil
         task.completed = false
         task.priority = 0
-        task.archived = false
+        task.unarchive()
         
         if let timetable = self.timetable {
             task.timetable = timetable
