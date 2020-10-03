@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import EventKit
 
 struct HomeDashOverviewView: View {
     
@@ -20,7 +21,7 @@ struct HomeDashOverviewView: View {
         HStack(alignment: .top) {
             HomeDashOverviewTaskView()
             
-            if let event = homeViewModel.nextCalendarEvent {
+            if let event = homeViewModel.nextEvents?.first {
                 
                 Spacer(minLength: 15)
                 
@@ -59,13 +60,16 @@ struct HomeDashOverviewView: View {
 
 struct HomeDashOverviewTaskView: View {
     
+    @EnvironmentObject
+    var homeViewModel: HomeViewModel
+    
     var body: some View {
         
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text("7")
+                Text("\(homeViewModel.eventCountToday)")
                     .font(.system(size: 35, weight: .bold))
-                Text("Events today")
+                Text("\(event(count: homeViewModel.eventCountToday)) today")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
                 
@@ -74,9 +78,9 @@ struct HomeDashOverviewTaskView: View {
             Spacer()
             
             VStack(alignment: .leading) {
-                Text("51")
+                Text("\(homeViewModel.eventCountWeek)")
                     .font(.system(size: 35, weight: .bold))
-                Text("Events this week")
+                Text("\(event(count: homeViewModel.eventCountWeek)) this week")
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
                 
@@ -85,6 +89,9 @@ struct HomeDashOverviewTaskView: View {
         
     }
     
+    private func event(count: Int) -> String {
+        return count == 1 ? "Event" : "Events"
+    }
 }
 
 struct HomeDashOverviewEventView: View {
@@ -92,8 +99,7 @@ struct HomeDashOverviewEventView: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    @ObservedObject
-    var event: CalendarEvent
+    var event: EKEvent
     
     @State
     private var showEventDetail = false
@@ -105,7 +111,7 @@ struct HomeDashOverviewEventView: View {
             HStack {
                
                 RoundedRectangle(cornerRadius: 2)
-                    .foregroundColor(Color(UIColor(event) ?? .appColor))
+                    .foregroundColor(Color(UIColor(cgColor: event.calendar.cgColor)))
                     .frame(width: 4, height: 12)
                 
                 Text(event.title)
@@ -122,9 +128,9 @@ struct HomeDashOverviewEventView: View {
                 
                 Spacer()
                 
-                if let timetable = event.timetable {
-                    TimetableBadgeView(timetable: timetable, size: .small, color: .appColorLight)
-                }
+//                if let timetable = event.timetable {
+//                    TimetableBadgeView(timetable: timetable, size: .small, color: .appColorLight)
+//                }
             }
         }
         .padding(10)
@@ -133,11 +139,11 @@ struct HomeDashOverviewEventView: View {
         .onTapGesture {
             showEventDetail.toggle()
         }.sheet(isPresented: $showEventDetail) {
-            if let event = event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel)
-            }else if let lesson = event.asLesson {
-                
-            }
+//            if let event = event.asEvent {
+//                EventEditView(event: event, presentationDelegate: homeViewModel)
+//            }else if let lesson = event.asLesson {
+//
+//            }
         }
     }
     
@@ -150,7 +156,7 @@ struct HomeDashOverviewEventView: View {
         dateFormatter.unitsStyle = .full
         dateFormatter.formattingContext = .beginningOfSentence
         
-        if event.isNow() {
+        if event.startDate <= Date() && Date() <= event.endDate {
             return "Now"
         }
         

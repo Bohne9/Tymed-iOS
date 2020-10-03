@@ -7,11 +7,13 @@
 //
 
 import SwiftUI
+import EventKit
 
 class HomeViewModel: ObservableObject {
     
     private var timetableService = TimetableService.shared
     private var calendarService = CalendarService.shared
+    private var eventService = EventService.shared
     
     @Published
     var dayDebrief: DayDebriefViewModel?
@@ -26,6 +28,15 @@ class HomeViewModel: ObservableObject {
     var timetables: [Timetable] {
         return timetableService.fetchTimetables() ?? []
     }
+    
+    @Published
+    var nextEvents: [EKEvent]?
+    
+    @Published
+    var eventCountToday: Int = 0
+    
+    @Published
+    var eventCountWeek: Int = 0
     
     @Published
     var nextCalendarEvent: CalendarEvent?
@@ -43,6 +54,12 @@ class HomeViewModel: ObservableObject {
     
     init(anchor: Date = Date()) {
         anchorDate = anchor
+        
+        nextEvents = eventService.nextEvents(in: eventService.calendars)
+        
+        eventCountToday = eventService.events(startingFrom: Date(), end: Date().endOfDay, in: eventService.calendars).count
+        
+        eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
         
         tasks = timetableService.getTasks(after: anchorDate).sorted()
         
@@ -88,6 +105,12 @@ class HomeViewModel: ObservableObject {
         anchorDate = Date()
         
         tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
+        
+        nextEvents = eventService.nextEvents(in: eventService.calendars)
+        
+        eventCountToday = eventService.events(startingFrom: Date(), end: Date().endOfDay, in: eventService.calendars).count
+        
+        eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
         

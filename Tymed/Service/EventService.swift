@@ -8,6 +8,7 @@
 
 import Foundation
 import EventKit
+import EventKitUI
 
 class EventService: Service {
     
@@ -25,6 +26,7 @@ class EventService: Service {
             if res {
                 print("Got access!")
             }
+            self.calendars = self.eventStore.calendars(for: .event)
             
             self.events(startingFrom: Date(), end: self.oneYearFromNow(), in: self.eventStore.calendars(for: .event))
                 .forEach { (event) in
@@ -32,7 +34,6 @@ class EventService: Service {
                 }
         }
         
-        calendars = eventStore.calendars(for: .event)
     }
     
     func requestAccess(_ completion: @escaping EKEventStoreRequestAccessCompletionHandler) {
@@ -91,11 +92,31 @@ class EventService: Service {
         return events(forDay: Date(), in: calendar)
     }
     
+    /// Returns the next events in the given calendars
+    /// - Parameter calendar: List of calendars to search in
+    /// - Returns: Next events in the given calendars
     func nextEvents(in calendar: [EKCalendar]) -> [EKEvent] {
-        let now = Date()
-        let nextYear = oneYearFrom(date: now)
+        let now = Date() // Current date
+        let nextYear = oneYearFrom(date: now) // One year later from now
         
-        return events(startingFrom: now, end: nextYear, in: calendar)
+        return events(startingFrom: now, end: nextYear, in: calendar).sorted { (lhs, rhs) -> Bool in
+            return lhs.compareStartDate(with: rhs).rawValue < 1 // Sort the events by their startDate
+        }.reduce([]) { (res, event) -> [EKEvent] in
+            if res.isEmpty { // If the array is empty -> return the first item
+                return [event]
+            }
+            guard let first = res.first else { // Make sure there is a first item
+                return [event]
+            }
+            if first.compareStartDate(with: event) == .orderedSame { // In case the new element has the same startDate as the first item
+                var events = res // Concat the new event to the array
+                events.append(event)
+                return events
+            }
+            return res // The new item does not have the same startDate as the first item. -> Do not include the new item in the list.
+        }
     }
+    
+    
     
 }
