@@ -78,28 +78,33 @@ class EventService: Service {
         return oneYearFrom(date: Date())
     }
     
-    func events(startingFrom: Date, end: Date, in calendars: [EKCalendar]) -> [EKEvent] {
-        let predicate = eventStore.predicateForEvents(withStart: startingFrom, end: end, calendars: calendars)
+    func events(startingFrom: Date, end: Date, in calendars: [EKCalendar]? = nil) -> [EKEvent] {
+        let cal = calendars ?? self.calendars
+        let predicate = eventStore.predicateForEvents(withStart: startingFrom, end: end, calendars: cal)
         
         return eventStore.events(matching: predicate)
     }
  
-    func events(forDay date: Date, in calendar: [EKCalendar]) -> [EKEvent] {
-        return events(startingFrom: date.startOfDay, end: date.endOfDay, in: calendar)
+    func events(forDay date: Date, in calendar: [EKCalendar]? = nil) -> [EKEvent] {
+        let cal = calendar ?? self.calendars
+        return events(startingFrom: date.startOfDay, end: date.endOfDay, in: cal)
     }
     
-    func eventsForToday(in calendar: [EKCalendar]) -> [EKEvent] {
-        return events(forDay: Date(), in: calendar)
+    func eventsForToday(in calendar: [EKCalendar]? = nil) -> [EKEvent] {
+        let cal = calendar ?? self.calendars
+        return events(forDay: Date(), in: cal)
     }
     
     /// Returns the next events in the given calendars
     /// - Parameter calendar: List of calendars to search in
     /// - Returns: Next events in the given calendars
-    func nextEvents(in calendar: [EKCalendar]) -> [EKEvent] {
+    func nextEvents(in calendar: [EKCalendar]? = nil) -> [EKEvent] {
+        let cal = calendar ?? self.calendars
+        
         let now = Date() // Current date
         let nextYear = oneYearFrom(date: now) // One year later from now
         
-        return events(startingFrom: now, end: nextYear, in: calendar).sorted { (lhs, rhs) -> Bool in
+        return events(startingFrom: now, end: nextYear, in: cal).sorted { (lhs, rhs) -> Bool in
             return lhs.compareStartDate(with: rhs).rawValue < 1 // Sort the events by their startDate
         }.reduce([]) { (res, event) -> [EKEvent] in
             if res.isEmpty { // If the array is empty -> return the first item
@@ -116,7 +121,5 @@ class EventService: Service {
             return res // The new item does not have the same startDate as the first item. -> Do not include the new item in the list.
         }
     }
-    
-    
     
 }

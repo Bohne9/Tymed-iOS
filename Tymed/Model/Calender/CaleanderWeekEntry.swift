@@ -31,12 +31,19 @@ class CalendarWeekEntry: CalendarEntry {
         return entries.count
     }
     
-    init(date: Date) {
-        self.date = date.startOfWeek ?? Date()
+    convenience init(date: Date) {
+        self.init(startingFrom: date.startOfWeek ?? date)
+    }
+    
+    init(startingFrom date: Date, expandsToEntireDay: Bool = true) {
+        self.date = date
         self.entries = CalendarService.shared.calendarWeekEntries(for: date)
-//            .filter({ (entry) -> Bool in
-//            return entry.eventCount > 0
-//        })
+        
+        if expandsToEntireDay {
+            entries.forEach { (entry) in
+                entry.expandToEntireDay()
+            }
+        }
     }
     
     func calendarDayEntry(for day: Day) -> CalendarDayEntry? {

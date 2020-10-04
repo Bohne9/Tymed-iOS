@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import EventKit
 
 fileprivate var heightForHour: CGFloat = 60
 
@@ -167,8 +168,8 @@ struct HomeDashCalendarContent: View {
         }
     }
     
-    private func width(for event: CalendarEvent, maxWidth: CGFloat) -> CGFloat {
-        let collisions = event.collisionCount(within: events.entries)
+    private func width(for event: EKEvent, maxWidth: CGFloat) -> CGFloat {
+        let collisions = events.collisionCount(for: event, within: events.entries)
         
         if collisions == 0 {
             return maxWidth
@@ -177,7 +178,7 @@ struct HomeDashCalendarContent: View {
         return maxWidth / CGFloat(collisions + 1)
     }
     
-    private func height(for event: CalendarEvent) -> CGFloat {
+    private func height(for event: EKEvent) -> CGFloat {
         guard let start = event.startDate,
               let end = event.endDate else {
             return 0
@@ -188,11 +189,12 @@ struct HomeDashCalendarContent: View {
         return heightForHour * duration
     }
     
-    private func offsetX(for event: CalendarEvent, width: CGFloat, environment: [CalendarEvent]) -> CGFloat {
-        return 60 + CGFloat(event.collisionRank(in: environment)) * width
+    private func offsetX(for event: EKEvent
+                         , width: CGFloat, environment: [EKEvent]) -> CGFloat {
+        return 60 + CGFloat(events.collisionRank(for: event)) * width
     }
     
-    private func offsetY(for event: CalendarEvent) -> CGFloat {
+    private func offsetY(for event: EKEvent) -> CGFloat {
         guard let startOfDay = events.startOfDay else {
             return 0
         }
@@ -222,8 +224,7 @@ struct HomeDashCalendarEvent: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    @ObservedObject
-    var event: CalendarEvent
+    var event: EKEvent
     
     @State
     private var showEditView = false
@@ -237,13 +238,13 @@ struct HomeDashCalendarEvent: View {
                     .frame(width: 10)
                 Spacer()
             }
-            .background(Color(UIColor(event) ?? .clear))
+            .background(Color(calendarColor()))
             
             VStack(alignment: .leading) {
                 if eventDuration() > 45 {
-                    Text(event.timetable?.name.uppercased() ?? "")
+                    Text(event.calendar.title)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(UIColor(event) ?? .clear))
+                        .foregroundColor(Color(calendarColor()))
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
@@ -263,30 +264,28 @@ struct HomeDashCalendarEvent: View {
 //        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
-        }.sheet(isPresented: $showEditView, content: {
-            if let lesson = event.asLesson {
-                LessonEditView(
-                    lesson: lesson,
-                    dismiss: {
-                        homeViewModel.reload()
-                        showEditView.toggle()
-                })
-            }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel)
-            }else {
-                Text("Ups! Something went wrong :(")
-            }
+        }
+        .sheet(isPresented: $showEditView, content: {
+//            if let lesson = event.asLesson {
+//                LessonEditView(
+//                    lesson: lesson,
+//                    dismiss: {
+//                        homeViewModel.reload()
+//                        showEditView.toggle()
+//                })
+//            }else if let event = self.event.asEvent {
+//                EventEditView(event: event, presentationDelegate: homeViewModel)
+//            }else {
+//                Text("Ups! Something went wrong :(")
+//            }
         })
 //        .contextMenu {
 //
 //        }.previewContext(Text("Hallo"))
     }
     
-    private func timetableColor() -> UIColor {
-        guard let timetable = event.timetable else {
-            return .clear
-        }
-        return UIColor(timetable) ?? .clear
+    private func calendarColor() -> UIColor {
+        return UIColor(cgColor: event.calendar.cgColor)
     }
     
     private func timeString() -> String {
@@ -337,8 +336,7 @@ struct HomeAllDayEventsRow: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    @ObservedObject
-    var event: CalendarEvent
+    var event: EKEvent
     
     @State
     private var showEditView = false
@@ -352,7 +350,7 @@ struct HomeAllDayEventsRow: View {
                     .frame(width: 4)
                 Spacer()
             }
-            .background(Color(UIColor(event) ?? .clear))
+            .background(Color(UIColor(cgColor: event.calendar.cgColor)))
             
             Text(event.title)
                 .font(.system(size: 10, weight: .semibold))
@@ -368,18 +366,18 @@ struct HomeAllDayEventsRow: View {
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView, content: {
-            if let lesson = event.asLesson {
-                LessonEditView(
-                    lesson: lesson,
-                    dismiss: {
-                        homeViewModel.reload()
-                        showEditView.toggle()
-                })
-            }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel)
-            }else {
-                Text("Ups! Something went wrong :(")
-            }
+//            if let lesson = event.asLesson {
+//                LessonEditView(
+//                    lesson: lesson,
+//                    dismiss: {
+//                        homeViewModel.reload()
+//                        showEditView.toggle()
+//                })
+//            }else if let event = self.event.asEvent {
+//                EventEditView(event: event, presentationDelegate: homeViewModel)
+//            }else {
+//                Text("Ups! Something went wrong :(")
+//            }
         })
     }
     

@@ -7,18 +7,19 @@
 //
 
 import SwiftUI
+import EventKit
 
 class CalendarDayEntry: ObservableObject, CalendarEntry {
-    typealias Entry = CalendarEvent
+    typealias Entry = EKEvent
     
     @Published
     var date: Date
     
     @Published
-    var entries: [CalendarEvent] = []
+    var entries: [EKEvent] = []
     
     @Published
-    var allDayEntries: [CalendarEvent] = []
+    var allDayEntries: [EKEvent] = []
     
     var eventCount: Int {
         return entries.count
@@ -28,7 +29,7 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
     
     private(set) var endOfDay: Date?
     
-    init(for date: Date, entries: [CalendarEvent]) {
+    init(for date: Date, entries: [EKEvent]) {
         self.date = date.startOfDay
                 
         setEntries(entries)
@@ -59,16 +60,16 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         }.last?.endDate
     }
     
-    func setEntries(_ entries: [CalendarEvent]) {
+    func setEntries(_ entries: [EKEvent]) {
         let allEntries = entries.sorted(by: { (lhs, rhs) -> Bool in
-            return lhs < rhs
+            return lhs.startDate < rhs.startDate
         })
         
         self.allDayEntries = allEntries
-            .filter { $0.allDay }
+            .filter { $0.isAllDay }
         
         self.entries = allEntries
-            .filter { !$0.allDay }
+            .filter { !$0.isAllDay }
     }
     
     func expandToEntireDay() {
@@ -77,5 +78,66 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         objectWillChange.send()
     }
     
+    
+    
+    
+    func collisionRank(for event: EKEvent) -> Int {
+        var rank = 0
+        
+        for entry in entries {
+            if collides(event, entry) {
+                rank += 1
+            }else if entry.eventIdentifier == event.eventIdentifier {
+                break
+            }
+        }
+        
+        return rank
+    }
+    
+    func collides(_ lhs: EKEvent, _ rhs: EKEvent) -> Bool {
+        guard let startDate = lhs.startDate,
+              let endDate = lhs.endDate else {
+            return false
+        }
+        
+        guard lhs.eventIdentifier != rhs.eventIdentifier,
+              let start = rhs.startDate,
+              let end = rhs.endDate else {
+            return false
+        }
+        
+        return Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+            Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+            Calendar.current.isDateBetween(date: endDate, left: start, right: end)
+    }
+    
+    func collisionCount(for event: EKEvent, within events: [EKEvent]) -> Int {
+        guard let startDate = event.startDate,
+              let endDate = event.endDate else {
+            print("COLLISION ERROR")
+            return 0
+        }
+        
+        var count = 0
+        
+        events.forEach { entry in
+            guard entry.eventIdentifier != event.eventIdentifier,
+                  let start = entry.startDate,
+                  let end = entry.endDate else {
+                return
+            }
+            
+            if  Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+                Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+                Calendar.current.isDateBetween(date: endDate, left: start, right: end) {
+                    count += 1
+            }
+        }
+        
+        return count
+    }
 }
 

@@ -21,7 +21,7 @@ class HomeViewModel: ObservableObject {
     @Published
     var tasks: [Task] = []
     
-    var events: [CalendarEvent] {
+    var events: [EKEvent] {
         upcomingCalendarDay.entries
     }
     
@@ -39,7 +39,10 @@ class HomeViewModel: ObservableObject {
     var eventCountWeek: Int = 0
     
     @Published
-    var nextCalendarEvent: CalendarEvent?
+    var nextCalendarEvent: EKEvent?
+    
+    @Published
+    var calendarWeek: CalendarWeekEntry
     
     @Published
     var upcomingCalendarDay: CalendarDayEntry
@@ -64,6 +67,8 @@ class HomeViewModel: ObservableObject {
         tasks = timetableService.getTasks(after: anchorDate).sorted()
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        
+        calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
         
         nextCalendarEvent = upcomingCalendarDay.entries.first
         
@@ -113,6 +118,8 @@ class HomeViewModel: ObservableObject {
         eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
         
         upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        
+        calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
         
         nextCalendarEvent = upcomingCalendarDay.entries.first
         
