@@ -11,7 +11,7 @@ import Foundation
 class CalendarWeekEntry: CalendarEntry {
     typealias Entry = CalendarDayEntry
     
-    static func entryForCurrentWeek() -> CalendarWeekEntry {
+    static func entryForCurrentWeek(expandsToEntireDay: Bool = true) -> CalendarWeekEntry {
         return CalendarWeekEntry(date: Date())
     }
     
@@ -31,13 +31,13 @@ class CalendarWeekEntry: CalendarEntry {
         return entries.count
     }
     
-    convenience init(date: Date) {
-        self.init(startingFrom: date.startOfWeek ?? date)
+    convenience init(date: Date, expandsToEntireDay: Bool = true) {
+        self.init(startingFrom: date.startOfWeek ?? date, expandsToEntireDay: expandsToEntireDay)
     }
     
     init(startingFrom date: Date, expandsToEntireDay: Bool = true) {
         self.date = date
-        self.entries = CalendarService.shared.calendarWeekEntries(for: date)
+        self.entries = CalendarService.shared.calendarWeekEntries(from: date)
         
         if expandsToEntireDay {
             entries.forEach { (entry) in

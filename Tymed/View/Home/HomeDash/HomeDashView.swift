@@ -78,20 +78,32 @@ struct HomeDashCalendarView: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    
     var body: some View {
         ZStack(alignment: .top) {
-            HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
-                .frame(height: CGFloat(numberOfHours()) * heightForHour)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
-                .padding(.bottom, 10)
             
-            HomeDashCalendarContent(events: event)
-                .frame(height: CGFloat(numberOfHours()) * heightForHour)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
-                .padding(.bottom, 10)
+            if event.entries.count != 0 {
+                HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
+                    .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                    .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
+                    .padding(.bottom, 10)
+                
+                HomeDashCalendarContent(events: event)
+                    .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                    .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
+                    .padding(.bottom, 10)
+            } else {
+                
+                HStack {
+                    Text("No events \(noEventText())")
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                }
+                
+            }
             
             HomeAllDayEvents(events: event)
-                .padding(.vertical, 10)
+                .padding(.vertical, event.entries.count != 0 ? 10 : 0)
                 .frame(height: CGFloat(event.allDayEntries.count * 20))
         }.frame(height: CGFloat(numberOfHours()) * heightForHour + 40  + CGFloat(event.allDayEntries.count * 20))
         .padding()
@@ -102,7 +114,7 @@ struct HomeDashCalendarView: View {
     private func numberOfHours() -> Int {
         guard let start = event.startOfDay,
               let end = event.endOfDay else {
-            return 1
+            return 0
         }
         
         let startHour = Calendar.current.dateComponents([.hour], from: start).hour ?? 0
@@ -117,6 +129,16 @@ struct HomeDashCalendarView: View {
         }
         
         return Calendar.current.dateComponents([.hour], from: start).hour ?? 0
+    }
+    
+    private func noEventText() -> String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.doesRelativeDateFormatting = true
+        dateFormatter.formattingContext = .middleOfSentence
+        dateFormatter.dateStyle = .medium
+        
+        return dateFormatter.string(from: event.date)
     }
     
 }

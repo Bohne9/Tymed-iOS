@@ -26,13 +26,13 @@ struct HomeDayCalendarView: View {
             HomeDashCalendarGrid(date: event.date, startHour: 0, endHour: 24)
                 .environmentObject(TimetableService.shared)
                 .frame(height: 24 * heightForHour)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
                 .padding(.bottom, 10)
             
             HomeDashCalendarContent(events: event)
                 .frame(height: 24 * heightForHour)
                 .padding(.bottom, 10)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
             
             HomeAllDayEvents(events: event)
                 .padding(.vertical, 10)
@@ -51,6 +51,7 @@ struct HomeDashCalendarGrid: View {
     
     @EnvironmentObject
     var homeViewModel: HomeViewModel
+    
     
     var date: Date
     
@@ -361,7 +362,7 @@ struct HomeAllDayEventsRow: View {
                 .font(.system(size: 10, weight: .regular))
                 .padding(.trailing, 10)
         }.frame(height: 20)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(Color(.tertiarySystemBackground))
         .cornerRadius(2.5)
         .onTapGesture {
             showEditView.toggle()

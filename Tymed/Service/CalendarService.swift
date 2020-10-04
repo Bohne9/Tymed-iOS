@@ -52,7 +52,7 @@ class CalendarService: Service {
     //MARK: calendarWeekEntries
     /// Returns a list of CalendarEntries for a given week.
     /// - Parameter week: Date within the requested date. The date does not necessarily has to be the start of the week.
-    /// - Returns: Returns a list of CalendarEntries for each day within the week.
+    /// - Returns: Returns a list of CalendarEntries for each day within the week starting at Monday.
     func calendarWeekEntries(for week: Date) -> [CalendarDayEntry] {
         guard let startOfWeek = week.startOfWeek else {
             return []
@@ -63,8 +63,8 @@ class CalendarService: Service {
     
     //MARK: calendarWeekEntries
     /// Returns a list of CalendarEntries for a given week.
-    /// - Parameter week: Date within the requested date. The date does not necessarily has to be the start of the week.
-    /// - Returns: Returns a list of CalendarEntries for each day within the week.
+    /// - Parameter week: Date within the requested date.
+    /// - Returns: Returns a list of CalendarEntries for each day within the week starting from the given date.
     func calendarWeekEntries(from date: Date) -> [CalendarDayEntry] {
         
         var date = date
