@@ -58,6 +58,12 @@ class CalendarWeekEntry: CalendarEntry {
         return Day.from(date: entries[index].date)
     }
     
-    
+    func removeEmptyDays() {
+        for (i, entry) in entries.enumerated().reversed() {
+            if entry.entries.isEmpty && entry.allDayEntries.isEmpty {
+                entries.remove(at: i)
+            }
+        }
+    }
     
 }

@@ -48,7 +48,7 @@ struct HomeDashView: View {
                 
                 ForEach(homeViewModel.calendarWeek.entries, id: \.date) { day in
                     VStack(alignment: .leading) {
-                        Text("\(day.date.stringify(with: .medium))")
+                        Text("\(day.date.stringify(with: .full))")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(Color(.label))
                             .padding(.leading, 5)

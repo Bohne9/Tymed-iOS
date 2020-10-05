@@ -16,18 +16,14 @@ class HomeViewModel: ObservableObject {
     private var eventService = EventService.shared
     
     @Published
-    var dayDebrief: DayDebriefViewModel?
-    
-    @Published
     var tasks: [Task] = []
-    
-    var events: [EKEvent] {
-        upcomingCalendarDay.entries
-    }
     
     var timetables: [Timetable] {
         return timetableService.fetchTimetables() ?? []
     }
+    
+    @Published
+    var calendars: [EKCalendar] = []
     
     @Published
     var nextEvents: [EKEvent]?
@@ -45,12 +41,6 @@ class HomeViewModel: ObservableObject {
     var calendarWeek: CalendarWeekEntry
     
     @Published
-    var upcomingCalendarDay: CalendarDayEntry
-    
-    @Published
-    var nextCalendarDay: CalendarDayEntry?
-    
-    @Published
     var currentDate = Date()
     
     private var anchorDate: Date
@@ -66,19 +56,13 @@ class HomeViewModel: ObservableObject {
         
         tasks = timetableService.getTasks(after: anchorDate).sorted()
         
-        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
-        
         calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
         
-        nextCalendarEvent = upcomingCalendarDay.entries.first
+        calendarWeek.removeEmptyDays()
         
-        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
-            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
-        }
+        calendars = eventService.calendars
         
         scheduleTimeUpdater()
-        
-        dayDebrief = DayDebriefViewModel(self)
         
         objectWillChange.send()
     }
@@ -109,23 +93,19 @@ class HomeViewModel: ObservableObject {
     func reload() {
         anchorDate = Date()
         
-        tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
-        
         nextEvents = eventService.nextEvents(in: eventService.calendars)
         
         eventCountToday = eventService.events(startingFrom: Date(), end: Date().endOfDay, in: eventService.calendars).count
         
         eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
         
-        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        tasks = timetableService.getTasks(after: anchorDate).sorted()
         
         calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
         
-        nextCalendarEvent = upcomingCalendarDay.entries.first
+        calendarWeek.removeEmptyDays()
         
-        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
-            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
-        }
+        calendars = eventService.calendars
         
         objectWillChange.send()
     }
@@ -161,31 +141,6 @@ extension HomeViewModel: DetailViewPresentationDelegate {
     
     func shouldDismiss() -> Bool {
         return !TimetableService.shared.hasChanges()
-    }
-    
-}
-
-extension HomeViewModel: DayDebriefDelegate {
-    
-    func replacement(for placeholder: Placeholders) -> String {
-        
-        switch placeholder {
-        case .name:
-            let name = SettingsService.shared.username
-            return name.isEmpty ? name : " \(name)"
-        case .totalEvents:
-            let count = numberOfEventsToday()
-            let ev = count == 1 ? "event" : "events"
-            
-            return "\(count) \(ev)"
-        default:
-            return "-"
-        }
-        
-    }
-    
-    func numberOfEventsToday() -> Int {
-        return Calendar.current.isDateInToday(upcomingCalendarDay.date) ? upcomingCalendarDay.eventCount : 0
     }
     
 }

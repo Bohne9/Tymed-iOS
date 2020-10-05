@@ -10,7 +10,7 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @ObservedObject
+    @StateObject
     var homeViewModel = HomeViewModel()
     
     var body: some View {
@@ -23,15 +23,14 @@ struct HomeView: View {
                 }else if index == 1 {
                     HomeTaskView(homeViewModel: homeViewModel)
                 }else if index == 2 {
-                    TimetableOverview()
+//                    TimetableOverview()
+                    HomeCalendarView()
+                        .environmentObject(homeViewModel)
                 }
                 
             }
             
         }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-        .onTapGesture(count: 1, perform: {
-            EventService.shared.oneYearFromNow()
-        })
     }
 }
 
