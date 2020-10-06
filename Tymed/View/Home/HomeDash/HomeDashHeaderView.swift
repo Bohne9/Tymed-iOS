@@ -34,9 +34,11 @@ struct HomeDashHeaderView: View {
                     Image(systemName: "plus")
                         .font(.system(size: 25, weight: .semibold))
                         .foregroundColor(.appColor)
-                }.sheet(isPresented: $showTaskAddView) {
-                    EventAddView()
-                }.padding(.trailing)
+                }.sheet(isPresented: $showTaskAddView, onDismiss: {
+                    homeViewModel.reload()
+                }, content: {
+                    EventEditView(event: EventViewModel(EventService.shared.addEvent()))
+                }).padding(.trailing)
 
                 
                 Button {

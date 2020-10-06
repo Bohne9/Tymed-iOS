@@ -71,6 +71,7 @@
 		4FA04A8C251F3E22004236CF /* PrivacyPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA04A8B251F3E22004236CF /* PrivacyPolicy.swift */; };
 		4FA04A8E251F463A004236CF /* AppSetupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA04A8D251F463A004236CF /* AppSetupModel.swift */; };
 		4FA2344C252C6849006CCE97 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA2344B252C6849006CCE97 /* EventViewModel.swift */; };
+		4FA23451252CAB3F006CCE97 /* CalendarPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA23450252CAB3F006CCE97 /* CalendarPicker.swift */; };
 		4FA8FFC325247E1D0082B548 /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA8FFC225247E1D0082B548 /* CalendarDayView.swift */; };
 		4FA8FFCE252488380082B548 /* HomeDashTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA8FFCD252488380082B548 /* HomeDashTaskView.swift */; };
 		4FAB1F412513B0E6007D5167 /* HomeDashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB1F402513B0E6007D5167 /* HomeDashView.swift */; };
@@ -205,6 +206,7 @@
 		4FA04A8B251F3E22004236CF /* PrivacyPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicy.swift; sourceTree = "<group>"; };
 		4FA04A8D251F463A004236CF /* AppSetupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupModel.swift; sourceTree = "<group>"; };
 		4FA2344B252C6849006CCE97 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
+		4FA23450252CAB3F006CCE97 /* CalendarPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPicker.swift; sourceTree = "<group>"; };
 		4FA8FFC225247E1D0082B548 /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		4FA8FFCD252488380082B548 /* HomeDashTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashTaskView.swift; sourceTree = "<group>"; };
 		4FAB1F402513B0E6007D5167 /* HomeDashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashView.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */,
 				4FB8F4D724F6E4A40015EC8E /* ViewWrapper.swift */,
 				4FA03663251CC555009C8F83 /* RadioButton.swift */,
+				4FA23450252CAB3F006CCE97 /* CalendarPicker.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -906,6 +909,7 @@
 				4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */,
 				4FFA61F024D00D7600C9F290 /* BackgroundRoutineService.swift in Sources */,
 				4F9405EF2468067C0063E4DA /* Time.swift in Sources */,
+				4FA23451252CAB3F006CCE97 /* CalendarPicker.swift in Sources */,
 				4F0F872C246F28BC00992721 /* Lesson+CoreDataProperties.swift in Sources */,
 				4FC1B22D25222D9200B3D8C9 /* AppContentView.swift in Sources */,
 				4FBF0F49252342B900CE789C /* CalendarViewModel.swift in Sources */,

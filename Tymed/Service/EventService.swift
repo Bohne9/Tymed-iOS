@@ -48,7 +48,21 @@ class EventService: Service {
     func addEvent() -> EKEvent {
         let event = EKEvent(eventStore: eventStore)
         
+        event.title = ""
+        let now = Date()
+        event.startDate = now
+        event.endDate = date(byAdding: 1, .hour, to: now)
+        event.calendar = editableCalendars().first
+        
         return event
+    }
+    
+    func date(byAdding value: Int, _ component: Calendar.Component, to date: Date) -> Date {
+        var comp = DateComponents()
+        
+        comp.setValue(value, for: component)
+        let nextDate = Calendar.current.date(byAdding: comp, to: date)
+        return nextDate ?? date
     }
     
     //MARK: Date
@@ -120,6 +134,11 @@ class EventService: Service {
             }
             return res // The new item does not have the same startDate as the first item. -> Do not include the new item in the list.
         }
+    }
+    
+    //MARK: Calendars
+    func editableCalendars() -> [EKCalendar] {
+        return eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
     }
     
 }

@@ -59,6 +59,7 @@ struct EventEditView: View {
     }
 }
 
+//MARK: EventEditViewContent
 struct EventEditViewContent: View {
     
     @ObservedObject
@@ -153,41 +154,36 @@ struct EventEditViewContent: View {
             
             //MARK: Calendar
             
-//            Section {
-//                HStack {
-//
-//                    NavigationLink(destination: AppTimetablePicker(timetable: $event.timetable)) {
-//                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
-//                        Spacer()
-//                        if event.timetable == TimetableService.shared.defaultTimetable() {
-//                            Text("Default")
-//                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-//                                .background(Color(.tertiarySystemGroupedBackground))
-//                                .font(.system(size: 13, weight: .semibold))
-//                                .cornerRadius(10)
-//                        }
-//                    }
-//
-//                }
-//            }
-            
-            //MARK: Delete
             Section {
-                DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showDeleteAction.toggle()
-                    }.actionSheet(isPresented: $showDeleteAction) {
-                        ActionSheet(
-                            title: Text(""),
-                            message: nil,
-                            buttons: [
-                                .destructive(Text("Delete"), action: {
-                                    deleteEvent()
-                                }),
-                                .cancel()
-                            ])
+                HStack {
+                    
+                    NavigationLink(destination: CalendarPicker(calendar: $event.calendar)) {
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        Spacer()
                     }
+
+                }
+            }
+            
+            if !event.isNew {
+                //MARK: Delete
+                Section {
+                    DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showDeleteAction.toggle()
+                        }.actionSheet(isPresented: $showDeleteAction) {
+                            ActionSheet(
+                                title: Text(""),
+                                message: nil,
+                                buttons: [
+                                    .destructive(Text("Delete"), action: {
+                                        deleteEvent()
+                                    }),
+                                    .cancel()
+                                ])
+                        }
+                }
             }
             
         }.listStyle(InsetGroupedListStyle())

@@ -40,11 +40,17 @@ class EventViewModel: ObservableObject {
             event.isAllDay = isAllDay
         }
     }
+    
     @Published
     var calendar: EKCalendar! {
         didSet {
             event.calendar = calendar
         }
+    }
+    
+    
+    var isNew: Bool {
+        return event.isNew
     }
     
     var hasChanges: Bool {

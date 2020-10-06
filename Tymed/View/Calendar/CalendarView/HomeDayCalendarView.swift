@@ -161,7 +161,7 @@ struct HomeDashCalendarContent: View {
                 ForEach(events.entries, id: \.self) { event in
                     let width = self.width(for: event, maxWidth: geometry.size.width - 60)
                     
-                    HomeDashCalendarEvent(event: event)
+                    HomeDashCalendarEvent(event: EventViewModel(event))
                         .frame(width: width, height: height(for: event))
                         .offset(x: offsetX(for: event, width: width, environment: events.entries), y: offsetY(for: event))
                 }
@@ -225,7 +225,8 @@ struct HomeDashCalendarEvent: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    var event: EKEvent
+    @ObservedObject
+    var event: EventViewModel
     
     @State
     private var showEditView = false
@@ -265,20 +266,10 @@ struct HomeDashCalendarEvent: View {
 //        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
-        }
-        .sheet(isPresented: $showEditView, content: {
-//            if let lesson = event.asLesson {
-//                LessonEditView(
-//                    lesson: lesson,
-//                    dismiss: {
-//                        homeViewModel.reload()
-//                        showEditView.toggle()
-//                })
-//            }else if let event = self.event.asEvent {
-//                EventEditView(event: event, presentationDelegate: homeViewModel)
-//            }else {
-//                Text("Ups! Something went wrong :(")
-//            }
+        }.sheet(isPresented: $showEditView, onDismiss: {
+            homeViewModel.reload()
+        }, content: {
+            EventEditView(event: event)
         })
 //        .contextMenu {
 //
