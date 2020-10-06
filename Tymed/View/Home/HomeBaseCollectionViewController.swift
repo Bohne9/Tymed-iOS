@@ -189,12 +189,6 @@ extension HomeBaseCollectionViewController: UIAdaptivePresentationControllerDele
     
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         
-        if let presentedViewController = presentationController.presentedViewController as? EventEditViewWrapper {
-            presentedViewController.presentationHandler.showDiscardWarning = TimetableService.shared.hasChanges()
-            
-            return !TimetableService.shared.hasChanges()
-        }
-        
         return true
     }
     

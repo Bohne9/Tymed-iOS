@@ -9,6 +9,7 @@
 import SwiftUI
 import EventKit
 
+//MARK: HomeDashOverviewView
 struct HomeDashOverviewView: View {
     
     @EnvironmentObject
@@ -30,7 +31,7 @@ struct HomeDashOverviewView: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundColor(Color(.label))
                     
-                    HomeDashOverviewEventView(event: event)
+                    HomeDashOverviewEventView(event: EventViewModel(event))
                 }
             }else {
                 VStack(alignment: .leading) {
@@ -58,6 +59,7 @@ struct HomeDashOverviewView: View {
     }
 }
 
+//MARK: HomeDashOverviewTaskView
 struct HomeDashOverviewTaskView: View {
     
     @EnvironmentObject
@@ -94,12 +96,14 @@ struct HomeDashOverviewTaskView: View {
     }
 }
 
+//MARK: HomeDashOverviewEventView
 struct HomeDashOverviewEventView: View {
     
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    var event: EKEvent
+    @ObservedObject
+    var event: EventViewModel
     
     @State
     private var showEventDetail = false
@@ -138,13 +142,11 @@ struct HomeDashOverviewEventView: View {
         .cornerRadius(8)
         .onTapGesture {
             showEventDetail.toggle()
-        }.sheet(isPresented: $showEventDetail) {
-//            if let event = event.asEvent {
-//                EventEditView(event: event, presentationDelegate: homeViewModel)
-//            }else if let lesson = event.asLesson {
-//
-//            }
-        }
+        }.sheet(isPresented: $showEventDetail, onDismiss: {
+            homeViewModel.reload()
+        }, content: {
+            EventEditView(event: event)
+        })
     }
     
     

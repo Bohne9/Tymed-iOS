@@ -98,13 +98,13 @@ class EventService: Service {
     /// Returns the next events in the given calendars
     /// - Parameter calendar: List of calendars to search in
     /// - Returns: Next events in the given calendars
-    func nextEvents(in calendar: [EKCalendar]? = nil) -> [EKEvent] {
+    func nextEvents(in calendar: [EKCalendar]? = nil, includeAllDayEvents: Bool = false) -> [EKEvent] {
         let cal = calendar ?? self.calendars
         
         let now = Date() // Current date
         let nextYear = oneYearFrom(date: now) // One year later from now
         
-        return events(startingFrom: now, end: nextYear, in: cal).sorted { (lhs, rhs) -> Bool in
+        return events(startingFrom: now, end: nextYear, in: cal).filter{ includeAllDayEvents ? true : !$0.isAllDay }.sorted { (lhs, rhs) -> Bool in
             return lhs.compareStartDate(with: rhs).rawValue < 1 // Sort the events by their startDate
         }.reduce([]) { (res, event) -> [EKEvent] in
             if res.isEmpty { // If the array is empty -> return the first item
