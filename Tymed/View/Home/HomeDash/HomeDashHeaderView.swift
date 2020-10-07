@@ -37,7 +37,7 @@ struct HomeDashHeaderView: View {
                 }.sheet(isPresented: $showTaskAddView, onDismiss: {
                     homeViewModel.reload()
                 }, content: {
-                    EventEditView(event: EventViewModel(EventService.shared.addEvent()))
+                    EventAddView()
                 }).padding(.trailing)
 
                 
