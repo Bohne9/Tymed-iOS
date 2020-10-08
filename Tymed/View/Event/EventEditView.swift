@@ -88,61 +88,44 @@ struct EventEditViewContent: View {
     var body: some View {
         List {
             
-            Section(header: Text("Title"))  {
+            Section {
                 TextField("Title", text: $event.title)
-                    .font(.system(size: 16, weight: .medium))
-//                VStack(alignment: .leading, spacing: 0) {
-//                    Text("Title")
-//                        .font(.system(size: 14, weight: .regular))
-//                        .foregroundColor(Color(.secondaryLabel))
-//                }.padding(.bottom, 2)
             }
             
-            Section(header: Text("Date & Time")) {
-                HStack {
-                    Text("Starts")
-                        .font(.system(size: 16, weight: .medium))
-                    Spacer()
-                    
-                    Text(textFor(event.startDate))
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(.systemBlue))
-                }.contentShape(Rectangle())
-                .onTapGesture {
-                    withAnimation {
-                        if showEndDatePicker {
-                            showEndDatePicker = false
+            Section {
+                
+                DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
+                    .onTapGesture {
+                        withAnimation {
+                            showStartDatePicker.toggle()
+                            
+                            if showEndDatePicker {
+                                showEndDatePicker = false
+                            }
                         }
-                        showStartDatePicker.toggle()
                     }
-                }
                 
                 if showStartDatePicker {
                     DatePicker("", selection: $event.startDate)
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
-                HStack {
-                    Text("Ends")
-                        .font(.system(size: 16, weight: .medium))
-                    Spacer()
-                    
-                    Text(textFor(event.endDate))
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color(.systemBlue))
-                }.contentShape(Rectangle())
-                .onTapGesture {
-                    withAnimation {
-                        if showStartDatePicker {
-                            showStartDatePicker = false
+                DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
+                    .animation(.default)
+                    .onTapGesture {
+                        withAnimation {
+                            showEndDatePicker.toggle()
+                            
+                            if showStartDatePicker {
+                                showStartDatePicker = false
+                            }
                         }
-                        showEndDatePicker.toggle()
                     }
-                }
                 
                 if showEndDatePicker {
                     DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
                         .datePickerStyle(GraphicalDatePickerStyle())
+                        .animation(.default)
                 }
                 
 //                HStack {
@@ -154,7 +137,7 @@ struct EventEditViewContent: View {
 //                        showNotificationDatePicker.toggle()
 //                    }
 //                }
-    
+//
 //                if event.notificationDate != nil && showNotificationDatePicker {
 //                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
 //                        .datePickerStyle(GraphicalDatePickerStyle())
@@ -162,12 +145,8 @@ struct EventEditViewContent: View {
 //                }
                 
                 HStack {
-                    Text("All day")
-                        .font(.system(size: 16, weight: .medium))
-                    Spacer()
-                    
+                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
                     Toggle("", isOn: $event.isAllDay)
-                        .foregroundColor(Color(.systemBlue))
                 }
             }
             
@@ -177,10 +156,10 @@ struct EventEditViewContent: View {
                 HStack {
                     
                     NavigationLink(destination: CalendarPicker(calendar: $event.calendar)) {
-                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", UIColor(cgColor: event.calendar.cgColor), value: timetableTitle())
                         Spacer()
                     }
-
+                    
                 }
             }
             
