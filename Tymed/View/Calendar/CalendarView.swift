@@ -26,7 +26,7 @@ struct CalendarView: View {
                         HStack {
 
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.appColorLight)
+                                .foregroundColor(.appColor)
                                 .font(.system(size: 18, weight: .semibold))
                                 .onTapGesture {
                                     withAnimation {
@@ -39,7 +39,7 @@ struct CalendarView: View {
                                 .font(.system(size: 16, weight: .semibold))
                             
                             Image(systemName: "chevron.right")
-                                .foregroundColor(.appColorLight)
+                                .foregroundColor(.appColor)
                                 .font(.system(size: 18, weight: .semibold))
                                 .onTapGesture {
                                     withAnimation {
@@ -55,6 +55,7 @@ struct CalendarView: View {
                             calendarViewModel.currentDay()
                         } label: {
                             Image(systemName: "calendar.circle.fill")
+                                .foregroundColor(.appColor)
                         }
 
                     }
