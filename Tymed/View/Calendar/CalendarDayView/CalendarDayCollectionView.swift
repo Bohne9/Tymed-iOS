@@ -11,10 +11,10 @@ import SwiftUI
 
 private let lessonCell = "lessonCell"
 
-//MARK: HomeWeekDayCollectionViewCell
-class HomeWeekDayCollectionViewCell: UICollectionViewCell  {
+//MARK: CalendarDayCollectionView
+class CalendarDayCollectionView: UICollectionViewCell  {
     
-    static let identifier = "HomeWeekDayCollectionViewCell"
+    static let identifier = "CalendarDayCollectionView"
     
     /// Delegate for displaying LessonEditView etc.
     var homeDelegate: HomeViewSceneDelegate?

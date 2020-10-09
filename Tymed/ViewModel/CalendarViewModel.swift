@@ -21,6 +21,9 @@ class CalendarViewModel: ObservableObject {
     @Published
     var index = 1
     
+    @Published
+    var currentDate = Date()
+    
     init() {
         reload()
     }
@@ -29,6 +32,8 @@ class CalendarViewModel: ObservableObject {
     func reload() {
         
         let now = Date()
+        
+        currentDate = now
         
         dayEntries = [
             calendarService.calendarDayEntry(for: now.prevDay),
@@ -46,8 +51,7 @@ class CalendarViewModel: ObservableObject {
     
     
     func titleForDay() -> String {
-        let date = dayEntries[index].date
-        return date.stringify(with: .medium)
+        return currentDate.stringify(with: .medium)
     }
     
     func fetchPrev() {
@@ -67,6 +71,18 @@ class CalendarViewModel: ObservableObject {
         
         dayEntries.insert(calendarService.calendarDayEntry(for: date.nextDay), at: dayEntries.count)
         objectWillChange.send()
+    }
+    
+    func nextDay() {
+        currentDate = currentDate.nextDay
+    }
+    
+    func prevDay() {
+        currentDate = currentDate.prevDay
+    }
+    
+    func currentDay() {
+        currentDate = Date()
     }
 }
 
