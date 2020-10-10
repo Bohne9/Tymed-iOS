@@ -25,7 +25,7 @@ struct SettingsView: View {
             
             Section(header: Text("App Icon")) {
                 NavigationLink(destination: AppIconPicker()) {
-                    Text("App Icon")
+                    DetailCellDescriptor("App Icon", image: "app", .systemBlue)
                 }
             }
             
@@ -80,7 +80,7 @@ struct SettingsView: View {
                 }
                 
                 NavigationLink (destination: AutoArchiveDelayTaskPickerView(autoArchiveDelay: $autoArchive)) {
-                    DetailCellDescriptor("Auto archive tasks after",
+                    DetailCellDescriptor("Auto archive tasks",
                                          image: "tray.full.fill",
                                          .systemOrange,
                                          value: autoArchiveTasks())

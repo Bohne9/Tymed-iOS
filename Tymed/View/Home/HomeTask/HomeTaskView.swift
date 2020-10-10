@@ -34,6 +34,7 @@ struct HomeTaskView: View {
     @State
     private var showTaskAdd = false
     
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
 
@@ -145,6 +146,9 @@ struct HomeTaskViewContent: View {
     @ObservedObject
     var taskViewModel: TaskViewModel
     
+    @State
+    private var showTaskArchive = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             HomeDashTaskView(taskViewModel: taskViewModel)
@@ -229,6 +233,11 @@ struct HomeTaskViewContent: View {
                 .cornerRadius(12)
                 .frame(height: 40)
                 .padding(.vertical)
+                .onTapGesture {
+                    showTaskArchive.toggle()
+                }.sheet(isPresented: $showTaskArchive) {
+                    Text("Archive")
+                }
             }
             
         }.environmentObject(taskViewModel)

@@ -69,6 +69,11 @@ struct ProfileView: View {
                 
                 Section {
                     NavigationLink(
+                        destination: MeView()) {
+                        DetailCellDescriptor("Me", image: "person.fill", .systemBlue)
+                    }
+                    
+                    NavigationLink(
                         destination: SettingsView(),
                         label: {
                             DetailCellDescriptor("Settings", image: "gear", .systemGray)

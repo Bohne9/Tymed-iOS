@@ -22,12 +22,17 @@ struct CalendarPicker: View {
         List {
             ForEach(calendars, id: \.self) { calendar in
                 HStack {
+                    Circle()
+                        .foregroundColor(Color(calendar.cgColor))
+                        .frame(width: 8, height: 8)
+                    
                     Text(calendar.title)
                         
                     Spacer()
                     
                     if self.calendar?.calendarIdentifier == calendar.calendarIdentifier {
                         Image(systemName: "checkmark")
+                            .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(Color(.systemBlue))
                     }
                 }.contentShape(Rectangle())
