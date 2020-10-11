@@ -61,6 +61,6 @@ struct CalendarView: View {
                     }
                     
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }

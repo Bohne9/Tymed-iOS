@@ -271,9 +271,6 @@ struct HomeDashCalendarEvent: View {
         }, content: {
             EventEditView(event: event)
         })
-//        .contextMenu {
-//
-//        }.previewContext(Text("Hallo"))
     }
     
     private func calendarColor() -> UIColor {
@@ -314,7 +311,7 @@ struct HomeAllDayEvents: View {
     var body: some View {
         VStack(spacing: 2) {
             ForEach(events.allDayEntries, id: \.self) { event in
-                HomeAllDayEventsRow(event: event)
+                HomeAllDayEventsRow(event: EventViewModel(event))
             }
             
         }
@@ -328,7 +325,8 @@ struct HomeAllDayEventsRow: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
-    var event: EKEvent
+    @ObservedObject
+    var event: EventViewModel
     
     @State
     private var showEditView = false
@@ -357,20 +355,12 @@ struct HomeAllDayEventsRow: View {
         .cornerRadius(2.5)
         .onTapGesture {
             showEditView.toggle()
-        }.sheet(isPresented: $showEditView, content: {
-//            if let lesson = event.asLesson {
-//                LessonEditView(
-//                    lesson: lesson,
-//                    dismiss: {
-//                        homeViewModel.reload()
-//                        showEditView.toggle()
-//                })
-//            }else if let event = self.event.asEvent {
-//                EventEditView(event: event, presentationDelegate: homeViewModel)
-//            }else {
-//                Text("Ups! Something went wrong :(")
-//            }
-        })
+        }.sheet(isPresented: $showEditView) {
+            homeViewModel.reload()
+        } content: {
+            EventEditView(event: event)
+        }
+
     }
     
     

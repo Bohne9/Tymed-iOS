@@ -105,7 +105,10 @@ struct HomeDashCalendarView: View {
             HomeAllDayEvents(events: event)
                 .padding(.vertical, event.entries.count != 0 ? 10 : 0)
                 .frame(height: CGFloat(event.allDayEntries.count * 20))
-        }.frame(height: CGFloat(numberOfHours()) * heightForHour + 40  + CGFloat(event.allDayEntries.count * 20))
+        }.frame(height:
+                    CGFloat(numberOfHours()) * heightForHour +
+                    CGFloat(event.entries.count != 0 ? 40 : 0) +
+                    CGFloat(event.allDayEntries.count * 20))
         .padding()
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
