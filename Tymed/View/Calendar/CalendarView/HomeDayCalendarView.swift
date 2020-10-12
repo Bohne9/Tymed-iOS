@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import EventKit
 
 fileprivate var heightForHour: CGFloat = 60
 
@@ -25,13 +26,13 @@ struct HomeDayCalendarView: View {
             HomeDashCalendarGrid(date: event.date, startHour: 0, endHour: 24)
                 .environmentObject(TimetableService.shared)
                 .frame(height: 24 * heightForHour)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
                 .padding(.bottom, 10)
             
             HomeDashCalendarContent(events: event)
                 .frame(height: 24 * heightForHour)
                 .padding(.bottom, 10)
-                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 10)
+                .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
             
             HomeAllDayEvents(events: event)
                 .padding(.vertical, 10)
@@ -50,6 +51,7 @@ struct HomeDashCalendarGrid: View {
     
     @EnvironmentObject
     var homeViewModel: HomeViewModel
+    
     
     var date: Date
     
@@ -159,7 +161,7 @@ struct HomeDashCalendarContent: View {
                 ForEach(events.entries, id: \.self) { event in
                     let width = self.width(for: event, maxWidth: geometry.size.width - 60)
                     
-                    HomeDashCalendarEvent(event: event)
+                    HomeDashCalendarEvent(event: EventViewModel(event))
                         .frame(width: width, height: height(for: event))
                         .offset(x: offsetX(for: event, width: width, environment: events.entries), y: offsetY(for: event))
                 }
@@ -167,8 +169,8 @@ struct HomeDashCalendarContent: View {
         }
     }
     
-    private func width(for event: CalendarEvent, maxWidth: CGFloat) -> CGFloat {
-        let collisions = event.collisionCount(within: events.entries)
+    private func width(for event: EKEvent, maxWidth: CGFloat) -> CGFloat {
+        let collisions = events.collisionCount(for: event, within: events.entries)
         
         if collisions == 0 {
             return maxWidth
@@ -177,7 +179,7 @@ struct HomeDashCalendarContent: View {
         return maxWidth / CGFloat(collisions + 1)
     }
     
-    private func height(for event: CalendarEvent) -> CGFloat {
+    private func height(for event: EKEvent) -> CGFloat {
         guard let start = event.startDate,
               let end = event.endDate else {
             return 0
@@ -188,11 +190,12 @@ struct HomeDashCalendarContent: View {
         return heightForHour * duration
     }
     
-    private func offsetX(for event: CalendarEvent, width: CGFloat, environment: [CalendarEvent]) -> CGFloat {
-        return 60 + CGFloat(event.collisionRank(in: environment)) * width
+    private func offsetX(for event: EKEvent
+                         , width: CGFloat, environment: [EKEvent]) -> CGFloat {
+        return 60 + CGFloat(events.collisionRank(for: event)) * width
     }
     
-    private func offsetY(for event: CalendarEvent) -> CGFloat {
+    private func offsetY(for event: EKEvent) -> CGFloat {
         guard let startOfDay = events.startOfDay else {
             return 0
         }
@@ -223,7 +226,7 @@ struct HomeDashCalendarEvent: View {
     var homeViewModel: HomeViewModel
     
     @ObservedObject
-    var event: CalendarEvent
+    var event: EventViewModel
     
     @State
     private var showEditView = false
@@ -237,13 +240,13 @@ struct HomeDashCalendarEvent: View {
                     .frame(width: 10)
                 Spacer()
             }
-            .background(Color(UIColor(event) ?? .clear))
+            .background(Color(calendarColor()))
             
             VStack(alignment: .leading) {
                 if eventDuration() > 45 {
-                    Text(event.timetable?.name.uppercased() ?? "")
+                    Text(event.calendar.title)
                         .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(UIColor(event) ?? .clear))
+                        .foregroundColor(Color(calendarColor()))
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
@@ -263,30 +266,15 @@ struct HomeDashCalendarEvent: View {
 //        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
-        }.sheet(isPresented: $showEditView, content: {
-            if let lesson = event.asLesson {
-                LessonEditView(
-                    lesson: lesson,
-                    dismiss: {
-                        homeViewModel.reload()
-                        showEditView.toggle()
-                })
-            }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel)
-            }else {
-                Text("Ups! Something went wrong :(")
-            }
+        }.sheet(isPresented: $showEditView, onDismiss: {
+            homeViewModel.reload()
+        }, content: {
+            EventEditView(event: event)
         })
-//        .contextMenu {
-//
-//        }.previewContext(Text("Hallo"))
     }
     
-    private func timetableColor() -> UIColor {
-        guard let timetable = event.timetable else {
-            return .clear
-        }
-        return UIColor(timetable) ?? .clear
+    private func calendarColor() -> UIColor {
+        return UIColor(cgColor: event.calendar.cgColor)
     }
     
     private func timeString() -> String {
@@ -323,7 +311,7 @@ struct HomeAllDayEvents: View {
     var body: some View {
         VStack(spacing: 2) {
             ForEach(events.allDayEntries, id: \.self) { event in
-                HomeAllDayEventsRow(event: event)
+                HomeAllDayEventsRow(event: EventViewModel(event))
             }
             
         }
@@ -338,7 +326,7 @@ struct HomeAllDayEventsRow: View {
     var homeViewModel: HomeViewModel
     
     @ObservedObject
-    var event: CalendarEvent
+    var event: EventViewModel
     
     @State
     private var showEditView = false
@@ -352,7 +340,7 @@ struct HomeAllDayEventsRow: View {
                     .frame(width: 4)
                 Spacer()
             }
-            .background(Color(UIColor(event) ?? .clear))
+            .background(Color(UIColor(cgColor: event.calendar.cgColor)))
             
             Text(event.title)
                 .font(.system(size: 10, weight: .semibold))
@@ -363,24 +351,16 @@ struct HomeAllDayEventsRow: View {
                 .font(.system(size: 10, weight: .regular))
                 .padding(.trailing, 10)
         }.frame(height: 20)
-        .background(Color(.secondarySystemGroupedBackground))
+        .background(Color(.tertiarySystemBackground))
         .cornerRadius(2.5)
         .onTapGesture {
             showEditView.toggle()
-        }.sheet(isPresented: $showEditView, content: {
-            if let lesson = event.asLesson {
-                LessonEditView(
-                    lesson: lesson,
-                    dismiss: {
-                        homeViewModel.reload()
-                        showEditView.toggle()
-                })
-            }else if let event = self.event.asEvent {
-                EventEditView(event: event, presentationDelegate: homeViewModel)
-            }else {
-                Text("Ups! Something went wrong :(")
-            }
-        })
+        }.sheet(isPresented: $showEditView) {
+            homeViewModel.reload()
+        } content: {
+            EventEditView(event: event)
+        }
+
     }
     
     

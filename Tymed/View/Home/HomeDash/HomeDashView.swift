@@ -46,55 +46,16 @@ struct HomeDashView: View {
                     HomeDashTaskView(taskViewModel: TaskViewModel())
                 }
                 
-    //            if homeViewModel.tasks.count > 0 {
-    //                Section(header:
-    //                            Text("Tasks")
-    //                            .font(.system(size: 13, weight: .semibold))
-    //                            .foregroundColor(Color(.label))) {
-    //                    ForEach(homeViewModel.tasks.prefix(3), id: \.self) { task in
-    //                        Section {
-    //                            HomeTaskCell(task: task)
-    //                                .environmentObject(homeViewModel)
-    //                                .frame(height: 45)
-    //                        }
-    //                    }
-    //                    if homeViewModel.tasks.count > 3 {
-    //                        HStack {
-    //                            Text("See all tasks")
-    //                            Spacer()
-    //
-    //                            Image(systemName: "arrow.right")
-    //                        }.font(.system(size: 15, weight: .semibold))
-    //                        .foregroundColor(Color(.systemBlue))
-    //                    }
-    //                }
-    //            }
-    //
-    //
-    //            Section(header:
-                VStack(alignment: .leading) {
-                    Text("\(homeViewModel.upcomingCalendarDay.date.stringify(with: .medium))")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(Color(.label))
-                        .padding(.leading, 5)
-                    HomeDashCalendarView(event: homeViewModel.upcomingCalendarDay)
-                }
-    //
-    //            }
-    //
-                if let nextCalendarDay = homeViewModel.nextCalendarDay,
-                    homeViewModel.nextCalendarDay?.entries.count ?? 0 > 0 {
+                ForEach(homeViewModel.calendarWeek.entries, id: \.date) { day in
                     VStack(alignment: .leading) {
-                        Text("\(nextCalendarDay.date.stringify(with: .medium))")
+                        Text("\(day.date.stringify(with: .full))")
                             .font(.system(size: 15, weight: .semibold))
                             .foregroundColor(Color(.label))
                             .padding(.leading, 5)
-                        HomeDashCalendarView(event: nextCalendarDay)
-                            .environmentObject(TimetableService.shared)
+                        HomeDashCalendarView(event: day)
                     }
                 }
                 
-//                Spacer()
             }
             .padding()
             .environmentObject(homeViewModel)
@@ -117,16 +78,37 @@ struct HomeDashCalendarView: View {
     @EnvironmentObject
     var homeViewModel: HomeViewModel
     
+    
     var body: some View {
         ZStack(alignment: .top) {
-            HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
-                .frame(height: CGFloat(numberOfHours()) * heightForHour)
-                .padding(.vertical, 20)
             
-            HomeDashCalendarContent(events: event)
-                .frame(height: CGFloat(numberOfHours()) * heightForHour)
-                .padding(.vertical, 20)
-        }.frame(height: CGFloat(numberOfHours()) * heightForHour + 40)
+            if event.entries.count != 0 {
+                HomeDashCalendarGrid(date: event.date, startHour: startHour(), endHour: startHour() + numberOfHours())
+                    .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                    .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
+                    .padding(.bottom, 10)
+                
+                HomeDashCalendarContent(events: event)
+                    .frame(height: CGFloat(numberOfHours()) * heightForHour)
+                    .padding(.top, CGFloat(event.allDayEntries.count * 20) + 20)
+                    .padding(.bottom, 10)
+            } else {
+                
+                HStack {
+                    Text("No events \(noEventText())")
+                        .font(.system(size: 14, weight: .semibold))
+                    Spacer()
+                }
+                
+            }
+            
+            HomeAllDayEvents(events: event)
+                .padding(.vertical, event.entries.count != 0 ? 10 : 0)
+                .frame(height: CGFloat(event.allDayEntries.count * 20))
+        }.frame(height:
+                    CGFloat(numberOfHours()) * heightForHour +
+                    CGFloat(event.entries.count != 0 ? 40 : 0) +
+                    CGFloat(event.allDayEntries.count * 20))
         .padding()
         .background(Color(.secondarySystemBackground))
         .cornerRadius(12)
@@ -150,6 +132,16 @@ struct HomeDashCalendarView: View {
         }
         
         return Calendar.current.dateComponents([.hour], from: start).hour ?? 0
+    }
+    
+    private func noEventText() -> String {
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.doesRelativeDateFormatting = true
+        dateFormatter.formattingContext = .middleOfSentence
+        dateFormatter.dateStyle = .medium
+        
+        return dateFormatter.string(from: event.date)
     }
     
 }

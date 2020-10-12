@@ -16,6 +16,8 @@ struct ProfileView: View {
     @State
     private var email = ""
     
+    @State
+    private var isSettingsPresented = true
     
     @State
     private var showProAccessPreview = false
@@ -69,7 +71,13 @@ struct ProfileView: View {
                 
                 Section {
                     NavigationLink(
+                        destination: MeView()) {
+                        DetailCellDescriptor("Me", image: "person.fill", .systemBlue)
+                    }
+                    
+                    NavigationLink(
                         destination: SettingsView(),
+                        isActive: $isSettingsPresented,
                         label: {
                             DetailCellDescriptor("Settings", image: "gear", .systemGray)
                         })
@@ -122,7 +130,7 @@ struct ProfileView: View {
                 
             }.listStyle(InsetGroupedListStyle())
             .navigationTitle("Profile")
-        }
+        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
 }
 

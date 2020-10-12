@@ -7,34 +7,38 @@
 //
 
 import SwiftUI
+import EventKit
 
 class HomeViewModel: ObservableObject {
     
     private var timetableService = TimetableService.shared
     private var calendarService = CalendarService.shared
-    
-    @Published
-    var dayDebrief: DayDebriefViewModel?
+    private var eventService = EventService.shared
     
     @Published
     var tasks: [Task] = []
-    
-    var events: [CalendarEvent] {
-        upcomingCalendarDay.entries
-    }
     
     var timetables: [Timetable] {
         return timetableService.fetchTimetables() ?? []
     }
     
     @Published
-    var nextCalendarEvent: CalendarEvent?
+    var calendars: [EKCalendar] = []
     
     @Published
-    var upcomingCalendarDay: CalendarDayEntry
+    var nextEvents: [EKEvent]?
     
     @Published
-    var nextCalendarDay: CalendarDayEntry?
+    var eventCountToday: Int = 0
+    
+    @Published
+    var eventCountWeek: Int = 0
+    
+    @Published
+    var nextCalendarEvent: EKEvent?
+    
+    @Published
+    var calendarWeek: CalendarWeekEntry
     
     @Published
     var currentDate = Date()
@@ -44,19 +48,21 @@ class HomeViewModel: ObservableObject {
     init(anchor: Date = Date()) {
         anchorDate = anchor
         
+        nextEvents = eventService.nextEvents(in: eventService.calendars)
+        
+        eventCountToday = eventService.events(startingFrom: Date(), end: Date().endOfDay, in: eventService.calendars).count
+        
+        eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
+        
         tasks = timetableService.getTasks(after: anchorDate).sorted()
         
-        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
         
-        nextCalendarEvent = upcomingCalendarDay.entries.first
+        calendarWeek.removeEmptyDays()
         
-        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
-            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
-        }
+        calendars = eventService.calendars
         
         scheduleTimeUpdater()
-        
-        dayDebrief = DayDebriefViewModel(self)
         
         objectWillChange.send()
     }
@@ -87,15 +93,19 @@ class HomeViewModel: ObservableObject {
     func reload() {
         anchorDate = Date()
         
-        tasks = timetableService.getTasks(after: taskThresholdDate()).sorted()
+        nextEvents = eventService.nextEvents(in: eventService.calendars)
         
-        upcomingCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: anchorDate)
+        eventCountToday = eventService.events(startingFrom: Date(), end: Date().endOfDay, in: eventService.calendars).count
         
-        nextCalendarEvent = upcomingCalendarDay.entries.first
+        eventCountWeek = eventService.events(startingFrom: Date(), end: Date().endOfWeek ?? Date(), in: eventService.calendars).count
         
-        if let upcomingEndDate = upcomingCalendarDay.endOfDay?.nextDay {
-            nextCalendarDay = calendarService.getNextCalendarDayEntry(startingFrom: upcomingEndDate)
-        }
+        tasks = timetableService.getTasks(after: anchorDate).sorted()
+        
+        calendarWeek = CalendarWeekEntry(startingFrom: anchorDate, expandsToEntireDay: false)
+        
+        calendarWeek.removeEmptyDays()
+        
+        calendars = eventService.calendars
         
         objectWillChange.send()
     }
@@ -131,31 +141,6 @@ extension HomeViewModel: DetailViewPresentationDelegate {
     
     func shouldDismiss() -> Bool {
         return !TimetableService.shared.hasChanges()
-    }
-    
-}
-
-extension HomeViewModel: DayDebriefDelegate {
-    
-    func replacement(for placeholder: Placeholders) -> String {
-        
-        switch placeholder {
-        case .name:
-            let name = SettingsService.shared.username
-            return name.isEmpty ? name : " \(name)"
-        case .totalEvents:
-            let count = numberOfEventsToday()
-            let ev = count == 1 ? "event" : "events"
-            
-            return "\(count) \(ev)"
-        default:
-            return "-"
-        }
-        
-    }
-    
-    func numberOfEventsToday() -> Int {
-        return Calendar.current.isDateInToday(upcomingCalendarDay.date) ? upcomingCalendarDay.eventCount : 0
     }
     
 }

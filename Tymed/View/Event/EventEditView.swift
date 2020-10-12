@@ -7,34 +7,12 @@
 //
 
 import SwiftUI
-
-class EventEditViewWrapper: ViewWrapper<EventEditView> {
-    
-    var event: Event?
-    
-    var eventEditView: EventEditView?
-    
-    override func createContent() -> UIHostingController<EventEditView>? {
-        guard let event = event else {
-            return nil
-        }
-        
-        eventEditView = EventEditView(
-            event: event,
-            presentationDelegate: presentationDelegate)
-     
-        return UIHostingController(rootView: eventEditView!)
-    }
-    
-}
+import EventKit
 
 struct EventEditView: View {
     
     @ObservedObject
-    var event: Event
-    
-    @State
-    var presentationDelegate: DetailViewPresentationDelegate?
+    var event: EventViewModel
     
     @State
     var showDiscardWarning = false
@@ -44,7 +22,7 @@ struct EventEditView: View {
     
     var body: some View {
         NavigationView {
-            EventEditViewContent(event: event, presentationDelegate: presentationDelegate) {
+            EventEditViewContent(event: event) {
                 presentationMode.wrappedValue.dismiss()
             }
                 .navigationTitle("Event")
@@ -55,17 +33,16 @@ struct EventEditView: View {
                     Text("Cancel")
                         .font(.system(size: 16, weight: .semibold))
                 }), trailing: Button(action: {
-                    NotificationService.current.scheduleEventNotification(for: event)
-                    presentationDelegate?.done()
+                    event.save()
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Done")
                         .font(.system(size: 16, weight: .semibold))
-                }).disabled(!event.isValid))
+                }).disabled(!event.hasChanges || event.title.isEmpty))
         }.actionSheet(isPresented: $showDiscardWarning, content: {
             ActionSheet(title: Text("Do you want to discard your changes?"), message: nil, buttons: [
                 .destructive(Text("Discard changes"), action: {
-                    presentationDelegate?.cancel()
+                    event.rollback()
                     presentationMode.wrappedValue.dismiss()
                 }),
                 .cancel()
@@ -74,22 +51,19 @@ struct EventEditView: View {
     }
     
     func cancel() {
-        if TimetableService.shared.hasChanges() {
+        if event.hasChanges {
             showDiscardWarning.toggle()
         }else {
-            presentationDelegate?.cancel()
             presentationMode.wrappedValue.dismiss()
         }
     }
 }
 
+//MARK: EventEditViewContent
 struct EventEditViewContent: View {
     
     @ObservedObject
-    var event: Event
-    
-    @State
-    var presentationDelegate: DetailViewPresentationDelegate?
+    var event: EventViewModel
     
     @Environment(\.presentationMode)
     var presentationMode
@@ -115,15 +89,12 @@ struct EventEditViewContent: View {
         List {
             
             Section {
-                
                 TextField("Title", text: $event.title)
-                
-                TextField("Description", text: Binding($event.body, replacingNilWith: ""))
             }
             
             Section {
                 
-                DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.start))
+                DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
                     .onTapGesture {
                         withAnimation {
                             showStartDatePicker.toggle()
@@ -135,11 +106,11 @@ struct EventEditViewContent: View {
                     }
                 
                 if showStartDatePicker {
-                    DatePicker("", selection: Binding($event.start, Date()))
+                    DatePicker("", selection: $event.startDate)
                         .datePickerStyle(GraphicalDatePickerStyle())
                 }
                 
-                DetailCellDescriptor("End date", image: "calendar", .systemOrange, value: textFor(event.end))
+                DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
                     .animation(.default)
                     .onTapGesture {
                         withAnimation {
@@ -151,31 +122,31 @@ struct EventEditViewContent: View {
                         }
                     }
                 
-                if showEndDatePicker, let start = event.start {
-                    DatePicker("", selection: Binding($event.end, Date()), in: (start + 60)...)
+                if showEndDatePicker {
+                    DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .animation(.default)
                 }
                 
-                HStack {
-                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
-                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
-                }.animation(.default)
-                .onTapGesture {
-                    withAnimation {
-                        showNotificationDatePicker.toggle()
-                    }
-                }
-    
-                if event.notificationDate != nil && showNotificationDatePicker {
-                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .animation(.easeIn)
-                }
+//                HStack {
+//                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
+//                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
+//                }.animation(.default)
+//                .onTapGesture {
+//                    withAnimation {
+//                        showNotificationDatePicker.toggle()
+//                    }
+//                }
+//
+//                if event.notificationDate != nil && showNotificationDatePicker {
+//                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
+//                        .datePickerStyle(GraphicalDatePickerStyle())
+//                        .animation(.easeIn)
+//                }
                 
                 HStack {
                     DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
-                    Toggle("", isOn: $event.allDay)
+                    Toggle("", isOn: $event.isAllDay)
                 }
             }
             
@@ -184,79 +155,71 @@ struct EventEditViewContent: View {
             Section {
                 HStack {
                     
-                    NavigationLink(destination: AppTimetablePicker(timetable: $event.timetable)) {
-                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                    NavigationLink(destination: CalendarPicker(calendar: $event.calendar)) {
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", UIColor(cgColor: event.calendar.cgColor), value: timetableTitle())
                         Spacer()
-                        if event.timetable == TimetableService.shared.defaultTimetable() {
-                            Text("Default")
-                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-                                .background(Color(.tertiarySystemGroupedBackground))
-                                .font(.system(size: 13, weight: .semibold))
-                                .cornerRadius(10)
-                        }
                     }
                     
                 }
             }
             
-            //MARK: Delete
-            Section {
-                DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        showDeleteAction.toggle()
-                    }.actionSheet(isPresented: $showDeleteAction) {
-                        ActionSheet(
-                            title: Text(""),
-                            message: nil,
-                            buttons: [
-                                .destructive(Text("Delete"), action: {
-                                    deleteEvent()
-                                }),
-                                .cancel()
-                            ])
-                    }
+            if !event.isNew {
+                //MARK: Delete
+                Section {
+                    DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showDeleteAction.toggle()
+                        }.actionSheet(isPresented: $showDeleteAction) {
+                            ActionSheet(
+                                title: Text(""),
+                                message: nil,
+                                buttons: [
+                                    .destructive(Text("Delete"), action: {
+                                        deleteEvent()
+                                    }),
+                                    .cancel()
+                                ])
+                        }
+                }
             }
             
         }.listStyle(InsetGroupedListStyle())
-        .onChange(of: event.end) { value in
-            if let start = event.start,
-               let end = event.end {
+        .onChange(of: event.endDate) { value in
+            if let start = event.startDate,
+               let end = event.endDate {
                 duration = end.timeIntervalSince(start)
             }
-        }.onChange(of: event.start) { value in
-            guard let start = event.start else {
+        }.onChange(of: event.startDate) { value in
+            guard let start = event.startDate else {
                 return
             }
-            event.end = start + duration
+            event.endDate = start + duration
         }.onAppear {
-            if let start = event.start,
-               let end = event.end {
+            if let start = event.startDate,
+               let end = event.endDate {
                 duration = end.timeIntervalSince(start)
             }
         }
     }
 
     func textFor(_ date: Date?) -> String {
-        return date?.stringify(dateStyle: .long, timeStyle: .short)  ?? ""
+        return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
     }
 
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
-        return event.timetable?.name
+        return event.calendar.title
     }
     
-    private func textForNotification() -> String? {
-        return event.notificationDate?.stringify(dateStyle: .medium, timeStyle: .short)
-    }
+//    private func textForNotification() -> String? {
+//        return event.notificationDate?.stringify(dateStyle: .medium, timeStyle: .short)
+//    }
     
     //MARK: deleteEvent
     private func deleteEvent() {
         showDeleteAction = false
         dismiss()
-        TimetableService.shared.deleteEvent(event)
-        
-        presentationDelegate?.done()
         
     }
 }

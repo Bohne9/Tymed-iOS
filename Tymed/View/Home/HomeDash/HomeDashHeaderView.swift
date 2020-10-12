@@ -16,6 +16,9 @@ struct HomeDashHeaderView: View {
     @State
     var showTaskAddView = false
     
+    @State
+    var showMeView = false
+    
     var body: some View {
         VStack {
             HStack(alignment: .top) {
@@ -31,23 +34,29 @@ struct HomeDashHeaderView: View {
                 Button {
                     showTaskAddView.toggle()
                 } label: {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.circle.fill")
                         .font(.system(size: 25, weight: .semibold))
                         .foregroundColor(.appColor)
-                }.sheet(isPresented: $showTaskAddView) {
+                }.sheet(isPresented: $showTaskAddView, onDismiss: {
+                    homeViewModel.reload()
+                }, content: {
                     EventAddView()
-                }.padding(.trailing)
+                }).padding(.trailing)
 
                 
                 Button {
-                    
+                    showMeView.toggle()
                 } label: {
                     if let img = SettingsService.shared.profilePicture {
                         Text("Image")
                     } else {
-                        Image(systemName: "person.crop.square")
+                        Image(systemName: "person.crop.circle")
                             .font(.system(size: 25, weight: .regular))
-                            .foregroundColor(Color(.secondaryLabel))
+                            .foregroundColor(Color(.label))
+                    }
+                }.sheet(isPresented: $showMeView) {
+                    NavigationView {
+                        MeView()
                     }
                 }
             }

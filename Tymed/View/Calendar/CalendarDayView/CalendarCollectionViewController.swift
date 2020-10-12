@@ -17,12 +17,14 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
     
     var homeViewModel: HomeViewModel? = HomeViewModel()
     
+    var calendarDelegate: CalendarCollectionViewControllerDelegate?
+    
     //MARK: setupUI()
     override internal func setupUserInterface() {
         
         // Register the Day Cell
-        collectionView.register(HomeWeekDayCollectionViewCell.self,
-                                forCellWithReuseIdentifier: HomeWeekDayCollectionViewCell.identifier)
+        collectionView.register(CalendarDayCollectionView.self,
+                                forCellWithReuseIdentifier: CalendarDayCollectionView.identifier)
         
         // Remove scroll indicator
         collectionView.showsVerticalScrollIndicator = false
@@ -71,6 +73,8 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
             updateCurrentDay(indexPath: collectionView.indexPath(for: cell)!)
         }
         
+        calendarDelegate?.didReloadCollectionView(self)
+        
     }
     
     private func fetchPreviousWeek() {
@@ -99,7 +103,7 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
     
     func currentDay() -> Date? {
     
-        if let cell = collectionView.visibleCells.first as? HomeWeekDayCollectionViewCell {
+        if let cell = collectionView.visibleCells.first as? CalendarDayCollectionView {
             return cell.entry?.date
         }
     
@@ -107,7 +111,7 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
     }
  
     //MARK: scrollTo(day: )
-    func scrollTo(date: Date, _ animated: Bool = false) {
+    func scrollTo(date: Date, animated: Bool = false, silent: Bool = false) {
         
         outer : for (section, week) in entries.enumerated() {
             
@@ -118,7 +122,10 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
                         let indexPath = IndexPath(item: index, section: section)
                         
                         collectionView.scrollToItem(at: indexPath, at: .left, animated: animated)
-                        updateCurrentDay(indexPath: indexPath)
+                        
+                        if !silent {
+                            updateCurrentDay(indexPath: indexPath)
+                        }
                         
                         break outer
                     }
@@ -137,10 +144,10 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
         return entries[section].entryCount
     }
     
-    private func dequeueHomeDayCell(for indexPath: IndexPath) -> HomeWeekDayCollectionViewCell? {
+    private func dequeueHomeDayCell(for indexPath: IndexPath) -> CalendarDayCollectionView? {
         return collectionView.dequeueReusableCell(
-            withReuseIdentifier: HomeWeekDayCollectionViewCell.identifier,
-            for: indexPath) as? HomeWeekDayCollectionViewCell
+            withReuseIdentifier: CalendarDayCollectionView.identifier,
+            for: indexPath) as? CalendarDayCollectionView
     }
     
     //MARK: cellForItem
@@ -171,12 +178,9 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
     
     //MARK: updateCurrentDay
     private func updateCurrentDay(indexPath: IndexPath) {
-        guard let navBar = navigationController?.navigationBar as? NavigationBar else {
-            return
-        }
         
         if let entry = calendarDayEntry(for: indexPath) {
-            navBar.setWeekTitle(entry.date)
+//            calendarDelegate?.didScrollTo(self, date: entry.date)
         }
         
     }
@@ -195,6 +199,10 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
             let indexPath = collectionView.indexPath(for: cell)!
             
             updateCurrentDay(indexPath: indexPath)
+            
+            if let entry = calendarDayEntry(for: indexPath) {
+                calendarDelegate?.didScrollTo(self, date: entry.date)
+            }
             
             if indexPath.section == 0 && indexPath.row == 0 {
                 fetchPreviousWeek()
@@ -216,6 +224,12 @@ class CalendarCollectionViewController: HomeBaseCollectionViewController {
 }
 
 
-protocol <#name#> {
-    <#requirements#>
+protocol CalendarCollectionViewControllerDelegate {
+    
+    func didReloadCollectionView(_ view: CalendarCollectionViewController)
+    
+    func scrollTo(_ date: Date)
+    
+    func didScrollTo(_ view: CalendarCollectionViewController, date: Date)
+    
 }

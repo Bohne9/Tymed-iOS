@@ -66,13 +66,13 @@ extension HomeViewSceneDelegate {
     }
     
     func presentEventEditView(for event: Event) {
-        let eventEdit = EventEditViewWrapper()
-        
-        eventEdit.event = event
-        
-        eventEdit.homeDelegate = self
-        
-        present(eventEdit, animated: true)
+//        let eventEdit = EventEditViewWrapper()
+//        
+//        eventEdit.event = event
+//        
+//        eventEdit.homeDelegate = self
+//        
+//        present(eventEdit, animated: true)
     }
     
 }

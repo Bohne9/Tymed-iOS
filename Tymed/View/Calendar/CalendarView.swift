@@ -17,44 +17,50 @@ struct CalendarView: View {
         
         NavigationView {
             CalendarDayView()
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                
-                ToolbarItem(placement: .principal) {
+                .environmentObject(calendarViewModel)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
                     
-                    HStack {
+                    ToolbarItem(placement: .principal) {
+                        
+                        HStack {
 
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.appColorLight)
-                            .onTapGesture {
-                                withAnimation {
-                                    calendarViewModel.index -= 1
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.appColor)
+                                .font(.system(size: 18, weight: .semibold))
+                                .onTapGesture {
+                                    withAnimation {
+                                        calendarViewModel.prevDay()
+                                    }
                                 }
-                            }
-                        
-                        Text(calendarViewModel.titleForDay())
-                            .frame(width: 100)
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.appColorLight)
-                            .onTapGesture {
-                                withAnimation {
-                                    calendarViewModel.index += 1
+                            
+                            Text(calendarViewModel.titleForDay())
+                                .frame(minWidth: 120)
+                                .font(.system(size: 16, weight: .semibold))
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.appColor)
+                                .font(.system(size: 18, weight: .semibold))
+                                .onTapGesture {
+                                    withAnimation {
+                                        calendarViewModel.nextDay()
+                                    }
                                 }
-                            }
-                    }.font(.system(size: 16, weight: .semibold))
-                    
-                }
-                
-            }.onChange(of: calendarViewModel.index) { index in
-//                withAnimation {
-                    if index == 0 {
-                        calendarViewModel.fetchPrev()
-                    }else if index == calendarViewModel.dayEntries.count - 1 {
-                        calendarViewModel.fetchNext()
+                        }
+                        
                     }
-//                }
+                    
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            calendarViewModel.currentDay()
+                        } label: {
+                            Image(systemName: "calendar.circle.fill")
+                                .foregroundColor(.appColor)
+                        }
+
+                    }
+                    
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }

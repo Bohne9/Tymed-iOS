@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import EventKit
 
 class CalendarService: Service {
     
@@ -20,8 +21,8 @@ class CalendarService: Service {
     /// Returns a list of lessons that match the weekday of the date.
     /// - Parameter date: Date
     /// - Returns: Returns a list of lessons that match the given weekday of the date.
-    func eventsForDay(date: Date) -> [CalendarEvent] {
-        return TimetableService.shared.calendarEventsFor(day: date)
+    func eventsForDay(date: Date) -> [EKEvent] {
+        return EventService.shared.events(forDay: date)
     }
     
     //MARK: calendarDayEntry
@@ -33,11 +34,11 @@ class CalendarService: Service {
     }
     
     func getNextCalendarDayEntry(startingFrom date: Date) -> CalendarDayEntry {
-        var events = [CalendarEvent]()
+        var events = [EKEvent]()
         var currentDate = date
         
         for _ in 0..<7 {
-            events = TimetableService.shared.calendarEventsFor(day: currentDate)
+            events = EventService.shared.events(forDay: currentDate)
             
             if events.count != 0 {
                 return CalendarDayEntry(for: currentDate, entries: events)
@@ -51,14 +52,23 @@ class CalendarService: Service {
     //MARK: calendarWeekEntries
     /// Returns a list of CalendarEntries for a given week.
     /// - Parameter week: Date within the requested date. The date does not necessarily has to be the start of the week.
-    /// - Returns: Returns a list of CalendarEntries for each day within the week.
+    /// - Returns: Returns a list of CalendarEntries for each day within the week starting at Monday.
     func calendarWeekEntries(for week: Date) -> [CalendarDayEntry] {
-        // Get the start date of the week (Monday)
         guard let startOfWeek = week.startOfWeek else {
             return []
         }
         
-        var date = startOfWeek
+        return calendarWeekEntries(from: startOfWeek)
+    }
+    
+    //MARK: calendarWeekEntries
+    /// Returns a list of CalendarEntries for a given week.
+    /// - Parameter week: Date within the requested date.
+    /// - Returns: Returns a list of CalendarEntries for each day within the week starting from the given date.
+    func calendarWeekEntries(from date: Date) -> [CalendarDayEntry] {
+        
+        var date = date
+        
         // Declare a list to save the entries
         var entries: [CalendarDayEntry] = []
         
@@ -66,7 +76,6 @@ class CalendarService: Service {
         for _ in 0..<7 {
             // Append a CalendarDayEntry for the current day to the list
             let entry = calendarDayEntry(for: date)
-            entry.expandToEntireDay()
             entries.append(entry)
             
             // Get the date of the next day

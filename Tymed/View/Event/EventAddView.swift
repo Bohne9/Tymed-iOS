@@ -11,14 +11,9 @@ import SwiftUI
 //MARK: EventAddView
 struct EventAddView: View {
     
-    @ObservedObject
-    var event: Event = {
-        let event = TimetableService.shared.event()
-        
-        event.start = Date()
-        event.end = Date() + 3600
-        
-        event.timetable = TimetableService.shared.defaultTimetable()
+    @StateObject
+    var event: EventViewModel = {
+        let event = EventViewModel(EventService.shared.addEvent())
         
         return event
     }()
@@ -27,36 +22,9 @@ struct EventAddView: View {
     var presentaionMode
     
     var body: some View {
-        NavigationView {
-            EventAddViewContent(event: event)
-                .navigationTitle("New Event")
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarItems(leading: Button(action: {
-                    TimetableService.shared.rollback()
-                    
-                    presentaionMode.wrappedValue.dismiss()
-                }, label: {
-                    Text("Cancel")
-                        .font(.system(size: 16, weight: .semibold))
-                }), trailing: Button(action: {
-                    addEvent()
-                }, label: {
-                    Text("Add")
-                        .font(.system(size: 16, weight: .semibold))
-                }).disabled(!event.isValid))
-        }
+        EventEditView(event: event)
     }
     
-    func addEvent() {
-        
-        NotificationService.current.scheduleEventNotification(for: event)
-
-        
-        TimetableService.shared.save()
-        
-        presentaionMode.wrappedValue.dismiss()
-        
-    }
 }
 
 //MARK: EventAddViewContent

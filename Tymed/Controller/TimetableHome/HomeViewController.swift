@@ -25,7 +25,7 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     var taskView = HomeTaskViewWrapper()
     
-    var weekCollectionView: HomeWeekCollectionView = HomeWeekCollectionView()
+    var weekCollectionView: CalendarCollectionViewController = CalendarCollectionViewController()
     
     var currentPage = 0 {
         didSet {
@@ -96,11 +96,11 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func scrollToToday(bar: NavigationBar) {
-        weekCollectionView.scrollTo(date: Date(), true)
+        weekCollectionView.scrollTo(date: Date(), animated: true)
     }
     
     func calendarScrollTo(date: Date) {
-        weekCollectionView.scrollTo(date: date, true)
+        weekCollectionView.scrollTo(date: date, animated: true)
     }
     
     func currentDay() -> Date? {
