@@ -15,24 +15,25 @@ struct HomeCalendarView: View {
     var homeViewModel: HomeViewModel
     
     var body: some View {
-        
-        List {
-            Section {
+         
+        ScrollView {
+            VStack(alignment: .leading, spacing: 15) {
                 HomeCalendarHeaderView()
-                    .padding(.bottom, 16)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .background(Color(.systemBackground))
-            }
-            
-            Section {
-                ForEach(homeViewModel.calendars, id: \.self) { calendar in
-                    HomeCalendarCellView(calendar: calendar)
-                        .frame(height: 45)
-                }
-            }
-        }.listStyle(InsetGroupedListStyle())
-        .padding(.top, 0)
-        .ignoresSafeArea(.container, edges: .top)
+                
+                VStack {
+                    ForEach(homeViewModel.calendars, id: \.self) { calendar in
+                        VStack {
+                            HomeCalendarCellView(calendar: calendar)
+                            if calendar != homeViewModel.calendars.last {
+                                Divider()
+                            }
+                        }
+                    }
+                }.padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+            }.padding()
+        }
     }
 }
 
@@ -46,7 +47,7 @@ struct HomeCalendarCellView: View {
     var body: some View {
         HStack {
             
-            Image(systemName: !calendar.isImmutable ? "checkmark.circle.fill" : "circle")
+            Image(systemName: !calendar.isImmutable ? "checkmark.circle" : "circle")
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(Color(!calendar.isImmutable ? .systemBlue : .secondaryLabel))
             
