@@ -31,6 +31,9 @@ struct HomeView: View {
             }
             
         }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+        .onAppear {
+            homeViewModel.reload()
+        }
     }
 }
 

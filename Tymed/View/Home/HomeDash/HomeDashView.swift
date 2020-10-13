@@ -59,9 +59,6 @@ struct HomeDashView: View {
             }
             .padding()
             .environmentObject(homeViewModel)
-            .onAppear {
-                homeViewModel.reload()
-            }
         }
     }
 }

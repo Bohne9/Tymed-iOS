@@ -116,7 +116,6 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
     func collisionCount(for event: EKEvent, within events: [EKEvent]) -> Int {
         guard let startDate = event.startDate,
               let endDate = event.endDate else {
-            print("COLLISION ERROR")
             return 0
         }
         
@@ -129,11 +128,38 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
                 return
             }
             
-            if  Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
-                Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
-                Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
-                Calendar.current.isDateBetween(date: endDate, left: start, right: end) {
+            if Calendar.current.isDateBetween(date: start, left: startDate, right: endDate) ||
+               Calendar.current.isDateBetween(date: end, left: startDate, right: endDate) ||
+               Calendar.current.isDateBetween(date: startDate, left: start, right: end) ||
+               Calendar.current.isDateBetween(date: endDate, left: start, right: end) {
                     count += 1
+            }
+        }
+        
+        return count
+    }
+    
+    /// Returns the number of events where the difference of the startDates is less than or equal to the given threshold.
+    /// - Parameters:
+    ///   - event: Anchor event.
+    ///   - events: Events for the comparision.
+    ///   - withMaximumDistance: TimeInterval threshold.
+    func collisionsOfStartDate(for event: EKEvent, in events: [EKEvent], withMaximumDistance distance: TimeInterval) -> Int {
+        guard let startDate = event.startDate else {
+            return 0
+        }
+        
+        var count = 0
+        
+        events.forEach { entry in
+            guard collides(event, entry), // Make sure only colliding events count
+                  let start = entry.startDate // Prevent force-unwrapping
+            else {
+                return
+            }
+            
+            if abs(startDate.timeIntervalSince(start)) <= distance {
+                count += 1
             }
         }
         
