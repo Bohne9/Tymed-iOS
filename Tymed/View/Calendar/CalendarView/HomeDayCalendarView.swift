@@ -232,33 +232,37 @@ struct HomeDashCalendarEvent: View {
     private var showEditView = false
     
     var body: some View {
-        HStack(spacing: 15) {
+        let eventDuration = self.eventDuration()
+        
+        return HStack(spacing: 15) {
             VStack {
                 Spacer()
                 Rectangle()
                     .foregroundColor(Color(.clear))
                     .frame(width: 10)
                 Spacer()
-            }
-            .background(Color(calendarColor()))
+            }.background(Color(calendarColor()))
             
             VStack(alignment: .leading) {
-                if eventDuration() > 45 {
+                if eventDuration > 45 {
                     Text(event.calendar.title)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color(calendarColor()))
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
-                    .minimumScaleFactor(0.75)
-                if eventDuration() > 20 {
+                    .minimumScaleFactor(0.7)
+                if eventDuration > 20 {
                     Text(timeString())
                         .font(.system(size: 12, weight: .regular))
                         .foregroundColor(Color(.secondaryLabel))
-                        .minimumScaleFactor(0.75)
+                        .minimumScaleFactor(0.7)
                 }
-                Spacer()
-            }.padding(.top, 5)
+                
+                if eventDuration > 45 {
+                   Spacer()
+                }
+            }.padding(.top, eventDuration > 45 ? 5 : 0)
             
             Spacer()
         }.background(Color(UIColor.tertiarySystemGroupedBackground.withAlphaComponent(0.75)))
