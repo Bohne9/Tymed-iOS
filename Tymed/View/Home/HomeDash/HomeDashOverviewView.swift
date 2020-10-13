@@ -72,6 +72,7 @@ struct HomeDashOverviewTaskView: View {
                 Text("\(homeViewModel.eventCountToday)")
                     .font(.system(size: 35, weight: .bold))
                 Text("\(event(count: homeViewModel.eventCountToday)) today")
+                    .lineLimit(2)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
                 
@@ -83,11 +84,12 @@ struct HomeDashOverviewTaskView: View {
                 Text("\(homeViewModel.eventCountWeek)")
                     .font(.system(size: 35, weight: .bold))
                 Text("\(event(count: homeViewModel.eventCountWeek)) this week")
+                    .lineLimit(2)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
                 
             }
-        }.lineLimit(2)
+        }
         
     }
     
@@ -112,7 +114,7 @@ struct HomeDashOverviewEventView: View {
         
         VStack(alignment: .leading) {
             
-            HStack {
+            HStack(alignment: .top) {
                
                 RoundedRectangle(cornerRadius: 2)
                     .foregroundColor(Color(UIColor(cgColor: event.calendar.cgColor)))
@@ -120,7 +122,6 @@ struct HomeDashOverviewEventView: View {
                 
                 Text(event.title)
                     .foregroundColor(Color(.white))
-                    .lineLimit(2)
                     .font(.system(size: 14, weight: .semibold))
             }
             

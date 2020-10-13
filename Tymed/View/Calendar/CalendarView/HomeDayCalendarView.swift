@@ -286,9 +286,9 @@ struct HomeDashCalendarEvent: View {
             }.padding(.top, eventDuration > 45 ? 5 : 0)
             
             Spacer()
-        }.background(Color(UIColor.tertiarySystemGroupedBackground.withAlphaComponent(0.75)))
+        }
+        .background(Color(UIColor(cgColor: event.calendar.cgColor).withAlphaComponent(0.45)))
         .cornerRadius(6)
-//        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView, onDismiss: {
