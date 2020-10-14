@@ -9,6 +9,14 @@
 import SwiftUI
 import EventKit
 
+private let rules: [[EKRecurrenceRule]?] = [
+    nil,
+    [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .weekly, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .monthly, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .yearly, interval: 1, end: .none)],
+]
+
 struct EventEditView: View {
     
     @ObservedObject
@@ -99,7 +107,7 @@ struct EventEditViewContent: View {
             Section {
                 
                 HStack {
-                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
+                    DetailCellDescriptor("All day", image: "24.circle", .systemBlue)
                     Toggle("", isOn: $event.isAllDay)
                 }
                 
@@ -162,21 +170,20 @@ struct EventEditViewContent: View {
                 
                 
                 HStack {
-                    DetailCellDescriptor("Repeats", image: "arrow.clockwise", .systemBlue, value: "")
-
-                    Picker(selection: $event.recurrenceRules, label: Text("")) {
-                        let rules: [[EKRecurrenceRule]] = [
-                            [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
-                            [EKRecurrenceRule.init(recurrenceWith: .weekly, interval: 1, end: .none)],
-                            [EKRecurrenceRule.init(recurrenceWith: .monthly, interval: 1, end: .none)],
-                            [EKRecurrenceRule.init(recurrenceWith: .yearly, interval: 1, end: .none)],
-                        ]
+                    ZStack {
+                        Color(.systemBlue)
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.white)
+                    }.cornerRadius(6).frame(width: 28, height: 28)
+                    
+                    Picker("Repeats", selection: $event.recurrenceRules) {
                         ForEach(rules, id: \.self) { rules in
                             
-                            Text("\(rules.first!.description)")
+                            Text(textFor(rule: rules?.first!))
                             
                         }
-                    }
+                    }.font(.system(size: 14, weight: .semibold))
                 }
             }
             
@@ -187,7 +194,6 @@ struct EventEditViewContent: View {
                     
                     NavigationLink(destination: CalendarPicker(calendar: $event.calendar)) {
                         DetailCellDescriptor("Calendar", image: "tray.full.fill", UIColor(cgColor: event.calendar.cgColor), value: timetableTitle())
-                        Spacer()
                     }
                     
                 }
@@ -251,7 +257,11 @@ struct EventEditViewContent: View {
     }
 
     func textFor(_ date: Date?) -> String {
-        return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
+        if !event.isAllDay {
+            return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
+        }else {
+            return date?.stringify(with: .medium)  ?? ""
+        }
     }
 
     //MARK: timetableTitle
@@ -273,5 +283,22 @@ struct EventEditViewContent: View {
         
         dismiss()
         
+    }
+    
+    private func textFor(rule: EKRecurrenceRule?) -> String {
+        guard let rule = rule else { return "None" }
+        
+        switch rule.frequency {
+        case .daily:
+            return "Daily"
+        case .monthly:
+            return "Monthly"
+        case .weekly:
+            return "Weekly"
+        case .yearly:
+            return "Yearly"
+        @unknown default:
+            return "-"
+        }
     }
 }
