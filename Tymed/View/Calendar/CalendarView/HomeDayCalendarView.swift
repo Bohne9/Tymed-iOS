@@ -269,6 +269,7 @@ struct HomeDashCalendarEvent: View {
                     Text(event.calendar.title)
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundColor(Color(calendarColor()))
+                        .minimumScaleFactor(0.7)
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
@@ -286,8 +287,7 @@ struct HomeDashCalendarEvent: View {
             }.padding(.top, eventDuration > 45 ? 5 : 0)
             
             Spacer()
-        }
-        .background(Color(UIColor(cgColor: event.calendar.cgColor).withAlphaComponent(0.45)))
+        }.background(Color(UIColor(cgColor: event.calendar.cgColor).withAlphaComponent(0.35)))
         .cornerRadius(6)
         .onTapGesture {
             showEditView.toggle()

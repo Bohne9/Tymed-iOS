@@ -57,6 +57,22 @@ class EventService: Service {
         return event
     }
     
+
+    //MARK: Remove events
+    /// Removes an event in the given span (only this event/ all future events)
+    /// - Parameters:
+    ///   - event: Event to delete
+    ///   - span: Span for the deleted events (only this event/ all future events)
+    func deleteEvent(_ event: EKEvent, _ span: EKSpan) {
+        do {
+            try eventStore.remove(event, span: span)
+            save(event, span: span)
+        } catch {
+            
+        }
+    }
+    
+    //MARK: Date
     func date(byAdding value: Int, _ component: Calendar.Component, to date: Date) -> Date {
         var comp = DateComponents()
         
@@ -65,7 +81,6 @@ class EventService: Service {
         return nextDate ?? date
     }
     
-    //MARK: Date
     func oneYearFrom(date: Date) -> Date {
         var comp = DateComponents()
         comp.year = 1

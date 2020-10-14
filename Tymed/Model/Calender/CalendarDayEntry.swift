@@ -78,9 +78,6 @@ class CalendarDayEntry: ObservableObject, CalendarEntry {
         objectWillChange.send()
     }
     
-    
-    
-    
     func collisionRank(for event: EKEvent) -> Int {
         var rank = 0
         

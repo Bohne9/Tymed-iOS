@@ -48,6 +48,13 @@ class EventViewModel: ObservableObject {
         }
     }
     
+    @Published
+    var recurrenceRules: [EKRecurrenceRule]? {
+        didSet {
+            event.recurrenceRules = recurrenceRules
+        }
+    }
+    
     
     var isNew: Bool {
         return event.isNew
@@ -79,6 +86,7 @@ class EventViewModel: ObservableObject {
         endDate = event.endDate
         isAllDay = event.isAllDay
         calendar = event.calendar
+        recurrenceRules = event.recurrenceRules
     }
     
 }

@@ -79,6 +79,8 @@ struct EventEditViewContent: View {
 
     //MARK: Delete state
     @State var showDeleteAction = false
+    @State var showSpanPicker = false
+    @State var deleteSpan = EKSpan.thisEvent
     
     @State
     private var duration: TimeInterval = 3600
@@ -90,63 +92,91 @@ struct EventEditViewContent: View {
             
             Section {
                 TextField("Title", text: $event.title)
+                
+                Text(event.event.location ?? "Location")
             }
             
             Section {
                 
-                DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
-                    .onTapGesture {
-                        withAnimation {
-                            showStartDatePicker.toggle()
-                            
-                            if showEndDatePicker {
-                                showEndDatePicker = false
-                            }
-                        }
-                    }
-                
-                if showStartDatePicker {
-                    DatePicker("", selection: $event.startDate)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                }
-                
-                DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
-                    .animation(.default)
-                    .onTapGesture {
-                        withAnimation {
-                            showEndDatePicker.toggle()
-                            
-                            if showStartDatePicker {
-                                showStartDatePicker = false
-                            }
-                        }
-                    }
-                
-                if showEndDatePicker {
-                    DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .animation(.default)
-                }
-                
-//                HStack {
-//                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
-//                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
-//                }.animation(.default)
-//                .onTapGesture {
-//                    withAnimation {
-//                        showNotificationDatePicker.toggle()
-//                    }
-//                }
-//
-//                if event.notificationDate != nil && showNotificationDatePicker {
-//                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
-//                        .datePickerStyle(GraphicalDatePickerStyle())
-//                        .animation(.easeIn)
-//                }
-                
                 HStack {
                     DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
                     Toggle("", isOn: $event.isAllDay)
+                }
+                
+                if event.isAllDay {
+                    
+                    DetailCellDescriptor("Day", image: "calendar", .systemBlue, value: textFor(event.startDate))
+                        .onTapGesture {
+                            withAnimation {
+                                showStartDatePicker.toggle()
+                                
+                                if showEndDatePicker {
+                                    showEndDatePicker = false
+                                }
+                            }
+                        }
+                    
+                    if showStartDatePicker {
+                        DatePicker("", selection: $event.startDate, displayedComponents: [.date])
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .onChange(of: event.startDate) { (date) in
+                                event.endDate = event.startDate
+                            }
+                    }
+                    
+                } else {
+                    DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
+                        .onTapGesture {
+                            withAnimation {
+                                showStartDatePicker.toggle()
+                                
+                                if showEndDatePicker {
+                                    showEndDatePicker = false
+                                }
+                            }
+                        }
+                    
+                    if showStartDatePicker {
+                        DatePicker("", selection: $event.startDate)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                    }
+                    
+                    DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
+                        .animation(.default)
+                        .onTapGesture {
+                            withAnimation {
+                                showEndDatePicker.toggle()
+                                
+                                if showStartDatePicker {
+                                    showStartDatePicker = false
+                                }
+                            }
+                        }
+                    
+                    if showEndDatePicker {
+                        DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .animation(.default)
+                    }
+                }
+                
+                
+                HStack {
+                    DetailCellDescriptor("Repeats", image: "arrow.clockwise", .systemBlue, value: "")
+
+                    Picker(selection: $event.recurrenceRules, label: Text("")) {
+                        let rules: [[EKRecurrenceRule]] = [
+                            [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
+                            [EKRecurrenceRule.init(recurrenceWith: .weekly, interval: 1, end: .none)],
+                            [EKRecurrenceRule.init(recurrenceWith: .monthly, interval: 1, end: .none)],
+                            [EKRecurrenceRule.init(recurrenceWith: .yearly, interval: 1, end: .none)],
+                        ]
+                        ForEach(rules, id: \.self) { rules in
+                            
+                            Text("\(rules.first!.description)")
+                            
+                        }
+                    }
                 }
             }
             
@@ -169,11 +199,14 @@ struct EventEditViewContent: View {
                     DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            showDeleteAction.toggle()
+                            if event.event.hasRecurrenceRules {
+                                showSpanPicker.toggle()
+                            }else {
+                                showDeleteAction.toggle()
+                            }
                         }.actionSheet(isPresented: $showDeleteAction) {
                             ActionSheet(
-                                title: Text(""),
-                                message: nil,
+                                title: Text("Are you sure you want to delete the event."),
                                 buttons: [
                                     .destructive(Text("Delete"), action: {
                                         deleteEvent()
@@ -200,6 +233,20 @@ struct EventEditViewContent: View {
                let end = event.endDate {
                 duration = end.timeIntervalSince(start)
             }
+        }.actionSheet(isPresented: $showSpanPicker) {
+            ActionSheet(
+                title: Text("Are you sure you want to delete the event. This is a repeating event."),
+                buttons: [
+                    .destructive(Text("Delete only this event"), action: {
+                        deleteSpan = .thisEvent
+                        deleteEvent()
+                    }),
+                    .destructive(Text("Delete all future events"), action: {
+                        deleteSpan = .futureEvents
+                        deleteEvent()
+                    }),
+                    .cancel()
+                ])
         }
     }
 
@@ -218,7 +265,12 @@ struct EventEditViewContent: View {
     
     //MARK: deleteEvent
     private func deleteEvent() {
+        
+        showSpanPicker = false
         showDeleteAction = false
+        
+        EventService.shared.deleteEvent(event.event, deleteSpan)
+        
         dismiss()
         
     }

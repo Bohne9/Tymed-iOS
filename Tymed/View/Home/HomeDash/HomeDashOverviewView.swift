@@ -71,7 +71,7 @@ struct HomeDashOverviewTaskView: View {
             VStack(alignment: .leading) {
                 Text("\(homeViewModel.eventCountToday)")
                     .font(.system(size: 35, weight: .bold))
-                Text("\(event(count: homeViewModel.eventCountToday)) today")
+                Text("\(event(count: homeViewModel.eventCountToday)) left today")
                     .lineLimit(2)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
@@ -83,7 +83,7 @@ struct HomeDashOverviewTaskView: View {
             VStack(alignment: .leading) {
                 Text("\(homeViewModel.eventCountWeek)")
                     .font(.system(size: 35, weight: .bold))
-                Text("\(event(count: homeViewModel.eventCountWeek)) this week")
+                Text("\(event(count: homeViewModel.eventCountWeek)) left this week")
                     .lineLimit(2)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(Color(.secondaryLabel))
