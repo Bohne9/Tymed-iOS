@@ -10,7 +10,6 @@ import SwiftUI
 import EventKit
 
 private let rules: [[EKRecurrenceRule]?] = [
-    nil,
     [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
     [EKRecurrenceRule.init(recurrenceWith: .weekly, interval: 1, end: .none)],
     [EKRecurrenceRule.init(recurrenceWith: .monthly, interval: 1, end: .none)],
@@ -168,23 +167,10 @@ struct EventEditViewContent: View {
                     }
                 }
                 
-                
-                HStack {
-                    ZStack {
-                        Color(.systemBlue)
-                        Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.white)
-                    }.cornerRadius(6).frame(width: 28, height: 28)
-                    
-                    Picker("Repeats", selection: $event.recurrenceRules) {
-                        ForEach(rules, id: \.self) { rules in
-                            
-                            Text(textFor(rule: rules?.first!))
-                            
-                        }
-                    }.font(.system(size: 14, weight: .semibold))
+                NavigationLink(destination: RecurrenceRulePicker(recurenceRule: $event.recurrenceRules)) {
+                    DetailCellDescriptor("Repeats", image: "arrow.clockwise", .systemBlue, value: textFor(rule: event.recurrenceRules?.first))
                 }
+                
             }
             
             //MARK: Calendar
@@ -298,6 +284,129 @@ struct EventEditViewContent: View {
         case .yearly:
             return "Yearly"
         @unknown default:
+            return "-"
+        }
+    }
+}
+
+//MARK: RecurrenceRulePicker
+struct RecurrenceRulePicker: View {
+    
+    @Binding
+    var recurenceRule: [EKRecurrenceRule]?
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @State
+    private var frequency: EKRecurrenceFrequency = .daily
+    
+    @State
+    private var interval: Int = 1
+    
+    @State
+    private var endDate: Date? = nil
+    
+    var body: some View {
+        
+        List {
+            
+            // No recurrence rule
+            Section {
+                HStack {
+                    Text(textFor(rule: nil))
+                    Spacer()
+                    if recurenceRule == nil {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    recurenceRule = nil
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            
+            Section {
+                ForEach(rules, id: \.self) { rules in
+                    HStack {
+                        Text(textFor(rule: rules?.first))
+                        Spacer()
+                        if recurenceRule == rules {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(.systemBlue))
+                        }
+                    }.contentShape(Rectangle())
+                    .onTapGesture {
+                        recurenceRule = rules
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            
+            Section {
+                HStack {
+                    Text("Custom")
+                    Spacer()
+                    if isCustomRule() {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    recurenceRule = [EKRecurrenceRule(recurrenceWith: frequency, interval: interval, end: nil)]
+                }
+            }
+            
+            if isCustomRule() {
+                
+                // Frequency
+                HStack {
+                    Picker(selection: $interval, label: Text("-")) {
+                        ForEach(1..<30) { value in
+                            Text("\(value)")
+                        }
+                        
+                    }.pickerStyle(WheelPickerStyle())
+                    
+                    Picker(selection: $frequency, label: Text("-")) {
+                        ForEach([EKRecurrenceFrequency.daily, EKRecurrenceFrequency.weekly, EKRecurrenceFrequency.monthly, EKRecurrenceFrequency.yearly], id: \.self) { value in
+                            Text("\(textFor(frequency: value))")
+                        }
+                    }.pickerStyle(WheelPickerStyle())
+                }
+                
+            }
+            
+        }.font(.system(size: 15, weight: .semibold))
+        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("Repeats")
+        
+    }
+    
+    private func isCustomRule() -> Bool {
+        return recurenceRule != nil && !rules.reduce(false) { (res, rule) in
+            return recurenceRule == rule ? true : res
+        }
+    }
+    
+    private func textFor(rule: EKRecurrenceRule?) -> String {
+        guard let rule = rule else { return "None" }
+        
+        return textFor(frequency: rule.frequency)
+    }
+    
+    private func textFor(frequency: EKRecurrenceFrequency) -> String {
+        switch frequency {
+        case .daily:
+            return "Daily"
+        case .monthly:
+            return "Monthly"
+        case .weekly:
+            return "Weekly"
+        case .yearly:
+            return "Yearly"
+        default:
             return "-"
         }
     }
