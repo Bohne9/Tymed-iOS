@@ -27,6 +27,9 @@ struct EventEditView: View {
     @Environment(\.presentationMode)
     var presentationMode
     
+    @State
+    private var showNoteKeyboardDismiss = false
+    
     var body: some View {
         NavigationView {
             EventEditViewContent(event: event) {
@@ -184,6 +187,31 @@ struct EventEditViewContent: View {
                     
                 }
             }
+            Section(header: HStack {
+                Text("Notes")
+                Spacer()
+                if showNotificationDatePicker {
+                    #if canImport(UIKit) // Just to make sure UIKit is available
+                    Button("Done") {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        showNotificationDatePicker = false
+                    }.foregroundColor(Color(.systemBlue))
+                    .font(.system(size: 12, weight: .semibold))
+                    #endif
+                }
+            }) {
+                ScrollViewReader { scrollView in
+                    TextEditor(text: Binding($event.notes, ""))
+                        .id("notes-text-editor")
+                        .onTapGesture {
+                            showNotificationDatePicker = true
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                                scrollView.scrollTo("notes-text-editor", anchor: .bottom)
+//                            }
+                        }.frame(minHeight: 100)
+                }
+            }
+            
             
             if !event.isNew {
                 //MARK: Delete

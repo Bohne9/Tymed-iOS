@@ -55,6 +55,12 @@ class EventViewModel: ObservableObject {
         }
     }
     
+    @Published
+    var notes: String? {
+        didSet {
+            event.notes = notes
+        }
+    }
     
     var isNew: Bool {
         return event.isNew
@@ -87,6 +93,8 @@ class EventViewModel: ObservableObject {
         isAllDay = event.isAllDay
         calendar = event.calendar
         recurrenceRules = event.recurrenceRules
+        notes = event.notes
+        
     }
     
 }
