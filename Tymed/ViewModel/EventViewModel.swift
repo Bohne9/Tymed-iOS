@@ -62,6 +62,13 @@ class EventViewModel: ObservableObject {
         }
     }
     
+    @Published
+    var alarms: [EKAlarm]? {
+        didSet {
+            event.alarms = alarms
+        }
+    }
+    
     var isNew: Bool {
         return event.isNew
     }
@@ -84,6 +91,16 @@ class EventViewModel: ObservableObject {
         EventService.shared.save(event, span: span)
     }
     
+    func addAlarm(_ alarm: EKAlarm) {
+        event.addAlarm(alarm)
+        refresh()
+    }
+    
+    func removeAlarm(_ alarm: EKAlarm) {
+        event.removeAlarm(alarm)
+        refresh()
+    }
+    
     func refresh() {
         event.refresh()
         
@@ -94,7 +111,7 @@ class EventViewModel: ObservableObject {
         calendar = event.calendar
         recurrenceRules = event.recurrenceRules
         notes = event.notes
-        
+        alarms = event.alarms
     }
     
 }

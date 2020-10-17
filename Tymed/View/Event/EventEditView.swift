@@ -180,6 +180,29 @@ struct EventEditViewContent: View {
                 
             }
             
+            
+            Section(header: Label("Alert", systemImage: "bell.badge.fill").font(.system(size: 12, weight: .semibold))) {
+                if let alarms = event.alarms {
+                    ForEach(alarms, id: \.self) { (alarm: EKAlarm) in
+                        NavigationLink(destination: AlarmTimePicker(event: event, alarm: alarm)) {
+                            Text(textFor(alarm))
+                                .font(.system(size: 15, weight: .semibold))
+                        }
+                    }
+                }
+                
+                HStack {
+                    Spacer()
+                    Button {
+                        event.addAlarm(EKAlarm(absoluteDate: event.startDate))
+                    } label: {
+                        Label("Add alert", systemImage: "plus.circle.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    Spacer()
+                }
+            }
+            
             //MARK: Calendar
             
             Section {
@@ -193,7 +216,8 @@ struct EventEditViewContent: View {
             }
             
             Section(header: HStack {
-                Text("Notes")
+                Label("Notes", systemImage: "note.text")
+                    .font(.system(size: 12, weight: .semibold))
                 Spacer()
                 if showNotificationDatePicker {
                     #if canImport(UIKit) // Just to make sure UIKit is available
@@ -274,7 +298,27 @@ struct EventEditViewContent: View {
                 ])
         }
     }
+    
+    func textFor(_ alarm: EKAlarm) -> String {
+        if let absolute = alarm.absoluteDate {
+            return absolute.stringify(dateStyle: .medium, timeStyle: .medium)
+        }
+        let offset = alarm.relativeOffset
 
+        if offset == 0 {
+            return "At time of event"
+        }
+        
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 1
+        
+        let value = formatter.string(from: offset) ?? "-"
+        
+        return "\(value) before event start"
+    }
+    
     func textFor(_ date: Date?) -> String {
         if !event.isAllDay {
             return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
@@ -477,7 +521,7 @@ struct EventLocationView: View {
             Map(
                 coordinateRegion: Binding($region, MKCoordinateRegion(center:
                                                                         event.event.structuredLocation!.geoLocation!.coordinate,
-                                                                       span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
+                                                                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
                 annotationItems: pins) { pin in
                 MapPin(coordinate: pin.coordinate)
             }.frame(height: 150)
@@ -488,4 +532,63 @@ struct EventLocationView: View {
         }
     }
     
+}
+
+//MARK: AlarmTimePicker
+struct AlarmTimePicker: View {
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @ObservedObject
+    var event: EventViewModel
+    
+    var alarm: EKAlarm
+    
+    var body: some View {
+        List {
+            Section {
+                ForEach(NotificationOffset.allCases, id: \.self) { (offset: NotificationOffset) in
+                    HStack {
+                        Text(text(for: offset.timeInterval))
+                        
+                        Spacer()
+                        
+                        if offset.timeInterval == alarm.relativeOffset {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(.systemBlue))
+                        }
+                    }.contentShape(Rectangle())
+                    .font(.system(size: 15, weight: .semibold))
+                    .onTapGesture {
+                        alarm.relativeOffset = offset.timeInterval
+//                        event.refresh()
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            
+            Section {
+                Button("Remove Alert") {
+                    event.removeAlarm(alarm)
+                    presentationMode.wrappedValue.dismiss()
+                }.font(.system(size: 15, weight: .semibold))
+            }
+            
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Alert")
+    }
+    
+    private func text(for offset: TimeInterval) -> String {
+        if offset == 0 {
+            return "At time of event"
+        }
+        
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 1
+        
+        return "\(formatter.string(from: offset) ?? "-") before"
+    }
 }

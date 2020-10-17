@@ -266,10 +266,20 @@ struct HomeDashCalendarEvent: View {
             
             VStack(alignment: .leading) {
                 if eventDuration > 45 {
-                    Text(event.calendar.title)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(calendarColor()))
-                        .minimumScaleFactor(0.7)
+                    HStack {
+                        Text(event.calendar.title)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(calendarColor()))
+                            .minimumScaleFactor(0.7)
+                        
+                        Spacer()
+                        
+                        if event.event.structuredLocation != nil {
+                            Image(systemName: "location.circle.fill")
+                                .foregroundColor(Color(.label))
+                                .font(.system(size: 12, weight: .semibold))
+                        }
+                    }
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
