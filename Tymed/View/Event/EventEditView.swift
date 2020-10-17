@@ -8,6 +8,7 @@
 
 import SwiftUI
 import EventKit
+import MapKit
 
 private let rules: [[EKRecurrenceRule]?] = [
     [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
@@ -103,7 +104,10 @@ struct EventEditViewContent: View {
             Section {
                 TextField("Title", text: $event.title)
                 
-                Text(event.event.location ?? "Location")
+            }
+            
+            if event.event.structuredLocation != nil {
+                EventLocationView(event: event)
             }
             
             Section {
@@ -187,6 +191,7 @@ struct EventEditViewContent: View {
                     
                 }
             }
+            
             Section(header: HStack {
                 Text("Notes")
                 Spacer()
@@ -438,4 +443,49 @@ struct RecurrenceRulePicker: View {
             return "-"
         }
     }
+}
+
+
+struct EventLocationView: View {
+    
+    struct EventLocation: Identifiable {
+        var id: Int = 0
+        var coordinate: CLLocationCoordinate2D
+    }
+    
+    @ObservedObject
+    var event: EventViewModel
+    
+    @State
+    var region: MKCoordinateRegion?
+    
+    var pins: [EventLocation] = []
+    
+    init(event: EventViewModel) {
+        self.event = event
+        if let location = event.event.structuredLocation {
+            region = MKCoordinateRegion(center:
+                                            location.geoLocation!.coordinate,
+                                           span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            pins = [EventLocation(coordinate: location.geoLocation!.coordinate)]
+        }
+    }
+    
+    var body: some View {
+        
+        if event.event.structuredLocation != nil {
+            Map(
+                coordinateRegion: Binding($region, MKCoordinateRegion(center:
+                                                                        event.event.structuredLocation!.geoLocation!.coordinate,
+                                                                       span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
+                annotationItems: pins) { pin in
+                MapPin(coordinate: pin.coordinate)
+            }.frame(height: 150)
+            .cornerRadius(10)
+            .listRowInsets(EdgeInsets())
+        }else {
+            Text("Choose location")
+        }
+    }
+    
 }
