@@ -96,6 +96,11 @@ class EventViewModel: ObservableObject {
         refresh()
     }
     
+    func addAlarm(relativeOffset: TimeInterval) {
+        event.addAlarm(EKAlarm(relativeOffset: relativeOffset))
+        refresh()
+    }
+    
     func removeAlarm(_ alarm: EKAlarm) {
         event.removeAlarm(alarm)
         refresh()

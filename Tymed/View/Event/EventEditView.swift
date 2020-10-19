@@ -106,7 +106,7 @@ struct EventEditViewContent: View {
                 
             }
             
-            if event.event.structuredLocation != nil {
+            Section {            
                 EventLocationView(event: event)
             }
             
@@ -314,9 +314,9 @@ struct EventEditViewContent: View {
         formatter.unitsStyle = .full
         formatter.maximumUnitCount = 1
         
-        let value = formatter.string(from: offset) ?? "-"
+        let value = formatter.string(from: abs(offset)) ?? "-"
         
-        return "\(value) before event start"
+        return "\(value) \(offset < 0 ? "before": "after") event start"
     }
     
     func textFor(_ date: Date?) -> String {
@@ -507,21 +507,25 @@ struct EventLocationView: View {
     
     init(event: EventViewModel) {
         self.event = event
-        if let location = event.event.structuredLocation {
+        if let location = event.event.structuredLocation,
+           let geo = location.geoLocation {
             region = MKCoordinateRegion(center:
-                                            location.geoLocation!.coordinate,
+                                            geo.coordinate,
                                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-            pins = [EventLocation(coordinate: location.geoLocation!.coordinate)]
+            pins = [EventLocation(coordinate: geo.coordinate)]
         }
     }
     
     var body: some View {
         
-        if event.event.structuredLocation != nil {
+        if let location = event.event.structuredLocation,
+           let geo = location.geoLocation {
             Map(
-                coordinateRegion: Binding($region, MKCoordinateRegion(center:
-                                                                        event.event.structuredLocation!.geoLocation!.coordinate,
-                                                                        span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
+                coordinateRegion:
+                    Binding($region,
+                            MKCoordinateRegion(center:
+                                                geo.coordinate,
+                                                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
                 annotationItems: pins) { pin in
                 MapPin(coordinate: pin.coordinate)
             }.frame(height: 150)
@@ -561,8 +565,7 @@ struct AlarmTimePicker: View {
                     }.contentShape(Rectangle())
                     .font(.system(size: 15, weight: .semibold))
                     .onTapGesture {
-                        alarm.relativeOffset = offset.timeInterval
-//                        event.refresh()
+                        alarm.relativeOffset = -offset.timeInterval
                         presentationMode.wrappedValue.dismiss()
                     }
                 }
