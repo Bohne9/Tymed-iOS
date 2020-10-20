@@ -52,7 +52,7 @@ struct HomeDashOverviewView: View {
                 .onTapGesture {
                     showEventAdd.toggle()
                 }.sheet(isPresented: $showEventAdd) {
-                    EventAddView()
+                    EventAddView(showEditView: $showEventAdd)
                 }
             }
         }
@@ -146,7 +146,7 @@ struct HomeDashOverviewEventView: View {
         }.sheet(isPresented: $showEventDetail, onDismiss: {
             homeViewModel.reload()
         }, content: {
-            EventEditView(event: event)
+            EventEditView(event: event, showEditView: $showEventDetail)
         })
     }
     

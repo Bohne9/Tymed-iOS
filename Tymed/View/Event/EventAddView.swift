@@ -11,6 +11,9 @@ import SwiftUI
 //MARK: EventAddView
 struct EventAddView: View {
     
+    @Binding
+    var showEditView: Bool
+    
     @StateObject
     var event: EventViewModel = {
         let event = EventViewModel(EventService.shared.addEvent())
@@ -22,7 +25,8 @@ struct EventAddView: View {
     var presentaionMode
     
     var body: some View {
-        EventEditView(event: event)
+//        EventEditView(event: event, showEditView: showEditView)
+        EventEditView(event: event, showEditView: $showEditView)
     }
     
 }
@@ -166,7 +170,7 @@ struct EventAddViewContent: View {
 
 struct EventAddView_Previews: PreviewProvider {
     static var previews: some View {
-        EventAddView()
+        EventAddView(showEditView: .constant(true))
             .colorScheme(.dark)
     }
 }

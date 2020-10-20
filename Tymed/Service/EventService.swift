@@ -14,7 +14,7 @@ class EventService: Service {
     
     static var shared = EventService()
     
-    private let eventStore: EKEventStore
+    let eventStore: EKEventStore
     
     var calendars: [EKCalendar] = []
 

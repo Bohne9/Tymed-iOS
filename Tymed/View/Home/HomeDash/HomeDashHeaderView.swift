@@ -56,7 +56,8 @@ struct HomeDashHeaderView: View {
                 }.sheet(isPresented: $showTaskAddView, onDismiss: {
                     homeViewModel.reload()
                 }, content: {
-                    EventAddView()
+//                    EventAddView(showEditView: $showTaskAddView)
+                    EventEditViewWrapper()
                 })
                 
             }

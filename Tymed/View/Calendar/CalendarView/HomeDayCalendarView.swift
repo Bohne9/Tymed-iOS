@@ -304,7 +304,7 @@ struct HomeDashCalendarEvent: View {
         }.sheet(isPresented: $showEditView, onDismiss: {
             homeViewModel.reload()
         }, content: {
-            EventEditView(event: event)
+            EventEditView(event: event, showEditView: $showEditView)
         })
     }
     
@@ -391,9 +391,13 @@ struct HomeAllDayEventsRow: View {
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView) {
+            if event.hasChanges {
+                showEditView.toggle()
+                return
+            }
             homeViewModel.reload()
         } content: {
-            EventEditView(event: event)
+            EventEditView(event: event, showEditView: $showEditView)
         }
 
     }

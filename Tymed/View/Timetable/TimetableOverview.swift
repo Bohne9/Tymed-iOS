@@ -114,7 +114,7 @@ struct TimetableOverview: View {
                 }else if showTaskAdd {
                     TaskAddView(dismiss: { })
                 }else if showEventAdd {
-                    EventAddView()
+                    EventAddView(showEditView: $showAddView)
                 }else {
                     TimetableAddView()
                 }

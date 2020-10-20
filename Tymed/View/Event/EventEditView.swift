@@ -22,6 +22,9 @@ struct EventEditView: View {
     @ObservedObject
     var event: EventViewModel
     
+    @Binding
+    var showEditView: Bool
+    
     @State
     var showDiscardWarning = false
     
