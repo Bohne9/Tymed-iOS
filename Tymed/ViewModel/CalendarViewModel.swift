@@ -25,15 +25,7 @@ class CalendarViewModel: ObservableObject {
     var currentDate = Date()
     
     init() {
-        reload()
-    }
-    
-    
-    func reload() {
-        
         let now = Date()
-        
-        currentDate = now
         
         dayEntries = [
             calendarService.calendarDayEntry(for: now.prevDay),
@@ -41,6 +33,18 @@ class CalendarViewModel: ObservableObject {
             calendarService.calendarDayEntry(for: now.nextDay)
         ]
         
+        
+        dayEntries.forEach { entry in
+            entry.expandToEntireDay()
+        }
+        
+    }
+    
+    
+    func reload() {
+        dayEntries.forEach { (entry) in
+            entry.setEntries(calendarService.eventsForDay(date: entry.date))
+        }
         
         dayEntries.forEach { entry in
             entry.expandToEntireDay()

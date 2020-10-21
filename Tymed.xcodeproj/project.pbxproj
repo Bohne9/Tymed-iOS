@@ -66,6 +66,7 @@
 		4F9405E92463F3A00063E4DA /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405E82463F3A00063E4DA /* Extensions.swift */; };
 		4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EA2465B7EE0063E4DA /* Label.swift */; };
 		4F9405EF2468067C0063E4DA /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F9405EE2468067C0063E4DA /* Time.swift */; };
+		4F974C31253EC90C00460599 /* EventEditViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F974C30253EC90C00460599 /* EventEditViewWrapper.swift */; };
 		4F99A0E72514E873006ADB05 /* HomeDayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */; };
 		4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */; };
 		4FA03664251CC555009C8F83 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA03663251CC555009C8F83 /* RadioButton.swift */; };
@@ -202,6 +203,7 @@
 		4F9405E82463F3A00063E4DA /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		4F9405EA2465B7EE0063E4DA /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		4F9405EE2468067C0063E4DA /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		4F974C30253EC90C00460599 /* EventEditViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditViewWrapper.swift; sourceTree = "<group>"; };
 		4F99A0E62514E873006ADB05 /* HomeDayCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarView.swift; sourceTree = "<group>"; };
 		4F99A0E82514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDayCalendarViewWrapper.swift; sourceTree = "<group>"; };
 		4F9AD188249BE6F300C2FE39 /* Tymed.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tymed.xctestplan; sourceTree = "<group>"; };
@@ -655,6 +657,7 @@
 			children = (
 				4FD2715B250956EB0073696A /* EventAddView.swift */,
 				4F8EEB2825114CCF00F3D4B9 /* EventEditView.swift */,
+				4F974C30253EC90C00460599 /* EventEditViewWrapper.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -930,6 +933,7 @@
 				4FC4F7762515F7680059E155 /* HomeTaskView.swift in Sources */,
 				4FA04A8E251F463A004236CF /* AppSetupModel.swift in Sources */,
 				4FB5784A24DF32DA0066F130 /* TimetableDetail.swift in Sources */,
+				4F974C31253EC90C00460599 /* EventEditViewWrapper.swift in Sources */,
 				4F8E058824DA793400748F47 /* AppTimetablePicker.swift in Sources */,
 				4FEE40F2246B2D5C00DFFF73 /* CalendarCollectionViewController.swift in Sources */,
 				4F2AA0DF25080F040056CC54 /* Event+CoreDataProperties.swift in Sources */,

@@ -9,7 +9,7 @@
 import Foundation
 import UserNotifications
 
-struct NotificationOffset: Comparable, CaseIterable {
+struct NotificationOffset: Comparable, CaseIterable, Hashable {
     typealias AllCases = [NotificationOffset]
     
     static var allCases: [NotificationOffset] {

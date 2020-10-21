@@ -8,17 +8,31 @@
 
 import SwiftUI
 import EventKit
+import MapKit
+
+private let rules: [[EKRecurrenceRule]?] = [
+    [EKRecurrenceRule.init(recurrenceWith: .daily, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .weekly, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .monthly, interval: 1, end: .none)],
+    [EKRecurrenceRule.init(recurrenceWith: .yearly, interval: 1, end: .none)],
+]
 
 struct EventEditView: View {
     
     @ObservedObject
     var event: EventViewModel
     
+    @Binding
+    var showEditView: Bool
+    
     @State
     var showDiscardWarning = false
     
     @Environment(\.presentationMode)
     var presentationMode
+    
+    @State
+    private var showNoteKeyboardDismiss = false
     
     var body: some View {
         NavigationView {
@@ -79,6 +93,8 @@ struct EventEditViewContent: View {
 
     //MARK: Delete state
     @State var showDeleteAction = false
+    @State var showSpanPicker = false
+    @State var deleteSpan = EKSpan.thisEvent
     
     @State
     private var duration: TimeInterval = 3600
@@ -90,63 +106,103 @@ struct EventEditViewContent: View {
             
             Section {
                 TextField("Title", text: $event.title)
+                
+            }
+            
+            Section {            
+                EventLocationView(event: event)
             }
             
             Section {
                 
-                DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
-                    .onTapGesture {
-                        withAnimation {
-                            showStartDatePicker.toggle()
-                            
-                            if showEndDatePicker {
-                                showEndDatePicker = false
-                            }
-                        }
-                    }
-                
-                if showStartDatePicker {
-                    DatePicker("", selection: $event.startDate)
-                        .datePickerStyle(GraphicalDatePickerStyle())
+                HStack {
+                    DetailCellDescriptor("All day", image: "24.circle", .systemBlue)
+                    Toggle("", isOn: $event.isAllDay)
                 }
                 
-                DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
-                    .animation(.default)
-                    .onTapGesture {
-                        withAnimation {
-                            showEndDatePicker.toggle()
-                            
-                            if showStartDatePicker {
-                                showStartDatePicker = false
+                if event.isAllDay {
+                    
+                    DetailCellDescriptor("Day", image: "calendar", .systemBlue, value: textFor(event.startDate))
+                        .onTapGesture {
+                            withAnimation {
+                                showStartDatePicker.toggle()
+                                
+                                if showEndDatePicker {
+                                    showEndDatePicker = false
+                                }
                             }
                         }
+                    
+                    if showStartDatePicker {
+                        DatePicker("", selection: $event.startDate, displayedComponents: [.date])
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .onChange(of: event.startDate) { (date) in
+                                event.endDate = event.startDate
+                            }
                     }
-                
-                if showEndDatePicker {
-                    DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
-                        .datePickerStyle(GraphicalDatePickerStyle())
+                    
+                } else {
+                    DetailCellDescriptor("Start date", image: "calendar", .systemBlue, value: textFor(event.startDate))
+                        .onTapGesture {
+                            withAnimation {
+                                showStartDatePicker.toggle()
+                                
+                                if showEndDatePicker {
+                                    showEndDatePicker = false
+                                }
+                            }
+                        }
+                    
+                    if showStartDatePicker {
+                        DatePicker("", selection: $event.startDate)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                    }
+                    
+                    DetailCellDescriptor("End date", image: "calendar", .systemBlue, value: textFor(event.endDate))
                         .animation(.default)
+                        .onTapGesture {
+                            withAnimation {
+                                showEndDatePicker.toggle()
+                                
+                                if showStartDatePicker {
+                                    showStartDatePicker = false
+                                }
+                            }
+                        }
+                    
+                    if showEndDatePicker {
+                        DatePicker("", selection: $event.endDate, in: (event.startDate + 60)...)
+                            .datePickerStyle(GraphicalDatePickerStyle())
+                            .animation(.default)
+                    }
                 }
                 
-//                HStack {
-//                    DetailCellDescriptor("Notification", image: "app.badge", .systemGreen, value: textForNotification())
-//                    Toggle("", isOn: Binding(isNotNil: $event.notificationDate, defaultValue: Date()))
-//                }.animation(.default)
-//                .onTapGesture {
-//                    withAnimation {
-//                        showNotificationDatePicker.toggle()
-//                    }
-//                }
-//
-//                if event.notificationDate != nil && showNotificationDatePicker {
-//                    DatePicker("", selection: Binding($event.notificationDate)!, in: Date()...)
-//                        .datePickerStyle(GraphicalDatePickerStyle())
-//                        .animation(.easeIn)
-//                }
+                NavigationLink(destination: RecurrenceRulePicker(recurenceRule: $event.recurrenceRules)) {
+                    DetailCellDescriptor("Repeats", image: "arrow.clockwise", .systemBlue, value: textFor(rule: event.recurrenceRules?.first))
+                }
+                
+            }
+            
+            
+            Section(header: Label("Alert", systemImage: "bell.badge.fill").font(.system(size: 12, weight: .semibold))) {
+                if let alarms = event.alarms {
+                    ForEach(alarms, id: \.self) { (alarm: EKAlarm) in
+                        NavigationLink(destination: AlarmTimePicker(event: event, alarm: alarm)) {
+                            Text(textFor(alarm))
+                                .font(.system(size: 15, weight: .semibold))
+                        }
+                    }
+                }
                 
                 HStack {
-                    DetailCellDescriptor("All day", image: "clock.arrow.circlepath", .systemBlue)
-                    Toggle("", isOn: $event.isAllDay)
+                    Spacer()
+                    Button {
+                        event.addAlarm(EKAlarm(absoluteDate: event.startDate))
+                    } label: {
+                        Label("Add alert", systemImage: "plus.circle.fill")
+                            .font(.system(size: 15, weight: .semibold))
+                    }
+                    Spacer()
                 }
             }
             
@@ -157,11 +213,37 @@ struct EventEditViewContent: View {
                     
                     NavigationLink(destination: CalendarPicker(calendar: $event.calendar)) {
                         DetailCellDescriptor("Calendar", image: "tray.full.fill", UIColor(cgColor: event.calendar.cgColor), value: timetableTitle())
-                        Spacer()
                     }
                     
                 }
             }
+            
+            Section(header: HStack {
+                Label("Notes", systemImage: "note.text")
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+                if showNotificationDatePicker {
+                    #if canImport(UIKit) // Just to make sure UIKit is available
+                    Button("Done") {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        showNotificationDatePicker = false
+                    }.foregroundColor(Color(.systemBlue))
+                    .font(.system(size: 12, weight: .semibold))
+                    #endif
+                }
+            }) {
+                ScrollViewReader { scrollView in
+                    TextEditor(text: Binding($event.notes, ""))
+                        .id("notes-text-editor")
+                        .onTapGesture {
+                            showNotificationDatePicker = true
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                                scrollView.scrollTo("notes-text-editor", anchor: .bottom)
+//                            }
+                        }.frame(minHeight: 100)
+                }
+            }
+            
             
             if !event.isNew {
                 //MARK: Delete
@@ -169,11 +251,14 @@ struct EventEditViewContent: View {
                     DetailCellDescriptor("Delete", image: "trash.fill", .systemRed)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            showDeleteAction.toggle()
+                            if event.event.hasRecurrenceRules {
+                                showSpanPicker.toggle()
+                            }else {
+                                showDeleteAction.toggle()
+                            }
                         }.actionSheet(isPresented: $showDeleteAction) {
                             ActionSheet(
-                                title: Text(""),
-                                message: nil,
+                                title: Text("Are you sure you want to delete the event."),
                                 buttons: [
                                     .destructive(Text("Delete"), action: {
                                         deleteEvent()
@@ -200,11 +285,49 @@ struct EventEditViewContent: View {
                let end = event.endDate {
                 duration = end.timeIntervalSince(start)
             }
+        }.actionSheet(isPresented: $showSpanPicker) {
+            ActionSheet(
+                title: Text("Are you sure you want to delete the event. This is a repeating event."),
+                buttons: [
+                    .destructive(Text("Delete only this event"), action: {
+                        deleteSpan = .thisEvent
+                        deleteEvent()
+                    }),
+                    .destructive(Text("Delete all future events"), action: {
+                        deleteSpan = .futureEvents
+                        deleteEvent()
+                    }),
+                    .cancel()
+                ])
         }
     }
+    
+    func textFor(_ alarm: EKAlarm) -> String {
+        if let absolute = alarm.absoluteDate {
+            return absolute.stringify(dateStyle: .medium, timeStyle: .medium)
+        }
+        let offset = alarm.relativeOffset
 
+        if offset == 0 {
+            return "At time of event"
+        }
+        
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 1
+        
+        let value = formatter.string(from: abs(offset)) ?? "-"
+        
+        return "\(value) \(offset < 0 ? "before": "after") event start"
+    }
+    
     func textFor(_ date: Date?) -> String {
-        return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
+        if !event.isAllDay {
+            return date?.stringify(dateStyle: .medium, timeStyle: .short)  ?? ""
+        }else {
+            return date?.stringify(with: .medium)  ?? ""
+        }
     }
 
     //MARK: timetableTitle
@@ -218,8 +341,260 @@ struct EventEditViewContent: View {
     
     //MARK: deleteEvent
     private func deleteEvent() {
+        
+        showSpanPicker = false
         showDeleteAction = false
+        
+        EventService.shared.deleteEvent(event.event, deleteSpan)
+        
         dismiss()
         
+    }
+    
+    private func textFor(rule: EKRecurrenceRule?) -> String {
+        guard let rule = rule else { return "None" }
+        
+        switch rule.frequency {
+        case .daily:
+            return "Daily"
+        case .monthly:
+            return "Monthly"
+        case .weekly:
+            return "Weekly"
+        case .yearly:
+            return "Yearly"
+        @unknown default:
+            return "-"
+        }
+    }
+}
+
+//MARK: RecurrenceRulePicker
+struct RecurrenceRulePicker: View {
+    
+    @Binding
+    var recurenceRule: [EKRecurrenceRule]?
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @State
+    private var frequency: EKRecurrenceFrequency = .daily
+    
+    @State
+    private var interval: Int = 1
+    
+    @State
+    private var endDate: Date? = nil
+    
+    var body: some View {
+        
+        List {
+            
+            // No recurrence rule
+            Section {
+                HStack {
+                    Text(textFor(rule: nil))
+                    Spacer()
+                    if recurenceRule == nil {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    recurenceRule = nil
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+            
+            Section {
+                ForEach(rules, id: \.self) { rules in
+                    HStack {
+                        Text(textFor(rule: rules?.first))
+                        Spacer()
+                        if recurenceRule == rules {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(.systemBlue))
+                        }
+                    }.contentShape(Rectangle())
+                    .onTapGesture {
+                        recurenceRule = rules
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            
+            Section {
+                HStack {
+                    Text("Custom")
+                    Spacer()
+                    if isCustomRule() {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(.systemBlue))
+                    }
+                }.contentShape(Rectangle())
+                .onTapGesture {
+                    recurenceRule = [EKRecurrenceRule(recurrenceWith: frequency, interval: interval, end: nil)]
+                }
+            }
+            
+            if isCustomRule() {
+                
+                // Frequency
+                HStack {
+                    Picker(selection: $interval, label: Text("-")) {
+                        ForEach(1..<30) { value in
+                            Text("\(value)")
+                        }
+                        
+                    }.pickerStyle(WheelPickerStyle())
+                    
+                    Picker(selection: $frequency, label: Text("-")) {
+                        ForEach([EKRecurrenceFrequency.daily, EKRecurrenceFrequency.weekly, EKRecurrenceFrequency.monthly, EKRecurrenceFrequency.yearly], id: \.self) { value in
+                            Text("\(textFor(frequency: value))")
+                        }
+                    }.pickerStyle(WheelPickerStyle())
+                }
+                
+            }
+            
+        }.font(.system(size: 15, weight: .semibold))
+        .listStyle(InsetGroupedListStyle())
+        .navigationBarTitle("Repeats")
+        
+    }
+    
+    private func isCustomRule() -> Bool {
+        return recurenceRule != nil && !rules.reduce(false) { (res, rule) in
+            return recurenceRule == rule ? true : res
+        }
+    }
+    
+    private func textFor(rule: EKRecurrenceRule?) -> String {
+        guard let rule = rule else { return "None" }
+        
+        return textFor(frequency: rule.frequency)
+    }
+    
+    private func textFor(frequency: EKRecurrenceFrequency) -> String {
+        switch frequency {
+        case .daily:
+            return "Daily"
+        case .monthly:
+            return "Monthly"
+        case .weekly:
+            return "Weekly"
+        case .yearly:
+            return "Yearly"
+        default:
+            return "-"
+        }
+    }
+}
+
+
+struct EventLocationView: View {
+    
+    struct EventLocation: Identifiable {
+        var id: Int = 0
+        var coordinate: CLLocationCoordinate2D
+    }
+    
+    @ObservedObject
+    var event: EventViewModel
+    
+    @State
+    var region: MKCoordinateRegion?
+    
+    var pins: [EventLocation] = []
+    
+    init(event: EventViewModel) {
+        self.event = event
+        if let location = event.event.structuredLocation,
+           let geo = location.geoLocation {
+            region = MKCoordinateRegion(center:
+                                            geo.coordinate,
+                                           span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            pins = [EventLocation(coordinate: geo.coordinate)]
+        }
+    }
+    
+    var body: some View {
+        
+        if let location = event.event.structuredLocation,
+           let geo = location.geoLocation {
+            Map(
+                coordinateRegion:
+                    Binding($region,
+                            MKCoordinateRegion(center:
+                                                geo.coordinate,
+                                                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))),
+                annotationItems: pins) { pin in
+                MapPin(coordinate: pin.coordinate)
+            }.frame(height: 150)
+            .cornerRadius(10)
+            .listRowInsets(EdgeInsets())
+        }else {
+            Text("Choose location")
+        }
+    }
+    
+}
+
+//MARK: AlarmTimePicker
+struct AlarmTimePicker: View {
+    
+    @Environment(\.presentationMode)
+    var presentationMode
+    
+    @ObservedObject
+    var event: EventViewModel
+    
+    var alarm: EKAlarm
+    
+    var body: some View {
+        List {
+            Section {
+                ForEach(NotificationOffset.allCases, id: \.self) { (offset: NotificationOffset) in
+                    HStack {
+                        Text(text(for: offset.timeInterval))
+                        
+                        Spacer()
+                        
+                        if offset.timeInterval == alarm.relativeOffset {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(.systemBlue))
+                        }
+                    }.contentShape(Rectangle())
+                    .font(.system(size: 15, weight: .semibold))
+                    .onTapGesture {
+                        alarm.relativeOffset = -offset.timeInterval
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+            
+            Section {
+                Button("Remove Alert") {
+                    event.removeAlarm(alarm)
+                    presentationMode.wrappedValue.dismiss()
+                }.font(.system(size: 15, weight: .semibold))
+            }
+            
+        }.listStyle(InsetGroupedListStyle())
+        .navigationTitle("Alert")
+    }
+    
+    private func text(for offset: TimeInterval) -> String {
+        if offset == 0 {
+            return "At time of event"
+        }
+        
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 1
+        
+        return "\(formatter.string(from: offset) ?? "-") before"
     }
 }

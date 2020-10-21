@@ -159,7 +159,7 @@ struct HomeDashCalendarContent: View {
         Group {
             GeometryReader { geometry in
                 ForEach(events.entries, id: \.self) { event in
-                    let width = self.width(for: event, maxWidth: geometry.size.width - 60)
+                    let width = self.width(for: event, maxWidth: geometry.size.width - 80)
                     
                     HomeDashCalendarEvent(event: EventViewModel(event))
                         .frame(width: width, height: height(for: event))
@@ -170,29 +170,50 @@ struct HomeDashCalendarContent: View {
     }
     
     private func width(for event: EKEvent, maxWidth: CGFloat) -> CGFloat {
-        let collisions = events.collisionCount(for: event, within: events.entries)
+        var collisions = events.collisionsOfStartDate(for: event, in: events.entries, withMaximumDistance: .minute(45))
+        
+        // In case there are startDate collisions
+        if collisions > 0 {
+            return maxWidth / CGFloat(collisions + 1) // Divide the space into enough parts to fit all events
+        }
+        
+        // Check if there are any collisions at all
+        collisions = events.collisionCount(for: event, within: events.entries)
         
         if collisions == 0 {
             return maxWidth
         }
         
-        return maxWidth / CGFloat(collisions + 1)
+        let collisionRank = events.collisionRank(for: event)
+        
+        return maxWidth - CGFloat((collisions + 1) * collisionRank)
     }
     
     private func height(for event: EKEvent) -> CGFloat {
-        guard let start = event.startDate,
-              let end = event.endDate else {
+        guard var start = event.startDate,
+              var end = event.endDate else {
             return 0
         }
         
-        let duration = CGFloat(end.timeIntervalSince(start)) / 3600
+        // Bound the start/ end date to the current day
+        start = max(start, events.date.startOfDay)
+        end = min(end, events.date.endOfDay)
+        
+        let duration = CGFloat(end.timeIntervalSince(start)) / 3600 // Duration of event in hours
         
         return heightForHour * duration
     }
     
-    private func offsetX(for event: EKEvent
-                         , width: CGFloat, environment: [EKEvent]) -> CGFloat {
-        return 60 + CGFloat(events.collisionRank(for: event)) * width
+    private func offsetX(for event: EKEvent , width: CGFloat, environment: [EKEvent]) -> CGFloat {
+        let collisions = events.collisionsOfStartDate(for: event, in: events.entries, withMaximumDistance: .minute(45))
+        
+        let collisionRank = events.collisionRank(for: event)
+        // In case there are startDate collisions
+        if collisions > 0 {
+            return 60 + CGFloat(events.collisionRank(for: event)) * width
+        }
+        
+        return 60 + CGFloat(collisionRank * 10) // Move the event on the X axis to show all calendar indicators of the colliding events
     }
     
     private func offsetY(for event: EKEvent) -> CGFloat {
@@ -232,44 +253,58 @@ struct HomeDashCalendarEvent: View {
     private var showEditView = false
     
     var body: some View {
-        HStack(spacing: 15) {
+        let eventDuration = self.eventDuration()
+        
+        return HStack(spacing: 15) {
             VStack {
                 Spacer()
                 Rectangle()
                     .foregroundColor(Color(.clear))
                     .frame(width: 10)
                 Spacer()
-            }
-            .background(Color(calendarColor()))
+            }.background(Color(calendarColor()))
             
             VStack(alignment: .leading) {
-                if eventDuration() > 45 {
-                    Text(event.calendar.title)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(Color(calendarColor()))
+                if eventDuration > 45 {
+                    HStack {
+                        Text(event.calendar.title)
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(Color(calendarColor()))
+                            .minimumScaleFactor(0.7)
+                        
+                        Spacer()
+                        
+                        if event.event.structuredLocation != nil {
+                            Image(systemName: "location.circle.fill")
+                                .foregroundColor(Color(.label))
+                                .font(.system(size: 12, weight: .semibold))
+                        }
+                    }
                 }
                 Text(event.title)
                     .font(.system(size: 14, weight: .semibold))
-                    .minimumScaleFactor(0.75)
-                if eventDuration() > 20 {
+                    .minimumScaleFactor(0.7)
+                if eventDuration > 20 {
                     Text(timeString())
                         .font(.system(size: 12, weight: .regular))
                         .foregroundColor(Color(.secondaryLabel))
-                        .minimumScaleFactor(0.75)
+                        .minimumScaleFactor(0.7)
                 }
-                Spacer()
-            }.padding(.top, 5)
+                
+                if eventDuration > 45 {
+                   Spacer()
+                }
+            }.padding(.top, eventDuration > 45 ? 5 : 0)
             
             Spacer()
-        }.background(Color(UIColor.tertiarySystemGroupedBackground.withAlphaComponent(0.75)))
+        }.background(Color(UIColor(cgColor: event.calendar.cgColor).withAlphaComponent(0.35)))
         .cornerRadius(6)
-//        .padding(.trailing)
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView, onDismiss: {
             homeViewModel.reload()
         }, content: {
-            EventEditView(event: event)
+            EventEditView(event: event, showEditView: $showEditView)
         })
     }
     
@@ -356,9 +391,13 @@ struct HomeAllDayEventsRow: View {
         .onTapGesture {
             showEditView.toggle()
         }.sheet(isPresented: $showEditView) {
+            if event.hasChanges {
+                showEditView.toggle()
+                return
+            }
             homeViewModel.reload()
         } content: {
-            EventEditView(event: event)
+            EventEditView(event: event, showEditView: $showEditView)
         }
 
     }

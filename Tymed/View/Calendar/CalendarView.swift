@@ -62,5 +62,8 @@ struct CalendarView: View {
                     
             }
         }.navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            calendarViewModel.reload()
+        }
     }
 }

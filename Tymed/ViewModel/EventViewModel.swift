@@ -48,6 +48,26 @@ class EventViewModel: ObservableObject {
         }
     }
     
+    @Published
+    var recurrenceRules: [EKRecurrenceRule]? {
+        didSet {
+            event.recurrenceRules = recurrenceRules
+        }
+    }
+    
+    @Published
+    var notes: String? {
+        didSet {
+            event.notes = notes
+        }
+    }
+    
+    @Published
+    var alarms: [EKAlarm]? {
+        didSet {
+            event.alarms = alarms
+        }
+    }
     
     var isNew: Bool {
         return event.isNew
@@ -71,6 +91,21 @@ class EventViewModel: ObservableObject {
         EventService.shared.save(event, span: span)
     }
     
+    func addAlarm(_ alarm: EKAlarm) {
+        event.addAlarm(alarm)
+        refresh()
+    }
+    
+    func addAlarm(relativeOffset: TimeInterval) {
+        event.addAlarm(EKAlarm(relativeOffset: relativeOffset))
+        refresh()
+    }
+    
+    func removeAlarm(_ alarm: EKAlarm) {
+        event.removeAlarm(alarm)
+        refresh()
+    }
+    
     func refresh() {
         event.refresh()
         
@@ -79,6 +114,9 @@ class EventViewModel: ObservableObject {
         endDate = event.endDate
         isAllDay = event.isAllDay
         calendar = event.calendar
+        recurrenceRules = event.recurrenceRules
+        notes = event.notes
+        alarms = event.alarms
     }
     
 }

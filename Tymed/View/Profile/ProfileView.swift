@@ -17,7 +17,7 @@ struct ProfileView: View {
     private var email = ""
     
     @State
-    private var isSettingsPresented = true
+    private var isSettingsPresented = false
     
     @State
     private var showProAccessPreview = false

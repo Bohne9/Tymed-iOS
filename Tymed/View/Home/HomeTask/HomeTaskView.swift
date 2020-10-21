@@ -184,7 +184,7 @@ struct HomeTaskViewContent: View {
             }
             
             if !taskViewModel.weekTasks.isEmpty {
-                HomeTaskViewSection(header: "Week", tasks: taskViewModel.weekTasks)
+                HomeTaskViewSection(header: "This Week", tasks: taskViewModel.weekTasks)
             }
             
             if !taskViewModel.laterTasks.isEmpty {

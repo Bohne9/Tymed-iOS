@@ -32,19 +32,6 @@ struct HomeDashHeaderView: View {
                 Spacer()
                 
                 Button {
-                    showTaskAddView.toggle()
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 25, weight: .semibold))
-                        .foregroundColor(.appColor)
-                }.sheet(isPresented: $showTaskAddView, onDismiss: {
-                    homeViewModel.reload()
-                }, content: {
-                    EventAddView()
-                }).padding(.trailing)
-
-                
-                Button {
                     showMeView.toggle()
                 } label: {
                     if let img = SettingsService.shared.profilePicture {
@@ -58,7 +45,21 @@ struct HomeDashHeaderView: View {
                     NavigationView {
                         MeView()
                     }
-                }
+                }.padding(.trailing)
+
+                Button {
+                    showTaskAddView.toggle()
+                } label: {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 25, weight: .semibold))
+                        .foregroundColor(.appColor)
+                }.sheet(isPresented: $showTaskAddView, onDismiss: {
+                    homeViewModel.reload()
+                }, content: {
+//                    EventAddView(showEditView: $showTaskAddView)
+                    EventEditViewWrapper()
+                })
+                
             }
             
             
