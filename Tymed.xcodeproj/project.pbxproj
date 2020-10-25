@@ -29,6 +29,7 @@
 		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
 		4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
 		4F405E87245DB86E00E1E704 /* TimetableOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* TimetableOverviewViewController.swift */; };
+		4F58C08B2545889A00C6FBA5 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F58C08A2545889A00C6FBA5 /* ReminderService.swift */; };
 		4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */; };
 		4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */; };
 		4F6C6D0124E0732500E5AEA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4B569524E06EAD00ED193A /* Assets.xcassets */; };
@@ -161,6 +162,7 @@
 		4F405E83245D72FC00E1E704 /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
 		4F405E86245DB86E00E1E704 /* TimetableOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableOverviewViewController.swift; sourceTree = "<group>"; };
 		4F4B569524E06EAD00ED193A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Tymed/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		4F58C08A2545889A00C6FBA5 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
 		4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreviewCell.swift; sourceTree = "<group>"; };
 		4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableOverview.swift; sourceTree = "<group>"; };
 		4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationOffsetView.swift; sourceTree = "<group>"; };
@@ -639,6 +641,7 @@
 				4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */,
 				4FC1B23125222EEB00B3D8C9 /* PersistanceService.swift */,
 				4FC48DE025277E0A00236478 /* EventService.swift */,
+				4F58C08A2545889A00C6FBA5 /* ReminderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */,
 				4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */,
 				4FC1B236252237D800B3D8C9 /* HomeDashOverviewView.swift in Sources */,
+				4F58C08B2545889A00C6FBA5 /* ReminderService.swift in Sources */,
 				4F6F6EFF24DD1DCA006EC4BE /* NotificationOffsetView.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */,
