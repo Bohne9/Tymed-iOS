@@ -15,7 +15,7 @@ class TaskViewModel: ObservableObject {
     private let reminderService = ReminderService.shared
     
     @Published
-    var includeDone = true {
+    var includeDone = false {
         didSet {
             reload()
         }
@@ -53,11 +53,17 @@ class TaskViewModel: ObservableObject {
     @Published
     var archivedTasks: [EKReminder] = []
  
+    @Published
+    var calendars: [EKCalendar] = []
+    
     var hasTasks: Bool {
         return !tasks.isEmpty
     }
     
     init() {
+        
+        calendars = reminderService.calendars
+        
         reload()
     }
     
@@ -65,14 +71,13 @@ class TaskViewModel: ObservableObject {
     func reload() {
         
         // Get all unarchived tasks
-        reminderService.reminders(in: reminderService.calendars) { (reminders) in
-            self.tasks = reminders ?? []
-            
-            if !self.includeDone {
-                self.tasks = self.tasks.filter { !$0.isCompleted }
+        reminderService.reminders(in: calendars) { (reminders) in
+            DispatchQueue.main.async {
+                self.tasks = reminders ?? []
+                
+                self.reloadValues()
             }
         }
-        
         
         // Filter the tasks again just in case the user unarchived a task.
 //        recentlyArchived = BackgroundRoutineService.standard.archivedTasksOfSession?.filter { $0.archived } ?? []
@@ -91,6 +96,10 @@ class TaskViewModel: ObservableObject {
     
     private func reloadValues() {
         let now = Date()
+        
+        if !self.includeDone {
+            self.tasks = self.tasks.filter { !$0.isCompleted }
+        }
         
         overdueTasks = tasks.filter { task in
             guard let dueDate = dueDate(for: task),
@@ -141,6 +150,13 @@ class TaskViewModel: ObservableObject {
 
     func remainingTasks(for calendar: EKCalendar) -> [EKReminder] {
         return tasks(for: calendar).filter { !$0.isCompleted }
+    }
+    
+    /// Filters the reminder calendars to only return calendars that have active reminders
+    func calendarsWithReminders() -> [EKCalendar] {
+        return calendars.filter { calendar in
+            tasks(for: calendar).count != 0
+        }
     }
     
 }

@@ -60,6 +60,8 @@ class ReminderViewModel: ObservableObject {
     
     init(_ reminder: EKReminder) {
         self.reminder = reminder
+        
+        refresh()
     }
     
     func refresh() {
@@ -72,6 +74,15 @@ class ReminderViewModel: ObservableObject {
         calendar = reminder.calendar
         notes = reminder.notes
         url = reminder.url
+        calendar = reminder.calendar
         
+    }
+    
+    func dueDate() -> Date? {
+        guard let components = reminder.dueDateComponents else {
+            return nil
+        }
+        
+        return Calendar.current.date(from: components)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  TimetableBadgeView.swift
+//  CalendarBadgeView.swift
 //  Tymed
 //
 //  Created by Jonah Schueller on 28.09.20.
@@ -7,8 +7,9 @@
 //
 
 import SwiftUI
+import EventKit
 
-enum TimetableBadgeViewSize {
+enum CalendarBadgeViewSize {
     case small
     case normal
     case large
@@ -36,12 +37,11 @@ enum TimetableBadgeViewSize {
     }
 }
 
-struct TimetableBadgeView: View {
+struct CalendarBadgeView: View {
     
-    @ObservedObject
-    var timetable: Timetable
+    var calendar: EKCalendar
     
-    var size = TimetableBadgeViewSize.normal
+    var size = CalendarBadgeViewSize.normal
     
     var color = UIColor.appColor
     
@@ -50,21 +50,17 @@ struct TimetableBadgeView: View {
             if size != .small {
                 RoundedRectangle(cornerRadius: (size == .normal ? 4.0 : 8.0) / 2)
                     .frame(width: size == .normal ? 4.0 : 8.0, height: size == .normal ? 14 : 18)
-                    .foregroundColor(Color(UIColor(timetable) ?? color))
-            }else {
-//                Spacer()
+                    .foregroundColor(Color(calendar.cgColor))
             }
                 
-            Text(timetable.name)
+            Text(calendar.title)
                 .font(.system(size: size.fontSize, weight: size.fontWeight))
                 .foregroundColor(.white)
             
-//            Spacer()
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
         .background(Color(color))
         .cornerRadius(size.fontSize + 4)
-//        .padding(5)
     }
 }

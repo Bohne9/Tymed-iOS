@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import EventKit
 
 struct HomeDashTaskView: View {
     
@@ -19,8 +19,8 @@ struct HomeDashTaskView: View {
     
     var body: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-            ForEach(homeViewModel.timetables, id: \.self) { timetable in
-                HomeDashTaskTimetableView(timetable: timetable)
+            ForEach(taskViewModel.calendarsWithReminders(), id: \.self) { calendar in
+                HomeDashTaskTimetableView(calendar: calendar)
             }
         }.environmentObject(taskViewModel)
     }
@@ -28,8 +28,7 @@ struct HomeDashTaskView: View {
 
 struct HomeDashTaskTimetableView: View {
     
-    @ObservedObject
-    var timetable: Timetable
+    var calendar: EKCalendar
     
     @EnvironmentObject
     var taskViewModel: TaskViewModel
@@ -37,7 +36,7 @@ struct HomeDashTaskTimetableView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            TimetableBadgeView(timetable: timetable, size: .normal)
+            CalendarBadgeView(calendar: calendar, size: .normal)
             
             HStack(alignment: .top) {
                 VStack(alignment: .leading) {
@@ -68,11 +67,11 @@ struct HomeDashTaskTimetableView: View {
     }
     
     private func remainingTasksCount() -> Int {
-        return taskViewModel.remainingTasks(for: timetable).count
+        return taskViewModel.remainingTasks(for: calendar).count
     }
     
     private func doneTasksCount() -> Int {
-        return taskViewModel.completedTasks(for: timetable).count
+        return taskViewModel.completedTasks(for: calendar).count
     }
 }
 
