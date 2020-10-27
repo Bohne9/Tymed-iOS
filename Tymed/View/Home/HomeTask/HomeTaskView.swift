@@ -101,8 +101,8 @@ struct HomeTaskView: View {
                 }
                 Spacer()
             }
-        }.padding()
-        .onAppear {
+            .padding()
+        }.onAppear {
             taskViewModel.reload()
             homeViewModel.reload()
         }
@@ -126,19 +126,23 @@ struct HomeTaskViewContent: View {
             
             
             if !taskViewModel.unlimitedTasks.isEmpty {
-                HomeTaskViewSection(header: "Unlimited", tasks: taskViewModel.unlimitedTasks)
+                HomeTaskViewSection(header: "Unlimited", reminders: taskViewModel.unlimitedTasks)
+            }
+            
+            if !taskViewModel.overdueTasks.isEmpty {
+                HomeTaskViewSection(header: "Overdue", reminders: taskViewModel.overdueTasks)
             }
             
             if !taskViewModel.todayTasks.isEmpty {
-                HomeTaskViewSection(header: "Today", tasks: taskViewModel.todayTasks)
+                HomeTaskViewSection(header: "Today", reminders: taskViewModel.todayTasks)
             }
             
             if !taskViewModel.weekTasks.isEmpty {
-                HomeTaskViewSection(header: "This Week", tasks: taskViewModel.weekTasks)
+                HomeTaskViewSection(header: "This Week", reminders: taskViewModel.weekTasks)
             }
             
             if !taskViewModel.laterTasks.isEmpty {
-                HomeTaskViewSection(header: "Later", tasks: taskViewModel.laterTasks)
+                HomeTaskViewSection(header: "Later", reminders: taskViewModel.laterTasks)
             }
             
             HomeTaskViewHelp()
@@ -153,7 +157,7 @@ struct HomeTaskViewSection: View {
     
     var header: String
     
-    var tasks: [EKReminder]
+    var reminders: [EKReminder]
     
     var body: some View {
         
@@ -165,9 +169,18 @@ struct HomeTaskViewSection: View {
                 
             }.font(.system(size: 16, weight: .semibold))
             
-            ForEach(tasks, id: \.self) { reminder in
-                HomeTaskCell(reminder: ReminderViewModel(reminder))
-            }
+            VStack {
+                ForEach(reminders, id: \.self) { reminder in
+                    HomeTaskCell(reminder: ReminderViewModel(reminder))
+                    
+                    if reminder != reminders.last {
+                        Divider()
+                    }
+                    
+                }
+            }.padding()
+            .background(Color(.secondarySystemGroupedBackground))
+            .cornerRadius(10)
         }
         
     }

@@ -26,19 +26,20 @@ struct HomeTaskCell: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            if reminder.calendar != nil {            
-                RoundedRectangle(cornerRadius: 5, style: .circular)
+            if reminder.calendar != nil {
+                RoundedRectangle(cornerRadius: 4, style: .circular)
                     .foregroundColor(Color(reminder.calendar.cgColor))
-                    .frame(width: 8, height: 40)
+                    .frame(width: 8, height: 35)
             }
             
             Image(systemName: reminder.isCompleted ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 22.5, weight: .semibold))
+                .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(Color(reminder.isCompleted ? .secondaryLabel : .systemBlue))
                 .frame(width: 25, height: 25)
                 .onTapGesture {
                     withAnimation {
                         reminder.isCompleted.toggle()
+                        ReminderService.shared.save(reminder.reminder)
                         taskViewModel.reload()
                         homeViewModel.reload()
                     }
@@ -48,29 +49,27 @@ struct HomeTaskCell: View {
                 HStack {
                     if reminder.isCompleted {
                         Text(reminder.title)
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .strikethrough()
                             .foregroundColor(Color(.secondaryLabel))
                     }else {
                         Text(reminder.title)
-                            .font(.system(size: 15, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                     }
                 }
                 
                 
                 if let date = reminder.dueDate() {
                     Text(textFor(date: date))
-                        .font(.system(size: 13, weight: .medium))
+                        .font(.system(size: 12, weight: .medium))
                         .foregroundColor(Color(colorFor(due: date)))
                 }
             }
             
             Spacer()
             
-        }.padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 10))
-        .frame(height: 55)
+        }
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(12)
         .contentShape(RoundedRectangle(cornerRadius: 12))
         .onTapGesture {
             showTaskDetail.toggle()

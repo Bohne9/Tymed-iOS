@@ -97,13 +97,14 @@ class TaskViewModel: ObservableObject {
     private func reloadValues() {
         let now = Date()
         
+        var tasks = self.tasks
+        
         if !self.includeDone {
-            self.tasks = self.tasks.filter { !$0.isCompleted }
+            tasks = tasks.filter { !$0.isCompleted }
         }
         
         overdueTasks = tasks.filter { task in
-            guard let dueDate = dueDate(for: task),
-                  task.isCompleted else {
+            guard let dueDate = dueDate(for: task) else {
                 return false
             }
             return dueDate < now
