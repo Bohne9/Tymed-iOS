@@ -124,13 +124,12 @@ struct HomeTaskViewContent: View {
         VStack(alignment: .leading, spacing: 15) {
             HomeDashTaskView(taskViewModel: taskViewModel)
             
+            if !taskViewModel.overdueTasks.isEmpty {
+                HomeTaskViewSection(header: "Overdue", reminders: taskViewModel.overdueTasks)
+            }
             
             if !taskViewModel.unlimitedTasks.isEmpty {
                 HomeTaskViewSection(header: "Unlimited", reminders: taskViewModel.unlimitedTasks)
-            }
-            
-            if !taskViewModel.overdueTasks.isEmpty {
-                HomeTaskViewSection(header: "Overdue", reminders: taskViewModel.overdueTasks)
             }
             
             if !taskViewModel.todayTasks.isEmpty {
@@ -172,13 +171,14 @@ struct HomeTaskViewSection: View {
             VStack {
                 ForEach(reminders, id: \.self) { reminder in
                     HomeTaskCell(reminder: ReminderViewModel(reminder))
+                        .frame(height: 40)
                     
                     if reminder != reminders.last {
                         Divider()
                     }
                     
                 }
-            }.padding()
+            }.padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
             .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(10)
         }

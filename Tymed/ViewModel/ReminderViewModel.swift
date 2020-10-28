@@ -8,6 +8,7 @@
 
 import Foundation
 import EventKit
+import UIKit
 
 class ReminderViewModel: ObservableObject {
     
@@ -84,5 +85,35 @@ class ReminderViewModel: ObservableObject {
         }
         
         return Calendar.current.date(from: components)
+    }
+    
+    /// - Returns: Returns a systemImage for the completion state of the reminder
+    func iconForCompletion() -> String {
+        if isCompleted {
+            return "checkmark.circle.fill"
+        }else if dueDateComponents == nil {
+            return "circle"
+        } else if dueDateComponents != nil  && dueDate()! < Date() {
+            return "exclamationmark.circle.fill"
+        }
+        // Default case
+        return "circle"
+    }
+    
+    /// - Returns: Returns a color for the completion state of the reminder.
+    func completeColor() -> UIColor {
+        if isCompleted {
+            if dueDateComponents == nil || completionDate ?? Date() <= dueDate() ?? Date() {
+                return .systemGreen
+            }else {
+                return .systemOrange
+            }
+        }else {
+            if dueDateComponents == nil || Date() <= dueDate() ?? Date() {
+                return .systemBlue
+            }else {
+                return .systemRed
+            }
+        }
     }
 }

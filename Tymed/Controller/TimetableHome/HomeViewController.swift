@@ -202,10 +202,10 @@ class HomeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func presentTaskDetail(_ task: Task, animated: Bool = true) {
-        let taskView = TaskEditViewWrapper()
-        taskView.task = task
-        
-        self.present(taskView, animated: animated, completion: nil)
+//        let taskView = TaskEditViewWrapper()
+//        taskView.task = task
+//        
+//        self.present(taskView, animated: animated, completion: nil)
         
     }
     

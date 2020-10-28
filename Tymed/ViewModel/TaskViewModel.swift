@@ -156,7 +156,7 @@ class TaskViewModel: ObservableObject {
     /// Filters the reminder calendars to only return calendars that have active reminders
     func calendarsWithReminders() -> [EKCalendar] {
         return calendars.filter { calendar in
-            tasks(for: calendar).count != 0
+            remainingTasks(for: calendar).count != 0
         }
     }
     

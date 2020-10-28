@@ -89,14 +89,14 @@ struct TimetableDetail: View {
             if unarchivedTasks().count > 0 {
                 Section(header: Text("Tasks").font(.system(size: 12, weight: .semibold))) {
                     ForEach(unarchivedTasks().prefix(maxNumberOfTasks), id: \.self) { task in
-                        NavigationLink(
-                            destination: TaskEditContent(task: task, dismiss: {
-                                
-                            }).navigationBarItems(trailing: EmptyView()) ,
-                            label: {
-                                TaskPreviewCell(task: task)
-                                    .frame(height: 50)
-                            })
+//                        NavigationLink(
+//                            destination: TaskEditContent(task: task, dismiss: {
+//
+//                            }).navigationBarItems(trailing: EmptyView()) ,
+//                            label: {
+//                                TaskPreviewCell(task: task)
+//                                    .frame(height: 50)
+//                            })
                     }
                     if unarchivedTasks().count > maxNumberOfTasks {
                         NavigationLink(
@@ -211,7 +211,7 @@ struct ArchivedTasksOverview: View {
                         deleteAllTasks()
                     }
             }
-            
+            /*
             //MARK: Manually archived
             Section(header: Text("Manually archived")) {
                 ForEach(archivedTasksWithOutDue(), id: \.self) { (task: Task) in
@@ -242,6 +242,7 @@ struct ArchivedTasksOverview: View {
                     index.forEach { deleteTask(at: $0, hasDue: true) }
                 }
             }
+ */
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("Archived tasks")
     }
@@ -317,12 +318,14 @@ struct AllTasksOverviewView: View {
     var body: some View {
         List {
             ForEach(unarchivedTasks(), id: \.self) { task in
+                /*
                 NavigationLink(
                     destination: TaskEditContent(task: task, dismiss: { }).navigationBarItems(leading: EmptyView()),
                     label: {
                         TaskPreviewCell(task: task)
                             .frame(height: 50)
                     })
+ */
             }
         }.listStyle(InsetGroupedListStyle())
         .navigationTitle("All subjects")

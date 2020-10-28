@@ -41,12 +41,12 @@ extension HomeViewSceneDelegate {
     }
     
     func presentTaskEditView(for task: Task) {
-        let taskView = TaskEditViewWrapper()
-        taskView.task = task
-        
-        taskView.homeDelegate = self
-        
-        present(taskView, animated: true)
+//        let taskView = TaskEditViewWrapper()
+//        taskView.task = task
+//        
+//        taskView.homeDelegate = self
+//        
+//        present(taskView, animated: true)
     }
     
     func presentTaskAddView() {

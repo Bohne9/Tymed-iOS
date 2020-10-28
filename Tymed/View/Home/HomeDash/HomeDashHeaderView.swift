@@ -22,7 +22,7 @@ struct HomeDashHeaderView: View {
     var body: some View {
         VStack {
             HStack(alignment: .top) {
-                Text("Hello,\n")
+                Text("Hello\n")
                     .font(.system(size: 24, weight: .semibold))
                 +
                     Text("\(SettingsService.shared.username)")

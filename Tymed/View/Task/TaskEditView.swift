@@ -9,36 +9,16 @@
 import SwiftUI
 import CoreData
 
-class TaskEditViewWrapper: ViewWrapper<TaskEditView> {
-    
-    var task: Task?
-    
-    override func createContent() -> UIHostingController<TaskEditView>? {
-        guard let task = task else {
-            return nil
-        }
-        
-        let taskEditView = TaskEditView(task: task,
-                                        dismiss: {
-                                            self.homeDelegate?.reload()
-                                            self.dismiss(animated: true, completion: nil)
-                                        })
-        
-        return UIHostingController(rootView: taskEditView)
-    }
-
-}
-
 //MARK: TaskEditView
 struct TaskEditView: View {
     
-    @ObservedObject var task: Task
+    @ObservedObject var reminder: ReminderViewModel
     
     var dismiss: () -> Void
     
     var body: some View {
         NavigationView {
-            TaskEditContent(task: task, dismiss: dismiss)
+            TaskEditContent(reminder: reminder, dismiss: dismiss)
         }
     }
     
@@ -82,7 +62,7 @@ struct TaskEditContent: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    @ObservedObject var task: Task
+    @ObservedObject var reminder: ReminderViewModel
     
     //MARK: Title states
     @State var taskTitle: String = ""
@@ -122,6 +102,8 @@ struct TaskEditContent: View {
     
     @State var showDismissWarning = false
     
+    //MARK: Notes
+    @State var showNotesKeyboardResign = false
     
     //MARK: Delete state
     @State var showDeleteAction = false
@@ -133,18 +115,21 @@ struct TaskEditContent: View {
             
             //MARK: Title
             Section {
-                TextField("Title", text: $task.title)
-                TextField("Description", text: $taskDescription).lineLimit(5)
-                    .font(.system(size: 13, weight: .semibold))
+                TextField("Title", text: $reminder.title)
             }
             
             //MARK: Complete
             Section {
                 HStack {
-                    DetailCellDescriptor("Completed", image: task.iconForCompletion(), task.completeColor(), value: task.completionDate?.stringify(dateStyle: .short, timeStyle: .short))
+                    DetailCellDescriptor("Completed",
+                                         image: reminder.iconForCompletion(),
+                                         reminder.completeColor(),
+                                         value: reminder.completionDate?.stringify(
+                                            dateStyle: .short,
+                                            timeStyle: .short))
                         .animation(.easeOut)
                     
-                    Toggle("", isOn: $task.completed)
+                    Toggle("", isOn: $reminder.isCompleted)
                 }.frame(height: 45)
             }
             
@@ -198,49 +183,24 @@ struct TaskEditContent: View {
                 
             }
             
-            //MARK: Lesson Attach
-            Section {
-                
-                HStack {
-                    DetailCellDescriptor("Lesson", image: "doc.text.fill", .systemBlue)
-                    
-                    Toggle("", isOn: $hasLessonAttached)
-                }.frame(height: 45)
-                
-                if hasLessonAttached {
-                    NavigationLink(
-                        destination: LessonPickerView(lesson: $task.lesson),
-                        label: {
-                            HStack {
-                                if task.lesson != nil {
-                                    Circle()
-                                        .frame(width: 12, height: 12)
-                                        .foregroundColor(subjectColor(task.lesson))
-                                }
-                                
-                                Text(titleForLessonCell())
-                                    .foregroundColor(foregroundColorForLessonCell())
-                                    .font(.system(size: 14, weight: .semibold))
-                                Spacer()
-                                if task.lesson != nil {
-                                    Text(textForLessonDate())
-                                        .multilineTextAlignment(.trailing)
-                                        .font(.system(size: 12, weight: .semibold))
-                                        .lineLimit(2)
-                                }
-                                    
-                            }.contentShape(Rectangle())
-                            .frame(height: 45)
-                        }).frame(height: 45)
+            Section(header: HStack {
+                Label("Notes", systemImage: "note.text")
+                    .font(.system(size: 12, weight: .semibold))
+                Spacer()
+                if showNotesKeyboardResign {
+                    #if canImport(UIKit) // Just to make sure UIKit is available
+                    Button("Done") {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        showNotesKeyboardResign = false
+                    }.foregroundColor(Color(.systemBlue))
+                    .font(.system(size: 12, weight: .semibold))
+                    #endif
                 }
-            }
-            //MARK: Archive
-            Section {
-                HStack {
-                    DetailCellDescriptor("Archived", image: "tray.full.fill", .systemOrange)
-                    
-                    Toggle("", isOn: $task.archived)
-                }.frame(height: 45)
+            }) {
+                TextEditor(text: Binding($reminder.notes, ""))
+                    .onTapGesture {
+                        showNotesKeyboardResign = true
+                    }.frame(minHeight: 100)
             }
             
             //MARK: Calendar
@@ -248,16 +208,9 @@ struct TaskEditContent: View {
             Section {
                 HStack {
                     
-                    NavigationLink(destination: AppTimetablePicker(timetable: $timetable)) {
-                        DetailCellDescriptor("Calendar", image: "tray.full.fill", .systemRed, value: timetableTitle())
+                    NavigationLink(destination: CalendarPicker(calendar: $reminder.calendar)) {
+                        DetailCellDescriptor("Calendar", image: "tray.full.fill", UIColor(cgColor: reminder.calendar.cgColor), value: timetableTitle())
                         Spacer()
-                        if timetable == TimetableService.shared.defaultTimetable() {
-                            Text("Default")
-                                .padding(EdgeInsets(top: 4, leading: 10, bottom: 4, trailing: 10))
-                                .background(Color(.tertiarySystemGroupedBackground))
-                                .font(.system(size: 13, weight: .semibold))
-                                .cornerRadius(10)
-                        }
                     }
                     
                 }
@@ -304,30 +257,22 @@ struct TaskEditContent: View {
         }))
         .onAppear {
             loadTaskValues()
-        }.onChange(of: task.completed) { completed in
+        }.onChange(of: reminder.isCompleted) { completed in
             completionDate = completed ? Date() : nil
-        }.onChange(of: timetable) { (value) in
-            if let timetable = value {
-                task.timetable = timetable
-                TimetableService.shared.save()
-            }
         }
     }
     
     //MARK: loadTaskValues
     private func loadTaskValues() {
         
-        taskTitle = task.title
-        taskDescription = task.text ?? taskDescription
-        dueDate = task.due ?? dueDate
-        hasDueDate = task.due != nil
-        lesson = task.lesson
+        taskTitle = reminder.title
+        dueDate = reminder.dueDate() ?? dueDate
+        hasDueDate = reminder.dueDate() != nil
         hasLessonAttached = lesson != nil
-        timetable = task.timetable
-        isArchived = task.archived
-        isCompleted = task.completed
-        completionDate = task.completionDate
+        isCompleted = reminder.isCompleted
+        completionDate = reminder.completionDate
         
+        /*
         task.getNotifications { (notifications) in
             sendNotification = notifications.count != 0
             if sendNotification, let not = notifications.first {
@@ -340,32 +285,12 @@ struct TaskEditContent: View {
                 }
             }
         }
-        
+        */
     }
     
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
-        return timetable?.name
-    }
-    
-    //MARK: titleForLessonCell
-    private func titleForLessonCell() -> String {
-        return task.lesson?.subject?.name ?? "Choose a lesson"
-    }
-    
-    //MARK: textForLessonDate
-    private func textForLessonDate() -> String {
-        guard let lesson = self.task.lesson else {
-            return ""
-        }
-        
-//        return "\(lesson.day.shortString()) \u{2022} \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
-        return "\(lesson.day.shortString()) \n \(lesson.startTime.string() ?? "") - \(lesson.endTime.string() ?? "")"
-    }
-    
-    //MARK: foregroundColorForLessonCell
-    private func foregroundColorForLessonCell() -> Color {
-        return task.lesson?.subject?.name != nil ? Color(.label) : Color(.systemBlue)
+        return reminder.calendar.title
     }
     
     //MARK: textForNotificationCell
@@ -399,19 +324,13 @@ struct TaskEditContent: View {
     
     //MARK: hasUnsavedChanges
     private func hasUnsavedChanges() -> Bool {
-        return
-            (task.title != taskTitle) ||
-            (task.text != taskDescription) ||
-            (task.due != dueDate) ||
-            (task.lesson != lesson) ||
-            (task.archived != isArchived) ||
-            (task.completed != isCompleted) ||
-            (task.lesson != nil && !hasLessonAttached) ||
-            (task.due != nil && !hasDueDate)
+        return reminder.hasChanges
     }
     
     //MARK: saveTask
     private func saveTask(dismiss: Bool = true) {
+        
+        /*
         if sendNotification {
             task.getNotifications { (notifications) in
                 guard let notificationOffset = notificationOffset else {
@@ -423,12 +342,9 @@ struct TaskEditContent: View {
         }else {
             NotificationService.current.removeAllNotifications(of: task)
         }
-        
-        task.text = taskDescription
-        task.due = hasDueDate ? dueDate : nil
-        task.lesson = hasLessonAttached ? lesson : nil
-        
-        TimetableService.shared.save()
+        */
+ 
+        ReminderService.shared.save(reminder.reminder)
         
         if dismiss {
             self.dismiss()
@@ -438,7 +354,7 @@ struct TaskEditContent: View {
     
     //MARK: deleteTask
     private func deleteTask() {
-        TimetableService.shared.deleteTask(task)
+        ReminderService.shared.deleteReminder(reminder.reminder)
         
         dismiss()
         presentationMode.wrappedValue.dismiss()

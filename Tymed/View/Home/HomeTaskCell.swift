@@ -29,7 +29,8 @@ struct HomeTaskCell: View {
             if reminder.calendar != nil {
                 RoundedRectangle(cornerRadius: 4, style: .circular)
                     .foregroundColor(Color(reminder.calendar.cgColor))
-                    .frame(width: 8, height: 35)
+                    .frame(width: 8, height: 25)
+                
             }
             
             Image(systemName: reminder.isCompleted ? "checkmark.circle.fill" : "circle")
@@ -39,9 +40,14 @@ struct HomeTaskCell: View {
                 .onTapGesture {
                     withAnimation {
                         reminder.isCompleted.toggle()
-                        ReminderService.shared.save(reminder.reminder)
-                        taskViewModel.reload()
-                        homeViewModel.reload()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            withAnimation {
+                                ReminderService.shared.save(reminder.reminder)
+                                taskViewModel.reload()
+                                homeViewModel.reload()
+                            }
+                        }
                     }
                 }
             
@@ -77,7 +83,7 @@ struct HomeTaskCell: View {
             taskViewModel.reload()
             homeViewModel.reload()
         }, content: {
-//            TaskEditView(task: task, dismiss: { homeViewModel.reload() })
+            TaskEditView(reminder: reminder, dismiss: { homeViewModel.reload() })
         }).onChange(of: reminder.isCompleted) { value in
             reminder.completionDate = value ? Date() : nil
         }
