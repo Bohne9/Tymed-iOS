@@ -29,6 +29,8 @@
 		4F3F628E247ABBD900A69202 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F3F6290247ABBD900A69202 /* Localizable.strings */; };
 		4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E83245D72FC00E1E704 /* TimetableService.swift */; };
 		4F405E87245DB86E00E1E704 /* TimetableOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F405E86245DB86E00E1E704 /* TimetableOverviewViewController.swift */; };
+		4F58C08B2545889A00C6FBA5 /* ReminderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F58C08A2545889A00C6FBA5 /* ReminderService.swift */; };
+		4F58C093254590B100C6FBA5 /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F58C092254590B100C6FBA5 /* ReminderViewModel.swift */; };
 		4F6B644924E1C50000C879BB /* TaskPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */; };
 		4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */; };
 		4F6C6D0124E0732500E5AEA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4B569524E06EAD00ED193A /* Assets.xcassets */; };
@@ -99,7 +101,7 @@
 		4FC1B23225222EEB00B3D8C9 /* PersistanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1B23125222EEB00B3D8C9 /* PersistanceService.swift */; };
 		4FC1B2342522352800B3D8C9 /* HomeDashHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1B2332522352800B3D8C9 /* HomeDashHeaderView.swift */; };
 		4FC1B236252237D800B3D8C9 /* HomeDashOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1B235252237D800B3D8C9 /* HomeDashOverviewView.swift */; };
-		4FC1B23825223A3100B3D8C9 /* TimetableBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1B23725223A3100B3D8C9 /* TimetableBadgeView.swift */; };
+		4FC1B23825223A3100B3D8C9 /* CalendarBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC1B23725223A3100B3D8C9 /* CalendarBadgeView.swift */; };
 		4FC23FE1251A4A520008AE3A /* ImageSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */; };
 		4FC43419251B546000D8EC0A /* AppStartSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC43418251B546000D8EC0A /* AppStartSetup.swift */; };
 		4FC48DE125277E0A00236478 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC48DE025277E0A00236478 /* EventService.swift */; };
@@ -161,6 +163,8 @@
 		4F405E83245D72FC00E1E704 /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
 		4F405E86245DB86E00E1E704 /* TimetableOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableOverviewViewController.swift; sourceTree = "<group>"; };
 		4F4B569524E06EAD00ED193A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Tymed/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		4F58C08A2545889A00C6FBA5 /* ReminderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderService.swift; sourceTree = "<group>"; };
+		4F58C092254590B100C6FBA5 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
 		4F6B644824E1C50000C879BB /* TaskPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPreviewCell.swift; sourceTree = "<group>"; };
 		4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableOverview.swift; sourceTree = "<group>"; };
 		4F6F6EFE24DD1DCA006EC4BE /* NotificationOffsetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationOffsetView.swift; sourceTree = "<group>"; };
@@ -237,7 +241,7 @@
 		4FC1B23125222EEB00B3D8C9 /* PersistanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceService.swift; sourceTree = "<group>"; };
 		4FC1B2332522352800B3D8C9 /* HomeDashHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashHeaderView.swift; sourceTree = "<group>"; };
 		4FC1B235252237D800B3D8C9 /* HomeDashOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDashOverviewView.swift; sourceTree = "<group>"; };
-		4FC1B23725223A3100B3D8C9 /* TimetableBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableBadgeView.swift; sourceTree = "<group>"; };
+		4FC1B23725223A3100B3D8C9 /* CalendarBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarBadgeView.swift; sourceTree = "<group>"; };
 		4FC23FE0251A4A520008AE3A /* ImageSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSupplier.swift; sourceTree = "<group>"; };
 		4FC43418251B546000D8EC0A /* AppStartSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartSetup.swift; sourceTree = "<group>"; };
 		4FC48DE025277E0A00236478 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
@@ -330,7 +334,7 @@
 				4F6C3F2D24DF211200D3F125 /* TimetableOverview.swift */,
 				4FB5784924DF32DA0066F130 /* TimetableDetail.swift */,
 				4FD270C524FADBE500D0075C /* TimetableAddView.swift */,
-				4FC1B23725223A3100B3D8C9 /* TimetableBadgeView.swift */,
+				4FC1B23725223A3100B3D8C9 /* CalendarBadgeView.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -586,6 +590,7 @@
 				4FBF0F48252342B900CE789C /* CalendarViewModel.swift */,
 				4F89BC0C2525DC90005A5854 /* TaskViewModel.swift */,
 				4FA2344B252C6849006CCE97 /* EventViewModel.swift */,
+				4F58C092254590B100C6FBA5 /* ReminderViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -639,6 +644,7 @@
 				4FB8F4CD24F195CC0015EC8E /* CalendarService.swift */,
 				4FC1B23125222EEB00B3D8C9 /* PersistanceService.swift */,
 				4FC48DE025277E0A00236478 /* EventService.swift */,
+				4F58C08A2545889A00C6FBA5 /* ReminderService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -963,7 +969,7 @@
 				4F38C4B024E69F020082517E /* Subject+CoreDataClass.swift in Sources */,
 				4FB8F4D224F1A4370015EC8E /* CaleanderWeekEntry.swift in Sources */,
 				4FA04A8C251F3E22004236CF /* PrivacyPolicy.swift in Sources */,
-				4FC1B23825223A3100B3D8C9 /* TimetableBadgeView.swift in Sources */,
+				4FC1B23825223A3100B3D8C9 /* CalendarBadgeView.swift in Sources */,
 				4F12658A24B0669C000488B8 /* NotificationService.swift in Sources */,
 				4FB9B692252B04EB008FEC3B /* HomeCalendarView.swift in Sources */,
 				4F152395245E9C05005F34B6 /* HomeCollectionViewDelegate.swift in Sources */,
@@ -972,6 +978,7 @@
 				4FFA61EE24D007E100C9F290 /* SettingsService.swift in Sources */,
 				4F99A0E92514E9AF006ADB05 /* HomeDayCalendarViewWrapper.swift in Sources */,
 				4FC1B236252237D800B3D8C9 /* HomeDashOverviewView.swift in Sources */,
+				4F58C08B2545889A00C6FBA5 /* ReminderService.swift in Sources */,
 				4F6F6EFF24DD1DCA006EC4BE /* NotificationOffsetView.swift in Sources */,
 				4F405E84245D72FC00E1E704 /* TimetableService.swift in Sources */,
 				4F6C3F2E24DF211200D3F125 /* TimetableOverview.swift in Sources */,
@@ -995,6 +1002,7 @@
 				4FD270C624FADBE500D0075C /* TimetableAddView.swift in Sources */,
 				4F9405EB2465B7EE0063E4DA /* Label.swift in Sources */,
 				4FB8F4D424F50DAF0015EC8E /* SettingsView.swift in Sources */,
+				4F58C093254590B100C6FBA5 /* ReminderViewModel.swift in Sources */,
 				4FC1B23225222EEB00B3D8C9 /* PersistanceService.swift in Sources */,
 				4F6F6F0124DD1DF2006EC4BE /* LessonPickerView.swift in Sources */,
 				4F7F77762456CA6400038729 /* NavigationBar.swift in Sources */,

@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     private var timetableService = TimetableService.shared
     private var calendarService = CalendarService.shared
     private var eventService = EventService.shared
+    private var reminderService = ReminderService.shared
     
     @Published
     var tasks: [Task] = []
@@ -23,7 +24,10 @@ class HomeViewModel: ObservableObject {
     }
     
     @Published
-    var calendars: [EKCalendar] = []
+    var eventCalendars: [EKCalendar] = []
+    
+    @Published
+    var reminderCalendars: [EKCalendar] = []
     
     @Published
     var nextEvents: [EKEvent]?
@@ -60,7 +64,9 @@ class HomeViewModel: ObservableObject {
         
         calendarWeek.removeEmptyDays()
         
-        calendars = eventService.calendars
+        eventCalendars = eventService.calendars
+        
+        reminderCalendars = reminderService.calendars
         
         scheduleTimeUpdater()
         
@@ -105,7 +111,9 @@ class HomeViewModel: ObservableObject {
         
         calendarWeek.removeEmptyDays()
         
-        calendars = eventService.calendars
+        eventCalendars = eventService.calendars
+        
+        reminderCalendars = reminderService.calendars
         
         objectWillChange.send()
     }

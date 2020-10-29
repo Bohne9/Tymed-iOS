@@ -134,7 +134,7 @@ struct HomeDashOverviewEventView: View {
                 Spacer()
                 
 //                if let timetable = event.timetable {
-//                    TimetableBadgeView(timetable: timetable, size: .small, color: .appColorLight)
+//                    CalendarBadgeView(timetable: timetable, size: .small, color: .appColorLight)
 //                }
             }
         }

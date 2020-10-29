@@ -53,9 +53,9 @@ struct TaskPreviewCell: View {
             showDetail.toggle()
         }
         .sheet(isPresented: $showDetail, content: {
-            TaskEditView(task: task) {
-                
-            }
+//            TaskEditView(task: task) {
+//                
+//            }
         })
         
     }

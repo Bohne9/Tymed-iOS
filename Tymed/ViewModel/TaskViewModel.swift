@@ -7,13 +7,15 @@
 //
 
 import SwiftUI
+import EventKit
 
 class TaskViewModel: ObservableObject {
     
     private let timetable = TimetableService.shared
+    private let reminderService = ReminderService.shared
     
     @Published
-    var includeDone = true {
+    var includeDone = false {
         didSet {
             reload()
         }
@@ -21,41 +23,47 @@ class TaskViewModel: ObservableObject {
     
     /// Contains all tasks that aren't archived at the moment
     @Published
-    var tasks: [Task] = []
+    var tasks: [EKReminder] = []
     
     /// Contains all tasks without a due date.
     @Published
-    var unlimitedTasks: [Task] = []
+    var unlimitedTasks: [EKReminder] = []
     
     /// Contains all tasks with a due date in the past
     @Published
-    var overdueTasks: [Task] = []
+    var overdueTasks: [EKReminder] = []
     
     /// Contains all tasks that with a due date within today
     @Published
-    var todayTasks: [Task] = []
+    var todayTasks: [EKReminder] = []
     
     /// Contains all tasks that with a due date within a week
     @Published
-    var weekTasks: [Task] = []
+    var weekTasks: [EKReminder] = []
     
     /// Contains all tasks that are scheduled for a date more than a month ahead.
     @Published
-    var laterTasks: [Task]  = []
+    var laterTasks: [EKReminder]  = []
     
     /// Contains all tasks that were archived via the automatics archive process at the start cycle of the app.
     @Published
-    var recentlyArchived: [Task] = []
+    var recentlyArchived: [EKReminder] = []
     
     /// Contains all tasks that are archived.
     @Published
-    var archivedTasks: [Task] = []
+    var archivedTasks: [EKReminder] = []
  
+    @Published
+    var calendars: [EKCalendar] = []
+    
     var hasTasks: Bool {
         return !tasks.isEmpty
     }
     
     init() {
+        
+        calendars = reminderService.calendars
+        
         reload()
     }
     
@@ -63,35 +71,54 @@ class TaskViewModel: ObservableObject {
     func reload() {
         
         // Get all unarchived tasks
-        tasks = timetable.getAllTasks()
-        if !includeDone {
-            tasks = tasks.filter { !$0.completed }
+        reminderService.reminders(in: calendars) { (reminders) in
+            DispatchQueue.main.async {
+                self.tasks = reminders ?? []
+                
+                self.reloadValues()
+            }
         }
         
         // Filter the tasks again just in case the user unarchived a task.
-        recentlyArchived = BackgroundRoutineService.standard.archivedTasksOfSession?.filter { $0.archived } ?? []
+//        recentlyArchived = BackgroundRoutineService.standard.archivedTasksOfSession?.filter { $0.archived } ?? []
         
-        archivedTasks = timetable.getArchivedTasks()
+//        archivedTasks = timetable.getArchivedTasks()
         
+    }
+    
+    private func dueDate(for reminder: EKReminder) -> Date? {
+        guard let components = reminder.dueDateComponents else {
+            return nil
+        }
+        
+        return Calendar.current.date(from: components)
+    }
+    
+    private func reloadValues() {
         let now = Date()
         
+        var tasks = self.tasks
+        
+        if !self.includeDone {
+            tasks = tasks.filter { !$0.isCompleted }
+        }
+        
         overdueTasks = tasks.filter { task in
-            guard let dueDate = task.due,
-                  task.completed else {
+            guard let dueDate = dueDate(for: task) else {
                 return false
             }
             return dueDate < now
         }
         
         todayTasks = tasks.filter { task in
-            guard let dueDate = task.due else {
+            guard let dueDate = dueDate(for: task) else {
                 return false
             }
             return dueDate >= now && Calendar.current.isDateInToday(dueDate)
         }
         
         weekTasks = tasks.filter { task in
-            guard let dueDate = task.due,
+            guard let dueDate = dueDate(for: task),
                   let endOfWeek = now.endOfWeek else {
                 return false
             }
@@ -99,7 +126,7 @@ class TaskViewModel: ObservableObject {
         }
         
         laterTasks = tasks.filter { task in
-            guard let dueDate = task.due,
+            guard let dueDate = dueDate(for: task),
                   let endOfWeek = now.endOfWeek else {
                 return false
             }
@@ -107,23 +134,30 @@ class TaskViewModel: ObservableObject {
         }
         
         unlimitedTasks = tasks.filter { task in
-            return task.due == nil
+            return dueDate(for: task) == nil
         }
     }
     
     /// Filters all tasks by the given timetable
-    /// - Parameter timetable: Timetable for the tasks
-    /// - Returns: Returns a list of tasks attached to the given timetable.
-    func tasks(for timetable: Timetable) -> [Task] {
-        return tasks.filter { $0.timetable == timetable }
+    /// - Parameter timetable: EKCalendar for the tasks
+    /// - Returns: Returns a list of reminders attached to the given calendar.
+    func tasks(for calendar: EKCalendar) -> [EKReminder] {
+        return tasks.filter { $0.calendar == calendar }
     }
     
-    func completedTasks(for timetable: Timetable) -> [Task] {
-        return tasks(for: timetable).filter { $0.completed }
+    func completedTasks(for calendar: EKCalendar) -> [EKReminder] {
+        return tasks(for: calendar).filter { $0.isCompleted }
+    }
+
+    func remainingTasks(for calendar: EKCalendar) -> [EKReminder] {
+        return tasks(for: calendar).filter { !$0.isCompleted }
     }
     
-    func remainingTasks(for timetable: Timetable) -> [Task] {
-        return tasks(for: timetable).filter { !$0.completed }
+    /// Filters the reminder calendars to only return calendars that have active reminders
+    func calendarsWithReminders() -> [EKCalendar] {
+        return calendars.filter { calendar in
+            remainingTasks(for: calendar).count != 0
+        }
     }
     
 }

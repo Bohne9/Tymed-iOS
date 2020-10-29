@@ -183,7 +183,7 @@ struct EventEditViewContent: View {
                 
             }
             
-            
+            //MARK: Alert
             Section(header: Label("Alert", systemImage: "bell.badge.fill").font(.system(size: 12, weight: .semibold))) {
                 if let alarms = event.alarms {
                     ForEach(alarms, id: \.self) { (alarm: EKAlarm) in

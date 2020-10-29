@@ -24,14 +24,9 @@ class EventService: Service {
         
         requestAccess { (res, err) in
             if res {
-                print("Got access!")
+                print("Got access to event store!")
             }
             self.calendars = self.eventStore.calendars(for: .event)
-            
-            self.events(startingFrom: Date(), end: self.oneYearFromNow(), in: self.eventStore.calendars(for: .event))
-                .forEach { (event) in
-                    print(event)
-                }
         }
         
     }
@@ -52,7 +47,7 @@ class EventService: Service {
         let now = Date()
         event.startDate = now
         event.endDate = date(byAdding: 1, .hour, to: now)
-        event.calendar = editableCalendars().first
+        event.calendar = eventStore.defaultCalendarForNewEvents
         
         return event
     }
@@ -65,7 +60,7 @@ class EventService: Service {
     ///   - span: Span for the deleted events (only this event/ all future events)
     func deleteEvent(_ event: EKEvent, _ span: EKSpan) {
         do {
-            try eventStore.remove(event, span: span)
+            try eventStore.remove(event, span: span, commit: true)
             save(event, span: span)
         } catch {
             

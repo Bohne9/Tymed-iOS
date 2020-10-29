@@ -17,14 +17,21 @@ struct HomeCalendarView: View {
     var body: some View {
          
         ScrollView {
-            VStack(alignment: .leading, spacing: 15) {
+            
+            VStack(alignment: .leading, spacing: 7.5) {
                 HomeCalendarHeaderView()
+                    .padding(.bottom, 7.5)
+                
+                Text("Event calendars")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(Color(.secondaryLabel))
+                    .padding(.leading)
                 
                 VStack {
-                    ForEach(homeViewModel.calendars, id: \.self) { calendar in
+                    ForEach(homeViewModel.eventCalendars, id: \.self) { calendar in
                         VStack {
                             HomeCalendarCellView(calendar: calendar)
-                            if calendar != homeViewModel.calendars.last {
+                            if calendar != homeViewModel.eventCalendars.last {
                                 Divider()
                             }
                         }
@@ -32,7 +39,29 @@ struct HomeCalendarView: View {
                 }.padding()
                 .background(Color(.secondarySystemBackground))
                 .cornerRadius(12)
+                .padding(.bottom, 7.5)
+                
+                Text("Reminder calendars")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundColor(Color(.secondaryLabel))
+                    .padding(.leading)
+                
+                VStack {
+                    ForEach(homeViewModel.reminderCalendars, id: \.self) { calendar in
+                        VStack {
+                            HomeCalendarCellView(calendar: calendar)
+                            if calendar != homeViewModel.reminderCalendars.last {
+                                Divider()
+                            }
+                        }
+                    }
+                }.padding()
+                .background(Color(.secondarySystemBackground))
+                .cornerRadius(12)
+                .padding(.bottom, 15)
+                
             }.padding()
+            
         }
     }
 }
