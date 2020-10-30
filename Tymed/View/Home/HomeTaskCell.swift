@@ -68,7 +68,7 @@ struct HomeTaskCell: View {
                 if let date = reminder.dueDate() {
                     Text(textFor(date: date))
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(Color(colorFor(due: date)))
+                        .foregroundColor(Color(colorFor(isDue: reminder.isDue())))
                 }
             }
             
@@ -90,19 +90,21 @@ struct HomeTaskCell: View {
     }
     
     private func textFor(date: Date) -> String {
-        return "\(date.stringify(dateStyle: .short, timeStyle: .short))"
+        if reminder.dueDateComponents?.hour != nil && reminder.dueDateComponents?.minute != nil {
+            return "\(date.stringify(dateStyle: .short, timeStyle: .short))"
+        }
+        return "\(date.stringify(with: .short))"
     }
     
-    private func colorFor(due date: Date) -> UIColor {
+    private func colorFor(isDue: Bool) -> UIColor {
         if reminder.isCompleted {
             return .tertiaryLabel
         }
         
-        if date < Date(){
+        if isDue {
             return .systemRed
-        }else if date.timeIntervalSinceNow < 3600 {
-            return .systemOrange
         }
+        
         return .secondaryLabel
     }
 }
