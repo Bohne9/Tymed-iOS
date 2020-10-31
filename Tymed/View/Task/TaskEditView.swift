@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CoreData
+import EventKit
 
 //MARK: TaskEditView
 struct TaskEditView: View {
@@ -19,42 +20,9 @@ struct TaskEditView: View {
     var body: some View {
         NavigationView {
             TaskEditContent(reminder: reminder, dismiss: dismiss)
+            
         }
     }
-    
-//    //MARK: cancel
-//    private func cancel() {
-//        dismiss()
-//        presentationMode.wrappedValue.dismiss()
-//    }
-//    
-//    //MARK: saveTask
-//    private func saveTask() {
-//        
-//        if sendNotification {
-//            task.getNotifications { (notifications) in
-//                NotificationService.current.scheduleDueDateNotification(for: task, notificationOffset)
-//                NotificationService.current.removeAllNotifications(of: task)
-//            }
-//        }else {
-//            NotificationService.current.removeAllNotifications(of: task)
-//        }
-//        
-//        task.title = taskTitle
-//        task.text = taskDescription
-//        task.due = hasDueDate ? dueDate : nil
-//        task.lesson = hasLessonAttached ? lesson : nil
-//        task.priority = 0
-//        task.archived = isArchived
-//        task.completed = isCompleted
-//        task.completionDate = completionDate
-//        
-//        TimetableService.shared.save()
-//        
-//        dismiss()
-//        presentationMode.wrappedValue.dismiss()
-//    }
-//    
 }
 
 
@@ -64,43 +32,17 @@ struct TaskEditContent: View {
     
     @ObservedObject var reminder: ReminderViewModel
     
-    //MARK: Title states
-    @State var taskTitle: String = ""
-    
-    @State var taskDescription: String = ""
-    
-    //MARK: Completed state
-    @State var isCompleted = false
-    
-    @State var completionDate: Date?
-    
     //MARK: Due date state
     @State private var hasDueDate = false
+    @State private var dueDateHasTime = false
     
     @State private var presentDueDatePicker = false
+    @State private var presentDueDateTimePicker = false
     
     @State var dueDate: Date = Date()
     
-    @State private var sendNotification = false
-    
-    @State private var presentNotificationPicker = false
-    
-    //MARK: Timetable
-    @State private var timetable: Timetable? = TimetableService.shared.defaultTimetable()
-    
-    @State var notificationOffset: NotificationOffset?
-    
-    //MARK: Lesson state
-    @State private var hasLessonAttached = false
-    
-    @State private var presentLessonPicker = false
-    
-    @State private var lesson: Lesson?
-    
-    //MARK: Archive state
-    @State var isArchived: Bool = false
-    
     @State var showDismissWarning = false
+    
     
     //MARK: Notes
     @State var showNotesKeyboardResign = false
@@ -155,29 +97,24 @@ struct TaskEditContent: View {
                             .datePickerStyle(GraphicalDatePickerStyle())
                             .frame(height: 350)
                     }
-                    //MARK: Notification
-                    HStack {
-                        DetailCellDescriptor("Notification", image: "alarm.fill", .systemGreen, value: textForNotificationCell())
-                        .onTapGesture {
-                            withAnimation {
-                                presentNotificationPicker.toggle()
-                            }
+                }
+                
+                HStack {
+                    
+                    DetailCellDescriptor("Time", image: "clock", .systemBlue, value:
+                                            dueDateHasTime ? dueDate.stringifyTime(with: .short) : nil)
+                    .onTapGesture {
+                        withAnimation {
+                            presentDueDateTimePicker.toggle()
                         }
-                        
-                        Toggle("", isOn: $sendNotification).labelsHidden()
-                    }.frame(height: 45)
+                    }
                     
-                    
-                    if sendNotification && presentNotificationPicker {
-                        NavigationLink(
-                            destination: NotificationOffsetView(notificationOffset: $notificationOffset),
-                            label: {
-                                HStack {
-                                    Spacer()
-                                    Text(notificationOffset?.title ?? "")
-                                        .font(.system(size: 14, weight: .semibold))
-                                }
-                            }).frame(height: 45)
+                    Toggle("", isOn: $dueDateHasTime).labelsHidden()
+                }.frame(height: 45)
+                
+                if dueDateHasTime {
+                    if presentDueDateTimePicker {
+                        DatePicker("", selection: $dueDate, displayedComponents: .hourAndMinute)
                     }
                 }
                 
@@ -257,20 +194,15 @@ struct TaskEditContent: View {
         }))
         .onAppear {
             loadTaskValues()
-        }.onChange(of: reminder.isCompleted) { completed in
-            completionDate = completed ? Date() : nil
         }
     }
     
     //MARK: loadTaskValues
     private func loadTaskValues() {
         
-        taskTitle = reminder.title
+        
         dueDate = reminder.dueDate() ?? dueDate
         hasDueDate = reminder.dueDate() != nil
-        hasLessonAttached = lesson != nil
-        isCompleted = reminder.isCompleted
-        completionDate = reminder.completionDate
         
         /*
         task.getNotifications { (notifications) in
@@ -291,19 +223,6 @@ struct TaskEditContent: View {
     //MARK: timetableTitle
     private func timetableTitle() -> String? {
         return reminder.calendar.title
-    }
-    
-    //MARK: textForNotificationCell
-    private func textForNotificationCell() -> String {
-        if !sendNotification {
-            return ""
-        }
-        
-        guard let notificationOffset = notificationOffset else {
-            return ""
-        }
-        
-        return (dueDate - notificationOffset.timeInterval).stringify(dateStyle: .short, timeStyle: .short)
     }
     
     //MARK: subjectColor
