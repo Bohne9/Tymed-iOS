@@ -79,6 +79,26 @@ class ReminderViewModel: ObservableObject {
         
     }
     
+    func isDue() -> Bool {
+        if isCompleted {
+            return false
+        }
+        
+        guard let components = reminder.dueDateComponents,
+              let date = Calendar.current.date(from: components) else {
+            return false
+        }
+        
+        // Decide weather the reminder is due on a day or time
+        var granularity: Calendar.Component = .day
+        
+        if components.hour != nil && components.minute != nil {
+            granularity = .minute
+        }
+        
+        return Calendar.current.compare(date, to: Date(), toGranularity: granularity) == ComparisonResult.orderedAscending
+    }
+    
     func dueDate() -> Date? {
         guard let components = reminder.dueDateComponents else {
             return nil
